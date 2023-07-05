@@ -6,9 +6,8 @@ public class Mine : MonoBehaviour
 {
     // Start is called before the first frame update
     public float attack, speed, range, accuracy;
-    public float defence, hp, size, swerve;
+    public float defence, hp, size, lubricity;
     public int stage;
-    private static readonly int frequancy = 1000;
     private static readonly int baseGold = 10;
 
     private int Ceil(float target)
@@ -23,7 +22,7 @@ public class Mine : MonoBehaviour
 
     public void GetGold()
     {
-        float miss = -(accuracy - swerve);
+        float miss = -(accuracy - lubricity);//정확도-곡구
 
         Debug.Log("miss" + miss);
         if (miss >= 100)
@@ -31,7 +30,7 @@ public class Mine : MonoBehaviour
             Debug.Log($"정확도가 {-(miss - 101)}만큼 부족합니다");
             return;
         }
-
+        
         float oneHitDMG = attack - defence;
         Debug.Log("oneHitDMG" + oneHitDMG);
         if (oneHitDMG <= 0)
@@ -39,25 +38,18 @@ public class Mine : MonoBehaviour
             Debug.Log($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
             return;
         }
-
-        int rangePerSize = Ceil(range / size);
-
-        // ReSharper disable once PossibleLossOfFraction
-        int frequancyPerRPS = Ceil(frequancy / rangePerSize);
-        Debug.Log("frequancyPerRPS" + frequancyPerRPS);
-
-
-        int hpPerDMG = Ceil(hp / oneHitDMG);
+        int rangePerSize = Ceil(range / size);//한번휘두를때 몇개나 영향을 주나
+        Debug.Log("rangePerSize" + rangePerSize);
+        
+        int hpPerDMG = Ceil(hp / oneHitDMG);//몇방때려야 하나를 캐는지
         Debug.Log("hpPerDMG" + hpPerDMG);
 
-        int oneOreGold = baseGold << stage;
+        int oneOreGold = baseGold << stage;//광물하나의 값
         Debug.Log("oneOreGold" + oneOreGold);
 
-        float time = frequancyPerRPS * hpPerDMG / speed;
-        time *= 0.001f;
+        float time = hpPerDMG / (speed*rangePerSize);// 하나를 캐기위한 평균 시간
         if (miss > 0)
             time *= 100 / (100 - miss);
-
         Debug.Log("time" + time);
 
         int goldPerMin = (int)(oneOreGold * (60 / time));
