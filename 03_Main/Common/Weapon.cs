@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour
     
     private NSubject.ISubject subjects;
 
-    private static Enforce[] enforces =
+    private static Reinforce[] enforces =
     {
         new Promote(), new Additional(), new MagicEngrave(),
         new SoulCrafting(), new Refinement()

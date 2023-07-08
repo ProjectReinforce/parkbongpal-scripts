@@ -2,7 +2,7 @@
 
 namespace NEnforce
 {
-    public abstract class Enforce
+    public abstract class Reinforce
     {
         public readonly string condition;
 
@@ -12,7 +12,7 @@ namespace NEnforce
         
         public abstract void Try (Weapon weapon);
     }
-    public class Promote:Enforce
+    public class Promote:Reinforce
     {
         private string condition;
 
@@ -31,7 +31,7 @@ namespace NEnforce
             
         }
     }
-    public class Additional:Enforce
+    public class Additional:Reinforce
     {
         private string condition;
 
@@ -50,7 +50,7 @@ namespace NEnforce
             
         }
     }
-    public class MagicEngrave:Enforce
+    public class MagicEngrave:Reinforce
     {
         private string condition;
 
@@ -69,7 +69,7 @@ namespace NEnforce
             
         }
     }
-    public class SoulCrafting:Enforce
+    public class SoulCrafting:Reinforce
     {
         private string condition;
 
@@ -88,7 +88,7 @@ namespace NEnforce
             
         }
     }
-    public class Refinement:Enforce
+    public class Refinement:Reinforce
     {
         private string condition;
 
