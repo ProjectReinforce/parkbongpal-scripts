@@ -34,13 +34,13 @@ public class SceneLoader : MonoBehaviour
             if( operation.progress < 0.9f )
             {
                 progressBar.value = operation.progress;//Mathf.MoveTowards(progressBar.value,0.9f,Time.deltaTime);
-                persentMessage.text = (System.Math.Round(operation.progress, 4) * 100).ToString() + "%";
+                persentMessage.text = (System.Math.Round(operation.progress, 2) * 100).ToString() + "%";
             }
             else
             {
                 timer += Time.unscaledDeltaTime;
                 progressBar.value = Mathf.Lerp(0.9f, 1f, timer);
-                persentMessage.text = (System.Math.Round(Mathf.Lerp(0.9f, 1f, timer), 4) * 100).ToString() + "%";
+                persentMessage.text = (System.Math.Round(Mathf.Lerp(0.9f, 1f, timer), 2) * 100).ToString() + "%";
                 if( progressBar.value >= 1f )
                 {
                     operation.allowSceneActivation = true;
