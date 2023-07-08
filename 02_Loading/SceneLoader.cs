@@ -8,22 +8,15 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private Slider progressBar;
     [SerializeField] private TextMeshProUGUI persentMessage;
-    private static string targetScene;
     void Start()
     {
         StartCoroutine(SceneLoading());
     }
 
-    public static void LoadScene(string _sceneName)
-    {
-        targetScene = _sceneName;
-        SceneManager.LoadScene("LoadingScene");
-    }
-
     private IEnumerator SceneLoading()
     {
         yield return null;
-        AsyncOperation operation = SceneManager.LoadSceneAsync(targetScene);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(Utills.TargetScene);
         operation.allowSceneActivation = false;
 
         float timer = 0f;

@@ -1,5 +1,4 @@
-﻿
-public static class Utills
+﻿public static class Utills
 {
     public static int Ceil(float target)
     {
@@ -9,5 +8,13 @@ public static class Utills
         }
 
         return (int)target;
+    }
+
+    static string targetScene;
+    public static string TargetScene { get => targetScene; }
+    public static void LoadScene(string _sceneName)
+    {
+        targetScene = _sceneName;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LoadingScene");
     }
 }
