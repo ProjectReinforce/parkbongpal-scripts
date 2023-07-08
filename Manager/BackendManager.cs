@@ -1,10 +1,11 @@
 using UnityEngine;
 using BackEnd;
 
-public class BackendManager : MonoBehaviour
+public class BackendManager : Manager.Singleton<BackendManager>
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         var bro = Backend.Initialize();
 
         if(bro.IsSuccess())
