@@ -42,6 +42,7 @@ public class Login : MonoBehaviour
     public void OnClickLogout()
     {
         BackEnd.Backend.BMember.Logout();
+        Utills.LoadScene("Start");
         // 액세스 토큰 삭제, 즉 토큰 로그인 불가 (로그인이 먼저 되어야함)
     }
 
