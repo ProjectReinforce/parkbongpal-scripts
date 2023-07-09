@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Manager
 {
-    public class Singleton<T> : MonoBehaviour where T : new()
+    public class Singleton<T> : MonoBehaviour
     {
         private static class BillPughSingleTon
         {
-            public static T instance;
+            public static T instance ;
         }
 
         public static T Instance => BillPughSingleTon.instance;
@@ -17,7 +17,8 @@ namespace Manager
             if (Instance != null)
                 Destroy(gameObject);
             DontDestroyOnLoad(this);
-            BillPughSingleTon.instance = new T();
+            gameObject.TryGetComponent(out BillPughSingleTon.instance);
         }
+
     }
 }

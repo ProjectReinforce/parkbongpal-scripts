@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
 using LitJson;
+using Manager;
 using UnityEngine;
 
 
@@ -86,22 +87,8 @@ public class BackTest : MonoBehaviour
         },
         () =>//6
         {
-            SendQueue.Enqueue(Backend.GameData.Get, "weaponTest_JG", new Where(), 10, bro =>
-            {
-                if (bro.IsSuccess() == false)
-                {
-                    // 요청 실패 처리
-                    Debug.Log(bro);
-                    return;
-                }
-                Debug.Log("ggg:"+bro.GetReturnValue());
-                // 검색한 데이터의 모든 row의 inDate 값 확인
-                for (int i = 0; i < bro.Rows().Count; ++i)
-                {
-                    var inDate = bro.Rows()[i]["inDate"]["S"].ToString();
-                    Debug.Log(inDate);
-                }
-            });
+             BackendManager.Instance.searchFromMyIndate.Equal("owner_inDate", Backend.UserInDate);
+             new GameObject().AddComponent<GameManager>();
         },
 
 
