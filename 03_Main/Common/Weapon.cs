@@ -8,12 +8,8 @@ public class Weapon : MonoBehaviour
 {
     private WeaponStat stat;
     private Sprite sprite;
-    private Grade grade;
+    private Grade birthGrade;
 
-    //무기 리스트나 각인용 마법 리스트들을 서버에서 관리할지
-    
-    //마법각인용 마법을 함수로만 관리할지 class로 관리할지
-    
     
     
     private NSubject.ISubject subjects;
