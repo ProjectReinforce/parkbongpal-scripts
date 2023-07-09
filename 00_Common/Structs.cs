@@ -29,6 +29,14 @@ public struct WeaponStat// 유저마다 바뀔수 있는 데이터
     }
 }
 
+public struct UserData
+{
+    int gold, diamond, weaponSoul, stone;
+    int exp, level, favoriteWeaponId;
+    string nickName;
+}
+
+
 public struct OreStat
 {
     public float defence, hp, size, lubricity;
