@@ -14,7 +14,6 @@ namespace NEnforce
     }
     public class Promote:Reinforce
     {
-        private string condition;
 
         public override bool Unlock(Weapon weapon)
         {
@@ -33,7 +32,6 @@ namespace NEnforce
     }
     public class Additional:Reinforce
     {
-        private string condition;
 
         public override bool Unlock(Weapon weapon)
         {
@@ -52,7 +50,6 @@ namespace NEnforce
     }
     public class MagicEngrave:Reinforce
     {
-        private string condition;
 
         public override bool Unlock(Weapon weapon)
         {
@@ -71,7 +68,6 @@ namespace NEnforce
     }
     public class SoulCrafting:Reinforce
     {
-        private string condition;
 
         public override bool Unlock(Weapon weapon)
         {
@@ -90,7 +86,6 @@ namespace NEnforce
     }
     public class Refinement:Reinforce
     {
-        private string condition;
 
         public override bool Unlock(Weapon weapon)
         {
