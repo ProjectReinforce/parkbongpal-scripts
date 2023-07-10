@@ -1,14 +1,15 @@
 ﻿using System;
 
-public struct WeaponStat// 유저마다 바뀔수 있는 데이터
+public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
+    public static WeaponData colum;
     public int id;
     public int damage, speed, range, accuracy, grade, inventoryIndex;
 
     public int normalReinforceCount;
 
    
-    public WeaponStat(int _id, int _damage,int _speed, int _range,int _accuracy,int _grade,int _inventoryIndex, int _normalReinforceCount=0)
+    public WeaponData(int _id, int _damage,int _speed, int _range,int _accuracy,int _grade,int _inventoryIndex, int _normalReinforceCount=0)
     {
         id = _id;
         damage = _damage;
@@ -31,9 +32,11 @@ public struct WeaponStat// 유저마다 바뀔수 있는 데이터
 
 public struct UserData
 {
-    int gold, diamond, weaponSoul, stone;
-    int exp, level, favoriteWeaponId;
-    string nickName;
+    public static UserData colum;
+    public int gold, diamond, weaponSoul, stone;
+    public int exp, level, favoriteWeaponId;
+    public string nickName;
+    public DateTime owner_inDate;
 }
 
 

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using BackEnd;
 using LitJson;
 using Manager;
@@ -55,10 +53,9 @@ public class BackTest : MonoBehaviour
             param.Add("range", 1);
             param.Add("accuracy", 2);
             param.Add("grade", 2);
-            param.Add("inventoryIndex", 2);
             //param.Add("normalReinforceCount", 1);
             
-            SendQueue.Enqueue(Backend.GameData.Insert, "weaponTest_JG", param, (callback) => 
+            SendQueue.Enqueue(Backend.GameData.Insert, typeof(WeaponData).ToString(), param, (callback) => 
             {
                 Debug.Log("gg");
                 Debug.Log(callback);
@@ -68,7 +65,7 @@ public class BackTest : MonoBehaviour
         },
         () =>//5
         {
-            SendQueue.Enqueue(Backend.GameData.Get, "weaponTest_JG", new Where(), 10, bro =>
+            SendQueue.Enqueue(Backend.GameData.Get, typeof(WeaponData).ToString(), new Where(), 10, bro =>
             {
                 if (bro.IsSuccess() == false)
                 {
@@ -80,14 +77,14 @@ public class BackTest : MonoBehaviour
                 for(int i=0; i<json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
-                    WeaponStat item = JsonMapper.ToObject<WeaponStat>(json[i].ToJson());
+                    WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
                     Debug.Log(item.ToString());
                 }
             });
         },
         () =>//6
         {
-             BackendManager.Instance.searchFromMyIndate.Equal("owner_inDate", Backend.UserInDate);
+             //BackendManager.Instance.searchFromMyIndate.Equal(, Backend.UserInDate);
              new GameObject().AddComponent<GameManager>();
         },
 

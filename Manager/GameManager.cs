@@ -11,8 +11,7 @@ namespace Manager
         {
             base.Awake();
             
-            BackendManager.Instance.searchFromMyIndate.Equal("owner_inDate", BackEnd.Backend.UserInDate);
-
+            BackendManager.Instance.searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), BackEnd.Backend.UserInDate);
             Inventory inventory = new GameObject("Inventory_S").AddComponent<Inventory>();
             Player player = new GameObject("Player_S").AddComponent<Player>();
             player.Initialize(inventory);

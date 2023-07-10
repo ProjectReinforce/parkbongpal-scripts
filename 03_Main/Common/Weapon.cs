@@ -6,7 +6,7 @@ using NEnforce;
 
 public class Weapon : MonoBehaviour
 {
-    private WeaponStat stat;
+    private WeaponData _data;
     private Sprite sprite;
     private Grade birthGrade;
 
@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
     public int GetPower()
     {
         //각 스탯별 계수 조정 필요
-        return (int)(stat.damage * stat.speed * stat.range * (1 + stat.accuracy / 20));
+        return (int)(_data.damage * _data.speed * _data.range * (1 + _data.accuracy / 20));
     }
     
 }

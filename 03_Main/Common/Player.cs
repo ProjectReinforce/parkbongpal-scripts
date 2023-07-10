@@ -17,7 +17,7 @@ public class Player : Manager.Singleton<Player>
     {
         base.Awake();
 
-        SendQueue.Enqueue(Backend.GameData.Get, Table.CommonTest_JG.ToString(),
+        SendQueue.Enqueue(Backend.GameData.Get, nameof(UserData),
             BackendManager.Instance.searchFromMyIndate, 1, bro =>
             {
                 if (!bro.IsSuccess())

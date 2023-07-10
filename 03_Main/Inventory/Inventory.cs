@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        SendQueue.Enqueue(Backend.GameData.Get, Table.weaponTest_JG.ToString(),
+        SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
             BackendManager.Instance.searchFromMyIndate, 120, bro =>
             {
                 if (!bro.IsSuccess())
@@ -32,7 +32,7 @@ public class Inventory : MonoBehaviour
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
-                    WeaponStat item = JsonMapper.ToObject<WeaponStat>(json[i].ToJson());
+                    WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
                     
                     Debug.Log(item.ToString());
                 }

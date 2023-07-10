@@ -9,8 +9,5 @@
         promote,additional,magicEngrave,soulCrafting,refineMent
     }
 
-    public enum Table
-    {
-        weaponTest_JG, CommonTest_JG
-    }
+    
 
