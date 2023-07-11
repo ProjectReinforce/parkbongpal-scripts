@@ -33,8 +33,9 @@ public class Inventory
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
                     WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
-                    
+                    myWeapons[i] = new Weapon(item);
                     Debug.Log(item.ToString());
+                     
                 }
             });
     }

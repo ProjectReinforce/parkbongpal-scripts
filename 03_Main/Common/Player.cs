@@ -28,7 +28,6 @@ public class Player : Manager.Singleton<Player>
                 }
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log(json);
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인

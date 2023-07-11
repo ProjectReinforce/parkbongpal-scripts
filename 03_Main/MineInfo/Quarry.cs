@@ -7,14 +7,14 @@ using UnityEngine;
 public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채석장
 {
     
-    Mine[] mines;
+    private Mine[] mines;
     protected override void Awake()
     {
         base.Awake();
         
         //차트관리 에서 데이터 받기
         
-        SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave,"85409", bro =>
+        SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave,"85425", bro =>
         {
             if (!bro.IsSuccess())
             {
@@ -34,7 +34,13 @@ public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채�
                 mines[i] = new Mine(item);
             }
         });
-       
     }
+
+    public void SetMine(Weapon weapon)
+    {
+        mines[weapon.data.mineId].SetWeapon(weapon);
+    }
+    
+    
 
 }
