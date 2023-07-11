@@ -30,6 +30,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
     }
 }
 
+[System.Serializable]
 public struct UserData
 {
     public static UserData colum;

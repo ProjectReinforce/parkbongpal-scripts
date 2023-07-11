@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Player : Manager.Singleton<Player>
 {
-    UserData userdata;
-    Inventory inventory;
+    [SerializeField] UserData userdata;
+    [SerializeField] Inventory inventory;
 
-    public void Initialize(Inventory _inventory)
-    {
-        inventory = _inventory;
-    }
+    // public void Initialize(Inventory _inventory)
+    // {
+    //     inventory = _inventory;
+    // }
 
     protected override void Awake()
     {
@@ -34,5 +34,7 @@ public class Player : Manager.Singleton<Player>
                     userdata = JsonMapper.ToObject<UserData>(json[i].ToJson());
                 }
             });
+
+        inventory = new Inventory();
     }
 }

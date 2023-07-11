@@ -49,7 +49,7 @@ public class Login : MonoBehaviour
 
     void InsertNewUserData()
     {
-        Param newParam = SetInitialParam();
+        Param newParam = new Param();
 
         var bro = Backend.GameData.Insert("UserData", newParam);
 
@@ -62,20 +62,6 @@ public class Login : MonoBehaviour
         {
             Debug.LogError($"신규 유저 데이터 삽입 실패 : {bro}");
         }
-    }
-
-    Param SetInitialParam()
-    {
-        Param param = new Param();
-        param.Add("level", 1);
-        param.Add("exp", 0);
-        param.Add("max_exp", 0);
-        param.Add("gold", 0);
-        param.Add("diamond", 0);
-        param.Add("weapon_soul", 0);
-        param.Add("ore", 0);
-
-        return param;
     }
 
     public void OnClickLogout()
