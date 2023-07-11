@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mine : MonoBehaviour
+public class Mine 
 {
     // Start is called before the first frame update
+    private MineData data;
     public float attack, speed, range, accuracy;
     public float defence, hp, size, lubricity;
     public int stage;
     private static readonly int baseGold = 10;
+
+    public Mine(MineData _data)
+    {
+        data = _data;
+    }
 
     public void GetGold()
     {
