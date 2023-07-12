@@ -11,7 +11,7 @@ namespace Manager
         protected override void Awake()
         {
             base.Awake();
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave,"85424", bro =>
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave,"85454", bro =>
             {
                 if (!bro.IsSuccess())
                 {

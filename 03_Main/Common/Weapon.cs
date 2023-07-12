@@ -2,13 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NEnforce;
 
 public class Weapon 
 {
     
     private Sprite sprite;
-    private Grade birthGrade;
+    private Rairity birthRairity;
     //private NSubject.ISubject subjects;
     public WeaponData data { get; set; }
 
@@ -19,9 +18,10 @@ public class Weapon
         new SoulCrafting(), new Refinement()
     };
 
-    public Weapon(WeaponData _data)
+    public Weapon(WeaponData _data)//기본데이터
     {//id를 토대로 resourceManager의 baseWaponData를 참조해 나머지 데이터도 채워야함
         data = _data;
+        birthRairity = (Rairity)_data.rarity;
         
     }
     

@@ -5,7 +5,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
     public static WeaponData colum;
     public int id;
-    public int damage, speed, range, accuracy, grade; 
+    public int damage, speed, range, accuracy, rarity; 
     public int mineId;
     public int normalReinforceCount;
     public DateTime inDate;
@@ -31,7 +31,7 @@ public struct MineData//광산차트
 
 public struct BaseWeaponData//기본 무기정보 차트
 {
-    public int index;
-    public float atk, atkSpeed, atkRange,accuracy;
-    public string name, rarity, description;
+    public int index,rarity;
+    public int atk, atkSpeed, atkRange,accuracy;
+    public string name,  description;
 }

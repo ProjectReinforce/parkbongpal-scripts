@@ -1,5 +1,5 @@
 ﻿
-    public enum Grade
+    public enum Rairity
     {
         trash,old,normal,rare,unique,legendary
     }

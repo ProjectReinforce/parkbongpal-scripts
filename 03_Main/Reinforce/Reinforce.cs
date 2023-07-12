@@ -1,7 +1,5 @@
 ﻿using System;
 
-namespace NEnforce
-{
     public abstract class Reinforce
     {
         public readonly string condition;
@@ -103,5 +101,4 @@ namespace NEnforce
         }
     }
     
-    
-}
+

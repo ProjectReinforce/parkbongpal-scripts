@@ -28,10 +28,15 @@ public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채�
             JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
             for (int i = 0; i < json.Count; ++i)
             {
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-                MineData item = JsonMapper.ToObject<MineData>(json[i].ToJson());
-                
-                mines[i] = new Mine(item);
+                // 계수, 스테이지 확인 
+                MineData mineData = JsonMapper.ToObject<MineData>(json[i].ToJson());
+                mineData.defence =(int)((mineData.defence <<mineData.stage) *0.1f) ;
+                mineData.hp = (int)((mineData.hp << mineData.stage) * 0.2f);
+                mineData.size = (int)(mineData.size*1.5f) +30;
+                mineData.lubricity =(int)( mineData.lubricity*1.5f);
+                Debug.Log($"defence:{mineData.defence} hp: {mineData.hp} size: {mineData.size}" +
+                          $"lubricity: {mineData.lubricity} stage: {mineData.stage}");
+                mines[i] = new Mine(mineData);
             }
         });
     }

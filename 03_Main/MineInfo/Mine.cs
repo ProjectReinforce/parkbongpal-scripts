@@ -21,8 +21,8 @@ public class Mine
     public void SetWeapon(Weapon rentWeapon)//
     {
         _rentWeapon = rentWeapon;
-        
-        float miss = -(rentWeapon.data.accuracy - data.lubricity); //정확도-매끄러움
+        WeaponData weaponData = rentWeapon.data;
+        float miss = -(weaponData.accuracy - data.lubricity); //정확도-매끄러움
 
         Debug.Log("miss" + miss);
         if (miss >= 100)
@@ -31,7 +31,7 @@ public class Mine
             return ;
         }
 
-        float oneHitDMG = rentWeapon.data.damage - data.defence;
+        float oneHitDMG = weaponData.damage - data.defence;
         Debug.Log("oneHitDMG" + oneHitDMG);
         if (oneHitDMG <= 0)
         {
@@ -40,7 +40,7 @@ public class Mine
         }
 
         // ReSharper disable once PossibleLossOfFraction
-        int rangePerSize = Utills.Ceil(rentWeapon.data.range / data.size); //한번휘두를때 몇개나 영향을 주나
+        int rangePerSize = Utills.Ceil(weaponData.range / data.size); //한번휘두를때 몇개나 영향을 주나
         Debug.Log("rangePerSize" + rangePerSize);
 
         int hpPerDMG = Utills.Ceil(data.hp / oneHitDMG); //몇방때려야 하나를 캐는지
@@ -50,7 +50,7 @@ public class Mine
         Debug.Log("oneOreGold" + oneOreGold);
 
         // ReSharper disable once PossibleLossOfFraction
-        float time = hpPerDMG / (rentWeapon.data.speed * rangePerSize); // 하나를 캐기위한 평균 시간
+        float time = hpPerDMG / (weaponData.speed * rangePerSize); // 하나를 캐기위한 평균 시간
         if (miss > 0)
             time *= 100 / (100 - miss);
         Debug.Log("time" + time);
