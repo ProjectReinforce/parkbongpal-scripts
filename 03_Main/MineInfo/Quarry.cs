@@ -25,7 +25,6 @@ public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채�
   
             JsonData json = BackendReturnObject.Flatten(bro.Rows());
             mines = new Mine[json.Count];
-            JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
             for (int i = 0; i < json.Count; ++i)
             {
                 // 계수, 스테이지 확인 

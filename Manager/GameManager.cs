@@ -1,6 +1,7 @@
 ﻿using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using LitJson;
 
 namespace Manager
 {
@@ -14,6 +15,7 @@ namespace Manager
             
             BackendManager.Instance.searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), BackEnd.Backend.UserInDate);
 
+            JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
             ResourceManager resourceManager = new GameObject("ResourceManager_S").AddComponent<ResourceManager>();
             
             Quarry quarry = new GameObject("Quarry_S").AddComponent<Quarry>();

@@ -6,8 +6,18 @@ namespace Manager
 {
     public class ResourceManager: Singleton<ResourceManager>
     {
-        private BaseWeaponData[] _baseWeaponData;
-        public BaseWeaponData[] baseWeaponData => _baseWeaponData;
+        private BaseWeaponData[] baseWeaponDatas;
+        
+        public BaseWeaponData GetBaseWeaponData(int index)
+        {
+            return baseWeaponDatas[index];
+        }
+        private Sprite[] baseWeaponSprites;
+        public Sprite GetbaseWeaponSprite(int index)
+        {
+            return baseWeaponSprites[index];
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -20,17 +30,16 @@ namespace Manager
                 }
             
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                _baseWeaponData = new BaseWeaponData[json.Count];
-                JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
-                JsonMapper.RegisterImporter<string, float>(s => float.Parse(s));
+                baseWeaponDatas = new BaseWeaponData[json.Count];
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
                     BaseWeaponData item = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
             
-                    baseWeaponData[i] = item;
+                    baseWeaponDatas[i] = item;
                 }
             });
+            baseWeaponSprites =Resources.LoadAll<Sprite>("Sprites/Weapons");
         }
     }
 }

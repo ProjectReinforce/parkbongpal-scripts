@@ -1,17 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 
 public class Weapon 
 {
     
-    private Sprite sprite;
-    private Rairity birthRairity;
+    private readonly Sprite sprite;
+    private readonly Rairity birthRairity;
     //private NSubject.ISubject subjects;
     public WeaponData data { get; set; }
 
-    public readonly string story;
+    public readonly string description;
+    public readonly string name;
     private static Reinforce[] enforces =
     {
         new Promote(), new Additional(), new MagicEngrave(),
@@ -19,10 +21,13 @@ public class Weapon
     };
 
     public Weapon(WeaponData _data)//기본데이터
-    {//id를 토대로 resourceManager의 baseWaponData를 참조해 나머지 데이터도 채워야함
+    {
         data = _data;
-        birthRairity = (Rairity)_data.rarity;
-        
+        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.id);
+        sprite = ResourceManager.Instance.GetbaseWeaponSprite(_data.id);
+        birthRairity= (Rairity)baseWeaponData.rarity;
+        description = baseWeaponData.description;
+        name = baseWeaponData.name;
     }
     
 
