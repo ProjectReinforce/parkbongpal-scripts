@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : Manager.Singleton<Player>
 {
-    [SerializeField] UserData userdata;
+    [SerializeField] public UserData userdata { get; set; }
     [SerializeField] Inventory inventory;
 
     public void Initialize(Inventory _inventory)
@@ -37,4 +37,5 @@ public class Player : Manager.Singleton<Player>
 
         inventory = new Inventory();
     }
+    
 }

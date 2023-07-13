@@ -1,104 +1,125 @@
 ﻿using System;
+using JetBrains.Annotations;
+using UnityEngine;
 
-    public abstract class Reinforce
+public abstract class Reinforce
+{
+    protected string _condition;
+    public string condition => $"{_condition}이 {Qualification}이상 일때 실행 가능합니다.";
+    public int Qualification { get; set; }
+    public abstract bool LockCheck(Weapon weapon);
+
+    public abstract float SuccessPercentage(Weapon weapon);
+
+    public abstract void Try(Weapon weapon);
+}
+
+public class Promote : Reinforce
+{
+    public Promote()
     {
-        public readonly string condition;
-
-        public abstract bool Unlock(Weapon weapon);
-            
-        public abstract float SuccessPercentage(Weapon weapon);
-        
-        public abstract void Try (Weapon weapon);
+        _condition = "레벨";
+        Qualification = 2;
     }
-    public class Promote:Reinforce
+    public override bool LockCheck(Weapon weapon)
     {
-
-        public override bool Unlock(Weapon weapon)
-        {
-            return true;
-        }
-
-        public override float SuccessPercentage(Weapon weapon)
-        {
-            return 0;
-        }
-
-        public override void Try(Weapon weapon)
-        {
-            
-        }
+        return Player.Instance.userdata.level >= Qualification;
     }
-    public class Additional:Reinforce
+
+    public override float SuccessPercentage(Weapon weapon)
     {
-
-        public override bool Unlock(Weapon weapon)
-        {
-            return true;
-        }
-
-        public override float SuccessPercentage(Weapon weapon)
-        {
-            return 0;
-        }
-
-        public override void Try(Weapon weapon)
-        {
-            
-        }
+        return 0;
     }
-    public class MagicEngrave:Reinforce
+
+    public override void Try(Weapon weapon)
     {
-
-        public override bool Unlock(Weapon weapon)
-        {
-            return true;
-        }
-
-        public override float SuccessPercentage(Weapon weapon)
-        {
-            return 0;
-        }
-
-        public override void Try(Weapon weapon)
-        {
-            
-        }
     }
-    public class SoulCrafting:Reinforce
+}
+
+public class Additional : Reinforce
+{
+    public Additional()
     {
-
-        public override bool Unlock(Weapon weapon)
-        {
-            return true;
-        }
-
-        public override float SuccessPercentage(Weapon weapon)
-        {
-            return 0;
-        }
-
-        public override void Try(Weapon weapon)
-        {
-            
-        }
+        _condition = "레벨";
+        Qualification = 10;
     }
-    public class Refinement:Reinforce
+    public override bool LockCheck(Weapon weapon)
     {
-
-        public override bool Unlock(Weapon weapon)
-        {
-            return true;
-        }
-
-        public override float SuccessPercentage(Weapon weapon)
-        {
-            return 0;
-        }
-
-        public override void Try(Weapon weapon)
-        {
-            
-        }
+        return  Player.Instance.userdata.level >= Qualification;
     }
-    
 
+    public override float SuccessPercentage(Weapon weapon)
+    {
+        return 0;
+    }
+
+    public override void Try(Weapon weapon)
+    {
+    }
+}
+
+public class MagicEngrave : Reinforce
+{
+    public MagicEngrave()
+    {
+        _condition = "무기 등급";
+        Qualification = (int)Rairity.rare;
+    }
+    public override bool LockCheck(Weapon weapon)
+    {
+        return true;
+    }
+
+    public override float SuccessPercentage(Weapon weapon)
+    {
+        return 0;
+    }
+
+    public override void Try(Weapon weapon)
+    {
+    }
+}
+
+public class SoulCrafting : Reinforce
+{
+    public SoulCrafting()
+    {
+        _condition = "레벨";
+        Qualification = 25;
+    }
+    public override bool LockCheck(Weapon weapon)
+    {
+        return true;
+    }
+
+    public override float SuccessPercentage(Weapon weapon)
+    {
+        return 0;
+    }
+
+    public override void Try(Weapon weapon)
+    {
+    }
+}
+
+public class Refinement : Reinforce
+{
+    public Refinement()
+    {
+        _condition = "무기 등급";
+        Qualification = (int)Rairity.legendary;
+    }
+    public override bool LockCheck(Weapon weapon)
+    {
+        return true;
+    }
+
+    public override float SuccessPercentage(Weapon weapon)
+    {
+        return 0;
+    }
+
+    public override void Try(Weapon weapon)
+    {
+    }
+}
