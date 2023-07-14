@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using BackEnd;
 using LitJson;
 
@@ -12,11 +13,26 @@ namespace Manager
         {
             return baseWeaponDatas[index];
         }
+        public BaseWeaponData GetBaseWeaponData(Rairity rairity)
+        {
+            List<BaseWeaponData> rarityData = new List<BaseWeaponData>();
+            foreach (var baseWeaponData in baseWeaponDatas)
+            {
+                if ((Rairity)baseWeaponData.rarity == rairity)
+                {
+                    rarityData.Add(baseWeaponData);
+                }
+            }
+            
+            return rarityData[Utills.random.Next(0,rarityData.Count)];
+        }
+        
         private Sprite[] baseWeaponSprites;
-        public Sprite GetbaseWeaponSprite(int index)
+        public Sprite GetBaseWeaponSprite(int index)
         {
             return baseWeaponSprites[index];
         }
+      
         
         protected override void Awake()
         {

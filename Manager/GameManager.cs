@@ -19,11 +19,9 @@ namespace Manager
             ResourceManager resourceManager = new GameObject("ResourceManager_S").AddComponent<ResourceManager>();
             
             Quarry quarry = new GameObject("Quarry_S").AddComponent<Quarry>();
-            
-            Inventory inventory = new Inventory();
+            Inventory inventory = new GameObject("Inventory_S").AddComponent<Inventory>();
             Player player = new GameObject("Player_S").AddComponent<Player>();
-            player.Initialize(inventory);
-            
+
 
 
         }

@@ -6,17 +6,13 @@ using UnityEngine;
 public class Player : Manager.Singleton<Player>
 {
     [SerializeField] public UserData userdata { get; set; }
-    [SerializeField] Inventory inventory;
-
-    public void Initialize(Inventory _inventory)
-    {
-        inventory = _inventory;
-    }
+    
 
     protected override void Awake()
     {
         base.Awake();
 
+        
         SendQueue.Enqueue(Backend.GameData.Get, nameof(UserData),
             BackendManager.Instance.searchFromMyIndate, 1, bro =>
             {
@@ -34,8 +30,7 @@ public class Player : Manager.Singleton<Player>
                     userdata = JsonMapper.ToObject<UserData>(json[i].ToJson());
                 }
             });
-
-        inventory = new Inventory();
     }
+    
     
 }

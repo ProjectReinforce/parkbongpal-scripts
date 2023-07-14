@@ -6,7 +6,7 @@ using LitJson;
 using UnityEngine;
 
 [System.Serializable]
-public class Inventory
+public class Inventory:Manager.Singleton<Inventory>
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
@@ -14,10 +14,11 @@ public class Inventory
 
     [SerializeField] Weapon selectedWeapon;
 
-    [SerializeField] Weapon[] myWeapons = new Weapon[size];
+    private LinkedList<Weapon> myWeapons = new LinkedList<Weapon>();
 
-    public Inventory()
+    protected override void Awake()
     {
+        base.Awake();
         SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
             BackendManager.Instance.searchFromMyIndate, 120, bro =>
             {
@@ -33,16 +34,19 @@ public class Inventory
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
                     WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
-                    myWeapons[i] = new Weapon(item);
-                    Quarry.Instance.SetMine(myWeapons[i]);
+                    Weapon weapon = new Weapon(item);
+                    myWeapons.AddLast(weapon) ;
+                    
+                    Quarry.Instance.SetMine(weapon);
                     
                     Debug.Log(item.ToString());
                 }
             });
     }
 
-    public void AddWeapon()
+    public void AddWeapon(BaseWeaponData baseWeaponData)
     {
+        myWeapons.AddLast(new Weapon(baseWeaponData));
     }
 
     public void Decomposition(Weapon[] weapons)

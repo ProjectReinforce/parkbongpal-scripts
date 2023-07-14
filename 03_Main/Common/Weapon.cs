@@ -24,12 +24,31 @@ public class Weapon
     {
         data = _data;
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.id);
-        sprite = ResourceManager.Instance.GetbaseWeaponSprite(_data.id);
+        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.id);
         birthRairity= (Rairity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
     }
-    
+    public Weapon(BaseWeaponData _data)//기본데이터
+    {
+        data = new WeaponData()
+        {
+            id=_data.index,
+            damage = _data.atk,
+            speed = _data.atkSpeed,
+            range = _data.atkRange,
+            accuracy = _data.accuracy,
+            rarity = _data.rarity,
+            mineId = -1,
+            normalReinforceCount = 0,
+            inDate = DateTime.Now
+        };
+        
+        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.index);
+        birthRairity= (Rairity)_data.rarity;
+        description = _data.description;
+        name = _data.name;
+    }
 
 
     public int GetPower()
