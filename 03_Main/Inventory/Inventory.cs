@@ -39,14 +39,14 @@ public class Inventory:Manager.Singleton<Inventory>
                     
                     Quarry.Instance.SetMine(weapon);
                     
-                    Debug.Log(item.ToString());
+                    Debug.Log(item.inDate);
                 }
             });
     }
 
-    public void AddWeapon(BaseWeaponData baseWeaponData)
+    public void AddWeapon(WeaponData weaponData)
     {
-        myWeapons.AddLast(new Weapon(baseWeaponData));
+        myWeapons.AddLast(new Weapon(weaponData));
     }
 
     public void Decomposition(Weapon[] weapons)

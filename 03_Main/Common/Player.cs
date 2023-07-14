@@ -2,11 +2,12 @@
 using BackEnd;
 using LitJson;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : Manager.Singleton<Player>
 {
-    [SerializeField] public UserData userdata { get; set; }
-    
+    [SerializeField] private UserData _userData;
+    public UserData userData => _userData;
 
     protected override void Awake()
     {
@@ -27,10 +28,25 @@ public class Player : Manager.Singleton<Player>
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
-                    userdata = JsonMapper.ToObject<UserData>(json[i].ToJson());
+                    _userData = JsonMapper.ToObject<UserData>(json[i].ToJson());
                 }
             });
     }
-    
-    
+
+    public bool CanBuy(int gold)
+    {
+        if (userData.gold < gold)
+        {
+            Debug.Log("돈이 부족합니다.");
+            return false;
+        }
+        
+        return true;
+    }
+    public void AddGold(int gold)
+    {
+        if (userData.gold < gold)
+            return ;
+        _userData.gold += gold;
+    }
 }

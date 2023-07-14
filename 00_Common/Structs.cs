@@ -4,11 +4,24 @@
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
     public static WeaponData colum;
-    public int id;
     public int damage, speed, range, accuracy, rarity; 
-    public int mineId;
+    public int baseWeaponIndex,mineId;
     public int normalReinforceCount;
     public DateTime inDate;
+
+    public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,int _baseWeaponIndex,
+        DateTime _inDate)
+    {
+        damage = _damage;
+        speed = _speed;
+        range = _range;
+        accuracy = _accuracy;
+        rarity = _rarity;
+        baseWeaponIndex = _baseWeaponIndex;
+        inDate = _inDate;
+        mineId = -1;
+        normalReinforceCount = 0;
+    }
 
 }
 
