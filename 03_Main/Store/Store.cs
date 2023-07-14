@@ -49,7 +49,7 @@ public class Store:Singleton<Store>
       var bro = Backend.GameData.Insert( typeof(WeaponData).ToString(), param);
       if (!bro.IsSuccess())
       {
-          Debug.LogError("게임 정보 삽입 실패 : " + bro.ToString());
+          Debug.LogError("게임 정보 삽입 실패 : " + bro);
          
       }
 

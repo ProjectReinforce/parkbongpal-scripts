@@ -4,52 +4,49 @@ using System.Collections.Generic;
 using BackEnd;
 using LitJson;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class Inventory:Manager.Singleton<Inventory>
+public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
-    private static readonly int size = 120;
+    static readonly int size = 120;
+    [SerializeField] Slot[] _slots;
+    LinkedList<Slot> slots ;
 
-    [SerializeField] Weapon selectedWeapon;
+    [SerializeField] int selectedWeaponIndex;
+    LinkedListNode<Slot> LastWeaponSlot;//항상 마지막 무기 바로뒤 빈슬롯을 가리킨다.
 
-    private LinkedList<Weapon> myWeapons = new LinkedList<Weapon>();
 
     protected override void Awake()
     {
         base.Awake();
-        SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
-            BackendManager.Instance.searchFromMyIndate, 120, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.Log(bro);
-                    return;
-                }
-
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
-                    Weapon weapon = new Weapon(item);
-                    myWeapons.AddLast(weapon) ;
-                    
-                    Quarry.Instance.SetMine(weapon);
-                    
-                    Debug.Log(item.inDate);
-                }
-            });
+        slots = new LinkedList<Slot>(_slots);
+        LastWeaponSlot = slots.First;
+        
     }
 
     public void AddWeapon(WeaponData weaponData)
     {
-        myWeapons.AddLast(new Weapon(weaponData));
+        LastWeaponSlot.Value.SetWeapon(new Weapon(weaponData)); 
+        LastWeaponSlot = LastWeaponSlot.Next;
     }
 
     public void Decomposition(Weapon[] weapons)
     {
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        foreach (Slot slot in slots)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint((RectTransform)slot.transform,
+                    eventData.position))
+            {
+                
+            }
+        }
+           
     }
 }

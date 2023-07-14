@@ -7,8 +7,8 @@ using UnityEngine;
 public class Weapon 
 {
     
-    private readonly Sprite sprite;
-    private readonly Rairity birthRairity;
+    public readonly Sprite sprite;
+    public readonly Rairity birthRairity;
     //private NSubject.ISubject subjects;
     public WeaponData data { get; set; }
 
