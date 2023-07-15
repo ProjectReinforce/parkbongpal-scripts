@@ -1,10 +1,10 @@
 using UnityEngine;
 using BackEnd;
 using LitJson;
+using Manager;
 
-public class BackendManager : Manager.Singleton<BackendManager>
+public class BackendManager : Singleton<BackendManager>
 {
-    public Where searchFromMyIndate = new Where();
     
     protected override void Awake()
     {
@@ -14,9 +14,20 @@ public class BackendManager : Manager.Singleton<BackendManager>
         if(bro.IsSuccess())
             Debug.Log($"초기화 성공 : {bro}");
         else
+        {
             Debug.LogError($"초기화 실패 : {bro}");
+            return;
+        }
         
+        JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
+        
+       
     }
 
+    public void BaseLoad()
+    {        
+        
 
+
+    }
 }

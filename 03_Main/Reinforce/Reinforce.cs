@@ -23,7 +23,7 @@ public class Promote : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return Player.Instance.userdata.level >= Qualification;
+        return Player.Instance.userData.level >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -45,7 +45,7 @@ public class Additional : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return  Player.Instance.userdata.level >= Qualification;
+        return  Player.Instance.userData.level >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -67,7 +67,7 @@ public class MagicEngrave : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return true;
+        return weapon.data.rarity >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -89,7 +89,7 @@ public class SoulCrafting : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return true;
+        return Player.Instance.userData.level >= Qualification;;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -111,7 +111,7 @@ public class Refinement : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return true;
+        return weapon.data.rarity >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)

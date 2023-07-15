@@ -4,48 +4,62 @@ using System.Collections.Generic;
 using BackEnd;
 using LitJson;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Manager;
 
 [System.Serializable]
-public class Inventory
+public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
-    private static readonly int size = 120;
+    public static readonly int size = 40;
+    [SerializeField] Slot[] _slots;
+    [SerializeField] GameObject inventory;    
+    [SerializeField] Slot Prefab;    
 
-    [SerializeField] Weapon selectedWeapon;
+    LinkedList<Slot> slots;
 
-    [SerializeField] Weapon[] myWeapons = new Weapon[size];
+    [SerializeField] int selectedWeaponIndex;
+    LinkedListNode<Slot> LastWeaponSlot;//항상 마지막 무기 바로뒤 빈슬롯을 가리킨다.
 
-    public Inventory()
+
+    protected override void Awake()
     {
-        SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
-            BackendManager.Instance.searchFromMyIndate, 120, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.Log(bro);
-                    return;
-                }
+        base.Awake();
+        slots = new LinkedList<Slot>(_slots);
+        LastWeaponSlot = slots.First;
 
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
-                    myWeapons[i] = new Weapon(item);
-                    Quarry.Instance.SetMine(myWeapons[i]);
-                    
-                    Debug.Log(item.ToString());
-                }
-            });
+        int weaponCount = ResourceManager.Instance.weaponDatas.Length;
+        for (int i = 0; i < weaponCount; i++)
+        {
+            
+            Weapon weapon = new Weapon(ResourceManager.Instance.weaponDatas[i]);
+            AddWeapon(weapon);
+            Quarry.Instance.SetMine(new Weapon(ResourceManager.Instance.weaponDatas[i]));
+        }
     }
 
-    public void AddWeapon()
+
+    public void AddWeapon(Weapon weapon)
     {
+        LastWeaponSlot.Value.SetWeapon(weapon); 
+        LastWeaponSlot = LastWeaponSlot.Next;
     }
 
     public void Decomposition(Weapon[] weapons)
     {
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        foreach (Slot slot in slots)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint((RectTransform)slot.transform,
+                    eventData.position))
+            {
+                
+            }
+        }
+           
     }
 }

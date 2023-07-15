@@ -2,18 +2,20 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
+// using TMPro;
 
 public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] private Slider progressBar;
-    [SerializeField] private TextMeshProUGUI persentMessage;
+    [SerializeField] Slider progressBar;
+    [SerializeField] Text persentMessage;
+    // [SerializeField] private TextMeshProUGUI persentMessage;
     void Start()
     {
         StartCoroutine(SceneLoading());
+        BackendManager.Instance.BaseLoad();
     }
 
-    private IEnumerator SceneLoading()
+    IEnumerator SceneLoading()
     {
         yield return null;
         AsyncOperation operation = SceneManager.LoadSceneAsync(Utills.TargetScene);

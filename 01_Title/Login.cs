@@ -6,7 +6,9 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
     [SerializeField] GameObject LoginPopup;
-    
+    private const string sceneName= "SampleScene JG";
+
+
     public void TryToLoginWithToken()
     {
         var bro = Backend.BMember.LoginWithTheBackendToken();
@@ -14,7 +16,7 @@ public class Login : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인에 성공했습니다");
-            Utills.LoadScene("Scene1");
+            Utills.LoadScene(sceneName);
         }
         else
         {
@@ -33,7 +35,7 @@ public class Login : MonoBehaviour
             {
                 case 200:
                     Debug.Log("게스트 로그인 성공!");
-                    Utills.LoadScene("Scene1");
+                    Utills.LoadScene(sceneName);
                     break;
                 case 201:
                     Debug.Log("게스트 회원가입 성공!");
@@ -56,7 +58,7 @@ public class Login : MonoBehaviour
         if(bro.IsSuccess())
         {
             Debug.Log("신규 유저 데이터 삽입 성공!");
-            Utills.LoadScene("Scene1");
+            Utills.LoadScene(sceneName);
         }
         else
         {

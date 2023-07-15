@@ -7,8 +7,8 @@ using UnityEngine;
 public class Weapon 
 {
     
-    private readonly Sprite sprite;
-    private readonly Rairity birthRairity;
+    public readonly Sprite sprite;
+    public readonly Rairity birthRairity;
     //private NSubject.ISubject subjects;
     public WeaponData data { get; set; }
 
@@ -23,13 +23,15 @@ public class Weapon
     public Weapon(WeaponData _data)//기본데이터
     {
         data = _data;
-        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.id);
-        sprite = ResourceManager.Instance.GetbaseWeaponSprite(_data.id);
+        Debug.Log("Weapon:"+_data.baseWeaponIndex);
+        //Debug.Log("Weapon:" + _data.baseWeaponIndex);
+        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
+        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         birthRairity= (Rairity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
     }
-    
+
 
 
     public int GetPower()

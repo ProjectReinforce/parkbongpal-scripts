@@ -1,5 +1,8 @@
-﻿public static class Utills
+﻿
+using Random = System.Random;
+public static class Utills
 {
+    public static Random random = new Random();
     public static int Ceil(float target)
     {
         if (target % 1 > 0.001f)
