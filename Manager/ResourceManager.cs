@@ -5,14 +5,14 @@ using LitJson;
 
 namespace Manager
 {
-    public class ResourceManager: Singleton<ResourceManager>
+    public class ResourceManager: DontDestroy<ResourceManager>
     {
         //[SerializeField] BaseWeaponData[] baseWeaponDatas;
         public Where searchFromMyIndate = new Where();
         public BaseWeaponData[] baseWeaponDatas;
         public Mine[] mines;
-        public WeaponData[] weaponDatas;
-        public UserData _userData;
+        public Weapon[] weapons;
+        public UserData userData;
 
         public BaseWeaponData GetBaseWeaponData(int index)
         {
@@ -37,12 +37,14 @@ namespace Manager
         {
             return baseWeaponSprites[index];
         }
-      
-        
+
+
         protected override void Awake()
         {
             base.Awake();
             
+            gameObject.TryGetComponent(out BillPughSingleTon.instance);
+
             baseWeaponSprites =Resources.LoadAll<Sprite>("Sprites/Weapons");
 
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
@@ -101,13 +103,13 @@ namespace Manager
                     }
 
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                    weaponDatas = new WeaponData[json.Count];
-                    Debug.Log("BackManager: 마이웨폰갯수" + weaponDatas.Length);
+                    weapons = new Weapon[json.Count];
+                    Debug.Log("BackManager: 마이웨폰갯수" + weapons.Length);
                     for (int i = 0; i < json.Count; ++i)
                     {
                         WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
 
-                        weaponDatas[i] = item;
+                        weapons[i] = new Weapon( item);
 
                         Debug.Log("weapon" + item.inDate);
                     }
@@ -119,17 +121,17 @@ namespace Manager
                     if (!bro.IsSuccess())
                     {
                         // 요청 실패 처리
-                        Debug.Log(bro);
+                        Debug.LogError(bro);
                         return;
                     }
-                    Debug.Log("backManager: 유저데이터");
+                    Debug.Log("backManager: 유저데이터"+ Backend.UserInDate);
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
 
                     for (int i = 0; i < json.Count; ++i)
                     {
                         // 데이터를 디시리얼라이즈 & 데이터 확인
-                        _userData = JsonMapper.ToObject<UserData>(json[i].ToJson());
-                        Debug.Log("BackManager: 플레이어데이터" + _userData);
+                        userData = JsonMapper.ToObject<UserData>(json[i].ToJson());
+                        Debug.Log("BackManager: 플레이어데이터" + userData);
                     }
                 });
 

@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using Manager;
 
 [System.Serializable]
-public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
+public class Inventory : Singleton<Inventory>, IPointerDownHandler
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
@@ -26,16 +26,15 @@ public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
     protected override void Awake()
     {
         base.Awake();
+
         slots = new LinkedList<Slot>(_slots);
         LastWeaponSlot = slots.First;
 
-        int weaponCount = ResourceManager.Instance.weaponDatas.Length;
+        int weaponCount = ResourceManager.Instance.weapons.Length;
         for (int i = 0; i < weaponCount; i++)
         {
             
-            Weapon weapon = new Weapon(ResourceManager.Instance.weaponDatas[i]);
-            AddWeapon(weapon);
-            Quarry.Instance.SetMine(new Weapon(ResourceManager.Instance.weaponDatas[i]));
+            AddWeapon(ResourceManager.Instance.weapons[i]);
         }
     }
 

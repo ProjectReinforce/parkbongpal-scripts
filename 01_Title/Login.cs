@@ -53,7 +53,7 @@ public class Login : MonoBehaviour
     {
         Param newParam = new Param();
 
-        var bro = Backend.GameData.Insert("UserData", newParam);
+        var bro = Backend.GameData.Insert(nameof(UserData), newParam);
 
         if(bro.IsSuccess())
         {

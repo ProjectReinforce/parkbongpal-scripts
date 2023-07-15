@@ -3,9 +3,8 @@ using BackEnd;
 using LitJson;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class Player : Manager.Singleton<Player>
+public class Player : Singleton<Player>
 {
     [SerializeField] UserData _userData;
     public UserData userData => _userData;
@@ -13,7 +12,7 @@ public class Player : Manager.Singleton<Player>
     protected override void Awake()
     {
         base.Awake();
-        _userData = ResourceManager.Instance._userData;
+        _userData = ResourceManager.Instance.userData;
 
     }
 

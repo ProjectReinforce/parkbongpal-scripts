@@ -3,12 +3,13 @@ using BackEnd;
 using LitJson;
 using Manager;
 
-public class BackendManager : Singleton<BackendManager>
+public class BackendManager : DontDestroy<BackendManager>
 {
     
     protected override void Awake()
     {
         base.Awake();
+
         var bro = Backend.Initialize();
 
         if(bro.IsSuccess())
