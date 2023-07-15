@@ -25,43 +25,46 @@ public class Store:Singleton<Store>
       int randomInt = Utills.random.Next(1, 101);
       int limit = 100;
       Rairity rarity; 
-      
-      if (randomInt > limit-8)
+    
+      if (randomInt > (limit-=8))
           rarity =Rairity.rare;
-      else if (randomInt > limit-14)
+      else if (randomInt > (limit-=14))
           rarity =Rairity.normal;
-      else if (randomInt > limit-27)
+      else if (randomInt > (limit-=27))
           rarity =Rairity.old;
       else
           rarity = Rairity.trash;
-      BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
-      
-      Param param = new Param();
+        Debug.Log("rarity"+rarity+"limit:"+limit);
+      //BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
+      //  Debug.Log(baseWeaponData.index);
 
-      param.Add(nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index);
-      param.Add(nameof(WeaponData.colum.damage),baseWeaponData.atk);
-      param.Add(nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed);
-      param.Add(nameof(WeaponData.colum.range), baseWeaponData.atkRange);
-      param.Add(nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy);
-      param.Add(nameof(WeaponData.colum.rarity), baseWeaponData.rarity);
-      
-    
-      var bro = Backend.GameData.Insert( typeof(WeaponData).ToString(), param);
-      if (!bro.IsSuccess())
-      {
-          Debug.LogError("게임 정보 삽입 실패 : " + bro);
-         
-      }
+      //  Param param = new Param
+      //  {
+      //      { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
+      //      { nameof(WeaponData.colum.damage), baseWeaponData.atk },
+      //      { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
+      //      { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
+      //      { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
+      //      { nameof(WeaponData.colum.rarity), baseWeaponData.rarity}
+      //  };
 
-      WeaponData weaponData = new WeaponData(baseWeaponData.atk,baseWeaponData.atkSpeed,
-          baseWeaponData.atkRange,baseWeaponData.accuracy,baseWeaponData.rarity,baseWeaponData.index
-          ,DateTime.Parse( bro.GetInDate()));
-      
-      
-      Player.Instance.AddGold(-pay);
-      Inventory.Instance.AddWeapon(new Weapon(weaponData));
-      Debug.Log("구입완료"+ bro.GetInDate());
-      
-      
-   }
+
+      //  var bro = Backend.GameData.Insert(typeof(WeaponData).ToString(), param);
+      //  if (!bro.IsSuccess())
+      //  {
+      //      Debug.LogError("게임 정보 삽입 실패 : " + bro);
+
+      //  }
+
+      //  WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
+      //      baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index
+      //      , DateTime.Parse(bro.GetInDate()));
+
+
+      //  Player.Instance.AddGold(-pay);
+      //  Inventory.Instance.AddWeapon(new Weapon(weaponData));
+      //  Debug.Log("구입완료" + bro.GetInDate());
+
+
+    }
 }
