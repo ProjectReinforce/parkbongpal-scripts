@@ -1,6 +1,7 @@
 ﻿using System;
 using BackEnd;
 using LitJson;
+using Manager;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,7 +13,7 @@ public class Player : Manager.Singleton<Player>
     protected override void Awake()
     {
         base.Awake();
-        _userData = BackendManager.Instance._userData;
+        _userData = ResourceManager.Instance._userData;
 
     }
 

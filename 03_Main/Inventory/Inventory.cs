@@ -5,15 +5,19 @@ using BackEnd;
 using LitJson;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Manager;
 
 [System.Serializable]
 public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
-    static readonly int size = 120;
+    public static readonly int size = 40;
     [SerializeField] Slot[] _slots;
-    LinkedList<Slot> slots ;
+    [SerializeField] GameObject inventory;    
+    [SerializeField] Slot Prefab;    
+
+    LinkedList<Slot> slots;
 
     [SerializeField] int selectedWeaponIndex;
     LinkedListNode<Slot> LastWeaponSlot;//항상 마지막 무기 바로뒤 빈슬롯을 가리킨다.
@@ -24,12 +28,21 @@ public class Inventory : Manager.Singleton<Inventory>, IPointerDownHandler
         base.Awake();
         slots = new LinkedList<Slot>(_slots);
         LastWeaponSlot = slots.First;
-        
+
+        int weaponCount = ResourceManager.Instance.weaponDatas.Length;
+        for (int i = 0; i < weaponCount; i++)
+        {
+            
+            Weapon weapon = new Weapon(ResourceManager.Instance.weaponDatas[i]);
+            AddWeapon(weapon);
+            Quarry.Instance.SetMine(new Weapon(ResourceManager.Instance.weaponDatas[i]));
+        }
     }
 
-    public void AddWeapon(WeaponData weaponData)
+
+    public void AddWeapon(Weapon weapon)
     {
-        LastWeaponSlot.Value.SetWeapon(new Weapon(weaponData)); 
+        LastWeaponSlot.Value.SetWeapon(weapon); 
         LastWeaponSlot = LastWeaponSlot.Next;
     }
 

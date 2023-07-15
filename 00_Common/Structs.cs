@@ -42,6 +42,7 @@ public struct MineData//광산차트
     public string name, description;
 }
 
+[System.Serializable]
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;

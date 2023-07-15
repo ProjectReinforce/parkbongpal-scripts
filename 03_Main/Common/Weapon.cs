@@ -23,6 +23,8 @@ public class Weapon
     public Weapon(WeaponData _data)//기본데이터
     {
         data = _data;
+        Debug.Log("Weapon:"+_data.baseWeaponIndex);
+        //Debug.Log("Weapon:" + _data.baseWeaponIndex);
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         birthRairity= (Rairity)baseWeaponData.rarity;

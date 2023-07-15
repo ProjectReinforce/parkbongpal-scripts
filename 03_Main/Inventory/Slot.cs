@@ -14,6 +14,7 @@ public class Slot : MonoBehaviour
     {
         myWeapon = weapon;
         image.sprite = weapon.sprite;
+        Debug.Log("Slot:setWeapon");
     }
     private void Awake()
     {

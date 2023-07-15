@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
 using LitJson;
+using Manager;
 using UnityEngine;
 
 public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채석장
@@ -12,8 +13,12 @@ public class Quarry : Manager.Singleton<Quarry>//광산들을 관리하는 채�
     {
         base.Awake();
 
-        mines = BackendManager.Instance.mines;
-
+        mines = ResourceManager.Instance.mines;
+        //int weaponCount = BackendManager.Instance.weaponDatas.Length;
+        //for (int i = 0; i < weaponCount; i++)
+        //{
+            
+        //}
 
     }
 

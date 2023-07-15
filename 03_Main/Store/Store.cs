@@ -59,7 +59,7 @@ public class Store:Singleton<Store>
       
       
       Player.Instance.AddGold(-pay);
-      Inventory.Instance.AddWeapon(weaponData);
+      Inventory.Instance.AddWeapon(new Weapon(weaponData));
       Debug.Log("구입완료"+ bro.GetInDate());
       
       
