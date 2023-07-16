@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BackEnd;
-using LitJson;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Manager;
 
-[System.Serializable]
+[Serializable]
 public class Inventory : Singleton<Inventory>, IPointerDownHandler
 {
     [SerializeField] int weaponSoul;

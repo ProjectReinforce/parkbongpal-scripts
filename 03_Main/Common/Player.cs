@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class Player : Singleton<Player>
 {
-    [SerializeField] UserData _userData;
+    UserData _userData;
     public UserData userData => _userData;
+   
 
     protected override void Awake()
     {
@@ -16,16 +17,7 @@ public class Player : Singleton<Player>
 
     }
 
-    public bool CanBuy(int gold)
-    {
-        if (userData.gold < gold)
-        {
-            Debug.Log("돈이 부족합니다.");
-            return false;
-        }
-        
-        return true;
-    }
+    
     public void AddGold(int gold)
     {
         if (userData.gold < gold)

@@ -7,10 +7,10 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
     public int damage, speed, range, accuracy, rarity; 
     public int baseWeaponIndex,mineId;
     public int normalReinforceCount;
-    public DateTime inDate;
+    public string inDate;
 
     public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,int _baseWeaponIndex,
-        DateTime _inDate)
+        string _inDate)
     {
         damage = _damage;
         speed = _speed;

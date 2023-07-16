@@ -5,34 +5,29 @@ using LitJson;
 
 namespace Manager
 {
-    public class ResourceManager: DontDestroy<ResourceManager>
+    public class ResourceManager : DontDestroy<ResourceManager>
     {
         //[SerializeField] BaseWeaponData[] baseWeaponDatas;
         public Where searchFromMyIndate = new Where();
         public BaseWeaponData[] baseWeaponDatas;
-        public Mine[] mines;
+        public MineData[] mineDatas;
         public Weapon[] weapons;
         public UserData userData;
+        private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
 
         public BaseWeaponData GetBaseWeaponData(int index)
         {
             return baseWeaponDatas[index];
         }
+
         public BaseWeaponData GetBaseWeaponData(Rairity rairity)
         {
-            List<BaseWeaponData> rarityData = new List<BaseWeaponData>();
-            foreach (var baseWeaponData in baseWeaponDatas)
-            {
-                if ((Rairity)baseWeaponData.rarity == rairity)
-                {
-                    rarityData.Add(baseWeaponData);
-                }
-            }
-            
-            return rarityData[Utills.random.Next(0,rarityData.Count)];
+            return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }
-        
+
         private Sprite[] baseWeaponSprites;
+
         public Sprite GetBaseWeaponSprite(int index)
         {
             return baseWeaponSprites[index];
@@ -42,13 +37,18 @@ namespace Manager
         protected override void Awake()
         {
             base.Awake();
-            
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
-
-            baseWeaponSprites =Resources.LoadAll<Sprite>("Sprites/Weapons");
-
+            baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85454", bro =>
+            for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
+            {
+                baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
+            }
+
+            
+            //비동기 처리
+            #region Sendqueue 
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85765", bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -58,12 +58,19 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 baseWeaponDatas = new BaseWeaponData[json.Count];
+                Debug.Log("baseWeaponData count :" + json.Count);
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 데이터를 디시리얼라이즈 & 데이터 확인
-                    BaseWeaponData item = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
-                    baseWeaponDatas[i] = item;
+                    BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
+                    baseWeaponData.atk = (int)((baseWeaponData.atk << baseWeaponData.rarity) * 0.5f) + 10;
+                    baseWeaponData.atkSpeed = (int)((baseWeaponData.atkSpeed << baseWeaponData.rarity) * 0.1f);
+                    baseWeaponData.atkRange = (int)(baseWeaponData.atkRange) + 40;
+                    baseWeaponData.accuracy = (int)(baseWeaponData.accuracy);
+                    baseWeaponDatas[i] = baseWeaponData;
+                    baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                 }
+             
             });
 
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85425", bro =>
@@ -76,7 +83,8 @@ namespace Manager
                 }
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                mines = new Mine[json.Count];
+                mineDatas = new MineData[json.Count];
+                Debug.Log("Mine count :" + json.Count);
                 for (int i = 0; i < json.Count; ++i)
                 {
                     // 계수, 스테이지 확인 
@@ -85,9 +93,7 @@ namespace Manager
                     mineData.hp = (int)((mineData.hp << mineData.stage) * 0.2f);
                     mineData.size = (int)(mineData.size * 1.5f) + 30;
                     mineData.lubricity = (int)(mineData.lubricity * 1.5f);
-                    Debug.Log($"defence:{mineData.defence} hp: {mineData.hp} size: {mineData.size}" +
-                              $"lubricity: {mineData.lubricity} stage: {mineData.stage}");
-                    mines[i] = new Mine(mineData);
+                    mineDatas[i] = mineData;
                 }
             });
 
@@ -109,9 +115,7 @@ namespace Manager
                     {
                         WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
 
-                        weapons[i] = new Weapon( item);
-
-                        Debug.Log("weapon" + item.inDate);
+                        weapons[i] = new Weapon(item);
                     }
                 });
 
@@ -124,7 +128,8 @@ namespace Manager
                         Debug.LogError(bro);
                         return;
                     }
-                    Debug.Log("backManager: 유저데이터"+ Backend.UserInDate);
+
+                    Debug.Log("backManager: 유저데이터" + Backend.UserInDate);
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
 
                     for (int i = 0; i < json.Count; ++i)
@@ -134,8 +139,8 @@ namespace Manager
                         Debug.Log("BackManager: 플레이어데이터" + userData);
                     }
                 });
-
+            #endregion
+            
         }
-        
     }
 }

@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using BackEnd;
-using LitJson;
+
 using Manager;
 using UnityEngine;
 
 public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
     
-    private Mine[] mines;
+    [SerializeField] Mine[] mines;
     protected override void Awake()
     {
         base.Awake();
-
-
-        mines = ResourceManager.Instance.mines;
+        int mineCount = ResourceManager.Instance.mineDatas.Length;
+        for (int i = 0; i < mineCount; i++)
+        {          
+            mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
+        }
         int weaponCount = ResourceManager.Instance.weapons.Length;
         for (int i = 0; i < weaponCount; i++)
         {          
@@ -25,9 +24,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     public void SetMine(Weapon weapon)
     {
-        mines[weapon.data.mineId].SetWeapon(weapon);
+        if(weapon.data.mineId>=0)
+            mines[weapon.data.mineId].SetWeapon(weapon);
     }
-    
-    
 
 }

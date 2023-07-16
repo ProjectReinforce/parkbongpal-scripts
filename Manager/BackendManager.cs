@@ -21,7 +21,7 @@ public class BackendManager : DontDestroy<BackendManager>
         }
         
         JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
-        
+        //Backend.BMember.DeleteGuestInfo();
        
     }
 
