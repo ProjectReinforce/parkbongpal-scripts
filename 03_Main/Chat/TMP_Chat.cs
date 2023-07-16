@@ -16,6 +16,8 @@ public class TMP_Chat : MonoBehaviour
     {
         Backend.Chat.OnJoinChannel = SomeoneJoinChannel;
         Backend.Chat.OnChat = SomeoneSendChat;
+        Backend.Chat.SetFilterUse(true);
+        Backend.Chat.SetFilterReplacementChar('♡');
     }
 
     void SomeoneJoinChannel(JoinChannelEventArgs args)
