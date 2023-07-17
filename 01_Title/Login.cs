@@ -6,7 +6,7 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
     [SerializeField] GameObject LoginPopup;
-    private const string sceneName= "SampleScene JG";
+    private const string sceneName= "SampleScene IJH";
 
 
     public void TryToLoginWithToken()

@@ -119,10 +119,10 @@ namespace Manager
                     if (!bro.IsSuccess())
                     {
                         // 요청 실패 처리
-                        Debug.Log(bro);
+                        Debug.LogError(bro);
                         return;
                     }
-                    Debug.Log("backManager: 유저데이터");
+                    Debug.Log("backManager: 유저데이터"+ Backend.UserInDate);
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
 
                     for (int i = 0; i < json.Count; ++i)
