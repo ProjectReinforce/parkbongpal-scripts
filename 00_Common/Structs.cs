@@ -49,3 +49,12 @@ public struct BaseWeaponData//기본 무기정보 차트
     public int atk, atkSpeed, atkRange,accuracy;
     public string name,  description;
 }
+
+public struct NormalGarchar
+{
+    public int trash, old, normal, rare;
+}
+public struct AdvencedGarchar
+{
+    public int trash, old, normal, rare, unique, legendary;
+}

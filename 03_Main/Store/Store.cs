@@ -24,17 +24,18 @@ public class Store:Singleton<Store>
       
       int randomInt = Utills.random.Next(1, 101);
       int limit = 100;
-      Rairity rarity; 
+      Rairity rarity;
+      NormalGarchar normalGarchar = ResourceManager.Instance.normalGarchar;
     
-      if (randomInt > (limit-=8))
+      if (randomInt > (limit-=normalGarchar.rare))
           rarity =Rairity.rare;
-      else if (randomInt > (limit-=14))
+      else if (randomInt > (limit-=normalGarchar.normal))
           rarity =Rairity.normal;
-      else if (randomInt > (limit-=27))
+      else if (randomInt > (limit-=normalGarchar.old))
           rarity =Rairity.old;
       else
           rarity = Rairity.trash;
-      Debug.Log("rarity"+rarity+"limit:"+limit);
+      Debug.Log("rarity: "+rarity+" limit: "+limit);
       BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
         Debug.Log(baseWeaponData.index);
 

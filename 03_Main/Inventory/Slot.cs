@@ -8,21 +8,19 @@ public class Slot : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] UnityEngine.UI.Image image;
-    private Weapon myWeapon;
+    public Weapon myWeapon { get; set; }//Immutable 클래스이기때문에 퍼블릭 허용
 
     public void SetWeapon(Weapon weapon)
     {
         myWeapon = weapon;
         image.sprite = weapon.sprite;
     }
-    private void Awake()
-    {
-        
-    }
 
-    void Start()
+    public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.
     {
-        
+        if(myWeapon is  null) return;
+        Inventory.Instance.currentWeapon = myWeapon;
     }
+ 
 
 }

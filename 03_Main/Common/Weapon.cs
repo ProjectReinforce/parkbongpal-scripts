@@ -34,7 +34,7 @@ public class Weapon
 
     public void Lend(int mineId)
     {
-        if(data.mineId!=-1)return;//이미세팅된무기는 거름
+        if(data.mineId!=-1)return;//예외처리 2
         _data.mineId = mineId;
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);

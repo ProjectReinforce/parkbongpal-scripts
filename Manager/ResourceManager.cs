@@ -16,6 +16,9 @@ namespace Manager
         private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
 
+        public NormalGarchar normalGarchar;
+        public AdvencedGarchar advencedGarchar;
+        
         public BaseWeaponData GetBaseWeaponData(int index)
         {
             return baseWeaponDatas[index];
@@ -33,7 +36,6 @@ namespace Manager
             return baseWeaponSprites[index];
         }
 
-
         protected override void Awake()
         {
             base.Awake();
@@ -41,13 +43,44 @@ namespace Manager
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
-            {
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
-            }
-
             
-            //비동기 처리
-            #region Sendqueue 
+            
+            #region normalGarchaData
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85808", bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    Debug.Log(bro);
+                    return;
+                }
+                JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                Debug.Log("일반뽑기데이터수"+json.Count);
+                for (int i = 0; i < json.Count; ++i)
+                {
+                    normalGarchar = JsonMapper.ToObject<NormalGarchar>(json[i].ToJson());
+                }
+            });
+            #endregion
+            
+            #region advencedGarchaData
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85810", bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    Debug.Log(bro);
+                    return;
+                }
+                JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                Debug.Log("고급뽑기데이터수"+json.Count);
+                for (int i = 0; i < json.Count; ++i)
+                {
+                    advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(json[i].ToJson());
+                }
+            });
+            #endregion
+
+            #region baseWeaponData
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85765", bro =>
             {
                 if (!bro.IsSuccess())
@@ -73,6 +106,9 @@ namespace Manager
              
             });
 
+            #endregion
+
+            #region minedata
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85425", bro =>
             {
                 if (!bro.IsSuccess())
@@ -96,8 +132,9 @@ namespace Manager
                     mineDatas[i] = mineData;
                 }
             });
+            #endregion
 
-            Debug.Log("유저인데이트" + Backend.UserInDate);
+            #region myWeaponData
             SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
                 searchFromMyIndate, 120, bro =>
                 {
@@ -118,7 +155,9 @@ namespace Manager
                         weapons[i] = new Weapon(item);
                     }
                 });
+            #endregion
 
+            #region playerData
             SendQueue.Enqueue(Backend.GameData.Get, nameof(UserData),
                 searchFromMyIndate, 1, bro =>
                 {

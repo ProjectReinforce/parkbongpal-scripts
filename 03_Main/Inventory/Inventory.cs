@@ -11,14 +11,21 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
     public static readonly int size = 40;
+    [SerializeField] Slot Prefab;
     [SerializeField] Slot[] _slots;
-    [SerializeField] GameObject inventory;    
-    [SerializeField] Slot Prefab;    
-
     LinkedList<Slot> slots;
-
-    [SerializeField] int selectedWeaponIndex;
     LinkedListNode<Slot> LastWeaponSlot;//항상 마지막 무기 바로뒤 빈슬롯을 가리킨다.
+    public Weapon currentWeapon { get; set; }//
+    // public void SetCurrentWeapon(int index)
+    // {
+    //     LinkedListNode<Slot> findingSlot = slots.First;
+    //     while (index > 0)
+    //     {
+    //         findingSlot= findingSlot.Next;
+    //         index--;
+    //     }
+    //     currentWeapon = findingSlot.Value.myWeapon;
+    // }
 
 
     protected override void Awake()
@@ -31,7 +38,6 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
         int weaponCount = ResourceManager.Instance.weapons.Length;
         for (int i = 0; i < weaponCount; i++)
         {
-            
             AddWeapon(ResourceManager.Instance.weapons[i]);
         }
     }
@@ -41,6 +47,13 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
     {
         LastWeaponSlot.Value.SetWeapon(weapon); 
         LastWeaponSlot = LastWeaponSlot.Next;
+    }
+
+    public void ConfirmWeapon()
+    {
+        Debug.Log("Quarry.Instance.currentMine "+ Quarry.Instance.currentMine);
+        Debug.Log("currentweapon "+ currentWeapon);
+        Quarry.Instance.currentMine.SetWeapon(currentWeapon);
     }
 
     public void Decomposition(Weapon[] weapons)
@@ -57,6 +70,5 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
                 
             }
         }
-           
     }
 }
