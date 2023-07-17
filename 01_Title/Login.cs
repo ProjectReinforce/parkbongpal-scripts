@@ -8,7 +8,7 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
     // const string SCENENAME = "Main";
-    const string SCENENAME = "Chat_HW";
+    const string SCENENAME = "SampleScene JG";
 
     [SerializeField] GameObject LoginPopup;
     public void TryToLoginWithToken()

@@ -15,7 +15,11 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
     [SerializeField] Slot[] _slots;
     LinkedList<Slot> slots;
     LinkedListNode<Slot> LastWeaponSlot;//항상 마지막 무기 바로뒤 빈슬롯을 가리킨다.
-    public Weapon currentWeapon { get; set; }//
+
+
+    public Weapon currentWeapon;
+
+
     // public void SetCurrentWeapon(int index)
     // {
     //     LinkedListNode<Slot> findingSlot = slots.First;

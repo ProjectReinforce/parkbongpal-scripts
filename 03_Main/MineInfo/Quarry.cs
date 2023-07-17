@@ -5,9 +5,16 @@ using UnityEngine;
 public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
     [SerializeField] GameObject quarry;
+
+    [SerializeField] UnityEngine.UI.Image mineImage;
+    
+    [SerializeField] UnityEngine.UI.Image weaponImage;
+    
     Mine[] mines;
-    public Mine currentMine { get; set; }
-    public UnityEngine.UI.Image infoImage;
+
+    public Mine currentMine;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,10 +29,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         {          
             SetMine(ResourceManager.Instance.weapons[i]);
         }
-
     }
-    
-    
 
     public void SetMine(Weapon weapon)  
     {
@@ -36,7 +40,4 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         Inventory.Instance.currentWeapon.Lend(currentMine.data.index);
     }
- 
-
-
 }
