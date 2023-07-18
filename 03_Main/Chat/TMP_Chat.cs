@@ -7,49 +7,111 @@ using LitJson;
 
 public class TMP_Chat : MonoBehaviour
 {
+    UnityEngine.Events.UnityEvent<ChatEventArgs> objMake;
     void Awake()
     {
         CheckChatStatus();
+
+        objMake = new UnityEngine.Events.UnityEvent<ChatEventArgs>();
+        objMake.AddListener(test);
     }
 
     void Start()
     {
         Backend.Chat.OnJoinChannel = SomeoneJoinChannel;
         Backend.Chat.OnChat = SomeoneSendChat;
+        Backend.Chat.OnLeaveChannel = LeaveChannel;
+        Backend.Chat.OnGlobalChat = RecieveGlobalChat;
+        Backend.Chat.OnNotification = RecieveNotice;
+
         Backend.Chat.SetFilterUse(true);
         Backend.Chat.SetFilterReplacementChar('♡');
+        Backend.Chat.SetTimeoutMessage("접속 종료됨.");
+        Backend.Chat.SetRepeatedChatBlockMessage("도배 차단.");
     }
 
-    void SomeoneJoinChannel(JoinChannelEventArgs args)
+    Queue<System.Action> testing = new Queue<System.Action>();
+    void Update()
     {
-        ErrorInfo errorInfo = args.ErrInfo;
+        if(testing.Count > 0)
+        {
+            testing.Dequeue().Invoke();
+        }
+    }
+
+    void SomeoneJoinChannel(JoinChannelEventArgs _args)
+    {
+        ErrorInfo errorInfo = _args.ErrInfo;
 
         if(errorInfo == ErrorInfo.Success)
         {
-            if(!args.Session.IsRemote)
+            if(!_args.Session.IsRemote)
                 Debug.Log("채팅 채널 접속 성공");
             else
-                Debug.Log($"{args.Session.NickName}님이 접속했습니다.");
+                Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
         }
         else
         {
-            Debug.LogError($"채널 접속 실패 : {args.ErrInfo}");
+            Debug.LogError($"채널 접속 실패 : {errorInfo}");
         }
     }
 
-    void SomeoneSendChat(ChatEventArgs args)
+    [SerializeField] GameObject messageSlot;
+    [SerializeField] Transform chatContent;
+    void SomeoneSendChat(ChatEventArgs _args)
     {
-        ErrorInfo errorInfo = args.ErrInfo;
+        ErrorInfo errorInfo = _args.ErrInfo;
 
         if(errorInfo == ErrorInfo.Success)
         {
-            if(!args.From.IsRemote)
-                Debug.Log($"나 : {args.Message}");
+            if(!_args.From.IsRemote)
+                Debug.Log($"나 : {_args.Message}");
             else
-                Debug.Log($"{args.From.NickName}님 : {args.Message}");
+                Debug.Log($"{_args.From.NickName}님 : {_args.Message}");
+            
+            // objMake.Invoke(_args);
+            testing.Enqueue(() => test(_args));
         }
         else
-            Debug.LogError("메시지 송신 실패");
+            Debug.LogError($"메시지 송신 실패 : {errorInfo}");
+    }
+
+    [SerializeField] GameObject newMessageSlot;
+    void test(ChatEventArgs _args)
+    {
+        // Debug.Log("오브젝트 생성 함수 호출");
+        newMessageSlot = Instantiate(messageSlot, chatContent);
+        newMessageSlot.SetActive(true);
+        if(newMessageSlot.TryGetComponent<TMP_ChatMessage>(out TMP_ChatMessage chatMessage))
+            chatMessage.Set(_args.From.NickName, _args.Message);
+    }
+
+    void LeaveChannel(LeaveChannelEventArgs _args)
+    {
+        ErrorInfo errorInfo = _args.ErrInfo;
+
+        if(errorInfo == ErrorInfo.Success)
+            if(!_args.Session.IsRemote)
+                Debug.Log("채널에서 퇴장");
+                // CheckChatStatus();
+        else
+            Debug.LogError($"퇴장 실패 : {errorInfo}");
+    }
+
+    void RecieveGlobalChat(GlobalChatEventArgs _args)
+    {
+        ErrorInfo errorInfo = _args.ErrInfo;
+        Debug.Log(errorInfo);
+
+        if(errorInfo == ErrorInfo.Success)
+            Debug.Log($"[공지] {_args.From} : {_args.Message}");
+        else
+            Debug.LogError($"공지 수신 실패 : {errorInfo}");
+    }
+
+    void RecieveNotice(NotificationEventArgs _args)
+    {
+        Debug.Log($"[공지] {_args.Subject} : {_args.Message}");
     }
 
     void CheckChatStatus()
@@ -93,11 +155,5 @@ public class TMP_Chat : MonoBehaviour
             else
                 Debug.LogError($"채널 그룹 검색 실패 : {callback}");
         });
-    }
-
-    public void SendMessage(UnityEngine.UI.InputField inputField)
-    {
-        Backend.Chat.ChatToChannel(ChannelType.Public, inputField.text);
-        inputField.text = "";
     }
 }
