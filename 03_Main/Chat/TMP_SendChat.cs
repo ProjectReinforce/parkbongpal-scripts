@@ -12,6 +12,6 @@ public class TMP_SendChat : MonoBehaviour
 
     public void SendGlobalChat()
     {
-        BackEnd.Backend.Chat.ChatToGlobal("[공지] 잠시 후 점검이 시작될 예정입니다.");
+        BackEnd.Backend.Chat.ChatToGlobal("GM박봉일 : 잠시 후 점검이 시작될 예정입니다.");
     }
 }

@@ -7,13 +7,9 @@ using LitJson;
 
 public class TMP_Chat : MonoBehaviour
 {
-    UnityEngine.Events.UnityEvent<ChatEventArgs> objMake;
     void Awake()
     {
         CheckChatStatus();
-
-        objMake = new UnityEngine.Events.UnityEvent<ChatEventArgs>();
-        objMake.AddListener(test);
     }
 
     void Start()
@@ -30,15 +26,17 @@ public class TMP_Chat : MonoBehaviour
         Backend.Chat.SetRepeatedChatBlockMessage("도배 차단.");
     }
 
-    Queue<System.Action> testing = new Queue<System.Action>();
+    Queue<System.Action> InMainThreadQueue = new Queue<System.Action>();
     void Update()
     {
-        if(testing.Count > 0)
+        if(InMainThreadQueue.Count > 0)
         {
-            testing.Dequeue().Invoke();
+            InMainThreadQueue.Dequeue().Invoke();
         }
     }
 
+    const string TITLE_GUIDE = "안내";
+    const string JOINMESSAGE = "채팅 채널 접속 성공";
     void SomeoneJoinChannel(JoinChannelEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
@@ -46,7 +44,11 @@ public class TMP_Chat : MonoBehaviour
         if(errorInfo == ErrorInfo.Success)
         {
             if(!_args.Session.IsRemote)
+            {
                 Debug.Log("채팅 채널 접속 성공");
+                
+                InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOINMESSAGE, MessageType.Guide));
+            }
             else
                 Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
         }
@@ -56,8 +58,6 @@ public class TMP_Chat : MonoBehaviour
         }
     }
 
-    [SerializeField] GameObject messageSlot;
-    [SerializeField] Transform chatContent;
     void SomeoneSendChat(ChatEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
@@ -69,21 +69,30 @@ public class TMP_Chat : MonoBehaviour
             else
                 Debug.Log($"{_args.From.NickName}님 : {_args.Message}");
             
-            // objMake.Invoke(_args);
-            testing.Enqueue(() => test(_args));
+            InMainThreadQueue.Enqueue(() => SetChatObject(_args.From.NickName, _args.Message));
         }
         else
             Debug.LogError($"메시지 송신 실패 : {errorInfo}");
     }
 
+    [SerializeField] GameObject messageSlot;
+    [SerializeField] GameObject messageSlot2;
+    [SerializeField] Transform chatContent;
     [SerializeField] GameObject newMessageSlot;
-    void test(ChatEventArgs _args)
+    [SerializeField] UnityEngine.UI.Scrollbar chatScroll;
+    void SetChatObject(string _nickname, string _message, MessageType _messageType = MessageType.Normal)
     {
         // Debug.Log("오브젝트 생성 함수 호출");
-        newMessageSlot = Instantiate(messageSlot, chatContent);
+        // newMessageSlot = Instantiate(messageSlot, chatContent);
+        // newMessageSlot.SetActive(true);
+        // if(newMessageSlot.TryGetComponent<TMP_ChatMessage>(out TMP_ChatMessage chatMessage))
+        //     chatMessage.Set(_nickname, _message);
+        // chatScroll.value = 0;
+        newMessageSlot = Instantiate(messageSlot2, chatContent);
         newMessageSlot.SetActive(true);
-        if(newMessageSlot.TryGetComponent<TMP_ChatMessage>(out TMP_ChatMessage chatMessage))
-            chatMessage.Set(_args.From.NickName, _args.Message);
+        if(newMessageSlot.TryGetComponent<TMP_ChatMessage2>(out TMP_ChatMessage2 chatMessage))
+            chatMessage.Set(_nickname, _message, _messageType);
+        chatScroll.value = 0;
     }
 
     void LeaveChannel(LeaveChannelEventArgs _args)
@@ -98,13 +107,18 @@ public class TMP_Chat : MonoBehaviour
             Debug.LogError($"퇴장 실패 : {errorInfo}");
     }
 
+    const string TITLE_NOTICE = "공지";
     void RecieveGlobalChat(GlobalChatEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
         Debug.Log(errorInfo);
 
         if(errorInfo == ErrorInfo.Success)
+        {
             Debug.Log($"[공지] {_args.From} : {_args.Message}");
+
+            InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
+        }
         else
             Debug.LogError($"공지 수신 실패 : {errorInfo}");
     }
@@ -112,6 +126,8 @@ public class TMP_Chat : MonoBehaviour
     void RecieveNotice(NotificationEventArgs _args)
     {
         Debug.Log($"[공지] {_args.Subject} : {_args.Message}");
+        
+        InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
     }
 
     void CheckChatStatus()
