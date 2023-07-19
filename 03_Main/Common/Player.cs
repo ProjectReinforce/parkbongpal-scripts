@@ -1,36 +1,26 @@
 ﻿using System;
-using BackEnd;
-using LitJson;
+
+using Manager;
 using UnityEngine;
 
-public class Player : Manager.Singleton<Player>
+public class Player : Singleton<Player>
 {
-    [SerializeField] public UserData userdata { get; set; }
-    
+    UserData _userData;
+    public UserData userData => _userData;
+   
 
     protected override void Awake()
     {
         base.Awake();
+        _userData = ResourceManager.Instance.userData;
 
-        
-        SendQueue.Enqueue(Backend.GameData.Get, nameof(UserData),
-            BackendManager.Instance.searchFromMyIndate, 1, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.Log(bro);
-                    return;
-                }
-
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    userdata = JsonMapper.ToObject<UserData>(json[i].ToJson());
-                }
-            });
     }
+
     
-    
+    public void AddGold(int gold)
+    {
+        if (userData.gold < gold)
+            return ;
+        _userData.gold += gold;
+    }
 }
