@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Mine :MonoBehaviour
 {
     // Start is called before the first frame update
     public MineData data { get; set; }
     private const int BASEGOLD = 10;
-    [SerializeField] UnityEngine.UI.Text name;
+    [SerializeField] UnityEngine.UI.Text mineName;
     [SerializeField] UnityEngine.UI.Text goldPerMin;
-    
-    private string weaponIndate;
+
+    public Weapon rentalWeapon { get; set; }
     public void Initialized(MineData _data)
     {
         data = _data;
-        name.text = data.name;
+        mineName.text = data.name;
     }
 
     public void SetCurrentMine()// *dip 위배중, 리팩토링 대상.
@@ -24,7 +25,7 @@ public class Mine :MonoBehaviour
 
     public void SetWeapon(Weapon rentWeapon)
     {
-        weaponIndate = rentWeapon.data.inDate;
+        rentalWeapon = rentWeapon;
         WeaponData weaponData = rentWeapon.data;
         float miss = -(weaponData.accuracy - data.lubricity); //정확도-매끄러움
 
@@ -53,7 +54,7 @@ public class Mine :MonoBehaviour
         if (miss > 0)
             time *= 100 / (100 - miss);
         goldPerMin.text = ((int)(oneOreGold * (60 / time))).ToString();
-        Debug.Log("goldPerMin" + name.text);
+        Debug.Log("goldPerMin" + mineName.text);
     }
     
    
