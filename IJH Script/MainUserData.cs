@@ -23,7 +23,7 @@ public class MainUserData : MonoBehaviour
     {
         mainGoldText.text = Player.Instance.userData.gold.ToString();       // 유저 보유 돈
         mainDiamondText.text = Player.Instance.userData.diamond.ToString(); // 유저 보유 다이아
-        mainLevelText.text = Player.Instance.userData.level.ToString();     // 유저 레벨
+        mainLevelText.text = "Lv." + Player.Instance.userData.level.ToString();     // 유저 레벨
         mainNickNameText.text = BackEnd.Backend.UserNickName;               // 유저 이름
         mainExp = Player.Instance.userData.exp;                             // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
         mainStone = Player.Instance.userData.stone;                         // 유저 보유 스톤?
