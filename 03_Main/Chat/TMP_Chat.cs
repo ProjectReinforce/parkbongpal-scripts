@@ -93,6 +93,7 @@ public class TMP_Chat : MonoBehaviour
         if(newMessageSlot.TryGetComponent<TMP_ChatMessage2>(out TMP_ChatMessage2 chatMessage))
             chatMessage.Set(_nickname, _message, _messageType);
         chatScroll.value = 0;
+        // chatScroll.transform.parent.GetComponent<UnityEngine.UI.ScrollRect>().normalizedPosition = Vector2.zero;
     }
 
     void LeaveChannel(LeaveChannelEventArgs _args)
