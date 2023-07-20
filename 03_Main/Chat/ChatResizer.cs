@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TMP_ChatResizer : MonoBehaviour
+public class ChatResizer : MonoBehaviour
 {
     [SerializeField] RectTransform chat;
-    [SerializeField] float expandPosY;
-    [SerializeField] float expandHeight;
-    [SerializeField] float shrinkPosY;
-    [SerializeField] float shrinkHeight;
+    [SerializeField] float expandPosY; // 330
+    [SerializeField] float expandHeight; // 425
+    [SerializeField] float shrinkPosY; // 190
+    [SerializeField] float shrinkHeight; // 145
     bool isExpanded;
 
     public void ChatResize()

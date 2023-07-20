@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TMP_SendChat : MonoBehaviour
+public class SendChat : MonoBehaviour
 {
     public void SendMessage(UnityEngine.UI.InputField inputField)
     {

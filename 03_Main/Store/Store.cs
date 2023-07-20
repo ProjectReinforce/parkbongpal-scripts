@@ -54,7 +54,6 @@ public class Store:Singleton<Store>
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
-
         }
 
         WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,

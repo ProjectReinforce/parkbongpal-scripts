@@ -5,7 +5,7 @@ using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
 
-public class TMP_Chat : MonoBehaviour
+public class ChatManager : MonoBehaviour
 {
     void Awake()
     {
@@ -76,24 +76,16 @@ public class TMP_Chat : MonoBehaviour
     }
 
     [SerializeField] GameObject messageSlot;
-    [SerializeField] GameObject messageSlot2;
     [SerializeField] Transform chatContent;
-    [SerializeField] GameObject newMessageSlot;
     [SerializeField] UnityEngine.UI.Scrollbar chatScroll;
     void SetChatObject(string _nickname, string _message, MessageType _messageType = MessageType.Normal)
     {
         // Debug.Log("오브젝트 생성 함수 호출");
-        // newMessageSlot = Instantiate(messageSlot, chatContent);
-        // newMessageSlot.SetActive(true);
-        // if(newMessageSlot.TryGetComponent<TMP_ChatMessage>(out TMP_ChatMessage chatMessage))
-        //     chatMessage.Set(_nickname, _message);
-        // chatScroll.value = 0;
-        newMessageSlot = Instantiate(messageSlot2, chatContent);
+        GameObject newMessageSlot = Instantiate(messageSlot, chatContent);
         newMessageSlot.SetActive(true);
-        if(newMessageSlot.TryGetComponent<TMP_ChatMessage2>(out TMP_ChatMessage2 chatMessage))
+        if(newMessageSlot.TryGetComponent<ChatMessage>(out ChatMessage chatMessage))
             chatMessage.Set(_nickname, _message, _messageType);
         chatScroll.value = 0;
-        // chatScroll.transform.parent.GetComponent<UnityEngine.UI.ScrollRect>().normalizedPosition = Vector2.zero;
     }
 
     void LeaveChannel(LeaveChannelEventArgs _args)
