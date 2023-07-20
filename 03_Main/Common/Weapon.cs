@@ -54,5 +54,9 @@ public class Weapon
         
         return 0;
     }
-    
+
+    public Weapon Clone()
+    {
+        return (Weapon)MemberwiseClone();
+    }
 }

@@ -12,12 +12,6 @@ public class Store:Singleton<Store>
     
    public void NormalDrawing()
    {
-      
-      /*
-       * 등급별 나올확률.
-       * 일반 51 27 14 8
-       * 고급 48 25 14 9 3.8 0.2;
-       */
       int pay = 0;
       if(Player.Instance.userData.gold<pay)
           return;
@@ -62,7 +56,7 @@ public class Store:Singleton<Store>
 
 
         Player.Instance.AddGold(-pay);
-        Inventory.Instance.AddWeapon(new Weapon(weaponData));
+        Inventory.Instance.AddWeapon(new Weapon(weaponData), Inventory.Instance.count);
         Debug.Log("구입완료" + bro.GetInDate());
 
 

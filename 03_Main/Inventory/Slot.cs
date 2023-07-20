@@ -1,39 +1,42 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 [Serializable]
-public class Slot : MonoBehaviour
+public class Slot : MonoBehaviour, IComparable<Slot> 
 {
     // Start is called before the first frame update
     [SerializeField] UnityEngine.UI.Image backgroundImage;
     [SerializeField] UnityEngine.UI.Image weaponImage;
     [SerializeField] GameObject lendImageObject;
-    Weapon _myWeapon;
-    public Weapon myWeapon => _myWeapon;
-
+    //Weapon _myWeapon;
+    private Weapon myWeapon ;
+//=> _myWeapon
     public void SetWeapon(Weapon weapon)
     {
-        _myWeapon = weapon;
+        myWeapon = weapon.Clone();
         lendImageObject.SetActive(weapon.data.mineId>-1);
         weaponImage.sprite = weapon.sprite;
+        Debug.Log("gg"+myWeapon);
     }
 
     public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.
     {
-        
         if(myWeapon is  null) return;
         Inventory.Instance.currentWeapon = myWeapon;
     }
 
-/*
-    public int CompareTo(Slot obj, SortedMethod sortedMethod)
+
+    public int CompareTo(Slot obj)
     {
-        if (myWeapon is null || obj.myWeapon is null )
+        if (myWeapon is null)
+            return 1;
+        if (obj.myWeapon is null)
             return -1;
-        switch (sortedMethod)
+        switch ((SortedMethod)Inventory.Instance.sortingMethod.value)
         {
             case SortedMethod.등급:
                 return  obj.myWeapon.data.rarity -myWeapon.data.rarity  ;
@@ -55,5 +58,8 @@ public class Slot : MonoBehaviour
                 return obj.myWeapon.data.rarity - myWeapon.data.rarity;
         }
     }
-    */
+
+
+
+   
 }

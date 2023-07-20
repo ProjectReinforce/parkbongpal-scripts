@@ -7,7 +7,7 @@ public class Mine :MonoBehaviour
 {
     // Start is called before the first frame update
     public MineData data { get; set; }
-    private const int BASEGOLD = 10;
+    private const int BASE_GOLD = 10;
     [SerializeField] UnityEngine.UI.Text mineName;
     [SerializeField] UnityEngine.UI.Text goldPerMin;
 
@@ -25,7 +25,10 @@ public class Mine :MonoBehaviour
 
     public void SetWeapon(Weapon rentWeapon)
     {
+        if(rentalWeapon== rentWeapon) return;
         rentalWeapon = rentWeapon;
+        Debug.Log(rentalWeapon.name);
+        Debug.Log(rentalWeapon.data.mineId);
         WeaponData weaponData = rentWeapon.data;
         float miss = -(weaponData.accuracy - data.lubricity); //정확도-매끄러움
 
@@ -46,7 +49,7 @@ public class Mine :MonoBehaviour
 
         int hpPerDMG = Utills.Ceil(data.hp / oneHitDMG); //몇방때려야 하나를 캐는지
         
-        int oneOreGold = BASEGOLD << data.stage; //광물하나의 값
+        int oneOreGold = BASE_GOLD << data.stage; //광물하나의 값
         
         // ReSharper disable once PossibleLossOfFraction
         float time = hpPerDMG / (float)(weaponData.speed * rangePerSize); // 하나를 캐기위한 평균 시간
@@ -55,6 +58,7 @@ public class Mine :MonoBehaviour
             time *= 100 / (100 - miss);
         goldPerMin.text = ((int)(oneOreGold * (60 / time))).ToString();
         Debug.Log("goldPerMin" + mineName.text);
+
     }
     
    
