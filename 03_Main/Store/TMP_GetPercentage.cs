@@ -35,4 +35,6 @@ public class TMP_GetPercentage : MonoBehaviour
                 Debug.Log($"{one["num"].ToString()} / {one["name"].ToString()} / {one["percent"].ToString()}");
         });
     }
-}
+}/*
+
+*/

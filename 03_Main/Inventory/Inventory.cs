@@ -65,7 +65,7 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
     {
         slots[count].SetWeapon(weapon);
         count++;
-        Sort();
+        //Sort();
     }
 
     public void ConfirmWeapon()
@@ -79,6 +79,8 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
     {
         Debug.Log("sortingMethod.value="+sortingMethod.value);
         //slots =  MergeSortLinkedList(slots);
+        
+        //ArgumentException: Unable to sort because the IComparer.Compare() method returns inconsistent results. Either a value does not compare equal to itself, or one value repeatedly compared to another value yields different results. IComparer: 'System.Comparison`1[Slot]'.
         slots.Sort((left, right) =>
         {
             if (left.myWeapon is null || right.myWeapon is null)
