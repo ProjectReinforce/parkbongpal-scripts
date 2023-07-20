@@ -11,7 +11,7 @@ public class Slot : MonoBehaviour
     [SerializeField] UnityEngine.UI.Image backgroundImage;
     [SerializeField] UnityEngine.UI.Image weaponImage;
     [SerializeField] GameObject lendImageObject;
-    Weapon _myWeapon;
+    [SerializeField] Weapon _myWeapon;
     public Weapon myWeapon => _myWeapon;
 
     public void SetWeapon(Weapon weapon)

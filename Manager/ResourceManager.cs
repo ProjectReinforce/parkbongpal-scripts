@@ -82,7 +82,7 @@ namespace Manager
             #endregion
 
             #region baseWeaponData
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85765", bro =>
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "86399", bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -95,12 +95,15 @@ namespace Manager
                 Debug.Log("baseWeaponData count :" + json.Count);
                 for (int i = 0; i < json.Count; ++i)
                 {
+                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+                    if(i >= 10)
+                        break;
                     // 데이터를 디시리얼라이즈 & 데이터 확인
                     BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
-                    baseWeaponData.atk = (int)((baseWeaponData.atk << baseWeaponData.rarity) * 0.5f) + 10;
-                    baseWeaponData.atkSpeed = (int)((baseWeaponData.atkSpeed << baseWeaponData.rarity) * 0.1f);
-                    baseWeaponData.atkRange = (int)(baseWeaponData.atkRange) + 40;
-                    baseWeaponData.accuracy = (int)(baseWeaponData.accuracy);
+                    // baseWeaponData.atk = (int)((baseWeaponData.atk << baseWeaponData.rarity) * 0.5f) + 10;
+                    // baseWeaponData.atkSpeed = (int)((baseWeaponData.atkSpeed << baseWeaponData.rarity) * 0.1f);
+                    // baseWeaponData.atkRange = (int)(baseWeaponData.atkRange) + 40;
+                    // baseWeaponData.accuracy = (int)(baseWeaponData.accuracy);
                     baseWeaponDatas[i] = baseWeaponData;
                     baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                 }

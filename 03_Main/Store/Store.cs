@@ -9,15 +9,14 @@ using BackEnd;
 [System.Serializable]
 public class Store:Singleton<Store>
 { 
+    /*
+    * 등급별 나올확률.
+    * 일반 51 27 14 8
+    * 고급 48 25 14 9 3.8 0.2;
+    */
     
    public void NormalDrawing()
    {
-      
-      /*
-       * 등급별 나올확률.
-       * 일반 51 27 14 8
-       * 고급 48 25 14 9 3.8 0.2;
-       */
       int pay = 0;
       if(Player.Instance.userData.gold<pay)
           return;
@@ -46,7 +45,15 @@ public class Store:Singleton<Store>
             { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
             { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
             { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
-            { nameof(WeaponData.colum.rarity), baseWeaponData.rarity}
+            { nameof(WeaponData.colum.rarity), baseWeaponData.rarity},
+            { nameof(WeaponData.colum.criticalRate), baseWeaponData.criticalRate},
+            { nameof(WeaponData.colum.criticalDamage), baseWeaponData.criticalDamage},
+            { nameof(WeaponData.colum.strength), baseWeaponData.strength},
+            { nameof(WeaponData.colum.intelligence), baseWeaponData.intelligence},
+            { nameof(WeaponData.colum.wisdom), baseWeaponData.wisdom},
+            { nameof(WeaponData.colum.technique), baseWeaponData.technique},
+            { nameof(WeaponData.colum.charm), baseWeaponData.charm},
+            { nameof(WeaponData.colum.constitution), baseWeaponData.constitution},
         };
 
 
@@ -57,8 +64,10 @@ public class Store:Singleton<Store>
         }
 
         WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
-            baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index
-            , bro.GetInDate());
+            baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index,
+            bro.GetInDate(), baseWeaponData.criticalRate, baseWeaponData.criticalDamage,
+            baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
+            baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
 
 
         Player.Instance.AddGold(-pay);
