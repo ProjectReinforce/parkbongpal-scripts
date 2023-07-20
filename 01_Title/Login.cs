@@ -7,8 +7,8 @@ using BackEnd;
 
 public class Login : MonoBehaviour
 {
-    // const string SCENENAME = "Main";
-    const string SCENENAME = "Chat_HW";
+     const string SCENE_NAME = "Main";
+    //const string SCENENAME = "Chat_HW";
 
     [SerializeField] GameObject LoginPopup;
     public void TryToLoginWithToken()
@@ -18,7 +18,7 @@ public class Login : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인에 성공했습니다");
-            Utills.LoadScene(SCENENAME);
+            Utills.LoadScene(SCENE_NAME);
         }
         else
         {
@@ -41,7 +41,7 @@ public class Login : MonoBehaviour
                     if(Backend.UserNickName == "")
                         NicknamePopup.SetActive(true);
                     else
-                        Utills.LoadScene(SCENENAME);
+                        Utills.LoadScene(SCENE_NAME);
                     break;
                 case 201:
                     Debug.Log("게스트 회원가입 성공!");
@@ -127,7 +127,7 @@ public class Login : MonoBehaviour
         if(bro.IsSuccess())
         {
             Debug.Log("신규 유저 데이터 삽입 성공!");
-            Utills.LoadScene(SCENENAME);
+            Utills.LoadScene(SCENE_NAME);
         }
         else
         {

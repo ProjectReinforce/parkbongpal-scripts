@@ -9,10 +9,20 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     [SerializeField] UnityEngine.UI.Image mineImage;
     
     [SerializeField] UnityEngine.UI.Image weaponImage;
+    [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
     
     Mine[] mines;
+    private Mine _currentMine;
 
-    public Mine currentMine;
+    public Mine currentMine
+    {
+        get => _currentMine;
+        set
+        {
+            selectedWeaponImage.sprite = weaponImage.sprite = value.rentalWeapon is null ? ResourceManager.Instance.EmptySprite:value.rentalWeapon.sprite;
+            _currentMine = value;
+        }
+    }
 
 
     protected override void Awake()

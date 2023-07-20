@@ -1,6 +1,5 @@
 ﻿using System;
-using BackEnd;
-using LitJson;
+
 using Manager;
 using UnityEngine;
 

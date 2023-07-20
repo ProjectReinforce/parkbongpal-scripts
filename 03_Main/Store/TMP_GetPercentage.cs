@@ -74,4 +74,6 @@ public class TMP_GetPercentage : MonoBehaviour
             }
         });
     }
-}
+}/*
+
+*/
