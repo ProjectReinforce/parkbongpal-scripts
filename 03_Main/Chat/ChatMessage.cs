@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum MessageType
-{
-    Normal,
-    Notice,
-    Guide
-}
-public class TMP_ChatMessage2 : MonoBehaviour
+public class ChatMessage : MonoBehaviour
 {
     [SerializeField] Image background;
     [SerializeField] Text messageText;

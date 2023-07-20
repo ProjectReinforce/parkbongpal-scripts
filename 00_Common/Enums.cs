@@ -14,3 +14,9 @@
         등급,  전투력, 공격력, 공격속도, 공격범위, 정확도
     }
 
+    
+    public enum MessageType
+    {
+        Normal, Notice, Guide
+    }
+

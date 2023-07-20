@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : Singleton<Player>
 {
+    [SerializeField] TopUIDatatViewer topUIDatatViewer;
     UserData _userData;
     public UserData userData => _userData;
    
@@ -22,5 +23,6 @@ public class Player : Singleton<Player>
         if (userData.gold < gold)
             return ;
         _userData.gold += gold;
+        topUIDatatViewer.UpdateGold();
     }
 }
