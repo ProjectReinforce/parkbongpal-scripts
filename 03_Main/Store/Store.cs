@@ -18,9 +18,16 @@ public class Store:Singleton<Store>
    public void NormalDrawing()
    {
       int pay = 0;
-      if(Player.Instance.userData.gold<pay)
+      if (Player.Instance.userData.gold < pay)
+      {
+          UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
           return;
-      
+      }
+      if (Inventory.Instance.count>Inventory.SIZE)
+      {
+          UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
+          return;
+      }
       int randomInt = Utills.random.Next(1, 101);
       int limit = 100;
       Rairity rarity;

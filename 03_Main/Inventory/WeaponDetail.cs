@@ -19,6 +19,11 @@ public class WeaponDetail : MonoBehaviour
 
     public void SetWeapon(Weapon weapon)
     {
+        if (weapon is null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
         weaponName.text = weapon.name;
         combatPower.text = weapon.power.ToString();
         WeaponData weaponData = weapon.data;

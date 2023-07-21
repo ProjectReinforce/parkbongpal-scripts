@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Manager;
+using UnityEngine.UI;
 
 [Serializable]
 public class Inventory : Singleton<Inventory>
@@ -11,19 +12,11 @@ public class Inventory : Singleton<Inventory>
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
     public const int SIZE = 40;
-    public int count;
     
-    [SerializeField] GameObject box;
     [SerializeField] WeaponDetail weaponDetail;
     
-    List<Slot> slots;
-
-    bool needSort;
-    int currentSorting;
-    [SerializeField] public UnityEngine.UI.Dropdown sortingMethod;
-
     Weapon _currentWeapon;
-    public Weapon CurrentWeapon
+    public Weapon currentWeapon
     {
         get => _currentWeapon;
         set
@@ -33,13 +26,30 @@ public class Inventory : Singleton<Inventory>
             _currentWeapon = value;
         } 
     }
+    
+    List<Slot> slots;
 
     public Slot GetSlot(int index)
     {
         return slots[index];
     }
 
-
+    
+    public int count;
+    public void Sort()
+    {
+        slots.Sort();
+        for (int i = 0 ; i<count ; i++)
+            slots[i].transform.SetSiblingIndex(i);
+        
+    }
+    public void AddWeapon(Weapon weapon , int index)
+    {
+        slots[index].SetWeapon(weapon);
+        count++;
+    }
+    
+    [SerializeField] GameObject box;
     protected override void Awake()
     {
         base.Awake();
@@ -51,40 +61,35 @@ public class Inventory : Singleton<Inventory>
         {
             AddWeapon( new Weapon(ResourceManager.Instance.WeaponDatas[i], slots[i]) ,i);
         }
-        needSort = true;
         Sort();
     }
-    
-    
-    public void AddWeapon(Weapon weapon , int index)
-    {
-        slots[index].SetWeapon(weapon);
-        count++;
-        needSort = true;
-    }
 
+    int currentSortingMethod;
+    
+    [SerializeField] public UnityEngine.UI.Dropdown sortingMethod;
     public void ChangeSortMethod()
     {
-        if (currentSorting != sortingMethod.value)
+        if (currentSortingMethod != sortingMethod.value)
         {
-            needSort = true;
             Sort();
-            currentSorting = sortingMethod.value;
+            currentSortingMethod = sortingMethod.value;
         }
     }
+    
+    [SerializeField]  GameObject inventory;
 
     public void ConfirmWeapon()
     {
-        if (CurrentWeapon is null) return;
+        if (currentWeapon is null) return;
         Mine currentMine = Quarry.Instance.currentMine;
         Weapon currentMineWeapon = currentMine.rentalWeapon;
         
         try
         {
-            if (CurrentWeapon.data.mineId >= 0)
+            if (currentWeapon.data.mineId >= 0)
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
             
-            currentMine.SetWeapon(CurrentWeapon);
+            currentMine.SetWeapon(currentWeapon);
         }
         catch (Exception e)
         {
@@ -94,25 +99,27 @@ public class Inventory : Singleton<Inventory>
 
         if (currentMineWeapon is not null)
         {
-            Debug.Log("currentMineWeapon is not null");
             currentMineWeapon.Lend(-1);
-            Debug.Log("currentMineWeapon.data.mineId"+currentMineWeapon.data.mineId);
         }
-        CurrentWeapon.Lend(currentMine.data.index);
+        currentWeapon.Lend(currentMine.data.index);
         Quarry.Instance.currentMine= currentMine ;
+        inventory.SetActive(false);
     }
 
-    public void Sort()
+    bool _isShowLend;
+    public bool isShowLend =>_isShowLend;
+
+
+    public void ShowLendWeapon()
     {
-        if(!needSort)return;
-        Debug.Log("sortingMethod.value="+sortingMethod.value);
-        slots.Sort();
-        for (int i = 0 ; i<count ; i++)
-            slots[i].transform.SetSiblingIndex(i);
         
-        Debug.Log("소팅완료");
-        needSort = false;
+        _isShowLend = !_isShowLend;
+        if(isShowLend)
+            currentWeapon = null;
+        Debug.Log("gg"+ isShowLend);
+        Sort();
     }
+
 
 
 }

@@ -7,7 +7,8 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     // Start is called before the first frame update
     [SerializeField] UnityEngine.UI.Image backgroundImage;
     [SerializeField] UnityEngine.UI.Image weaponImage;
-    [SerializeField] GameObject lendImageObject;
+    [SerializeField] GameObject lendImageObject;//광산에 빌려줫다는 표시
+    [SerializeField] UnityEngine.UI.Button button;
     public Weapon myWeapon { get; set; }
     public void SetWeapon(Weapon weapon)
     {
@@ -19,7 +20,7 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.
     {
         if(myWeapon is  null) return;
-        Inventory.Instance.CurrentWeapon = myWeapon;
+        Inventory.Instance.currentWeapon = myWeapon;
     }
 
     public void UpdateLend()
@@ -37,6 +38,22 @@ public class Slot : MonoBehaviour, IComparable<Slot>
              return -1;
         if (obj.myWeapon is null&&myWeapon is null)
             return 1;
+        if (Inventory.Instance.isShowLend)
+        {
+            if (obj.myWeapon.data.mineId<0)
+            {
+                
+                return 1;
+            } 
+            if (myWeapon.data.mineId<0)
+            {
+                return -1;
+            } 
+            
+        }
+     
+        
+        
         switch ((SortedMethod)Inventory.Instance.sortingMethod.value)
         {
             case SortedMethod.등급:
