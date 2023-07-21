@@ -6,9 +6,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
     [SerializeField] GameObject quarry;
 
-    [SerializeField] UnityEngine.UI.Image mineImage;
-    
-    [SerializeField] UnityEngine.UI.Image weaponImage;
+    [SerializeField] MineDetail mineDetail;
     [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
     
     Mine[] mines;
@@ -19,11 +17,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         get => _currentMine;
         set
         {
-            selectedWeaponImage.sprite = weaponImage.sprite = value.rentalWeapon is null ? ResourceManager.Instance.EmptySprite:value.rentalWeapon.sprite;
+            mineDetail.SetCurrentMine(value);
             _currentMine = value;
+            Debug.Log("GGG");
         }
     }
-
 
     protected override void Awake()
     {
@@ -37,17 +35,14 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         int weaponCount = ResourceManager.Instance.weapons.Length;
         for (int i = 0; i < weaponCount; i++)
         {          
-            SetMine(ResourceManager.Instance.weapons[i]);
+            LendWeapon(ResourceManager.Instance.weapons[i]);
         }
     }
 
-    public void SetMine(Weapon weapon)  
+    public void LendWeapon(Weapon weapon)  
     {
         if(weapon.data.mineId>=0)
             mines[weapon.data.mineId].SetWeapon(weapon);
     }
-    public void ConfirmLend()
-    {
-        Inventory.Instance.currentWeapon.Lend(currentMine.data.index);
-    }
+
 }

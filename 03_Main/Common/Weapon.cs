@@ -65,5 +65,9 @@ public class Weapon
         
         return (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
     }
-    
+
+    public Weapon Clone()
+    {
+        return (Weapon)MemberwiseClone();
+    }
 }
