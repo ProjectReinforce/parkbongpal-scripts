@@ -69,9 +69,8 @@ public class Store:Singleton<Store>
             baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
             baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
 
-
         Player.Instance.AddGold(-pay);
-        Inventory.Instance.AddWeapon(new Weapon(weaponData), Inventory.Instance.count);
+        Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
         Debug.Log("구입완료" + bro.GetInDate());
 
 

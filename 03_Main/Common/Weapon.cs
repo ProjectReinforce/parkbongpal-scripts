@@ -24,7 +24,9 @@ public class Weapon
         new SoulCrafting(), new Refinement()
     };
 
-    public Weapon(WeaponData _data)//기본데이터
+    public Slot myslot;
+
+    public Weapon(WeaponData _data , Slot slot)//기본데이터
     {
         this._data = _data;
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
@@ -33,14 +35,15 @@ public class Weapon
         description = baseWeaponData.description;
         name = baseWeaponData.name;
         SetPower();
+        myslot = slot;
     }
 
     public void Lend(int mineId)
     {
-        if(data.mineId!=-1)return;//예외처리 2
         _data.mineId = mineId;
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
+        
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -51,6 +54,7 @@ public class Weapon
             }
             Debug.Log("성공"+callback);
         });
+        myslot.UpdateLend();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;

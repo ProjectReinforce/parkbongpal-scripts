@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using BackEnd;
 [Serializable]
 public class Slot : MonoBehaviour, IComparable<Slot> 
 {
@@ -14,15 +14,20 @@ public class Slot : MonoBehaviour, IComparable<Slot>
         myWeapon = weapon;
         lendImageObject.SetActive(weapon.data.mineId>-1);
         weaponImage.sprite = weapon.sprite;
-        Debug.Log("gg"+myWeapon);
     }
 
     public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.
     {
         if(myWeapon is  null) return;
-        Inventory.Instance.currentWeapon = myWeapon;
+        Inventory.Instance.CurrentWeapon = myWeapon;
     }
 
+    public void UpdateLend()
+    {
+        lendImageObject.SetActive(myWeapon.data.mineId>-1);
+    }
+
+   
 
     public int CompareTo(Slot obj)
     {

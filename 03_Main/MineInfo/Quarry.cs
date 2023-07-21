@@ -1,4 +1,5 @@
 
+using System;
 using Manager;
 using UnityEngine;
 
@@ -22,7 +23,6 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
                 ResourceManager.Instance.EmptySprite : value.rentalWeapon.sprite;
             
             _currentMine = value;
-            Debug.Log("GGG");
         }
     }
 
@@ -35,10 +35,15 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         {          
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
         }
-        int weaponCount = ResourceManager.Instance.weapons.Length;
+        
+    }
+
+    private void Start()
+    {
+        int weaponCount = ResourceManager.Instance.WeaponDatas.Length;
         for (int i = 0; i < weaponCount; i++)
         {          
-            LendWeapon(ResourceManager.Instance.weapons[i]);
+            LendWeapon(Inventory.Instance.GetSlot(i).myWeapon);
         }
     }
 

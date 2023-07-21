@@ -2,6 +2,7 @@
 using UnityEngine;
 using BackEnd;
 using LitJson;
+using UnityEngine.Serialization;
 
 namespace Manager
 {
@@ -11,7 +12,7 @@ namespace Manager
         public Where searchFromMyIndate = new Where();
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
-        public Weapon[] weapons;
+        public WeaponData[] WeaponDatas;
         public UserData userData;
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
@@ -37,12 +38,7 @@ namespace Manager
 
         public Sprite EmptySprite;
         
-        [SerializeField] Warning warning;
-        public void ShowWarning(string _title, string _description)
-        {
-            warning.gameObject.SetActive(true);
-            warning.ShowMessage(_title, _description);
-        }
+    
         protected override void Awake()
         {
             base.Awake();
@@ -156,13 +152,13 @@ namespace Manager
                     }
 
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                    weapons = new Weapon[json.Count];
-                    Debug.Log("BackManager: 마이웨폰갯수" + weapons.Length);
+                    WeaponDatas = new WeaponData[json.Count];
+                    Debug.Log("BackManager: 마이웨폰갯수" + WeaponDatas.Length);
                     for (int i = 0; i < json.Count; ++i)
                     {
                         WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
 
-                        weapons[i] = new Weapon(item);
+                        WeaponDatas[i] = item;
                     }
                 });
             #endregion

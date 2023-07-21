@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Mine :MonoBehaviour
 {
@@ -43,12 +40,15 @@ public class Mine :MonoBehaviour
         Quarry.Instance.currentMine = this;
     }
 
+    public void ClearWeapon()
+    {
+        rentalWeapon.Lend(-1);
+        rentalWeapon = null;
+    }
     public void SetWeapon(Weapon rentWeapon)
     {
         if (rentalWeapon == rentWeapon) return;
         rentalWeapon = rentWeapon;
-        Debug.Log(rentalWeapon.name);
-        Debug.Log(rentalWeapon.data.mineId);
         WeaponData weaponData = rentWeapon.data;
         float miss = -(weaponData.accuracy - data.lubricity); //정확도-매끄러움
 
