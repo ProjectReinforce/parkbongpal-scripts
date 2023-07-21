@@ -18,6 +18,9 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         set
         {
             mineDetail.SetCurrentMine(value);
+            selectedWeaponImage.sprite =value.rentalWeapon is null? 
+                ResourceManager.Instance.EmptySprite : value.rentalWeapon.sprite;
+            
             _currentMine = value;
             Debug.Log("GGG");
         }

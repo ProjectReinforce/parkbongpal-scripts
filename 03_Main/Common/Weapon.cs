@@ -16,6 +16,8 @@ public class Weapon
 
     public readonly string description;
     public readonly string name;
+    int _power;
+    public int power =>_power;
     private static Reinforce[] enforces =
     {
         new Promote(), new Additional(), new MagicEngrave(),
@@ -30,6 +32,7 @@ public class Weapon
         birthRairity= (Rairity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
+        SetPower();
     }
 
     public void Lend(int mineId)
@@ -51,8 +54,9 @@ public class Weapon
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;
-    public int GetPower()
+    public void SetPower()
     {
+        
         float statSumWithFactor = (data.strength + data.intelligence + data.wisdom
                                     + data.technique + data.charm + data.constitution)
                                     * STAT_CORRECTION_FACTOR;
@@ -63,11 +67,7 @@ public class Weapon
         float calculatedDamage = data.damage * speed * range * (criticalRate * criticalDamage + 1);
         // Debug.Log($"{statSumWithFactor} / {speed} / {range} / {criticalRate} / {criticalDamage} / {calculatedDamage}");
         
-        return (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
+        _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
     }
 
-    public Weapon Clone()
-    {
-        return (Weapon)MemberwiseClone();
-    }
 }

@@ -15,7 +15,7 @@ namespace Manager
         public UserData userData;
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
-        
+       
         private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
@@ -36,7 +36,13 @@ namespace Manager
         }
 
         public Sprite EmptySprite;
-
+        
+        [SerializeField] Warning warning;
+        public void ShowWarning(string _title, string _description)
+        {
+            warning.gameObject.SetActive(true);
+            warning.ShowMessage(_title, _description);
+        }
         protected override void Awake()
         {
             base.Awake();

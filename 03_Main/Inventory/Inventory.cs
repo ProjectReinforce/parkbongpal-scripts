@@ -49,6 +49,7 @@ public class Inventory : Singleton<Inventory>
             AddWeapon(ResourceManager.Instance.weapons[i],i);
         }
 
+      
         needSort = true;
         Sort();
         
@@ -77,7 +78,21 @@ public class Inventory : Singleton<Inventory>
     {
         if (currentWeapon is null) return;
         Mine currentMine = Quarry.Instance.currentMine;
-        currentMine.SetWeapon(currentWeapon);
+        Weapon currentMineWeapon = currentMine.rentalWeapon;
+        
+        try
+        {
+            if (currentWeapon.data.mineId >= 0)
+                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
+            
+            currentMine.SetWeapon(currentWeapon);
+        }
+        catch (Exception e)
+        {
+            ResourceManager.Instance.ShowWarning("안내", e.ToString());
+        }
+        
+        currentMineWeapon.Lend(-1);
         currentWeapon.Lend(currentMine.data.index);
         Quarry.Instance.currentMine= currentMine ;
     }

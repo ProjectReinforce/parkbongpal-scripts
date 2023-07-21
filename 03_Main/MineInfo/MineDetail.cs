@@ -25,7 +25,7 @@ public class MineDetail : MonoBehaviour
         {
             weaponImage.sprite = mine.rentalWeapon.sprite;
             weaponName.text = mine.rentalWeapon.name;
-            mineWithWeaponStats.text = $"마인에겟변수 만들";
+            mineWithWeaponStats.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
         }
     }
 }

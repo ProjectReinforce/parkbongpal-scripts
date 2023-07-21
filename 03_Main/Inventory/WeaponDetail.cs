@@ -20,7 +20,7 @@ public class WeaponDetail : MonoBehaviour
     public void SetWeapon(Weapon weapon)
     {
         weaponName.text = weapon.name;
-        combatPower.text = weapon.GetPower().ToString();
+        combatPower.text = weapon.power.ToString();
         WeaponData weaponData = weapon.data;
         rarity.text = weaponData.rarity.ToString();
         stats.text = $"{weaponData.damage}\n{weaponData.speed}\n{weaponData.range}\n{weaponData.accuracy}\n{weaponData.criticalRate}\n{weaponData.criticalDamage}";

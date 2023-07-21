@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,9 +9,27 @@ public class Mine :MonoBehaviour
 {
     // Start is called before the first frame update
     public MineData data { get; set; }
-    private const int BASE_GOLD = 10;
+    const int BASE_GOLD = 10;
     [SerializeField] UnityEngine.UI.Text mineName;
-    [SerializeField] UnityEngine.UI.Text goldPerMin;
+    [SerializeField] UnityEngine.UI.Text goldPerMinText;
+
+    int _hpPerDMG;
+    public int hpPerDMG => _hpPerDMG;
+
+    int _rangePerSize;
+    public int rangePerSize => _rangePerSize;
+
+    int _goldPerMin;
+    public int goldPerMin
+    {
+        get =>_goldPerMin;
+
+        set
+        {
+            goldPerMinText.text = value.ToString();
+            _goldPerMin = value;
+        }
+    }
 
     public Weapon rentalWeapon { get; set; }
     public void Initialized(MineData _data)
@@ -25,7 +45,7 @@ public class Mine :MonoBehaviour
 
     public void SetWeapon(Weapon rentWeapon)
     {
-        if(rentalWeapon== rentWeapon) return;
+        if (rentalWeapon == rentWeapon) return;
         rentalWeapon = rentWeapon;
         Debug.Log(rentalWeapon.name);
         Debug.Log(rentalWeapon.data.mineId);
@@ -34,20 +54,19 @@ public class Mine :MonoBehaviour
 
         if (miss >= 100)
         {
-            Debug.Log($"정확도가 {miss - 99}만큼 부족합니다");
-            return ;
+            throw new Exception($"정확도가 {miss - 99}만큼 부족합니다") ;
+            
         }
 
         float oneHitDMG = weaponData.damage - data.defence;
         if (oneHitDMG <= 0)
         {
-            Debug.Log($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
-            return ;
+            throw new Exception($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
         }
         // ReSharper disable once PossibleLossOfFraction
-        int rangePerSize = Utills.Ceil(weaponData.range / data.size)+1; //한번휘두를때 몇개나 영향을 주나
+        _rangePerSize = Utills.Ceil(weaponData.range / data.size)+1; //한번휘두를때 몇개나 영향을 주나
 
-        int hpPerDMG = Utills.Ceil(data.hp / oneHitDMG); //몇방때려야 하나를 캐는지
+        _hpPerDMG = Utills.Ceil(data.hp / oneHitDMG); //몇방때려야 하나를 캐는지
         
         int oneOreGold = BASE_GOLD << data.stage; //광물하나의 값
         
@@ -56,9 +75,8 @@ public class Mine :MonoBehaviour
         
         if (miss > 0)
             time *= 100 / (100 - miss);
-        goldPerMin.text = ((int)(oneOreGold * (60 / time))).ToString();
+        goldPerMin = ((int)(oneOreGold * (60 / time)));
         Debug.Log("goldPerMin" + mineName.text);
-
     }
     
    

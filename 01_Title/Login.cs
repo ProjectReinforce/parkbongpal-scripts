@@ -8,8 +8,8 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    //  const string SCENE_NAME = "Main";
-    const string SCENE_NAME = "Chat_HW";
+      const string SCENE_NAME = "Main_JG";
+    //const string SCENE_NAME = "Chat_HW";
 
 
     [SerializeField] GameObject LoginPopup;
