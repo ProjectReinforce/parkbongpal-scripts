@@ -42,7 +42,7 @@ public struct UserData
     public static UserData colum;
     public int gold, diamond, weaponSoul, stone;
     public int exp, level, favoriteWeaponId;
-    public string nickName;
+    //public string nickName;
     public DateTime owner_inDate;
 }
 

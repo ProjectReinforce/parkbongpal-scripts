@@ -116,10 +116,8 @@ public class Inventory : Singleton<Inventory>
         _isShowLend = !_isShowLend;
         if(isShowLend)
             currentWeapon = null;
-        Debug.Log("gg"+ isShowLend);
         Sort();
     }
-
-
+ 
 
 }

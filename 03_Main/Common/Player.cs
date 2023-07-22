@@ -1,5 +1,5 @@
 ﻿using System;
-
+using BackEnd;
 using Manager;
 using UnityEngine;
 
@@ -24,5 +24,19 @@ public class Player : Singleton<Player>
             return ;
         _userData.gold += gold;
         topUIDatatViewer.UpdateGold();
+
     }
+
+    //void UserBackEndDataUpdate()//플레이어 정보 바뀔때만 호출
+    //{       
+
+
+    //    var bro = Backend.GameData.Insert(typeof(WeaponData).ToString(), param);
+    //    if (!bro.IsSuccess())
+    //    {
+    //        Debug.LogError("게임 정보 삽입 실패 : " + bro);
+    //    }
+
+
+    //}
 }

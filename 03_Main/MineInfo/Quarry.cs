@@ -50,5 +50,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         }
     }
 
+    public void ClearWeapon()
+    {
+        currentMine.SetWeapon(null);
+        currentMine = currentMine;
+    }
+
 
 }
