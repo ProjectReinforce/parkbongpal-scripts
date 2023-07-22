@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BackEnd;
 using UnityEngine;
 
 public class Decomposition : MonoBehaviour
@@ -11,7 +12,7 @@ public class Decomposition : MonoBehaviour
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
 
-    UnityEngine.UI.Text text;
+    [ SerializeField]UnityEngine.UI.Text text;
     public void SetDecomposit()
     {
         _isDecompositing = !_isDecompositing;
@@ -22,11 +23,26 @@ public class Decomposition : MonoBehaviour
                 slot.SetsellectChecker(false);
             }
             slots.Clear();
-            text.text = "분해하기";
+            text.text= "분해 확정";   
         }
         else
         {
-            text.text= "분해 확정";            
+            foreach (Slot slot in slots)
+            {
+                slot.SetsellectChecker(true);
+                SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), slot.myWeapon.data.inDate, Backend.UserInDate, ( callback ) => 
+                { 
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.Log(callback);
+                        return;
+                    }
+                    slot.SetWeapon(null);
+                });
+            }
+            Inventory.Instance.Sort();
+            
+            text.text = "분해하기";
         }
         
     }

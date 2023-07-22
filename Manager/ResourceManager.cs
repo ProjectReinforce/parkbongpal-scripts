@@ -2,7 +2,6 @@
 using UnityEngine;
 using BackEnd;
 using LitJson;
-using UnityEngine.Serialization;
 
 namespace Manager
 {

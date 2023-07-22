@@ -15,6 +15,13 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     public Weapon myWeapon { get; set; }
     public void SetWeapon(Weapon weapon)
     {
+        if (weapon is null)
+        {
+            ImageObject.SetActive(false);
+            button.enabled = false;
+            myWeapon = null;
+            return;
+        }
         ImageObject.SetActive(true);
         button.enabled = true;
         myWeapon = weapon;
