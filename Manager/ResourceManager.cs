@@ -45,10 +45,55 @@ namespace Manager
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
-            
-            
-            #region normalGarchaData
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85808", bro =>
+
+            GetAllChart();
+
+            GetUserData();
+            GetOwnedWeaponData();
+        }
+
+        public enum ChartName
+        {
+            normalGachaPercentage, advancedGachaPercentage, MineData, weapon
+        }
+
+        Dictionary<string, string> chartLists;
+        void GetAllChart()
+        {
+            var bro = Backend.Chart.GetChartListV2();
+            // SendQueue.Enqueue(Backend.Chart.GetChartListV2, bro =>
+            {
+                if(!bro.IsSuccess())
+                {
+                    Debug.LogError($"차트 리스트 수신 실패 : {bro}");
+                    // todo: 에러 메시지 출력 및 타이틀로
+
+                    return;
+                }
+
+                chartLists = new Dictionary<string, string>();
+
+                JsonData results = bro.FlattenRows();
+
+                for(int i = 0; i < results.Count; i++)
+                {
+                    chartLists.Add(results[i]["chartName"].ToString(), results[i]["selectedChartFileId"].ToString());
+                    // Debug.Log($"{results[i]["chartName"].ToString()} / {results[i]["selectedChartFileId"].ToString()}");
+                }
+
+                GetMineData();
+                GetNormalGachaData();
+                GetAdvancedGachaData();
+                GetBaseWeaponData();
+            }
+            // });
+        }
+
+        void GetNormalGachaData()
+        {
+            string chartId = chartLists[ChartName.normalGachaPercentage.ToString()];
+
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -62,10 +107,13 @@ namespace Manager
                     normalGarchar = JsonMapper.ToObject<NormalGarchar>(json[i].ToJson());
                 }
             });
-            #endregion
-            
-            #region advencedGarchaData
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85810", bro =>
+        }
+
+        void GetAdvancedGachaData()
+        {
+            string chartId = chartLists[ChartName.advancedGachaPercentage.ToString()];
+
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -79,10 +127,13 @@ namespace Manager
                     advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(json[i].ToJson());
                 }
             });
-            #endregion
+        }
 
-            #region baseWeaponData
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "86399", bro =>
+        void GetBaseWeaponData()
+        {
+            string chartId = chartLists[ChartName.weapon.ToString()];
+
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -109,11 +160,13 @@ namespace Manager
                 }
              
             });
+        }
 
-            #endregion
+        void GetMineData()
+        {
+            string chartId = chartLists[ChartName.weapon.ToString()];
 
-            #region minedata
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "85425", bro =>
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -136,9 +189,10 @@ namespace Manager
                     mineDatas[i] = mineData;
                 }
             });
-            #endregion
+        }
 
-            #region myWeaponData
+        void GetOwnedWeaponData()
+        {
             SendQueue.Enqueue(Backend.GameData.Get, nameof(WeaponData),
                 searchFromMyIndate, 120, bro =>
                 {
@@ -146,6 +200,7 @@ namespace Manager
                     {
                         // 요청 실패 처리
                         Debug.Log(bro);
+                        // todo: 에러 메시지 출력 및 타이틀로
                         return;
                     }
 
@@ -159,9 +214,10 @@ namespace Manager
                         weapons[i] = new Weapon(item);
                     }
                 });
-            #endregion
+        }
 
-            #region playerData
+        void GetUserData()
+        {
             SendQueue.Enqueue(Backend.GameData.Get, nameof(UserData),
                 searchFromMyIndate, 1, bro =>
                 {
@@ -169,6 +225,7 @@ namespace Manager
                     {
                         // 요청 실패 처리
                         Debug.LogError(bro);
+                        // todo: 에러 메시지 출력 및 타이틀로
                         return;
                     }
 
@@ -182,8 +239,6 @@ namespace Manager
                         Debug.Log("BackManager: 플레이어데이터" + userData);
                     }
                 });
-            #endregion
-            
         }
     }
 }

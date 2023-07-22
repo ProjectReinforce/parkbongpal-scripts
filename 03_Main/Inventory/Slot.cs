@@ -19,7 +19,7 @@ public class Slot : MonoBehaviour, IComparable<Slot>
 
     public void SetWeapon(Weapon weapon)
     {
-        myWeapon = weapon.Clone();
+        _myWeapon = weapon;
         lendImageObject.SetActive(weapon.data.mineId>-1);
         weaponImage.sprite = weapon.sprite;
         Debug.Log("gg"+myWeapon);
