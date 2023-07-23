@@ -78,7 +78,7 @@ public class Slot : MonoBehaviour, IComparable<Slot>
      
         
         
-        switch ((SortedMethod)Inventory.Instance.sortingMethod.value)
+        switch ((SortedMethod)SortingDropDown.currentSortingMethod)
         {
             case SortedMethod.등급:
                 return  obj.myWeapon.data.rarity -myWeapon.data.rarity  ;

@@ -40,11 +40,6 @@ public class Mine :MonoBehaviour
         Quarry.Instance.currentMine = this;
     }
 
-    public void ClearWeapon()
-    {
-        rentalWeapon.Lend(-1);
-        rentalWeapon = null;
-    }
     public void SetWeapon(Weapon rentWeapon)
     {
 

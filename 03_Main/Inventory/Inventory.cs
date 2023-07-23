@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Manager;
-using UnityEngine.UI;
 
 [Serializable]
 public class Inventory : Singleton<Inventory>
@@ -28,13 +25,11 @@ public class Inventory : Singleton<Inventory>
     }
     
     List<Slot> slots;
-
     public Slot GetSlot(int index)
     {
         return slots[index];
     }
 
-    
     public int count;
     public void Sort()
     {
@@ -64,17 +59,7 @@ public class Inventory : Singleton<Inventory>
         Sort();
     }
 
-    int currentSortingMethod;
-    
-    [SerializeField] public UnityEngine.UI.Dropdown sortingMethod;
-    public void ChangeSortMethod()
-    {
-        if (currentSortingMethod != sortingMethod.value)
-        {
-            Sort();
-            currentSortingMethod = sortingMethod.value;
-        }
-    }
+  
     
     [SerializeField]  GameObject inventory;
 
@@ -109,10 +94,8 @@ public class Inventory : Singleton<Inventory>
     bool _isShowLend;
     public bool isShowLend =>_isShowLend;
 
-
     public void ShowLendWeapon()
     {
-        
         _isShowLend = !_isShowLend;
         if(isShowLend)
             currentWeapon = null;
