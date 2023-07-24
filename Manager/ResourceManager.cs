@@ -13,12 +13,11 @@ namespace Manager
         public MineData[] mineDatas;
         public Weapon[] weapons;
         public UserData userData;
-        private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
-            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
-
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
         
+        private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
             return baseWeaponDatas[index];
@@ -35,6 +34,8 @@ namespace Manager
         {
             return baseWeaponSprites[index];
         }
+
+        public Sprite EmptySprite;
 
         protected override void Awake()
         {

@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Weapon 
 {
-    
     public readonly Sprite sprite;
     public readonly Rairity birthRairity;
     //private NSubject.ISubject subjects;
@@ -48,15 +47,11 @@ public class Weapon
             }
             Debug.Log("성공"+callback);
         });
-        
     }
-
-
 
     public int GetPower()
     {
-        //각 스탯별 계수 조정 필요
-        //return (int)(data.damage * data.speed * data.range * (1 + data.accuracy / 20));
+        
         return 0;
     }
     
