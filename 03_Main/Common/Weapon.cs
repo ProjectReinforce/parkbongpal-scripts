@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BackEnd;
 using Manager;
 using UnityEngine;
 
 public class Weapon 
 {
     
-    private readonly Sprite sprite;
-    private readonly Rairity birthRairity;
+    public readonly Sprite sprite;
+    public readonly Rairity birthRairity;
     //private NSubject.ISubject subjects;
-    public WeaponData data { get; set; }
+    WeaponData _data;
+    public WeaponData data => _data;
 
     public readonly string description;
     public readonly string name;
@@ -22,33 +24,33 @@ public class Weapon
 
     public Weapon(WeaponData _data)//기본데이터
     {
-        data = _data;
-        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.id);
-        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.id);
+        this._data = _data;
+        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
+        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         birthRairity= (Rairity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
     }
-    public Weapon(BaseWeaponData _data)//기본데이터
+
+    public void Lend(int mineId)
     {
-        data = new WeaponData()
+        if(data.mineId!=-1)return;//예외처리 2
+        _data.mineId = mineId;
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.mineId),mineId);
+
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
-            id=_data.index,
-            damage = _data.atk,
-            speed = _data.atkSpeed,
-            range = _data.atkRange,
-            accuracy = _data.accuracy,
-            rarity = _data.rarity,
-            mineId = -1,
-            normalReinforceCount = 0,
-            inDate = DateTime.Now
-        };
+            if (!callback.IsSuccess())
+            {
+                Debug.Log(callback);
+                return;
+            }
+            Debug.Log("성공"+callback);
+        });
         
-        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.index);
-        birthRairity= (Rairity)_data.rarity;
-        description = _data.description;
-        name = _data.name;
     }
+
 
 
     public int GetPower()

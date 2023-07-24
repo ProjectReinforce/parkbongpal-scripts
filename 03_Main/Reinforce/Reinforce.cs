@@ -1,6 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
-using UnityEngine;
+﻿
 
 public abstract class Reinforce
 {
@@ -23,7 +21,7 @@ public class Promote : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return Player.Instance.userdata.level >= Qualification;
+        return Player.Instance.userData.level >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -45,7 +43,7 @@ public class Additional : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return  Player.Instance.userdata.level >= Qualification;
+        return  Player.Instance.userData.level >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -89,7 +87,7 @@ public class SoulCrafting : Reinforce
     }
     public override bool LockCheck(Weapon weapon)
     {
-        return Player.Instance.userdata.level >= Qualification;;
+        return Player.Instance.userData.level >= Qualification;;
     }
 
     public override float SuccessPercentage(Weapon weapon)
