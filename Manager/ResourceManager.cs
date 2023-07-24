@@ -3,6 +3,11 @@ using UnityEngine;
 using BackEnd;
 using LitJson;
 
+public enum ChartName
+{
+    normalGachaPercentage, advancedGachaPercentage, MineData, weapon
+}
+
 namespace Manager
 {
     public class ResourceManager : DontDestroy<ResourceManager>
@@ -50,11 +55,6 @@ namespace Manager
 
             GetUserData();
             GetOwnedWeaponData();
-        }
-
-        public enum ChartName
-        {
-            normalGachaPercentage, advancedGachaPercentage, MineData, weapon
         }
 
         Dictionary<string, string> chartLists;
