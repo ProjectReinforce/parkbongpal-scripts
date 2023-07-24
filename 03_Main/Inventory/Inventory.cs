@@ -73,8 +73,13 @@ public class Inventory : Singleton<Inventory>
         {
             if (currentWeapon.data.mineId >= 0)
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
-            
+            int beforeGoldPerMin = currentMine.goldPerMin;
             currentMine.SetWeapon(currentWeapon);
+            Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
+                
+                
+            
+            
         }
         catch (Exception e)
         {

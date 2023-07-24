@@ -51,7 +51,9 @@ public class Mine :MonoBehaviour
             rentalWeapon = null;
             _rangePerSize = 0;
             _hpPerDMG = 0;
+            
             goldPerMin = 0;
+            
             return;
         }
         rentalWeapon = rentWeapon;
@@ -81,7 +83,9 @@ public class Mine :MonoBehaviour
         
         if (miss > 0)
             time *= 100 / (100 - miss);
-        goldPerMin = ((int)(oneOreGold * (60 / time)));
+        goldPerMin = (int)(oneOreGold * (60 / time));
+       
+        
     }
     
    

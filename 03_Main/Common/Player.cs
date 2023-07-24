@@ -27,16 +27,20 @@ public class Player : Singleton<Player>
 
     }
 
-    //void UserBackEndDataUpdate()//플레이어 정보 바뀔때만 호출
-    //{       
+    public void SetGoldPerMin(int goldPerMin)
+    {
+        _userData.goldPerMin = goldPerMin;
+        Param param = new Param {{ nameof(UserData.colum.goldPerMin), goldPerMin }};
+        
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log("Plaer:SetGoldPerMin 실패"+callback.GetMessage());   
+            }
+            Debug.Log("Plaer:SetGoldPerMin 성공"+callback);
+        });
+    }
 
-
-    //    var bro = Backend.GameData.Insert(typeof(WeaponData).ToString(), param);
-    //    if (!bro.IsSuccess())
-    //    {
-    //        Debug.LogError("게임 정보 삽입 실패 : " + bro);
-    //    }
-
-
-    //}
+ 
 }

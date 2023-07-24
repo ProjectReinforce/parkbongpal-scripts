@@ -28,9 +28,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         base.Awake();
         mines = quarry.GetComponentsInChildren<Mine>();
         int mineCount = ResourceManager.Instance.mineDatas.Length;
+        
         for (int i = 0; i < mineCount; i++)
         {          
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
+            
         }
         
     }
@@ -39,18 +41,23 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     private void Start()
     {
         int weaponCount = ResourceManager.Instance.WeaponDatas.Length;
+        
         for (int i = 0; i < weaponCount; i++)
         {
             Weapon weapon = Inventory.Instance.GetSlot(i).myWeapon;
-            
-            if(weapon.data.mineId>=0)
+           
+            if (weapon.data.mineId >= 0)
+            {
                 mines[weapon.data.mineId].SetWeapon(weapon);
+            }
         }
     }
 
     public void ClearWeapon()
     {
+        int beforeGoldPerMin = currentMine.goldPerMin;
         currentMine.SetWeapon(null);
+        Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin-beforeGoldPerMin);
         currentMine = currentMine;
     }
 
