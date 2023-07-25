@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[System.Serializable]
 public class Mine :MonoBehaviour
 {
     // Start is called before the first frame update

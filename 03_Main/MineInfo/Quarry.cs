@@ -9,7 +9,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     [SerializeField] MineDetail mineDetail;
     [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
     
-    Mine[] mines;
+    [SerializeField] Mine[] mines;
     private Mine _currentMine;
 
     public Mine currentMine
@@ -29,7 +29,9 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         mines = quarry.GetComponentsInChildren<Mine>();
         int mineCount = ResourceManager.Instance.mineDatas.Length;
         for (int i = 0; i < mineCount; i++)
-        {          
+        {
+            if (i >= mines.Length)
+                break;
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
         }
         int weaponCount = ResourceManager.Instance.weapons.Length;
