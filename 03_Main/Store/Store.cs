@@ -64,7 +64,7 @@ public class Store:Singleton<Store>
         };
 
 
-        var bro = Backend.GameData.Insert(typeof(WeaponData).ToString(), param);
+        var bro = Backend.GameData.Insert(nameof(WeaponData), param);
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
@@ -78,6 +78,22 @@ public class Store:Singleton<Store>
 
         Player.Instance.AddGold(-pay);
         Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
+
+        if (!Pidea.Instance.ownedWeaponIds[baseWeaponData.index])
+        {
+            var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
+            {
+                {nameof(PideaData.colum.ownedWeaponId),baseWeaponData.index},
+                {nameof(PideaData.colum.rarity),baseWeaponData.rarity}
+            });
+            if (!pidea.IsSuccess())
+            {
+                Debug.LogError("게임 정보 삽입 실패 : " + pidea);
+            }
+            Debug.Log(Pidea.Instance);
+            Pidea.Instance.GetNewWeapon(baseWeaponData.index);
+        }
+        
         Debug.Log("구입완료" + bro.GetInDate());
 
 

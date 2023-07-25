@@ -83,7 +83,10 @@ namespace Manager
             #endregion
 
             #region baseWeaponData
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "86399", bro =>
+            
+            //86938
+            //86399
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, "86938", bro =>
             {
                 if (!bro.IsSuccess())
                 {
@@ -185,6 +188,30 @@ namespace Manager
                 });
             #endregion
             
+            SetOwnedWeaponId();
         }
+
+        public const int WEAPON_COUNT = 150;
+        public bool[] ownedWeaponIds=  new bool[WEAPON_COUNT]; 
+        void SetOwnedWeaponId()
+        {
+            SendQueue.Enqueue(Backend.GameData.Get, nameof(PideaData),
+                searchFromMyIndate, 250, bro =>
+                {
+                    if (!bro.IsSuccess())
+                    {
+                        Debug.LogError(bro);
+                        return;
+                    }
+                    JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                    for (int i = 0; i < json.Count; ++i)
+                    {
+                        PideaData item = JsonMapper.ToObject<PideaData>(json[i].ToJson());
+                        
+                        ownedWeaponIds[item.ownedWeaponId] = true;
+                    }
+                });
+        }
+      
     }
 }

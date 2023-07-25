@@ -8,8 +8,8 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    //const string SCENE_NAME = "Main_JG";
-    const string SCENE_NAME = "SampleScene SH Clone";
+    const string SCENE_NAME = "Main JG";
+    //const string SCENE_NAME = "SampleScene SH Clone";
 
 
     [SerializeField] GameObject LoginPopup;

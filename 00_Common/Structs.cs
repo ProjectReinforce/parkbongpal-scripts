@@ -47,7 +47,12 @@ public struct UserData
     public string inDate;
     public DateTime owner_inDate;
 }
+public struct PideaData//광산차트
+{
+    public int ownedWeaponId, rarity;
 
+    public static PideaData colum;
+}
 
 public struct MineData//광산차트
 {
@@ -62,6 +67,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     public int index,rarity;
     public int atk, atkSpeed, atkRange,accuracy;
     public int criticalRate, criticalDamage, strength, intelligence, wisdom, technique, charm, constitution;
+    public int[] collection;
     public string name,  description;
 }
 
