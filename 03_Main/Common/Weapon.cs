@@ -9,7 +9,7 @@ using UnityEngine;
 public class Weapon 
 {
     public readonly Sprite sprite;
-    public readonly Rairity birthRairity;
+    public readonly Rarity birthRairity;
     //private NSubject.ISubject subjects;
     [SerializeField] WeaponData _data;
     public WeaponData data => _data;
@@ -31,7 +31,7 @@ public class Weapon
         this._data = _data;
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
-        birthRairity= (Rairity)baseWeaponData.rarity;
+        birthRairity= (Rarity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
         SetPower();

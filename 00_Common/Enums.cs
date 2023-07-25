@@ -1,5 +1,5 @@
 ﻿
-    public enum Rairity
+    public enum Rarity
     {
         trash,old,normal,rare,unique,legendary
     }
@@ -11,7 +11,7 @@
 
     public enum SortedMethod
     {
-        등급,  전투력, 공격력, 공격속도, 공격범위, 정확도
+        Rarity,  Power, Damage, Speed, Range, Accuracy
     }
 
     

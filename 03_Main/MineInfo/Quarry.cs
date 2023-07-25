@@ -7,6 +7,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
     [SerializeField] MineDetail mineDetail;
     [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
+    Sprite plusImage;
     private Mine _currentMine;
     public Mine currentMine
     {
@@ -15,7 +16,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         {
             mineDetail.SetCurrentMine(value);
             selectedWeaponImage.sprite =value.rentalWeapon is null? 
-                ResourceManager.Instance.EmptySprite : value.rentalWeapon.sprite;
+                plusImage : value.rentalWeapon.sprite;
             
             _currentMine = value;
         }
@@ -26,6 +27,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     protected override void Awake()
     {
         base.Awake();
+        plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         int mineCount = ResourceManager.Instance.mineDatas.Length;
         

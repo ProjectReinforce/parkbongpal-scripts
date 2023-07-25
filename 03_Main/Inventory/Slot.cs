@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using BackEnd;
+using Manager;
+
 [Serializable]
 public class Slot : MonoBehaviour, IComparable<Slot> 
 {
@@ -17,11 +19,13 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     {
         if (weapon is null)
         {
+            backgroundImage.sprite = UIManager.Instance.weaponRaritySlot[6];
             ImageObject.SetActive(false);
             button.enabled = false;
             myWeapon = null;
             return;
         }
+        backgroundImage.sprite = UIManager.Instance.weaponRaritySlot[weapon.data.rarity];
         ImageObject.SetActive(true);
         button.enabled = true;
         myWeapon = weapon;
@@ -80,21 +84,21 @@ public class Slot : MonoBehaviour, IComparable<Slot>
         
         switch ((SortedMethod)SortingDropDown.currentSortingMethod)
         {
-            case SortedMethod.등급:
+            case SortedMethod.Rarity:
                 return  obj.myWeapon.data.rarity -myWeapon.data.rarity  ;
-            case SortedMethod.전투력:
+            case SortedMethod.Power:
                   return obj.myWeapon.power - myWeapon.power;
 
-            case SortedMethod.공격력:
+            case SortedMethod.Damage:
                 return obj.myWeapon.data.damage - myWeapon.data.damage;
  
-            case SortedMethod.공격속도:
+            case SortedMethod.Speed:
                 return obj.myWeapon.data.speed - myWeapon.data.speed;
 
-            case SortedMethod.공격범위:
+            case SortedMethod.Range:
                 return obj.myWeapon.data.range - myWeapon.data.range;
 
-            case SortedMethod.정확도:
+            case SortedMethod.Accuracy:
                 return obj.myWeapon.data.accuracy - myWeapon.data.accuracy;
             default:
                 return obj.myWeapon.data.rarity - myWeapon.data.rarity;

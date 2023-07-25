@@ -17,13 +17,13 @@ namespace Manager
         public AdvencedGarchar advencedGarchar;
        
         private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
-            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
+            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
             return baseWeaponDatas[index];
         }
 
-        public BaseWeaponData GetBaseWeaponData(Rairity rairity)
+        public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }

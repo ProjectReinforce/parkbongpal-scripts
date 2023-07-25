@@ -9,5 +9,7 @@ namespace Manager
             warning.gameObject.SetActive(true);
             warning.ShowMessage(_title, _description);
         }
+
+        public Sprite[] weaponRaritySlot;
     }
 }

@@ -23,7 +23,7 @@ public class Decomposition : MonoBehaviour
                 slot.SetsellectChecker(false);
             }
             slots.Clear();
-            text.text= "분해 확정";   
+            text.text= "확정";   
         }
         else
         {
@@ -42,7 +42,7 @@ public class Decomposition : MonoBehaviour
             }
             Inventory.Instance.Sort();
             
-            text.text = "분해하기";
+            text.text = "분해";
         }
         
     }

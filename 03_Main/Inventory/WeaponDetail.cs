@@ -27,7 +27,7 @@ public class WeaponDetail : MonoBehaviour
         weaponName.text = weapon.name;
         combatPower.text = weapon.power.ToString();
         WeaponData weaponData = weapon.data;
-        rarity.text = weaponData.rarity.ToString();
+        rarity.text = ((Rarity)weaponData.rarity).ToString();
         stats.text = $"{weaponData.damage}\n{weaponData.speed}\n{weaponData.range}\n{weaponData.accuracy}\n{weaponData.criticalRate}\n{weaponData.criticalDamage}";
         stats2.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";
         stats3.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
