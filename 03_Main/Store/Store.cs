@@ -79,7 +79,7 @@ public class Store:Singleton<Store>
         Player.Instance.AddGold(-pay);
         Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
 
-        if (!Pidea.Instance.ownedWeaponIds[baseWeaponData.index])
+        if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
             var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
             {

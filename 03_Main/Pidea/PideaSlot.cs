@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,13 +10,16 @@ public class PideaSlot : MonoBehaviour
     [SerializeField] private Image backGroundImage;
     [SerializeField] private Image weaponImage;
 
-    public void SetWeaponSprite(Sprite sprite)
+
+    public void Initialized(int index)
     {
-        weaponImage.sprite = sprite;
+        weaponImage.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
+        weaponImage.material = ResourceManager.Instance.materials[index];
     }
+
     public void SetWeaponColor()
     {
-        weaponImage.color = new Color(255, 255, 255);
+        
     }
     
 }

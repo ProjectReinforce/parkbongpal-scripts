@@ -36,7 +36,6 @@ namespace Manager
         }
 
         public Sprite EmptySprite;
-        
     
         protected override void Awake()
         {
@@ -192,11 +191,18 @@ namespace Manager
         }
 
         public const int WEAPON_COUNT = 150;
-        public bool[] ownedWeaponIds=  new bool[WEAPON_COUNT]; 
+        public Material[] materials=  new Material[WEAPON_COUNT];
+        
         void SetOwnedWeaponId()
         {
+            Material LockMaterial = new Material(Shader.Find("UI/Default"));
+            LockMaterial.color= Color.black;
+            for (int i = 0; i < WEAPON_COUNT; i++)
+            {
+                materials[i] = new Material(LockMaterial);
+            }
             SendQueue.Enqueue(Backend.GameData.Get, nameof(PideaData),
-                searchFromMyIndate, 250, bro =>
+                searchFromMyIndate, 200, bro =>
                 {
                     if (!bro.IsSuccess())
                     {
@@ -207,8 +213,7 @@ namespace Manager
                     for (int i = 0; i < json.Count; ++i)
                     {
                         PideaData item = JsonMapper.ToObject<PideaData>(json[i].ToJson());
-                        
-                        ownedWeaponIds[item.ownedWeaponId] = true;
+                        materials[item.ownedWeaponId].color = Color.white;
                     }
                 });
         }

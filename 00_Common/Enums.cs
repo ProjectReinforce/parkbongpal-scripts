@@ -20,3 +20,8 @@
         Normal, Notice, Guide
     }
 
+    public enum Collection
+    {
+        A,B,C,D,E,F,G
+    }
+
