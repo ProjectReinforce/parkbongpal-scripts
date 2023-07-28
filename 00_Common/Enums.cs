@@ -24,4 +24,9 @@
     {
         A,B,C,D,E,F,G
     }
+    
+    public enum MagicType
+    {
+        A,B,C,D,E,F,G
+    }
 

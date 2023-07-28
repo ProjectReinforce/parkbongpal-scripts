@@ -23,6 +23,7 @@ public class Pidea : Singleton<Pidea>
     public void GetNewWeapon(int index)
     {
         materials[index].color = Color.white;
+        
     }
     protected override void Awake()
     {

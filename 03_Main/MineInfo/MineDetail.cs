@@ -17,12 +17,12 @@ public class MineDetail : MonoBehaviour
 
     public void SetCurrentMine(Mine mine)
     {
-        mineName.text = mine.data.name;
-        description.text = mine.data.description;
-        stat.text = $"{mine.data.defence}";
-        stat2.text = $"{mine.data.hp}";
-        stat3.text = $"{mine.data.size}";
-        stat4.text = $"{mine.data.lubricity}";
+        mineName.text = mine.data().name;
+        description.text = mine.data().description;
+        stat.text = $"{mine.data().defence}";
+        stat2.text = $"{mine.data().hp}";
+        stat3.text = $"{mine.data().size}";
+        stat4.text = $"{mine.data().lubricity}";
 
         if (mine.rentalWeapon is null)
         {

@@ -74,13 +74,9 @@ public class Inventory : Singleton<Inventory>
             if (currentWeapon.data.mineId >= 0)
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
             int beforeGoldPerMin = currentMine.goldPerMin;
-            Debug.Log("aa");
             currentMine.SetWeapon(currentWeapon);
-            Debug.Log("bb");
             Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
-            Debug.Log("cc");
-                
-            
+           
             
         }
         catch (Exception e)
@@ -93,7 +89,7 @@ public class Inventory : Singleton<Inventory>
         {
             currentMineWeapon.Lend(-1);
         }
-        currentWeapon.Lend(currentMine.data.index);
+        currentWeapon.Lend(currentMine.data().index);
         Quarry.Instance.currentMine= currentMine ;
         inventory.SetActive(false);
     }
