@@ -7,19 +7,15 @@ using UnityEngine.UI;
 
 public class PideaSlot : MonoBehaviour
 {
-    [SerializeField] private Image backGroundImage;
-    [SerializeField] private Image weaponImage;
-
+    [SerializeField] Image backGroundImage;
+    [SerializeField] Image weaponImage;
+    int _baseWeaponIndex;
+    public int baseWeaponIndex => _baseWeaponIndex;
 
     public void Initialized(int index)
     {
         weaponImage.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
         weaponImage.material = ResourceManager.Instance.materials[index];
+        _baseWeaponIndex = index;
     }
-
-    public void SetWeaponColor()
-    {
-        
-    }
-    
 }

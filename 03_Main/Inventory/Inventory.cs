@@ -10,6 +10,7 @@ public class Inventory : Singleton<Inventory>
     [SerializeField] int stone;
     public const int SIZE = 40;
     
+    [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
     
     Weapon _currentWeapon;
@@ -20,6 +21,7 @@ public class Inventory : Singleton<Inventory>
         {
             weaponDetail.gameObject.SetActive(true);
             weaponDetail.SetWeapon(value);
+            nullImage.SetActive(value is null);
             _currentWeapon = value;
         } 
     }

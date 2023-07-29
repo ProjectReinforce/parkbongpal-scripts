@@ -198,7 +198,7 @@ namespace Manager
                 SceneLoader.ResourceLoadComplete();
             }
             else
-            {
+            {  
                 SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
                 {
                     if (!bro.IsSuccess())

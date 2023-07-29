@@ -13,6 +13,8 @@ public class Pidea : Singleton<Pidea>
     [SerializeField] PideaSlot[] pideaSlots;
 
     [SerializeField] PideaCollection collection;
+    
+
 
     private Material[] materials;//가진 웨폰아이디
 
