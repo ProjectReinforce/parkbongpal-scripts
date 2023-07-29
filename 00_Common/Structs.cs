@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
@@ -41,8 +42,9 @@ public struct UserData
 {
     public static UserData colum;
     public int gold, diamond, weaponSoul, stone;
-    public int exp, level, favoriteWeaponId;
-    public string nickName;
+    public int exp, level, favoriteWeaponId,goldPerMin;
+    //public string nickName;
+    public string inDate;
     public DateTime owner_inDate;
 }
 
@@ -51,6 +53,7 @@ public struct UserData
 public struct MineData//광산차트
 {
     public int index, stage, defence,hp,size, lubricity;
+    
     public string name, description;
 }
 

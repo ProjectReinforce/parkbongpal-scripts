@@ -16,19 +16,19 @@ namespace Manager
         public Where searchFromMyIndate = new Where();
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
-        public Weapon[] weapons;
+        public WeaponData[] WeaponDatas;
         public UserData userData;
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
-        
-        List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
-            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rairity)).Length];
+       
+        private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+            new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
             return baseWeaponDatas[index];
         }
 
-        public BaseWeaponData GetBaseWeaponData(Rairity rairity)
+        public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }
@@ -41,7 +41,8 @@ namespace Manager
         }
 
         public Sprite EmptySprite;
-
+        
+    
         protected override void Awake()
         {
             base.Awake();

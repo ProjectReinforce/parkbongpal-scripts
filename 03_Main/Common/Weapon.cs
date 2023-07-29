@@ -9,35 +9,41 @@ using UnityEngine;
 public class Weapon 
 {
     public readonly Sprite sprite;
-    public readonly Rairity birthRairity;
+    public readonly Rarity birthRairity;
     //private NSubject.ISubject subjects;
     [SerializeField] WeaponData _data;
     public WeaponData data => _data;
 
     public readonly string description;
     public readonly string name;
+    int _power;
+    public int power =>_power;
     private static Reinforce[] enforces =
     {
         new Promote(), new Additional(), new MagicEngrave(),
         new SoulCrafting(), new Refinement()
     };
 
-    public Weapon(WeaponData _data)//기본데이터
+    public Slot myslot;
+
+    public Weapon(WeaponData _data , Slot slot)//기본데이터
     {
         this._data = _data;
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
-        birthRairity= (Rairity)baseWeaponData.rarity;
+        birthRairity= (Rarity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
+        SetPower();
+        myslot = slot;
     }
 
     public void Lend(int mineId)
     {
-        if(data.mineId!=-1)return;//예외처리 2
         _data.mineId = mineId;
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
+        
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -48,11 +54,13 @@ public class Weapon
             }
             Debug.Log("성공"+callback);
         });
+        myslot.UpdateLend();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;
-    public int GetPower()
+    public void SetPower()
     {
+        
         float statSumWithFactor = (data.strength + data.intelligence + data.wisdom
                                     + data.technique + data.charm + data.constitution)
                                     * STAT_CORRECTION_FACTOR;
@@ -63,11 +71,7 @@ public class Weapon
         float calculatedDamage = data.damage * speed * range * (criticalRate * criticalDamage + 1);
         // Debug.Log($"{statSumWithFactor} / {speed} / {range} / {criticalRate} / {criticalDamage} / {calculatedDamage}");
         
-        return (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
+        _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
     }
 
-    public Weapon Clone()
-    {
-        return (Weapon)MemberwiseClone();
-    }
 }

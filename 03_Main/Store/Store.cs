@@ -18,22 +18,29 @@ public class Store:Singleton<Store>
    public void NormalDrawing()
    {
       int pay = 0;
-      if(Player.Instance.userData.gold<pay)
+      if (Player.Instance.userData.gold < pay)
+      {
+          UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
           return;
-      
+      }
+      if (Inventory.Instance.count>Inventory.SIZE)
+      {
+          UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
+          return;
+      }
       int randomInt = Utills.random.Next(1, 101);
       int limit = 100;
-      Rairity rarity;
+      Rarity rarity;
       NormalGarchar normalGarchar = ResourceManager.Instance.normalGarchar;
     
       if (randomInt > (limit-=normalGarchar.rare))
-          rarity =Rairity.rare;
+          rarity =Rarity.rare;
       else if (randomInt > (limit-=normalGarchar.normal))
-          rarity =Rairity.normal;
+          rarity =Rarity.normal;
       else if (randomInt > (limit-=normalGarchar.old))
-          rarity =Rairity.old;
+          rarity =Rarity.old;
       else
-          rarity = Rairity.trash;
+          rarity = Rarity.trash;
       Debug.Log("rarity: "+rarity+" limit: "+limit);
       BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
         Debug.Log(baseWeaponData.index);
@@ -69,9 +76,8 @@ public class Store:Singleton<Store>
             baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
             baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
 
-
         Player.Instance.AddGold(-pay);
-        Inventory.Instance.AddWeapon(new Weapon(weaponData), Inventory.Instance.count);
+        Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
         Debug.Log("구입완료" + bro.GetInDate());
 
 

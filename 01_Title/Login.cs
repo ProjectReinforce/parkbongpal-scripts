@@ -8,8 +8,8 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    //  const string SCENE_NAME = "Main";
-    const string SCENE_NAME = "Chat_HW";
+    //const string SCENE_NAME = "Main_JG";
+    const string SCENE_NAME = "SampleScene SH Clone";
 
 
     [SerializeField] GameObject LoginPopup;
@@ -122,9 +122,8 @@ public class Login : MonoBehaviour
 
     void InsertNewUserData()
     {
-        Param newParam = new Param();
-
-        var bro = Backend.GameData.Insert(nameof(UserData), newParam);
+        
+        var bro = Backend.GameData.Insert(nameof(UserData), new Param());
 
         if(bro.IsSuccess())
         {
