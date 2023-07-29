@@ -90,6 +90,7 @@ namespace Manager
                 GetNormalGachaData();
                 GetAdvancedGachaData();
                 GetBaseWeaponData();
+                SetOwnedWeaponId();
             });
         }
 
