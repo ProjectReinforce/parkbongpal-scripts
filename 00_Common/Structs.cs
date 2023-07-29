@@ -54,6 +54,7 @@ public struct PideaData//광산차트
     public static PideaData colum;
 }
 
+[System.Serializable]
 public struct MineData//광산차트
 {
     public int index, stage, defence,hp,size, lubricity;
@@ -71,10 +72,12 @@ public struct BaseWeaponData//기본 무기정보 차트
     public string name,  description;
 }
 
+[System.Serializable]
 public struct NormalGarchar
 {
     public int trash, old, normal, rare;
 }
+[System.Serializable]
 public struct AdvencedGarchar
 {
     public int trash, old, normal, rare, unique, legendary;

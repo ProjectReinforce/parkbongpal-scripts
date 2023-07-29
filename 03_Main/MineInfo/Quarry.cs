@@ -32,7 +32,9 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         int mineCount = ResourceManager.Instance.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
-        {          
+        {
+            if (i >= mines.Length)
+                break;
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
             
         }
