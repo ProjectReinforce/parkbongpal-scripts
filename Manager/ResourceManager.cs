@@ -98,20 +98,25 @@ namespace Manager
             string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (loadedChart != "")
+            if (GetLocalChartData<NormalGarchar>(ChartName.normalGachaPercentage, out normalGarchar))
             {
-                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-                JsonData local2 = BackendReturnObject.Flatten(local);
-                normalGarchar = new NormalGarchar();
-                for (int i = 0; i < local2.Count; ++i)
-                {                   
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    normalGarchar = JsonMapper.ToObject<NormalGarchar>(local2[i].ToJson());
-                }
-
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
+            // if (loadedChart != "")
+            // {
+            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+            //     JsonData local2 = BackendReturnObject.Flatten(local);
+            //     normalGarchar = new NormalGarchar();
+            //     for (int i = 0; i < local2.Count; ++i)
+            //     {                   
+            //         // 데이터를 디시리얼라이즈 & 데이터 확인
+            //         normalGarchar = JsonMapper.ToObject<NormalGarchar>(local2[i].ToJson());
+            //     }
+
+            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+            //     SceneLoader.ResourceLoadComplete();
+            // }
             else
             {
                 SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
@@ -138,20 +143,25 @@ namespace Manager
             string chartId = chartInfos[ChartName.advancedGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (loadedChart != "")
+            if (GetLocalChartData<AdvencedGarchar>(ChartName.advancedGachaPercentage, out advencedGarchar))
             {
-                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-                JsonData local2 = BackendReturnObject.Flatten(local);
-                advencedGarchar = new AdvencedGarchar();
-                for (int i = 0; i < local2.Count; ++i)
-                {                   
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
-                }
-
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
+            // if (loadedChart != "")
+            // {
+            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+            //     JsonData local2 = BackendReturnObject.Flatten(local);
+            //     advencedGarchar = new AdvencedGarchar();
+            //     for (int i = 0; i < local2.Count; ++i)
+            //     {                   
+            //         // 데이터를 디시리얼라이즈 & 데이터 확인
+            //         advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
+            //     }
+
+            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+            //     SceneLoader.ResourceLoadComplete();
+            // }
             else
             {
                 SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
@@ -178,25 +188,37 @@ namespace Manager
 
             // Backend.Chart.DeleteLocalChartData("86938");
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (loadedChart != "")
-            {                
-                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-                JsonData local2 = BackendReturnObject.Flatten(local);
-                baseWeaponDatas = new BaseWeaponData[local2.Count];
-                for (int i = 0; i < local2.Count; ++i)
+            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
+            {
+                for (int i = 0; i < baseWeaponDatas.Length; ++i)
                 {
                     // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
                     if(i >= 10)
                         break;
-                    // 데이터를 디시리얼라이즈 & 데이터 확인
-                    BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
-                    baseWeaponDatas[i] = baseWeaponData;
                     baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                 }
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                
                 SceneLoader.ResourceLoadComplete();
             }
+            // if (loadedChart != "")
+            // {                
+            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+            //     JsonData local2 = BackendReturnObject.Flatten(local);
+            //     baseWeaponDatas = new BaseWeaponData[local2.Count];
+            //     for (int i = 0; i < local2.Count; ++i)
+            //     {
+            //         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+            //         if(i >= 10)
+            //             break;
+            //         // 데이터를 디시리얼라이즈 & 데이터 확인
+            //         BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
+            //         baseWeaponDatas[i] = baseWeaponData;
+            //         baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+            //     }
+            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                
+            //     SceneLoader.ResourceLoadComplete();
+            // }
             else
             {
                 SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
@@ -231,22 +253,27 @@ namespace Manager
             string chartId = chartInfos[ChartName.mineData.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (loadedChart != "")
+            if (GetLocalChartData<MineData>(ChartName.mineData, out mineDatas))
             {
-                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-                JsonData local2 = BackendReturnObject.Flatten(local);
-                mineDatas = new MineData[local2.Count];
-                for (int i = 0; i < local2.Count; ++i)
-                {
-                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                    if(i >= 10)
-                        break;
-                    
-                    mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
-                }
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
+            // if (loadedChart != "")
+            // {
+            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+            //     JsonData local2 = BackendReturnObject.Flatten(local);
+            //     mineDatas = new MineData[local2.Count];
+            //     for (int i = 0; i < local2.Count; ++i)
+            //     {
+            //         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+            //         if(i >= 10)
+            //             break;
+                    
+            //         mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
+            //     }
+            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+            //     SceneLoader.ResourceLoadComplete();
+            // }
             else
             {
                 SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
@@ -276,63 +303,80 @@ namespace Manager
             }
         }
 
-        // void GetLocalChartData<T>(ChartName _chartName, System.Action<JsonData> action) where T: struct
-        // {
-        //     string chartId = chartInfos[_chartName.ToString()];
+        bool GetLocalChartData<T>(ChartName _chartName, out T _result) where T: struct
+        {
+            string chartId = chartInfos[_chartName.ToString()];
 
-        //     string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-        //     if (loadedChart != "")
-        //     {
-        //         JsonData loadedChartJson = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-        //         JsonData flattenedChart = BackendReturnObject.Flatten(loadedChartJson);
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            if (loadedChart != "")
+            {
+                JsonData loadedChartJson = StringToJson(loadedChart);
 
-        //         for (int i = 0; i < flattenedChart.Count; ++i)
-        //         {                   
-        //             action(flattenedChart[i]);
-        //         }
+                ChartToStruct<T>(loadedChartJson, out _result);
 
-        //     }
-        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-        //         JsonData local2 = BackendReturnObject.Flatten(local);
-        //         advencedGarchar = new AdvencedGarchar();
-        //         for (int i = 0; i < local2.Count; ++i)
-        //         {                   
-        //             // 데이터를 디시리얼라이즈 & 데이터 확인
-        //             advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
-        //         }
+                return true;
+            }
+            else
+            {
+                _result = default(T);
+                return false;
+            }
+        }
 
+        bool GetLocalChartData<T>(ChartName _chartName, out T[] _results) where T: struct
+        {
+            string chartId = chartInfos[_chartName.ToString()];
 
-        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-        //         JsonData local2 = BackendReturnObject.Flatten(local);
-        //         baseWeaponDatas = new BaseWeaponData[local2.Count];
-        //         for (int i = 0; i < local2.Count; ++i)
-        //         {
-        //             // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-        //             if(i >= 10)
-        //                 break;
-        //             // 데이터를 디시리얼라이즈 & 데이터 확인
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            if (loadedChart != "")
+            {
+                JsonData loadedChartJson = StringToJson(loadedChart);
 
-        //             () => {
-        //             BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
-        //             baseWeaponDatas[i] = baseWeaponData;
-        //             baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-        //             }
-        //         }
+                ChartToStruct<T>(loadedChartJson, out _results);
 
-        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-        //         JsonData local2 = BackendReturnObject.Flatten(local);
-        //         mineDatas = new MineData[local2.Count];
-        //         for (int i = 0; i < local2.Count; ++i)
-        //         {
-        //             // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-        //             if(i >= 10)
-        //                 break;
-                    
-        //             mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
-        //         }
-        // }
+                return true;
+            }
+            else
+            {
+                _results = default(T[]);
 
+                return false;
+            }
+        }
 
+        const int CUT_LENGTH = 8;
+        JsonData StringToJson(string _targetString)
+        {
+            // 제이슨 데이터의 앞부분 -["rows:-과 마지막 -]- 부분 잘라냄
+            string stringJson = _targetString.Substring(CUT_LENGTH, _targetString.Length - CUT_LENGTH - 1);
+            JsonData localJson = JsonMapper.ToObject(stringJson);
+            JsonData flattenedJson = BackendReturnObject.Flatten(localJson);
+
+            return flattenedJson;
+        }
+
+        void ChartToStruct<T>(JsonData _chartJson, out T[] _results) where T: struct
+        {
+            _results = new T[_chartJson.Count];
+            for (int i = 0; i < _chartJson.Count; ++i)
+            {
+                // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+                if(i >= 10)
+                    break;
+                // 데이터를 디시리얼라이즈 & 데이터 확인
+                _results[i] = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
+            }
+        }
+
+        void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: new()
+        {
+            _result = new T();
+            for (int i = 0; i < _chartJson.Count; ++i)
+            {                   
+                // 데이터를 디시리얼라이즈 & 데이터 확인
+                _result = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
+            }
+        }
 
         void GetOwnedWeaponData()
         {
