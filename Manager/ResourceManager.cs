@@ -307,13 +307,13 @@ namespace Manager
                 }
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                weapons = new Weapon[json.Count];
-                Debug.Log($"[ResourceM] 유저 무기 정보 수신 완료 : {weapons.Length}개");
+                WeaponDatas = new WeaponData[json.Count];
+                Debug.Log($"[ResourceM] 유저 무기 정보 수신 완료 : {WeaponDatas.Length}개");
                 for (int i = 0; i < json.Count; ++i)
                 {
                     WeaponData item = JsonMapper.ToObject<WeaponData>(json[i].ToJson());
 
-                    weapons[i] = new Weapon(item);
+                    WeaponDatas[i] = item;
                 }
                 SceneLoader.ResourceLoadComplete();
             });
