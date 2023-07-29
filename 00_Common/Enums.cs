@@ -30,3 +30,7 @@
         A,B,C,D,E,F,G
     }
 
+    public enum ChartName
+    {
+        normalGachaPercentage, advancedGachaPercentage, mineData, weapon
+    }

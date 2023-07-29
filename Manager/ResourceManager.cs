@@ -3,16 +3,11 @@ using UnityEngine;
 using BackEnd;
 using LitJson;
 
-public enum ChartName
-{
-    normalGachaPercentage, advancedGachaPercentage, MineData, weapon
-}
 
 namespace Manager
 {
     public class ResourceManager : DontDestroy<ResourceManager>
     {
-        //[SerializeField] BaseWeaponData[] baseWeaponDatas;
         public Where searchFromMyIndate = new Where();
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
@@ -21,7 +16,7 @@ namespace Manager
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
        
-        private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+        [SerializeField] private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
@@ -30,6 +25,7 @@ namespace Manager
 
         public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
+           
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }
 
@@ -41,6 +37,7 @@ namespace Manager
         }
 
         public Sprite EmptySprite;
+        
     
         protected override void Awake()
         {
@@ -55,11 +52,7 @@ namespace Manager
             GetOwnedWeaponData();
 
             GetVersionChart();
-
-            SetOwnedWeaponId();
-
             // Backend.Chart.DeleteLocalChartData("85810");
-            // Backend.Chart.DeleteLocalChartData("85808");
         }
 
         const string VERSION_CHART_ID = "86892";
@@ -89,6 +82,9 @@ namespace Manager
                     chartInfos.TryAdd(result["name"].ToString(), result["latestfileId"].ToString());
                 }
 
+                foreach (var one in chartInfos)
+                    Debug.Log(one);
+
                 // 수신된 정보로 로컬 차트 로드
                 GetMineData();
                 GetNormalGachaData();
@@ -99,24 +95,20 @@ namespace Manager
 
         void GetNormalGachaData()
         {
-            // string chartId = chartLists[ChartName.normalGachaPercentage.ToString()];
             string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (loadedChart != "")
             {
-                JsonData chartJson = JsonMapper.ToObject(loadedChart)["rows"];
-                // JsonData chartJson = JsonMapper.ToObject(loadedChart);
-                foreach (JsonData one in chartJson)
-                {
-                    // Debug.Log(one["trash"]["S"].ToString());
-
-                    normalGarchar = new NormalGarchar();
-                    normalGarchar.trash = int.Parse(one["trash"]["S"].ToString());
-                    normalGarchar.old = int.Parse(one["old"]["S"].ToString());
-                    normalGarchar.normal = int.Parse(one["normal"]["S"].ToString());
-                    normalGarchar.rare = int.Parse(one["rare"]["S"].ToString());
+                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+                JsonData local2 = BackendReturnObject.Flatten(local);
+                normalGarchar = new NormalGarchar();
+                for (int i = 0; i < local2.Count; ++i)
+                {                   
+                    // 데이터를 디시리얼라이즈 & 데이터 확인
+                    normalGarchar = JsonMapper.ToObject<NormalGarchar>(local2[i].ToJson());
                 }
+
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
@@ -148,17 +140,15 @@ namespace Manager
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (loadedChart != "")
             {
-                JsonData chartJson = JsonMapper.ToObject(loadedChart)["rows"];
-                foreach (JsonData one in chartJson)
-                {
-                    advencedGarchar = new AdvencedGarchar();
-                    advencedGarchar.trash = int.Parse(one["trash"]["S"].ToString());
-                    advencedGarchar.old = int.Parse(one["old"]["S"].ToString());
-                    advencedGarchar.normal = int.Parse(one["normal"]["S"].ToString());
-                    advencedGarchar.rare = int.Parse(one["rare"]["S"].ToString());
-                    advencedGarchar.unique = int.Parse(one["unique"]["S"].ToString());
-                    advencedGarchar.legendary = int.Parse(one["legendary"]["S"].ToString());
+                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+                JsonData local2 = BackendReturnObject.Flatten(local);
+                advencedGarchar = new AdvencedGarchar();
+                for (int i = 0; i < local2.Count; ++i)
+                {                   
+                    // 데이터를 디시리얼라이즈 & 데이터 확인
+                    advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
                 }
+
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
@@ -186,31 +176,25 @@ namespace Manager
         {
             string chartId = chartInfos[ChartName.weapon.ToString()];
 
+            // Backend.Chart.DeleteLocalChartData("86938");
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (loadedChart != "")
-            {
-                JsonData chartJson = JsonMapper.ToObject(loadedChart)["rows"];
-                for (int i = 0; i < chartJson.Count; i++)
+            {                
+                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+                JsonData local2 = BackendReturnObject.Flatten(local);
+                baseWeaponDatas = new BaseWeaponData[local2.Count];
+                for (int i = 0; i < local2.Count; ++i)
                 {
+                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
                     if(i >= 10)
                         break;
-                    BaseWeaponData baseWeaponData = new BaseWeaponData();
-                    baseWeaponData.index = int.Parse(chartJson[i]["index"]["S"].ToString());
-                    baseWeaponData.atk = int.Parse(chartJson[i]["atk"]["S"].ToString());
-                    baseWeaponData.atkSpeed = int.Parse(chartJson[i]["atkSpeed"]["S"].ToString());
-                    baseWeaponData.atkRange = int.Parse(chartJson[i]["atkRange"]["S"].ToString());
-                    baseWeaponData.accuracy = int.Parse(chartJson[i]["accuracy"]["S"].ToString());
-                    baseWeaponData.rarity = int.Parse(chartJson[i]["rarity"]["S"].ToString());
-                    baseWeaponData.criticalRate = int.Parse(chartJson[i]["criticalRate"]["S"].ToString());
-                    baseWeaponData.criticalDamage = int.Parse(chartJson[i]["criticalDamage"]["S"].ToString());
-                    baseWeaponData.strength = int.Parse(chartJson[i]["strength"]["S"].ToString());
-                    baseWeaponData.intelligence = int.Parse(chartJson[i]["intelligence"]["S"].ToString());
-                    baseWeaponData.wisdom = int.Parse(chartJson[i]["wisdom"]["S"].ToString());
-                    baseWeaponData.technique = int.Parse(chartJson[i]["technique"]["S"].ToString());
-                    baseWeaponData.charm = int.Parse(chartJson[i]["charm"]["S"].ToString());
-                    baseWeaponData.constitution = int.Parse(chartJson[i]["constitution"]["S"].ToString());
+                    // 데이터를 디시리얼라이즈 & 데이터 확인
+                    BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
+                    baseWeaponDatas[i] = baseWeaponData;
+                    baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                 }
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                
                 SceneLoader.ResourceLoadComplete();
             }
             else
@@ -226,6 +210,7 @@ namespace Manager
                     JsonData json = BackendReturnObject.Flatten(bro.Rows());
                     baseWeaponDatas = new BaseWeaponData[json.Count];
                     Debug.Log($"뒤끝 차트 {chartId} 수신 완료 : {json.Count}개");
+                    
                     for (int i = 0; i < json.Count; ++i)
                     {
                         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
@@ -233,10 +218,6 @@ namespace Manager
                             break;
                         // 데이터를 디시리얼라이즈 & 데이터 확인
                         BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
-                        // baseWeaponData.atk = (int)((baseWeaponData.atk << baseWeaponData.rarity) * 0.5f) + 10;
-                        // baseWeaponData.atkSpeed = (int)((baseWeaponData.atkSpeed << baseWeaponData.rarity) * 0.1f);
-                        // baseWeaponData.atkRange = (int)(baseWeaponData.atkRange) + 40;
-                        // baseWeaponData.accuracy = (int)(baseWeaponData.accuracy);
                         baseWeaponDatas[i] = baseWeaponData;
                         baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                     }
@@ -247,22 +228,21 @@ namespace Manager
 
         void GetMineData()
         {
-            string chartId = chartInfos[ChartName.weapon.ToString()];
+            string chartId = chartInfos[ChartName.mineData.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (loadedChart != "")
             {
-                JsonData chartJson = JsonMapper.ToObject(loadedChart)["rows"];
-                mineDatas = new MineData[chartJson.Count];
-                for (int i = 0; i < chartJson.Count; i++)
+                JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+                JsonData local2 = BackendReturnObject.Flatten(local);
+                mineDatas = new MineData[local2.Count];
+                for (int i = 0; i < local2.Count; ++i)
                 {
-                    MineData mineData = new MineData();
-                    mineData.index = int.Parse(chartJson[i]["index"]["S"].ToString());
-                    mineData.defence = int.Parse(chartJson[i]["atk"]["S"].ToString());
-                    mineData.hp = int.Parse(chartJson[i]["atkSpeed"]["S"].ToString());
-                    mineData.size = int.Parse(chartJson[i]["atkRange"]["S"].ToString());
-                    mineData.lubricity = int.Parse(chartJson[i]["accuracy"]["S"].ToString());
-                    mineDatas[i] = mineData;
+                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+                    if(i >= 10)
+                        break;
+                    
+                    mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
                 }
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -295,6 +275,64 @@ namespace Manager
                 });
             }
         }
+
+        // void GetLocalChartData<T>(ChartName _chartName, System.Action<JsonData> action) where T: struct
+        // {
+        //     string chartId = chartInfos[_chartName.ToString()];
+
+        //     string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+        //     if (loadedChart != "")
+        //     {
+        //         JsonData loadedChartJson = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+        //         JsonData flattenedChart = BackendReturnObject.Flatten(loadedChartJson);
+
+        //         for (int i = 0; i < flattenedChart.Count; ++i)
+        //         {                   
+        //             action(flattenedChart[i]);
+        //         }
+
+        //     }
+        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+        //         JsonData local2 = BackendReturnObject.Flatten(local);
+        //         advencedGarchar = new AdvencedGarchar();
+        //         for (int i = 0; i < local2.Count; ++i)
+        //         {                   
+        //             // 데이터를 디시리얼라이즈 & 데이터 확인
+        //             advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
+        //         }
+
+
+        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+        //         JsonData local2 = BackendReturnObject.Flatten(local);
+        //         baseWeaponDatas = new BaseWeaponData[local2.Count];
+        //         for (int i = 0; i < local2.Count; ++i)
+        //         {
+        //             // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+        //             if(i >= 10)
+        //                 break;
+        //             // 데이터를 디시리얼라이즈 & 데이터 확인
+
+        //             () => {
+        //             BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
+        //             baseWeaponDatas[i] = baseWeaponData;
+        //             baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+        //             }
+        //         }
+
+        //         JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
+        //         JsonData local2 = BackendReturnObject.Flatten(local);
+        //         mineDatas = new MineData[local2.Count];
+        //         for (int i = 0; i < local2.Count; ++i)
+        //         {
+        //             // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+        //             if(i >= 10)
+        //                 break;
+                    
+        //             mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
+        //         }
+        // }
+
+
 
         void GetOwnedWeaponData()
         {
