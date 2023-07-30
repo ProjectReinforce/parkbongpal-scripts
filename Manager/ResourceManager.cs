@@ -3,7 +3,6 @@ using UnityEngine;
 using BackEnd;
 using LitJson;
 
-
 namespace Manager
 {
     public class ResourceManager : DontDestroy<ResourceManager>
@@ -50,6 +49,7 @@ namespace Manager
 
             GetUserData();
             GetOwnedWeaponData();
+            SetOwnedWeaponId();
 
             GetVersionChart();
             // Backend.Chart.DeleteLocalChartData("85810");
@@ -90,7 +90,6 @@ namespace Manager
                 GetNormalGachaData();
                 GetAdvancedGachaData();
                 GetBaseWeaponData();
-                SetOwnedWeaponId();
             });
         }
 
@@ -304,11 +303,13 @@ namespace Manager
             }
         }
 
+        #region For load to local chart
         bool GetLocalChartData<T>(ChartName _chartName, out T _result) where T: struct
         {
             string chartId = chartInfos[_chartName.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
@@ -329,6 +330,7 @@ namespace Manager
             string chartId = chartInfos[_chartName.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
@@ -369,7 +371,7 @@ namespace Manager
             }
         }
 
-        void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: new()
+        void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: struct
         {
             _result = new T();
             for (int i = 0; i < _chartJson.Count; ++i)
@@ -378,6 +380,7 @@ namespace Manager
                 _result = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
             }
         }
+        #endregion
 
         void GetOwnedWeaponData()
         {
@@ -456,6 +459,5 @@ namespace Manager
                     }
                 });
         }
-      
     }
 }
