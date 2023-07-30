@@ -1,36 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Manager;
 
 [Serializable]
-public class Inventory : Singleton<Inventory>, IPointerDownHandler
+public class Inventory : Singleton<Inventory>
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
     public const int SIZE = 40;
-    private int count; 
-    [SerializeField] Slot Prefab;
-    [SerializeField] GameObject box;
+    
+    [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
-    
-    List<Slot> slots;
-    
-    //
-    // bool isShowLend;
-    // public void ShowLendedWeapon(bool check)
-    // {
-    //     isShowLend = check;
-    // }
-
-    bool needSort;
-    
-
-    [SerializeField] UnityEngine.UI.Dropdown sortingMethod;
-
-
     
     Weapon _currentWeapon;
     public Weapon currentWeapon
@@ -38,162 +19,93 @@ public class Inventory : Singleton<Inventory>, IPointerDownHandler
         get => _currentWeapon;
         set
         {
+            weaponDetail.gameObject.SetActive(true);
             weaponDetail.SetWeapon(value);
+            nullImage.SetActive(value is null);
             _currentWeapon = value;
         } 
     }
+    
+    List<Slot> slots;
+    public Slot GetSlot(int index)
+    {
+        return slots[index];
+    }
 
-
+    public int count;
+    public void Sort()
+    {
+        slots.Sort();
+        for (int i = 0 ; i<count ; i++)
+            slots[i].transform.SetSiblingIndex(i);
+        
+    }
+    public void AddWeapon(Weapon weapon , int index)
+    {
+        slots[index].SetWeapon(weapon);
+        count++;
+    }
+    
+    [SerializeField] GameObject box;
     protected override void Awake()
     {
         base.Awake();
 
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
 
-        count = ResourceManager.Instance.weapons.Length;
+        int count = ResourceManager.Instance.WeaponDatas.Length;
         for (int i = 0; i < count; i++)
         {
-            AddWeapon(ResourceManager.Instance.weapons[i]);
+            AddWeapon( new Weapon(ResourceManager.Instance.WeaponDatas[i], slots[i]) ,i);
         }
-        
-        
+        Sort();
     }
+
+  
     
-
-
-    public void AddWeapon(Weapon weapon)
-    {
-        slots[count].SetWeapon(weapon);
-        count++;
-        //Sort();
-    }
+    [SerializeField]  GameObject inventory;
 
     public void ConfirmWeapon()
     {
-        Debug.Log("Quarry.Instance.currentMine "+ Quarry.Instance.currentMine);
-        Debug.Log("currentweapon "+ currentWeapon);
-        Quarry.Instance.currentMine.SetWeapon(currentWeapon);
+        if (currentWeapon is null) return;
+        Mine currentMine = Quarry.Instance.currentMine;
+        Weapon currentMineWeapon = currentMine.rentalWeapon;
+        
+        try
+        {
+            if (currentWeapon.data.mineId >= 0)
+                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
+            int beforeGoldPerMin = currentMine.goldPerMin;
+            currentMine.SetWeapon(currentWeapon);
+            Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
+           
+            
+        }
+        catch (Exception e)
+        {
+            UIManager.Instance.ShowWarning("안내", e.Message);
+            return;
+        }
+
+        if (currentMineWeapon is not null)
+        {
+            currentMineWeapon.Lend(-1);
+        }
+        currentWeapon.Lend(currentMine.data().index);
+        Quarry.Instance.currentMine= currentMine ;
+        inventory.SetActive(false);
     }
 
-    public void Sort()
-    {
-        Debug.Log("sortingMethod.value="+sortingMethod.value);
-        //slots =  MergeSortLinkedList(slots);
-        
-        //ArgumentException: Unable to sort because the IComparer.Compare() method returns inconsistent results. Either a value does not compare equal to itself, or one value repeatedly compared to another value yields different results. IComparer: 'System.Comparison`1[Slot]'.
-        slots.Sort((left, right) =>
-        {
-            if (left.myWeapon is null || right.myWeapon is null)
-                return -1;
-            switch ((SortedMethod)sortingMethod.value)
-            {
-                case SortedMethod.등급:
-                    return  right.myWeapon.data.rarity -left.myWeapon.data.rarity  ;
-                // case SortedMethod.전투력:
-                //     return myWeapon.GetPower() - obj.myWeapon.data.rarity;
+    bool _isShowLend;
+    public bool isShowLend =>_isShowLend;
 
-                case SortedMethod.공격력:
-                    return right.myWeapon.data.damage - left.myWeapon.data.damage;
+    public void ShowLendWeapon()
+    {
+        _isShowLend = !_isShowLend;
+        if(isShowLend)
+            currentWeapon = null;
+        Sort();
+    }
  
-                case SortedMethod.공격속도:
-                    return right.myWeapon.data.speed - left.myWeapon.data.speed;
 
-                case SortedMethod.공격범위:
-                    return right.myWeapon.data.range -left. myWeapon.data.range;
-
-                case SortedMethod.정확도:
-                    return right.myWeapon.data.accuracy - left.myWeapon.data.accuracy;
-                default:
-                    return right.myWeapon.data.rarity - left.myWeapon.data.rarity;
-            }
-        });
-        for (int i = 0 ; i<count ; i++)
-            slots[i].transform.SetSiblingIndex(i);
-        
-        Debug.Log("소팅완료");
-    }
-    /*
-    public LinkedList<T> MergeSortLinkedList<T>(LinkedList<T> list) where T : Slot
-    {
-        if (list == null || list.Count <= 1)
-            return list; // 이미 정렬되었거나 빈 리스트인 경우 반환
-
-        LinkedList<T> left = new LinkedList<T>();
-        LinkedList<T> right = new LinkedList<T>();
-
-        int middle = list.Count / 2;
-        LinkedListNode<T> current = list.First;
-
-        for (int i = 0; i < middle; i++)
-        {
-            left.AddLast(current.Value);
-            current = current.Next;
-        }
-
-        while (current != null)
-        {
-            right.AddLast(current.Value);
-            current = current.Next;
-        }
-
-        left = MergeSortLinkedList(left);
-        right = MergeSortLinkedList(right);
-
-        return MergeLinkedLists(left, right);
-    }
-
-    private LinkedList<T> MergeLinkedLists<T>(LinkedList<T> left, LinkedList<T> right ) where T : Slot
-    {
-        LinkedList<T> mergedList = new LinkedList<T>();
-        LinkedListNode<T> leftNode = left.First;
-        LinkedListNode<T> rightNode = right.First;
-
-        while (leftNode != null && rightNode != null)
-        {
-            if (leftNode.Value.CompareTo(rightNode.Value,(SortedMethod)sortingMethod.value ) <= 0)
-            {
-                mergedList.AddLast(leftNode.Value);
-                leftNode = leftNode.Next;
-            }
-            else
-            {
-                mergedList.AddLast(rightNode.Value);
-                rightNode = rightNode.Next;
-            }
-        }
-
-        while (leftNode != null)
-        {
-            mergedList.AddLast(leftNode.Value);
-            leftNode = leftNode.Next;
-        }
-
-        while (rightNode != null)
-        {
-            mergedList.AddLast(rightNode.Value);
-            rightNode = rightNode.Next;
-        }
-
-        return mergedList;
-    }
-    */
-    public void Decomposition(Weapon[] weapons)
-    {
-        List<Slot> a = new List<Slot>();
-        Slot[] b = new Slot[5];
-        
-        a.Sort((a,b)=>a.myWeapon.data.accuracy );
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        foreach (Slot slot in slots)
-        {
-            if (RectTransformUtility.RectangleContainsScreenPoint((RectTransform)slot.transform,
-                    eventData.position))
-            {
-                
-            }
-        }
-    }
 }

@@ -13,6 +13,12 @@ public class ChatResizer : MonoBehaviour
 
     public void ChatResize()
     {
+        if(!ChatManager.Instance.ChatConnected)
+        {
+            ChatManager.Instance.CheckChatStatus();
+            return;
+        }
+
         if(isExpanded)
         {
             chat.sizeDelta = Vector2.right * chat.sizeDelta.x + Vector2.up * shrinkHeight;

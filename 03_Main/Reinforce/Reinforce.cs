@@ -61,7 +61,7 @@ public class MagicEngrave : Reinforce
     public MagicEngrave()
     {
         _condition = "무기 등급";
-        Qualification = (int)Rairity.rare;
+        Qualification = (int)Rarity.rare;
     }
     public override bool LockCheck(Weapon weapon)
     {
@@ -105,7 +105,7 @@ public class Refinement : Reinforce
     public Refinement()
     {
         _condition = "무기 등급";
-        Qualification = (int)Rairity.legendary;
+        Qualification = (int)Rarity.legendary;
     }
     public override bool LockCheck(Weapon weapon)
     {

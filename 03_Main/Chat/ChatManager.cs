@@ -5,10 +5,14 @@ using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
 
-public class ChatManager : MonoBehaviour
+public class ChatManager : Manager.Singleton<ChatManager>
 {
-    void Awake()
+    public bool ChatConnected { get; private set; }
+
+    protected override void Awake()
     {
+        base.Awake();
+
         CheckChatStatus();
     }
 
@@ -36,7 +40,8 @@ public class ChatManager : MonoBehaviour
     }
 
     const string TITLE_GUIDE = "안내";
-    const string JOINMESSAGE = "채팅 채널 접속 성공";
+    const string JOIN_MESSAGE = "채팅 채널 접속 성공";
+    const string JOIN_FAIL_MESSAGE = "채팅 채널 접속 실패";
     void SomeoneJoinChannel(JoinChannelEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
@@ -46,8 +51,9 @@ public class ChatManager : MonoBehaviour
             if(!_args.Session.IsRemote)
             {
                 Debug.Log("채팅 채널 접속 성공");
+                ChatConnected = true;
                 
-                InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOINMESSAGE, MessageType.Guide));
+                InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOIN_MESSAGE, MessageType.Guide));
             }
             else
                 Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
@@ -55,6 +61,9 @@ public class ChatManager : MonoBehaviour
         else
         {
             Debug.LogError($"채널 접속 실패 : {errorInfo}");
+            ChatConnected = false;
+
+            InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOIN_FAIL_MESSAGE, MessageType.Guide));
         }
     }
 
@@ -85,6 +94,14 @@ public class ChatManager : MonoBehaviour
         newMessageSlot.SetActive(true);
         if(newMessageSlot.TryGetComponent<ChatMessage>(out ChatMessage chatMessage))
             chatMessage.Set(_nickname, _message, _messageType);
+        StartCoroutine(SetScrollRecently());
+    }
+
+    WaitForSeconds scrolDelayTime = new WaitForSeconds(0.01f);
+    IEnumerator SetScrollRecently()
+    {
+        yield return scrolDelayTime;
+
         chatScroll.value = 0;
     }
 
@@ -123,7 +140,7 @@ public class ChatManager : MonoBehaviour
         InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
     }
 
-    void CheckChatStatus()
+    public void CheckChatStatus()
     {
         SendQueue.Enqueue(BackEnd.Backend.Chat.GetChatStatus, callback =>
         {
