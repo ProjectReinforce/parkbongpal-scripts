@@ -82,9 +82,6 @@ namespace Manager
                     chartInfos.TryAdd(result["name"].ToString(), result["latestfileId"].ToString());
                 }
 
-                foreach (var one in chartInfos)
-                    Debug.Log(one);
-
                 // 수신된 정보로 로컬 차트 로드
                 GetMineData();
                 GetNormalGachaData();
