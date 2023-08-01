@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine.Serialization;
 
 [System.Serializable]
@@ -81,4 +82,36 @@ public struct NormalGarchar
 public struct AdvencedGarchar
 {
     public int trash, old, normal, rare, unique, legendary;
+}
+
+[Serializable]
+public struct NormalReinforceData
+{
+    public int percent;
+    public int baseGold;
+    public int goldPerRarity;
+    public int atkUp;
+}
+
+[Serializable]
+public struct SoulCraftingData
+{
+    public int goldCost, soulCost;
+    public int option1, option2, option3, option4, option5;
+}
+
+[Serializable]
+public struct AdditionalData
+{
+    public int goldCost;
+    public int option2, option4, option6, option8, option10;
+}
+
+[Serializable]
+public struct RefinementData
+{
+    public int baseGold, goldPerTry;
+    public int baseOre, orePerTry;
+    public int atk, critical, stat3, stat6;
+    public int minus3, minus1, zero, plus1, plus5;
 }

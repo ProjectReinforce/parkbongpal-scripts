@@ -14,6 +14,10 @@ namespace Manager
         public UserData userData;
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
+        public NormalReinforceData normalReinforceData;
+        public SoulCraftingData soulCraftingData;
+        public AdditionalData additionalData;
+        public RefinementData refinementData;
        
         [SerializeField] private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
@@ -55,7 +59,7 @@ namespace Manager
             // Backend.Chart.DeleteLocalChartData("85810");
         }
 
-        const string VERSION_CHART_ID = "86892";
+        const string VERSION_CHART_ID = "87504";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -82,11 +86,24 @@ namespace Manager
                     chartInfos.TryAdd(result["name"].ToString(), result["latestfileId"].ToString());
                 }
 
+                foreach (var one in chartInfos)
+                    Debug.Log(one);
+
                 // 수신된 정보로 로컬 차트 로드
                 GetMineData();
                 GetNormalGachaData();
                 GetAdvancedGachaData();
                 GetBaseWeaponData();
+                // GetNormalReinforceData();
+
+                System.Action<NormalReinforceData> setNormalData = data => {normalReinforceData = data;};
+                SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
+                System.Action<AdditionalData> setAdditionalData = data => {additionalData = data;};
+                SetChartData<AdditionalData>(ChartName.additional, setAdditionalData);
+                System.Action<SoulCraftingData> setSoulData = data => {soulCraftingData = data;};
+                SetChartData<SoulCraftingData>(ChartName.soulCrafting, setSoulData);
+                System.Action<RefinementData> setRefineData = data => {refinementData = data;};
+                SetChartData<RefinementData>(ChartName.refinement, setRefineData);
             });
         }
 
@@ -300,7 +317,91 @@ namespace Manager
             }
         }
 
+        void GetNormalReinforceData()
+        {
+            ChartName chartName = ChartName.normalReinforce;
+            string chartId = chartInfos[chartName.ToString()];
+
+            Backend.Chart.DeleteLocalChartData(chartId);
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            if (GetLocalChartData<NormalReinforceData>(chartName, out normalReinforceData))
+            {
+                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                SceneLoader.ResourceLoadComplete();
+            }
+            else
+            {
+                System.Action<NormalReinforceData> callback = data =>
+                {
+                    normalReinforceData = data;
+                };
+                GetBackEndChartData<NormalReinforceData>(chartId, callback);
+            }
+        }
+        
+        #region For download to BackEnd chart
+        void SetChartData<T>(ChartName _chartName, System.Action<T> _callback) where T: struct
+        {
+            string chartId = chartInfos[_chartName.ToString()];
+
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            if(loadedChart != "")
+                Backend.Chart.DeleteLocalChartData(chartId);
+            if (GetLocalChartData<T>(_chartName, _callback))
+            {
+                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                SceneLoader.ResourceLoadComplete();
+            }
+            else
+                GetBackEndChartData<T>(chartId, _callback);
+        }
+        
+        void GetBackEndChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
+        {
+            T result = default(T);
+
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    // 요청 실패 처리
+                    Debug.Log(bro);
+                    return;
+                }
+
+                JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
+                for (int i = 0; i < json.Count; ++i)
+                {
+                    // 계수, 스테이지 확인 
+                    result = JsonMapper.ToObject<T>(json[i].ToJson());
+                    _callback(result);
+                }
+                SceneLoader.ResourceLoadComplete();
+            });
+        }
+        #endregion
+
         #region For load to local chart
+        bool GetLocalChartData<T>(ChartName _chartName, System.Action<T> _callback) where T: struct
+        {
+            T result = default(T);
+            string chartId = chartInfos[_chartName.ToString()];
+
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            // 로컬 차트가 있는 경우
+            if (loadedChart != "")
+            {
+                JsonData loadedChartJson = StringToJson(loadedChart);
+
+                ChartToStruct<T>(loadedChartJson, out result);
+
+                _callback(result);
+                return true;
+            }
+            return false;
+        }
+
         bool GetLocalChartData<T>(ChartName _chartName, out T _result) where T: struct
         {
             string chartId = chartInfos[_chartName.ToString()];
