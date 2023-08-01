@@ -16,7 +16,7 @@ namespace Manager
         public NormalGarchar normalGarchar;
         public AdvencedGarchar advencedGarchar;
        
-        [SerializeField] private List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+        List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
@@ -29,21 +29,37 @@ namespace Manager
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }
 
+        public Sprite[] weaponRaritySlot;
+        
+        public Sprite EmptySprite;
+        
         Sprite[] baseWeaponSprites;
 
         public Sprite GetBaseWeaponSprite(int index)
         {
+            if (index >= baseWeaponSprites.Length || index < 0)
+            {
+                Debug.Log("무기 스프라이트 갯수가 부족합니다.");
+                return null;
+            }
+            
             return baseWeaponSprites[index];
         }
 
-        public Sprite EmptySprite;
         
-    
+        [SerializeField]Skill[] skills;
+
+        public Skill GetSkill(int index)
+        {
+            return skills[index];
+        }
         protected override void Awake()
         {
             base.Awake();
-            gameObject.TryGetComponent(out BillPughSingleTon.instance);
+            
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
+            skills = Resources.LoadAll<Skill>("Sprites/Skills");
+            gameObject.TryGetComponent(out BillPughSingleTon.instance);
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
@@ -55,12 +71,13 @@ namespace Manager
             // Backend.Chart.DeleteLocalChartData("85810");
         }
 
-        const string VERSION_CHART_ID = "86892";
+        const string VERSION_CHART_ID = "87504";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
             // 버전 차트 뒤끝에서 수신
             chartInfos = new Dictionary<string, string>();
+           
 
             SendQueue.Enqueue(Backend.Chart.GetChartContents, VERSION_CHART_ID, callback =>
             {
@@ -456,6 +473,7 @@ namespace Manager
                     }
                 });
         }
+        
       
     }
 }

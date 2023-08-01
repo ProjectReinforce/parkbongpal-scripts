@@ -9,6 +9,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
                 strength, intelligence, wisdom, technique, charm, constitution; 
     public int baseWeaponIndex,mineId;
     public int normalReinforceCount;
+    public int[] magic;
     public string inDate;
 
     public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,
@@ -33,6 +34,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         constitution = _constitution;
         mineId = -1;
         normalReinforceCount = 0;
+        magic = new int []{-1,-1};
     }
 
 }

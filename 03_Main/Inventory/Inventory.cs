@@ -4,7 +4,7 @@ using UnityEngine;
 using Manager;
 
 [Serializable]
-public class Inventory : Singleton<Inventory>
+public class Inventory : DontDestroy<Inventory>
 {
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
@@ -47,10 +47,11 @@ public class Inventory : Singleton<Inventory>
     }
     
     [SerializeField] GameObject box;
+
     protected override void Awake()
     {
         base.Awake();
-
+        
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
 
         int count = ResourceManager.Instance.WeaponDatas.Length;
@@ -78,20 +79,17 @@ public class Inventory : Singleton<Inventory>
             int beforeGoldPerMin = currentMine.goldPerMin;
             currentMine.SetWeapon(currentWeapon);
             Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
-           
-            
         }
         catch (Exception e)
         {
             UIManager.Instance.ShowWarning("안내", e.Message);
             return;
         }
-
         if (currentMineWeapon is not null)
         {
             currentMineWeapon.Lend(-1);
         }
-        currentWeapon.Lend(currentMine.data().index);
+        currentWeapon.Lend(currentMine.GetMineData().index);
         Quarry.Instance.currentMine= currentMine ;
         inventory.SetActive(false);
     }

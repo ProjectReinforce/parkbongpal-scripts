@@ -27,6 +27,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     protected override void Awake()
     {
         base.Awake();
+        
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         int mineCount = ResourceManager.Instance.mineDatas.Length;

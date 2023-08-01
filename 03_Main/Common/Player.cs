@@ -3,7 +3,7 @@ using BackEnd;
 using Manager;
 using UnityEngine;
 
-public class Player : Singleton<Player>
+public class Player : DontDestroy<Player>
 {
     [SerializeField] TopUIDatatViewer topUIDatatViewer;
     UserData _userData;
