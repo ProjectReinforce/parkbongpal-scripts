@@ -25,7 +25,6 @@ namespace Manager
 
         public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
-           
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
         }
 
@@ -42,7 +41,6 @@ namespace Manager
                 Debug.Log("무기 스프라이트 갯수가 부족합니다.");
                 return null;
             }
-            
             return baseWeaponSprites[index];
         }
 
@@ -77,8 +75,6 @@ namespace Manager
         {
             // 버전 차트 뒤끝에서 수신
             chartInfos = new Dictionary<string, string>();
-           
-
             SendQueue.Enqueue(Backend.Chart.GetChartContents, VERSION_CHART_ID, callback =>
             {
                 if (!callback.IsSuccess())
@@ -110,7 +106,7 @@ namespace Manager
                 SetOwnedWeaponId();
             });
         }
-
+        
         void GetNormalGachaData()
         {
             string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
@@ -473,7 +469,5 @@ namespace Manager
                     }
                 });
         }
-        
-      
     }
 }

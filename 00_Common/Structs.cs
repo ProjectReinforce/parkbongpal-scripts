@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
     public static WeaponData colum;
@@ -39,7 +38,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 
 }
 
-[System.Serializable]
+[Serializable]
 public struct UserData
 {
     public static UserData colum;
@@ -56,7 +55,7 @@ public struct PideaData//광산차트
     public static PideaData colum;
 }
 
-[System.Serializable]
+[Serializable]
 public struct MineData//광산차트
 {
     public int index, stage, defence,hp,size, lubricity;
@@ -64,7 +63,7 @@ public struct MineData//광산차트
     public string name, description;
 }
 
-[System.Serializable]
+[Serializable]
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;
@@ -74,12 +73,12 @@ public struct BaseWeaponData//기본 무기정보 차트
     public string name,  description;
 }
 
-[System.Serializable]
+[Serializable]
 public struct NormalGarchar
 {
     public int trash, old, normal, rare;
 }
-[System.Serializable]
+[Serializable]
 public struct AdvencedGarchar
 {
     public int trash, old, normal, rare, unique, legendary;
