@@ -345,8 +345,11 @@ namespace Manager
             string chartId = chartInfos[_chartName.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if(loadedChart != "")
-                Backend.Chart.DeleteLocalChartData(chartId);
+            // if(loadedChart != "")
+            // {
+            //     Backend.Chart.DeleteLocalChartData(chartId);
+            //     loadedChart = "";
+            // }
             if (GetLocalChartData<T>(_chartName, _callback))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
