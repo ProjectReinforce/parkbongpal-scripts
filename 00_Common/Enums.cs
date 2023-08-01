@@ -6,7 +6,7 @@
 
     public enum EnforceIDX
     {
-        promote,additional,magicEngrave,soulCrafting,refineMent
+        promote,additional,normalReinforce, magicEngrave,soulCrafting,refineMent
     }
 
     public enum SortedMethod
@@ -36,5 +36,5 @@
 
     public enum ChartName
     {
-        normalGachaPercentage, advancedGachaPercentage, mineData, weapon
+        normalGachaPercentage, advancedGachaPercentage, mineData, weapon, normalReinforce, soulCrafting, additional, refinement
     }
