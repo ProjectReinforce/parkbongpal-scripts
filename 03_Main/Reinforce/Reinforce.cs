@@ -56,6 +56,29 @@ public class Additional : Reinforce
     }
 }
 
+public class NormalReinforce : Reinforce
+{
+    public NormalReinforce()
+    {
+        _condition = "레벨 ";
+        Qualification = 1;
+    }
+
+    public override bool LockCheck(Weapon weapon)
+    {
+        return  Player.Instance.userData.level >= Qualification;
+    }
+
+    public override float SuccessPercentage(Weapon weapon)
+    {
+        return 0;
+    }
+
+    public override void Try(Weapon weapon)
+    {
+    }
+}
+
 public class MagicEngrave : Reinforce
 {
     public MagicEngrave()

@@ -7,7 +7,7 @@ public class SceneLoader : MonoBehaviour
 {
     static int loadedResourcesCount = 0;
 
-    const int REQUIRE_TO_LOAD_RESOURCES_COUNT = 6;
+    const int REQUIRE_TO_LOAD_RESOURCES_COUNT = 10;
 
     [SerializeField] Slider progressBar;
     [SerializeField] Text persentMessage;
@@ -48,7 +48,7 @@ public class SceneLoader : MonoBehaviour
                 timer += Time.unscaledDeltaTime;
                 progressBar.value = Mathf.Lerp(0.9f, 1f, timer);
                 persentMessage.text = (System.Math.Round(Mathf.Lerp(0.9f, 1f, timer), 2) * 100).ToString() + "%";
-                if( progressBar.value >= 1f && loadedResourcesCount == REQUIRE_TO_LOAD_RESOURCES_COUNT)
+                if( progressBar.value >= 1f && loadedResourcesCount >= REQUIRE_TO_LOAD_RESOURCES_COUNT)
                 {
                     operation.allowSceneActivation = true;
                     break;

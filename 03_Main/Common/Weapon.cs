@@ -20,8 +20,8 @@ public class Weapon
     public int power =>_power;
     private static Reinforce[] enforces =
     {
-        new Promote(), new Additional(), new MagicEngrave(),
-        new SoulCrafting(), new Refinement()
+        new Promote(), new Additional(), new NormalReinforce(),
+        new MagicEngrave(), new SoulCrafting(), new Refinement()
     };
 
     public Slot myslot;
