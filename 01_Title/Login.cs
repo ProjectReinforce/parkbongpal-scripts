@@ -8,7 +8,7 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    const string SCENE_NAME = "Main_V2 JG";
+    const string SCENE_NAME = "Main_V2 IJH";
     //const string SCENE_NAME = "Main_V2";
 
 
