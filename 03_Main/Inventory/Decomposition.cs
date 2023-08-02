@@ -40,6 +40,8 @@ public class Decomposition : MonoBehaviour
                     slot.SetWeapon(null);
                 });
             }
+
+            Inventory.Instance.count -= slots.Count;
             Inventory.Instance.Sort();
             
             text.text = "ºÐÇØ";

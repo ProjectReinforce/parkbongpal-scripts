@@ -3,21 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class Pidea : Singleton<Pidea>
 {
-    [SerializeField] GameObject slotBox ;
-    // Start is called before the first frame update
-    [SerializeField] PideaSlot[] pideaSlots;
-
+    [SerializeField] PideaSlot prefab ;
+    [SerializeField] List< PideaSlot> pideaSlots;
+    [SerializeField] Transform[] tables;
     [SerializeField] PideaCollection collection;
-    
-
-
-    private Material[] materials;//가진 웨폰아이디
-
+    [SerializeField] PideaDetail pideaDetail;
+    [SerializeField]Notifyer notifyer;
+    Material[] materials;//가진 웨폰아이디
     public bool CheckLockWeapon(int index)
     {
         return materials[index].color == Color.black;
@@ -25,24 +20,38 @@ public class Pidea : Singleton<Pidea>
     public void GetNewWeapon(int index)
     {
         materials[index].color = Color.white;
-        
+        pideaSlots[index].SetNew();
+        notifyer.GetNew(pideaSlots[index]);
     }
+    
+    public void Close()
+    {
+        notifyer.Clear();
+        notifyer.gameObject.SetActive(false);
+    }
+    
     protected override void Awake()
     {
         base.Awake();
-        pideaSlots = slotBox.GetComponentsInChildren<PideaSlot>();
+        pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
+        notifyer = Instantiate(notifyer,transform);
         materials = ResourceManager.Instance.materials;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Length; i++)
         {
-            pideaSlots[i].Initialized(i);
-
+            PideaSlot slot = Instantiate(prefab, tables[ResourceManager.Instance.baseWeaponDatas[i].rarity]);
+            slot.gameObject.SetActive(true);
+            slot.Initialized(i);
+            pideaSlots.Add(slot);
+            
+            if(ResourceManager.Instance.baseWeaponDatas[i].collection is null) continue;
             foreach (var VARIABLE in ResourceManager.Instance.baseWeaponDatas[i].collection)
             {
                 collection.AddSlot(pideaSlots[i],VARIABLE);
             }
         }
-        
     }
-
-    
+    public void SetCurrentWeapon(int index)
+    {
+        pideaDetail.SetDetail(index);
+    }
 }

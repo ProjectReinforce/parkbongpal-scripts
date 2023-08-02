@@ -61,7 +61,8 @@ public class Store:Singleton<Store>
             { nameof(WeaponData.colum.technique), baseWeaponData.technique},
             { nameof(WeaponData.colum.charm), baseWeaponData.charm},
             { nameof(WeaponData.colum.constitution), baseWeaponData.constitution},
-            { "magic", new int[] {2}},
+            {nameof(WeaponData.colum.magic), new int []{-1,-1}}
+
         };
 
 

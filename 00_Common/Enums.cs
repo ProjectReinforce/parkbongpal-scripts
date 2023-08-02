@@ -27,8 +27,12 @@
     
     public enum MagicType
     {
-        A,B,C,D,E,F,G
+        술수,묘법,유일,신념,
     }
+    //자격, 인멸, 술수
+    //축복, 해방, 묘법
+    //진섬, 오폭, 유일
+    //미세, 사철, 신념
 
     public enum ChartName
     {

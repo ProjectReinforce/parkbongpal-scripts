@@ -1,4 +1,5 @@
 ﻿
+using LitJson;
 using Random = System.Random;
 
 public static class Utills
@@ -22,4 +23,6 @@ public static class Utills
         targetScene = _sceneName;
         UnityEngine.SceneManagement.SceneManager.LoadScene("LoadingScene");
     }
+    
+    
 }

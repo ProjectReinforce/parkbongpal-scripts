@@ -10,6 +10,8 @@ namespace Manager
             warning.ShowMessage(_title, _description);
         }
 
-        public Sprite[] weaponRaritySlot;
+       
+        
+        
     }
 }
