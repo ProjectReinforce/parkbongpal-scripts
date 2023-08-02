@@ -54,7 +54,7 @@ public class Inventory : DontDestroy<Inventory>
         
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
 
-        int count = ResourceManager.Instance.WeaponDatas.Length;
+        int count = ResourceManager.Instance.WeaponDatas.Count;
         for (int i = 0; i < count; i++)
         {
             AddWeapon( new Weapon(ResourceManager.Instance.WeaponDatas[i], slots[i]) ,i);

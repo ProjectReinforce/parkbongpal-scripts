@@ -42,15 +42,10 @@ public class Pidea : Singleton<Pidea>
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);
-            Debug.Log("00");
-            Debug.Log(ResourceManager.Instance.baseWeaponDatas[i]);
-            Debug.Log(ResourceManager.Instance.baseWeaponDatas[i].collection);
+            
             if(ResourceManager.Instance.baseWeaponDatas[i].collection is null) continue;
-           Debug.Log("11");
             foreach (var VARIABLE in ResourceManager.Instance.baseWeaponDatas[i].collection)
             {
-                Debug.Log("22");
-                Debug.Log(VARIABLE);
                 collection.AddSlot(pideaSlots[i],VARIABLE);
             }
         }

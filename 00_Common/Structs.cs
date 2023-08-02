@@ -115,3 +115,10 @@ public struct RefinementData
     public int atk, critical, stat3, stat6;
     public int minus3, minus1, zero, plus1, plus5;
 }
+
+[Serializable]
+public struct PostData
+{
+    public string content, expirationDate, reservationDate, nickname, inDate, title, author, sentDate;
+    public BaseWeaponData[] items;
+}
