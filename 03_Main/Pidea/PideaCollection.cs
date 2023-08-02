@@ -10,7 +10,6 @@ public class PideaCollection : MonoBehaviour
 
     public void AddSlot(PideaSlot slot, int index)
     {
-
-        Instantiate(slot, collections[index]);
+        Instantiate(slot, collections[index]).Initialized(slot.baseWeaponIndex);
     }
 }

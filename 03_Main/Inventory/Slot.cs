@@ -19,13 +19,13 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     {
         if (weapon is null)
         {
-            backgroundImage.sprite = UIManager.Instance.weaponRaritySlot[6];
+            backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[6];
             ImageObject.SetActive(false);
             button.enabled = false;
             myWeapon = null;
             return;
         }
-        backgroundImage.sprite = UIManager.Instance.weaponRaritySlot[weapon.data.rarity];
+        backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[weapon.data.rarity];
         ImageObject.SetActive(true);
         button.enabled = true;
         myWeapon = weapon;

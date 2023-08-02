@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
+using Manager;
 using UnityEngine;
 using ResourceManager = Manager.ResourceManager;
 
@@ -16,7 +17,9 @@ public class PideaDetail : MonoBehaviour
     public void SetDetail(int index)
     {
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(index);
-        //weaponName=baseWeaponData.name
-
+        weaponName.text = baseWeaponData.name;
+        description.text = baseWeaponData.description;
+        image.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
+        stats.text = $"{baseWeaponData.atk}\n {baseWeaponData.atkSpeed} \n{baseWeaponData.atkRange}\n{baseWeaponData.accuracy}";
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 //팩토리메서드 패턴
 public class RentalFactory
@@ -7,63 +8,103 @@ public class RentalFactory
     {
         Rental returnType = rental;
         switch (type){
-            case MagicType.A:
-                returnType = new DamageSkill(returnType);
+            case MagicType.술수:
+                returnType = new Accumulate(returnType);
+                break;
+            case MagicType.묘법:
+                returnType = new FallenKingSword(returnType);
+                break;
+            case MagicType.유일:
+                returnType = new Space(returnType);
+                break;
+            case MagicType.신념:
+                returnType = new AtomicBlade(returnType);
                 break;
         }
         return returnType;
     }
 }
-public class Magic:Rental//데코레이터 페턴
+public abstract class Magic:Rental//데코레이터 페턴
 {
-    protected string _description;
-    public string description => _description;
-   
+
     protected Rental mine;
     public Magic(Rental mine){
         this.mine = mine;
     }
-    public MineData data()
+    public virtual MineData GetMineData()
     {
-        return mine.data();
-    }
-    public float GetMiss(WeaponData weaponData)
-    {
-        return mine.GetMiss(weaponData);
+        return mine.GetMineData();
     }
 
-    public float GetOneHitDMG(WeaponData weaponData)
+    public virtual WeaponData GetWeaponData()
     {
-        return mine.GetOneHitDMG(weaponData);
+        return mine.GetWeaponData();
     }
 
-    public float GetRangePerSize(WeaponData weaponData)
+    public virtual float GetMiss()
     {
-        return mine.GetRangePerSize(weaponData);
+        return mine.GetMiss();
     }
 
-    public float GetHpPerDMG(WeaponData weaponData)
+    public virtual float GetOneHitDMG()
     {
-        return mine.GetHpPerDMG(weaponData);
+         return mine.GetOneHitDMG();
     }
+
+    public virtual int GetRangePerSize()
+    {
+        return mine.GetRangePerSize();
+    }
+
+    public virtual float GetHpPerDMG()
+    {
+         return mine.GetHpPerDMG();
+    }
+
+  
+    
 }
 
-public class DamageSkill:Magic
+public class Accumulate:Magic
 {
-    public DamageSkill(Rental mine) : base(mine)
+    public Accumulate(Rental mine) : base(mine) { }
+    public override float GetHpPerDMG()
     {
-        _description = $"{_description}\n 체력 초과분 대미지를 저장합니다.";
+         return  GetMineData().hp / GetOneHitDMG();
     }
-
-
-
-    public float GetHpPerDMG(WeaponData weaponData)
-    {
-        //weaponData.damage=
-        return mine.GetHpPerDMG(weaponData);
-        
-        
-    }
-
 }
 
+public class FallenKingSword:Magic
+{
+    public FallenKingSword(Rental mine) : base(mine) {  }
+    public override float GetOneHitDMG()
+    {
+        return  GetWeaponData().damage+GetMineData().hp*0.03f - GetMineData().defence;
+    }
+}
+
+public class Space:Magic
+{
+    public Space(Rental mine) : base(mine) {}
+    public override MineData GetMineData()
+    {
+        MineData mineData = base.GetMineData();
+        mineData.size = 80;
+        return mineData;
+    }
+}
+
+public class AtomicBlade:Magic
+{
+    public AtomicBlade(Rental mine) : base(mine) {  }
+    public override WeaponData GetWeaponData()
+    {
+        WeaponData weaponData = base.GetWeaponData();
+        float miss = GetMiss();
+        if (miss < 0)
+        {
+            weaponData.speed -= (int)miss;
+        }
+        return weaponData;
+    }
+}

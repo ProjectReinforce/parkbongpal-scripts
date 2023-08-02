@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
     public static WeaponData colum;
@@ -10,6 +8,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
                 strength, intelligence, wisdom, technique, charm, constitution; 
     public int baseWeaponIndex,mineId;
     public int normalReinforceCount;
+    public int[] magic;
     public string inDate;
 
     public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,
@@ -34,11 +33,12 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         constitution = _constitution;
         mineId = -1;
         normalReinforceCount = 0;
+        magic = new int []{-1,-1};
     }
 
 }
 
-[System.Serializable]
+[Serializable]
 public struct UserData
 {
     public static UserData colum;
@@ -55,7 +55,7 @@ public struct PideaData//광산차트
     public static PideaData colum;
 }
 
-[System.Serializable]
+[Serializable]
 public struct MineData//광산차트
 {
     public int index, stage, defence,hp,size, lubricity;
@@ -63,7 +63,7 @@ public struct MineData//광산차트
     public string name, description;
 }
 
-[System.Serializable]
+[Serializable]
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;
@@ -73,12 +73,12 @@ public struct BaseWeaponData//기본 무기정보 차트
     public string name,  description;
 }
 
-[System.Serializable]
+[Serializable]
 public struct NormalGarchar
 {
     public int trash, old, normal, rare;
 }
-[System.Serializable]
+[Serializable]
 public struct AdvencedGarchar
 {
     public int trash, old, normal, rare, unique, legendary;
@@ -114,4 +114,11 @@ public struct RefinementData
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;
     public int minus3, minus1, zero, plus1, plus5;
+}
+
+[Serializable]
+public struct PostData
+{
+    public string content, expirationDate, reservationDate, nickname, inDate, title, author, sentDate;
+    public BaseWeaponData[] items;
 }
