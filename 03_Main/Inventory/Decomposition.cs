@@ -16,37 +16,26 @@ public class Decomposition : MonoBehaviour
     public void SetDecomposit()
     {
         _isDecompositing = !_isDecompositing;
-        if (isDecompositing)
-        {
-            foreach (Slot slot in slots)
-            {
-                slot.SetsellectChecker(false);
-            }
-            slots.Clear();
-            text.text= "확정";   
-        }
-        else
-        {
-            foreach (Slot slot in slots)
-            {
-                slot.SetsellectChecker(true);
-                SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), slot.myWeapon.data.inDate, Backend.UserInDate, ( callback ) => 
-                { 
-                    if (!callback.IsSuccess())
-                    {
-                        Debug.Log(callback);
-                        return;
-                    }
-                    slot.SetWeapon(null);
-                });
-            }
-
-            Inventory.Instance.count -= slots.Count;
-            Inventory.Instance.Sort();
-            
-            text.text = "분해";
-        }
+        text.text = isDecompositing?"확정" :"분해";
+        if(isDecompositing) return;
         
+        foreach (Slot slot in slots)
+        {
+            slot.SetsellectChecker(false);
+            string indate = slot.myWeapon.data.inDate;
+            slot.SetWeapon(null);
+            SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), indate, Backend.UserInDate, ( callback ) => 
+            { 
+                if (!callback.IsSuccess())
+                {
+                    Debug.Log(callback);
+                    return;
+                }
+            });
+        }
+        Inventory.Instance.count -= slots.Count;
+        slots.Clear();
+        Inventory.Instance.Sort();
     }
     static public bool ChooseWeaponSlot(Slot slot)
     {

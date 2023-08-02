@@ -12,6 +12,7 @@ public class Pidea : Singleton<Pidea>
     [SerializeField] PideaCollection collection;
     [SerializeField] PideaDetail pideaDetail;
     [SerializeField]Notifyer notifyer;
+    [SerializeField]List< NewThing> newThings;
     Material[] materials;//가진 웨폰아이디
     public bool CheckLockWeapon(int index)
     {
@@ -22,6 +23,7 @@ public class Pidea : Singleton<Pidea>
         materials[index].color = Color.white;
         pideaSlots[index].SetNew();
         notifyer.GetNew(pideaSlots[index]);
+        Debug.Log("index="+index);
     }
     
     public void Close()
@@ -35,6 +37,7 @@ public class Pidea : Singleton<Pidea>
         base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
         notifyer = Instantiate(notifyer,transform);
+        notifyer.Initialized(newThings);
         materials = ResourceManager.Instance.materials;
         for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Length; i++)
         {

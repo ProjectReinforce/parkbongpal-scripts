@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Notifyer:MonoBehaviour,Notice
 {
-    [SerializeField] List< NewThing> newThings;
+    [SerializeField]List< NewThing> newThings; 
     [SerializeField]GameObject body;
     [SerializeField]UnityEngine.UI.Text text;
-    int count;
-    private void Awake()
+    public void Initialized(List< NewThing> things)
     {
-        newThings = new List<NewThing>();
+        newThings = things;
     }
     public void GetNew(NewThing newThing)
     {
@@ -21,8 +20,10 @@ public class Notifyer:MonoBehaviour,Notice
     }
     public void Clear()
     {
+        Debug.Log("Notify clear");
         foreach (var newThing in newThings)
         {
+            Debug.Log("nething clear");
             newThing.Clear();
         }
         newThings.Clear();

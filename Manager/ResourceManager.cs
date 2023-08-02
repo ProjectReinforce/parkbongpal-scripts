@@ -511,7 +511,6 @@ namespace Manager
         }
         void GetMyBackEndData<T>(string tableName,int length, System.Action<T,int> _callback) where T: struct
         {
-            T result = default(T);
             SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, length, bro =>
             {
                 if (!bro.IsSuccess())
@@ -526,9 +525,7 @@ namespace Manager
 
                 for (int i = 0; i < json.Count; ++i)
                 {
-                    if (i > 9) break;
-                    result = JsonMapper.ToObject<T>(json[i].ToJson());
-                    _callback(result,i);
+                    _callback(JsonMapper.ToObject<T>(json[i].ToJson()),i);
                 }
                 SceneLoader.ResourceLoadComplete();
             });
