@@ -90,13 +90,13 @@ public class Slot : MonoBehaviour, IComparable<Slot>
                   return obj.myWeapon.power - myWeapon.power;
 
             case SortedMethod.Damage:
-                return obj.myWeapon.data.damage - myWeapon.data.damage;
+                return obj.myWeapon.data.atk - myWeapon.data.atk;
  
             case SortedMethod.Speed:
-                return obj.myWeapon.data.speed - myWeapon.data.speed;
+                return obj.myWeapon.data.atkSpeed - myWeapon.data.atkSpeed;
 
             case SortedMethod.Range:
-                return obj.myWeapon.data.range - myWeapon.data.range;
+                return obj.myWeapon.data.atkRange - myWeapon.data.atkRange;
 
             case SortedMethod.Accuracy:
                 return obj.myWeapon.data.accuracy - myWeapon.data.accuracy;
