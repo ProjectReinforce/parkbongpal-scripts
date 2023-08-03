@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BackEnd;
 
 public abstract class Reinforce
 {
@@ -78,16 +79,25 @@ public class NormalReinforce : Reinforce
     {
         NormalReinforceData data = Manager.ResourceManager.Instance.normalReinforceData;
 
+        if (weapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
+            return;
+        weapon.data.NormalStat[(int)StatType.upgradeCount]--;
+
         int randomValue = Random.Range(0, 101);
         if (randomValue < data.percent)
         {
             Debug.Log($"result : {randomValue} / 강화 성공!");
-            // weapon.data.damage += data.atkUp;
+            weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
         }
         else
         {
             Debug.Log($"result : {randomValue} / 강화 실패!");
         }
+
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.NormalStat), weapon.data.NormalStat);
+
+        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
     }
 }
 

@@ -54,12 +54,12 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         mineId = -1;
         magic = new int []{-1,-1};
 
-        defaultStat = _weaponData.defaultStat;
-        PromoteStat = _weaponData.PromoteStat;
-        AdditionalStat = _weaponData.AdditionalStat;
-        NormalStat = _weaponData.NormalStat;
-        SoulStat = _weaponData.SoulStat;
-        RefineStat = _weaponData.RefineStat;
+        defaultStat = (int[])_weaponData.defaultStat.Clone();
+        PromoteStat = (int[])_weaponData.PromoteStat.Clone();
+        AdditionalStat = (int[])_weaponData.AdditionalStat.Clone();
+        NormalStat = (int[])_weaponData.NormalStat.Clone();
+        SoulStat = (int[])_weaponData.SoulStat.Clone();
+        RefineStat = (int[])_weaponData.RefineStat.Clone();
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
     }

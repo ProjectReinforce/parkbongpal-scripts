@@ -92,10 +92,10 @@ public class Inventory : DontDestroy<Inventory>
         inventory.SetActive(false);
     }
 
-    [SerializeField] ReinforceUIInfo reinforceUIInfo;
+    [SerializeField] ReinforceManager reinforceManager;
     public void ReinforceSelect()
     {
-        reinforceUIInfo.WeaponSlot.SelectedWeapon = currentWeapon;
+        reinforceManager.SelectedWeapon = currentWeapon;
     }
 
     bool _isShowLend;

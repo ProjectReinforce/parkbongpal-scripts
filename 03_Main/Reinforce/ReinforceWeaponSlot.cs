@@ -5,26 +5,41 @@ using UnityEngine.UI;
 
 public class ReinforceWeaponSlot : MonoBehaviour
 {
+    [SerializeField] ReinforceManager reinforceManager;
+    // [SerializeField] ReinforceUIInfo reinforceUIInfo;
     Image weaponIcon;
-    Weapon selectedWeapon;
-    public Weapon SelectedWeapon
-    {
-        get => selectedWeapon;
-        set
-        {
-            if (value is null) return;
-            selectedWeapon = value;
-            weaponIcon.sprite = selectedWeapon.sprite;
-        }
-    }
+    // [SerializeField] Weapon selectedWeapon;
+    // public Weapon SelectedWeapon
+    // {
+    //     get => selectedWeapon;
+    //     set
+    //     {
+    //         if (value is null) return;
+    //         selectedWeapon = value;
+    //         weaponIcon.sprite = selectedWeapon.sprite;
+    //         // reinforceUIInfo.ReinforceUI.SelectWeapon();
+    //     }
+    // }
 
     void Awake()
     {
+        transform.parent.TryGetComponent<ReinforceManager>(out reinforceManager);
+        // transform.parent.TryGetComponent<ReinforceUIInfo>(out reinforceUIInfo);
         gameObject.transform.GetChild(0).TryGetComponent<Image>(out weaponIcon);
     }
 
-    void OnDisable()
+    void OnEnable()
     {
+        if (reinforceManager != null)
+        {
+            reinforceManager.WeaponChangeEvent -= UpdateWeaponIcon;
+            reinforceManager.WeaponChangeEvent += UpdateWeaponIcon;
+        }
         weaponIcon.sprite = null;
+    }
+
+    void UpdateWeaponIcon()
+    {
+        weaponIcon.sprite = reinforceManager.SelectedWeapon.sprite;
     }
 }
