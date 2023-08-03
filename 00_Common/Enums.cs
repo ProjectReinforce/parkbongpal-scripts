@@ -4,7 +4,7 @@
         trash,old,normal,rare,unique,legendary
     }
 
-    public enum EnforceIDX
+    public enum ReinforceType
     {
         promote,additional,normalReinforce, magicEngrave,soulCrafting,refineMent
     }

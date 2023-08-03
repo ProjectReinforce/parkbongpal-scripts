@@ -18,7 +18,7 @@ public class Weapon
     public readonly string name;
     int _power;
     public int power =>_power;
-    private static Reinforce[] enforces =
+    private static Reinforce[] reinforces =
     {
         new Promote(), new Additional(), new NormalReinforce(),
         new MagicEngrave(), new SoulCrafting(), new Refinement()
@@ -75,4 +75,9 @@ public class Weapon
         _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
     }
 
+    public void ExecuteReinforce(ReinforceType _type)
+    {
+        Reinforce reinforce = reinforces[(int)_type];
+        reinforces[(int)_type].Try(this);
+    }
 }
