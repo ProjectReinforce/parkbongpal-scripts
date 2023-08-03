@@ -120,5 +120,5 @@ public struct RefinementData
 public struct PostData
 {
     public string content, expirationDate, reservationDate, nickname, inDate, title, author, sentDate;
-    public BaseWeaponData[] items;
+   // public BaseWeaponData[] items;
 }

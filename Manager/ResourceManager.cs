@@ -36,6 +36,7 @@ namespace Manager
         public Sprite EmptySprite;
         
         Sprite[] baseWeaponSprites;
+        
 
         public Sprite GetBaseWeaponSprite(int index)
         {
@@ -53,6 +54,7 @@ namespace Manager
         {
             return skills[index];
         }
+        public Notifyer notifyer;
         protected override void Awake()
         {
             base.Awake();

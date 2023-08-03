@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Notifyer:MonoBehaviour,Notice
+public class Notifyer:MonoBehaviour
 {
     [SerializeField]List< NewThing> newThings; 
     [SerializeField]GameObject body;
     [SerializeField]UnityEngine.UI.Text text;
-    public void Initialized(List< NewThing> things)
+    public void Initialized()
     {
-        newThings = things;
+        newThings = new List<NewThing>();
     }
     public void GetNew(NewThing newThing)
     {
@@ -20,10 +20,8 @@ public class Notifyer:MonoBehaviour,Notice
     }
     public void Clear()
     {
-        Debug.Log("Notify clear");
         foreach (var newThing in newThings)
         {
-            Debug.Log("nething clear");
             newThing.Clear();
         }
         newThings.Clear();
