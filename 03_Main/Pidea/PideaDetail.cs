@@ -20,6 +20,6 @@ public class PideaDetail : MonoBehaviour
         weaponName.text = baseWeaponData.name;
         description.text = baseWeaponData.description;
         image.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
-        stats.text = $"{baseWeaponData.atk}\n {baseWeaponData.atkSpeed} \n{baseWeaponData.atkRange}\n{baseWeaponData.accuracy}";
+        // stats.text = $"{baseWeaponData.atk}\n {baseWeaponData.atkSpeed} \n{baseWeaponData.atkRange}\n{baseWeaponData.accuracy}";
     }
 }

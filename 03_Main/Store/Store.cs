@@ -45,26 +45,37 @@ public class Store:Singleton<Store>
       BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
         Debug.Log(baseWeaponData.index);
 
+        // Param param = new Param
+        // {
+        //     { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
+        //     { nameof(WeaponData.colum.damage), baseWeaponData.atk },
+        //     { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
+        //     { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
+        //     { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
+        //     { nameof(WeaponData.colum.rarity), baseWeaponData.rarity},
+        //     { nameof(WeaponData.colum.criticalRate), baseWeaponData.criticalRate},
+        //     { nameof(WeaponData.colum.criticalDamage), baseWeaponData.criticalDamage},
+        //     { nameof(WeaponData.colum.strength), baseWeaponData.strength},
+        //     { nameof(WeaponData.colum.intelligence), baseWeaponData.intelligence},
+        //     { nameof(WeaponData.colum.wisdom), baseWeaponData.wisdom},
+        //     { nameof(WeaponData.colum.technique), baseWeaponData.technique},
+        //     { nameof(WeaponData.colum.charm), baseWeaponData.charm},
+        //     { nameof(WeaponData.colum.constitution), baseWeaponData.constitution},
+        //     { nameof(WeaponData.colum.magic), new int []{-1,-1}}
+        // };
         Param param = new Param
         {
-            { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
-            { nameof(WeaponData.colum.damage), baseWeaponData.atk },
-            { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
-            { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
-            { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
+            { nameof(WeaponData.colum.mineId), -1},
+            { nameof(WeaponData.colum.magic), new int []{-1,-1}},
             { nameof(WeaponData.colum.rarity), baseWeaponData.rarity},
-            { nameof(WeaponData.colum.criticalRate), baseWeaponData.criticalRate},
-            { nameof(WeaponData.colum.criticalDamage), baseWeaponData.criticalDamage},
-            { nameof(WeaponData.colum.strength), baseWeaponData.strength},
-            { nameof(WeaponData.colum.intelligence), baseWeaponData.intelligence},
-            { nameof(WeaponData.colum.wisdom), baseWeaponData.wisdom},
-            { nameof(WeaponData.colum.technique), baseWeaponData.technique},
-            { nameof(WeaponData.colum.charm), baseWeaponData.charm},
-            { nameof(WeaponData.colum.constitution), baseWeaponData.constitution},
-            {nameof(WeaponData.colum.magic), new int []{-1,-1}}
-
+            { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
+            { nameof(WeaponData.colum.defaultStat), baseWeaponData.defaultStat },
+            { nameof(WeaponData.colum.PromoteStat), baseWeaponData.PromoteStat },
+            { nameof(WeaponData.colum.AdditionalStat), baseWeaponData.AdditionalStat },
+            { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
+            { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
+            { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
         };
-
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
         if (!bro.IsSuccess())
@@ -72,11 +83,13 @@ public class Store:Singleton<Store>
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
         }
 
-        WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
-            baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index,
-            bro.GetInDate(), baseWeaponData.criticalRate, baseWeaponData.criticalDamage,
-            baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
-            baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
+        // WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
+        //     baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index,
+        //     bro.GetInDate(), baseWeaponData.criticalRate, baseWeaponData.criticalDamage,
+        //     baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
+        //     baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
+
+        WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
 
         Player.Instance.AddGold(-pay);
         Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);

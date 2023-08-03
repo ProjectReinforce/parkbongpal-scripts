@@ -1,4 +1,4 @@
-﻿
+﻿using UnityEngine;
 
 public abstract class Reinforce
 {
@@ -66,7 +66,7 @@ public class NormalReinforce : Reinforce
 
     public override bool LockCheck(Weapon weapon)
     {
-        return  Player.Instance.userData.level >= Qualification;
+        return Player.Instance.userData.level >= Qualification;
     }
 
     public override float SuccessPercentage(Weapon weapon)
@@ -76,6 +76,18 @@ public class NormalReinforce : Reinforce
 
     public override void Try(Weapon weapon)
     {
+        NormalReinforceData data = Manager.ResourceManager.Instance.normalReinforceData;
+
+        int randomValue = Random.Range(0, 101);
+        if (randomValue < data.percent)
+        {
+            Debug.Log($"result : {randomValue} / 강화 성공!");
+            // weapon.data.damage += data.atkUp;
+        }
+        else
+        {
+            Debug.Log($"result : {randomValue} / 강화 실패!");
+        }
     }
 }
 

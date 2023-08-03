@@ -66,12 +66,12 @@ namespace Manager
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
+            // Backend.Chart.DeleteLocalChartData("87732");
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
 
             GetVersionChart();
-            // Backend.Chart.DeleteLocalChartData("85810");
         }
 
         const string VERSION_CHART_ID = "87504";
@@ -223,7 +223,7 @@ namespace Manager
         {
             string chartId = chartInfos[ChartName.weapon.ToString()];
 
-            // Backend.Chart.DeleteLocalChartData("86938");
+            // Backend.Chart.DeleteLocalChartData("87732");
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
             {
@@ -355,28 +355,6 @@ namespace Manager
                 //     }
                 //     SceneLoader.ResourceLoadComplete();
                 // });
-            }
-        }
-
-        void GetNormalReinforceData()
-        {
-            ChartName chartName = ChartName.normalReinforce;
-            string chartId = chartInfos[chartName.ToString()];
-
-            Backend.Chart.DeleteLocalChartData(chartId);
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<NormalReinforceData>(chartName, out normalReinforceData))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {
-                System.Action<NormalReinforceData> callback = data =>
-                {
-                    normalReinforceData = data;
-                };
-                GetBackEndChartData<NormalReinforceData>(chartId, callback);
             }
         }
         
