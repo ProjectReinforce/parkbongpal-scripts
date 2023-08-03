@@ -12,7 +12,7 @@ public class NewThing:MonoBehaviour
          newObject.SetActive(true);
     }
 
-    public void Clear()
+    public void NewClear()
     {
         Destroy(newObject);
     }

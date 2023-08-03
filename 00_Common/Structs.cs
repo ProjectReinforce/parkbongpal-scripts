@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
@@ -394,6 +395,8 @@ public struct RefinementData
 [Serializable]
 public struct PostData
 {
-    public string content, expirationDate, reservationDate, nickname, inDate, title, author, sentDate;
-   // public BaseWeaponData[] items;
+    public string content,  title, author, sentDate , inDate;// 필요 없음 expirationDate, reservationDate, nickname, ,
+   
+    // public BaseWeaponData[] items;
+   
 }
