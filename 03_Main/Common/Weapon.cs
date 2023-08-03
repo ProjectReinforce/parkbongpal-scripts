@@ -64,12 +64,12 @@ public class Weapon
         float statSumWithFactor = (data.strength + data.intelligence + data.wisdom
                                     + data.technique + data.charm + data.constitution)
                                     * STAT_CORRECTION_FACTOR;
-        float speed = data.speed * 0.01f;
-        float range = data.range * 0.01f;
+        float speed = data.atkSpeed * 0.01f;
+        float range = data.atkRange * 0.01f;
         float accuracy = data.accuracy * 0.01f;
         float criticalRate = data.criticalRate * 0.01f;
         float criticalDamage = data.criticalDamage * 0.01f;
-        float calculatedDamage = data.damage * speed * range * (accuracy + 1) * (criticalRate * criticalDamage + 1);
+        float calculatedDamage = data.atk * speed * range * (accuracy + 1) * (criticalRate * criticalDamage + 1);
         // Debug.Log($"{statSumWithFactor} / {speed} / {range} / {criticalRate} / {criticalDamage} / {calculatedDamage}");
         
         _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
