@@ -13,11 +13,11 @@ public class TopUIDatatViewer : MonoBehaviour
     [SerializeField] int stone;
     [SerializeField] int favoriteWeaponId;
     [SerializeField] Image favoriteWeaponIcon;
-    UserData userData;
+    Player player;
 
     void Start()
     {
-        userData = Player.Instance.userData;
+        player = Player.Instance;
 
         AllInfoUpdate();
     }
@@ -31,21 +31,22 @@ public class TopUIDatatViewer : MonoBehaviour
         UpdateExp();
         UpdateStone();
         UpdateWeaponIcon();
+        Debug.Log(Player.Instance.userData.gold);
     }
 
     public void UpdateGold()
     {
-        goldText.text = userData.gold.ToString();           // 유저 보유 돈
+        goldText.text = player.userData.gold.ToString();           // 유저 보유 돈
     }
 
     public void UpdateDiamond()
     {
-        diamondText.text = userData.diamond.ToString();     // 유저 보유 다이아
+        diamondText.text = player.userData.diamond.ToString();     // 유저 보유 다이아
     }
 
     public void UpdateLevel()
     {
-        levelText.text = $"Lv.{userData.level.ToString()}"; // 유저 레벨
+        levelText.text = $"Lv.{player.userData.level.ToString()}"; // 유저 레벨
     }
 
     public void UpdateNickname()
@@ -55,17 +56,17 @@ public class TopUIDatatViewer : MonoBehaviour
 
     public void UpdateExp()
     {
-        currentExp = userData.exp;                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
+        currentExp = player.userData.exp;                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
     public void UpdateStone()
     {
-        stone = userData.stone;                             // 유저 보유 스톤?
+        stone = player.userData.stone;                             // 유저 보유 스톤?
     }
 
     public void UpdateWeaponIcon()
     {
-        favoriteWeaponId = userData.favoriteWeaponId;       // 유저의 프로필 무기 번호
+        favoriteWeaponId = player.userData.favoriteWeaponId;       // 유저의 프로필 무기 번호
         // 무기 번호에 따른 아이콘 변경 기능 추가
         // favoriteWeaponIcon.sprite = ;
     }
