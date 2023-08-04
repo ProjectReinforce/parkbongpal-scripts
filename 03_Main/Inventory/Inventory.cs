@@ -6,8 +6,6 @@ using Manager;
 [Serializable]
 public class Inventory : DontDestroy<Inventory>
 {
-    [SerializeField] int weaponSoul;
-    [SerializeField] int stone;
     public const int SIZE = 40;
     
     [SerializeField] GameObject nullImage;
@@ -92,6 +90,11 @@ public class Inventory : DontDestroy<Inventory>
         currentWeapon.Lend(currentMine.GetMineData().index);
         Quarry.Instance.currentMine= currentMine ;
         inventory.SetActive(false);
+    }
+
+    public void ReinforceSelect()
+    {
+        ReinforceManager.Instance.SelectedWeapon = currentWeapon;
     }
 
     bool _isShowLend;

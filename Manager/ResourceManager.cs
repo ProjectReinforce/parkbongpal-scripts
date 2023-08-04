@@ -12,8 +12,8 @@ namespace Manager
         public MineData[] mineDatas;
         public List< WeaponData> WeaponDatas;
         public UserData userData;
-        public NormalGarchar normalGarchar;
-        public AdvencedGarchar advencedGarchar;
+        public GachaData normalGarchar;
+        public GachaData advencedGarchar;
         public NormalReinforceData normalReinforceData;
         public SoulCraftingData soulCraftingData;
         public AdditionalData additionalData;
@@ -64,15 +64,15 @@ namespace Manager
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
+            // Backend.Chart.DeleteLocalChartData("87732");
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
 
             GetVersionChart();
-            // Backend.Chart.DeleteLocalChartData("85810");
         }
 
-        const string VERSION_CHART_ID = "87504";
+        const string VERSION_CHART_ID = "87814";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -124,7 +124,7 @@ namespace Manager
             string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<NormalGarchar>(ChartName.normalGachaPercentage, out normalGarchar))
+            if (GetLocalChartData(ChartName.normalGachaPercentage, out normalGarchar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -145,7 +145,7 @@ namespace Manager
             // }
             else
             {
-                GetBackEndChartData<NormalGarchar>(chartId, (data, index) =>
+                GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     normalGarchar = data;
                 });
@@ -173,7 +173,7 @@ namespace Manager
             string chartId = chartInfos[ChartName.advancedGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<AdvencedGarchar>(ChartName.advancedGachaPercentage, out advencedGarchar))
+            if (GetLocalChartData(ChartName.advancedGachaPercentage, out advencedGarchar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -194,7 +194,7 @@ namespace Manager
             // }
             else
             {
-                GetBackEndChartData<AdvencedGarchar>(chartId, (data, index) =>
+                GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     advencedGarchar = data;
                 });
@@ -221,7 +221,7 @@ namespace Manager
         {
             string chartId = chartInfos[ChartName.weapon.ToString()];
 
-            // Backend.Chart.DeleteLocalChartData("86938");
+            // Backend.Chart.DeleteLocalChartData("87732");
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
             if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
             {
@@ -353,28 +353,6 @@ namespace Manager
                 //     }
                 //     SceneLoader.ResourceLoadComplete();
                 // });
-            }
-        }
-
-        void GetNormalReinforceData()
-        {
-            ChartName chartName = ChartName.normalReinforce;
-            string chartId = chartInfos[chartName.ToString()];
-
-            Backend.Chart.DeleteLocalChartData(chartId);
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<NormalReinforceData>(chartName, out normalReinforceData))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {
-                System.Action<NormalReinforceData> callback = data =>
-                {
-                    normalReinforceData = data;
-                };
-                GetBackEndChartData<NormalReinforceData>(chartId, callback);
             }
         }
         

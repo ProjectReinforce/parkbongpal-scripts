@@ -4,9 +4,9 @@
         trash,old,normal,rare,unique,legendary
     }
 
-    public enum EnforceIDX
+    public enum ReinforceType
     {
-        promote,additional,normalReinforce, magicEngrave,soulCrafting,refineMent
+        Default, promote,additional,normalReinforce, magicEngrave,soulCrafting,refineMent
     }
 
     public enum SortedMethod

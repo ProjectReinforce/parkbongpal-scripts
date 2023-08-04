@@ -82,12 +82,12 @@ public class Mine :MonoBehaviour,Rental
 
     public float GetOneHitDMG()
     {
-        return GetWeaponData().damage - GetMineData().defence;
+        return GetWeaponData().atk - GetMineData().defence;
     }
 
     public int GetRangePerSize()
     {
-        return Utills.Ceil(GetWeaponData().range / GetMineData().size) + 1;
+        return Utills.Ceil(GetWeaponData().atkRange / GetMineData().size) + 1;
     }
 
     public float GetHpPerDMG()
@@ -145,7 +145,7 @@ public class Mine :MonoBehaviour,Rental
         int oneOreGold = BASE_GOLD << GetMineData().stage; //광물하나의 값
         
         // ReSharper disable once PossibleLossOfFraction
-        float time = hpPerDMG / (float)(GetWeaponData().speed * rangePerSize); // 하나를 캐기위한 평균 시간
+        float time = hpPerDMG / (float)(GetWeaponData().atkSpeed * rangePerSize); // 하나를 캐기위한 평균 시간
         
         if (miss > 0)
             time *= 100 / (100 - miss);

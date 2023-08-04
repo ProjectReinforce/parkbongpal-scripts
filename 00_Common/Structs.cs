@@ -3,39 +3,191 @@
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
+    // public static WeaponData colum;
+    // public int baseWeaponIndex,mineId;
+    // public string inDate;
+
+    // public int[] magic;
+    // public int damage, speed, range, accuracy, rarity, criticalRate, criticalDamage,
+    //             strength, intelligence, wisdom, technique, charm, constitution; 
+    // public int normalReinforceCount;
+
+    // public int rarity;
+    // public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat, collection;
+    // public Sprite icon;
+
+    // public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,
+    //                     int _baseWeaponIndex, string _inDate,
+    //                     int _criticalRate, int _criticalDamage, int _strength, int _intelligence,
+    //                     int _wisdom, int _technique, int _charm, int _constitution)
+    // {
+    //     damage = _damage;
+    //     speed = _speed;
+    //     range = _range;
+    //     accuracy = _accuracy;
+    //     rarity = _rarity;
+    //     baseWeaponIndex = _baseWeaponIndex;
+    //     inDate = _inDate;
+    //     criticalRate = _criticalRate;
+    //     criticalDamage = _criticalDamage;
+    //     strength = _strength;
+    //     intelligence = _intelligence;
+    //     wisdom = _wisdom;
+    //     technique = _technique;
+    //     charm = _charm;
+    //     constitution = _constitution;
+    //     mineId = -1;
+    //     normalReinforceCount = 0;
+    //     magic = new int []{-1,-1};
+    // }
     public static WeaponData colum;
-    public int damage, speed, range, accuracy, rarity, criticalRate, criticalDamage,
-                strength, intelligence, wisdom, technique, charm, constitution; 
-    public int baseWeaponIndex,mineId;
-    public int normalReinforceCount;
-    public int[] magic;
+    public int baseWeaponIndex, mineId;
     public string inDate;
 
-    public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,
-                        int _baseWeaponIndex, string _inDate,
-                        int _criticalRate, int _criticalDamage, int _strength, int _intelligence,
-                        int _wisdom, int _technique, int _charm, int _constitution)
+    public int[] magic;
+    public int rarity;
+    public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat;
+
+    public WeaponData(string _inDate, BaseWeaponData _weaponData)
     {
-        damage = _damage;
-        speed = _speed;
-        range = _range;
-        accuracy = _accuracy;
-        rarity = _rarity;
-        baseWeaponIndex = _baseWeaponIndex;
         inDate = _inDate;
-        criticalRate = _criticalRate;
-        criticalDamage = _criticalDamage;
-        strength = _strength;
-        intelligence = _intelligence;
-        wisdom = _wisdom;
-        technique = _technique;
-        charm = _charm;
-        constitution = _constitution;
         mineId = -1;
-        normalReinforceCount = 0;
         magic = new int []{-1,-1};
+
+        defaultStat = (int[])_weaponData.defaultStat.Clone();
+        PromoteStat = (int[])_weaponData.PromoteStat.Clone();
+        AdditionalStat = (int[])_weaponData.AdditionalStat.Clone();
+        NormalStat = (int[])_weaponData.NormalStat.Clone();
+        SoulStat = (int[])_weaponData.SoulStat.Clone();
+        RefineStat = (int[])_weaponData.RefineStat.Clone();
+        rarity = _weaponData.rarity;
+        baseWeaponIndex = _weaponData.index;
     }
 
+    #region Property
+    public int atk
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atk] +
+                        PromoteStat[(int)StatType.atk] +
+                        AdditionalStat[(int)StatType.atk] +
+                        NormalStat[(int)StatType.atk] +
+                        RefineStat[(int)StatType.atk];
+            return sum;
+        }
+    }
+    
+    public int atkSpeed
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atkSpeed] +
+                        RefineStat[(int)StatType.atkSpeed];
+            return sum;
+        }
+    }
+    
+    public int atkRange
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atkSpeed] +
+                        RefineStat[(int)StatType.atkSpeed];
+            return sum;
+        }
+    }
+    
+    public int accuracy
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.accuracy] +
+                        RefineStat[(int)StatType.accuracy];
+            return sum;
+        }
+    }
+
+    public int criticalRate
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.criticalRate] +
+                        RefineStat[(int)StatType.criticalRate];
+            return sum;
+        }
+    }
+
+    public int criticalDamage
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.criticalDamage] +
+                        RefineStat[(int)StatType.criticalDamage];
+            return sum;
+        }
+    }
+
+    public int strength
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.strength] +
+                        RefineStat[(int)StatType.strength];
+            return sum;
+        }
+    }
+
+    public int intelligence
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.intelligence] +
+                        RefineStat[(int)StatType.intelligence];
+            return sum;
+        }
+    }
+
+    public int wisdom
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.wisdom] +
+                        RefineStat[(int)StatType.wisdom];
+            return sum;
+        }
+    }
+
+    public int technique
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.technique] +
+                        RefineStat[(int)StatType.technique];
+            return sum;
+        }
+    }
+
+    public int charm
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.charm] +
+                        RefineStat[(int)StatType.charm];
+            return sum;
+        }
+    }
+
+    public int constitution
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.constitution] +
+                        RefineStat[(int)StatType.constitution];
+            return sum;
+        }
+    }
+    #endregion
 }
 
 [Serializable]
@@ -67,10 +219,139 @@ public struct MineData//광산차트
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;
-    public int atk, atkSpeed, atkRange,accuracy;
-    public int criticalRate, criticalDamage, strength, intelligence, wisdom, technique, charm, constitution;
-    public int[] collection;
     public string name,  description;
+    public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat, collection;
+
+    #region Property
+    public int atk
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atk] +
+                        PromoteStat[(int)StatType.atk] +
+                        AdditionalStat[(int)StatType.atk] +
+                        NormalStat[(int)StatType.atk] +
+                        RefineStat[(int)StatType.atk];
+            return sum;
+        }
+    }
+    
+    public int atkSpeed
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atkSpeed] +
+                        RefineStat[(int)StatType.atkSpeed];
+            return sum;
+        }
+    }
+    
+    public int atkRange
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.atkSpeed] +
+                        RefineStat[(int)StatType.atkSpeed];
+            return sum;
+        }
+    }
+    
+    public int accuracy
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.accuracy] +
+                        RefineStat[(int)StatType.accuracy];
+            return sum;
+        }
+    }
+
+    public int criticalRate
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.criticalRate] +
+                        RefineStat[(int)StatType.criticalRate];
+            return sum;
+        }
+    }
+
+    public int criticalDamage
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.criticalDamage] +
+                        RefineStat[(int)StatType.criticalDamage];
+            return sum;
+        }
+    }
+
+    public int strength
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.strength] +
+                        RefineStat[(int)StatType.strength];
+            return sum;
+        }
+    }
+
+    public int intelligence
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.intelligence] +
+                        RefineStat[(int)StatType.intelligence];
+            return sum;
+        }
+    }
+
+    public int wisdom
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.wisdom] +
+                        RefineStat[(int)StatType.wisdom];
+            return sum;
+        }
+    }
+
+    public int technique
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.technique] +
+                        RefineStat[(int)StatType.technique];
+            return sum;
+        }
+    }
+
+    public int charm
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.charm] +
+                        RefineStat[(int)StatType.charm];
+            return sum;
+        }
+    }
+
+    public int constitution
+    {
+        get
+        {
+            int sum = defaultStat[(int)StatType.constitution] +
+                        RefineStat[(int)StatType.constitution];
+            return sum;
+        }
+    }
+    #endregion
+}
+
+[Serializable]
+public struct GachaData
+{
+    public int trash, old, normal, rare, unique, legendary;
 }
 
 [Serializable]
@@ -85,31 +366,40 @@ public struct AdvencedGarchar
 }
 
 [Serializable]
-public struct NormalReinforceData
-{
-    public int percent;
-    public int baseGold;
-    public int goldPerRarity;
-    public int atkUp;
-}
-
-[Serializable]
-public struct SoulCraftingData
-{
-    public int goldCost, soulCost;
-    public int option1, option2, option3, option4, option5;
-}
-
-[Serializable]
 public struct AdditionalData
 {
+    public int levelQuilfication;
     public int goldCost;
     public int option2, option4, option6, option8, option10;
 }
 
 [Serializable]
+public struct NormalReinforceData
+{
+    public int levelQuilfication;
+    public int percent;
+    public int baseGold;
+    public int goldPerRarity;
+    public int atkUp;
+
+    public readonly int GetGoldCost(Rarity _rarity)
+    {
+        return baseGold + (int)_rarity * goldPerRarity;
+    }
+}
+
+[Serializable]
+public struct SoulCraftingData
+{
+    public int levelQuilfication;
+    public int goldCost, soulCost;
+    public int option1, option2, option3, option4, option5;
+}
+
+[Serializable]
 public struct RefinementData
 {
+    public int levelQuilfication;
     public int baseGold, goldPerTry;
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;

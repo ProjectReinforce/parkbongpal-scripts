@@ -79,7 +79,7 @@ public class FallenKingSword:Magic
     public FallenKingSword(Rental mine) : base(mine) {  }
     public override float GetOneHitDMG()
     {
-        return  GetWeaponData().damage+GetMineData().hp*0.03f - GetMineData().defence;
+        return  GetWeaponData().atk+GetMineData().hp*0.03f - GetMineData().defence;
     }
 }
 
@@ -101,10 +101,10 @@ public class AtomicBlade:Magic
     {
         WeaponData weaponData = base.GetWeaponData();
         float miss = GetMiss();
-        if (miss < 0)
-        {
-            weaponData.speed -= (int)miss;
-        }
+        // if (miss < 0)
+        // {
+        //     weaponData.atkSpeed -= (int)miss;
+        // }
         return weaponData;
     }
 }
