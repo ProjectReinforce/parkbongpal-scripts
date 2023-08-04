@@ -9,7 +9,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
     ReinforceUIInfo reinforceUIInfo;
     public ReinforceUIInfo ReinforceUIInfo { get => reinforceUIInfo; }
 
-    [SerializeField] Weapon selectedWeapon;
+    Weapon selectedWeapon;
     public Weapon SelectedWeapon
     {
         get => selectedWeapon;
@@ -22,7 +22,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
         }
     }
 
-    void Awake()
+    protected override void Awake()
     {
         base.Awake();
         

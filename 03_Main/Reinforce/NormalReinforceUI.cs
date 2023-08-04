@@ -7,7 +7,7 @@ public class NormalReinforceUI : MonoBehaviour
 {
     ReinforceManager reinforceManager;
     ReinforceUIInfo reinforceUIInfo;
-    Text upgradeContText;
+    Text upgradeCountText;
     Text costText;
     Button normalReinforceButton;
 
@@ -16,17 +16,17 @@ public class NormalReinforceUI : MonoBehaviour
         reinforceManager = ReinforceManager.Instance;
         if (reinforceManager != null)
             reinforceUIInfo = reinforceManager.ReinforceUIInfo;
-        transform.GetChild(6).GetChild(0).TryGetComponent<Text>(out upgradeContText);
+        transform.GetChild(6).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
         transform.GetChild(7).GetChild(1).TryGetComponent(out costText);
         transform.GetChild(8).TryGetComponent<Button>(out normalReinforceButton);
     }
 
     void OnEnable()
     {
-        UpdateCost();
-        UpdateUpgradeCount();
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent += SelectWeapon;
+
+        SelectWeapon();
     }
 
     void OnDisable()
@@ -37,6 +37,13 @@ public class NormalReinforceUI : MonoBehaviour
 
     public void SelectWeapon()
     {
+        if (reinforceManager.SelectedWeapon is null)
+        {
+            upgradeCountText.transform.parent.gameObject.SetActive(false);
+            return;
+        }
+        upgradeCountText.transform.parent.gameObject.SetActive(true);
+
         UpdateCost();
         UpdateUpgradeCount();
 
@@ -48,7 +55,7 @@ public class NormalReinforceUI : MonoBehaviour
             reinforceUIInfo.ReinforceUI.UpdateUpgradeCount()
         );
         normalReinforceButton.onClick.AddListener(() =>
-            reinforceUIInfo.ReinforceUI.UpdateCost()
+            UpdateCost()
         );
     }
 
@@ -56,15 +63,15 @@ public class NormalReinforceUI : MonoBehaviour
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         BaseWeaponData originData = Manager.ResourceManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
-        
+
         if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
         {
-            upgradeContText.text = $"<color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
+            upgradeCountText.text = $"<color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
             normalReinforceButton.interactable = false;
         }
         else
         {
-            upgradeContText.text = $"<color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
+            upgradeCountText.text = $"<color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
             normalReinforceButton.interactable = true;
         }
     }
@@ -75,7 +82,7 @@ public class NormalReinforceUI : MonoBehaviour
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
 
-        if (userData.gold <= cost)
+        if (userData.gold < cost)
         {
             costText.text = $"<color=red>{userData.gold}</color> / {cost}";
             normalReinforceButton.interactable = false;
