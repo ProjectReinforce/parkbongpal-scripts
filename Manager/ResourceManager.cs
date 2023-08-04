@@ -75,7 +75,7 @@ namespace Manager
             GetVersionChart();
         }
 
-        const string VERSION_CHART_ID = "87814";
+        const string VERSION_CHART_ID = "87960";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -110,6 +110,7 @@ namespace Manager
                 GetAdvancedGachaData();
                 GetBaseWeaponData();
                 // GetNormalReinforceData();
+                
 
                 System.Action<NormalReinforceData> setNormalData = data => {normalReinforceData = data;};
                 SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
@@ -292,6 +293,36 @@ namespace Manager
                 // });
             }
         }
+         void GetnData()
+        {
+            string chartId = chartInfos[ChartName.weapon.ToString()];
+
+            // Backend.Chart.DeleteLocalChartData("87732");
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
+            {
+                for (int i = 0; i < baseWeaponDatas.Length; ++i)
+                {
+                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
+                    if(i >= 10)
+                        break;
+                    baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+                }
+                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                SceneLoader.ResourceLoadComplete();
+            }
+            else
+            {  
+                baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
+                
+                GetBackEndChartData<BaseWeaponData>(chartId, (data, index) =>
+                {
+                    baseWeaponDatas[index] = data;
+                    baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
+                });
+            }
+        }
+        
 
         public const int MINE_COUNT=20;
         void GetMineData()

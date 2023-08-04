@@ -55,7 +55,7 @@ public class Post : Singleton<Post>
 
     private void OnEnable()//목록조회
     {
-        //if(Time.time-lastCallTime<1800)return;// 30분
+        if(Time.time-lastCallTime<1800)return;// 30분
         lastCallTime = Time.time;
         ReciveFromServer();
     }

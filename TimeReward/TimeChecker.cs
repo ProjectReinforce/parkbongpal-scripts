@@ -29,13 +29,19 @@ public class TimeChecker : Singleton<TimeChecker>
     {
         if (ResourceManager.Instance.lastLogin.Month != ResourceManager.Instance.serverTime.Month)
         {
-            //갱신
+            //보살리스트 갱신
+            //내 누적일수 갱신
         }
+
+        if (ResourceManager.Instance.lastLogin.Day == ResourceManager.Instance.serverTime.Day)
+            return;
         
-        if(ResourceManager.Instance.lastLogin.Day == ResourceManager.Instance.serverTime.Day)return;
         
-        
-        
+        /*내 누적일수 =0*/
+         
+        // 
+        //보상리스트에서 내 누적 일수 갱신 
+        //
         
     }
 
