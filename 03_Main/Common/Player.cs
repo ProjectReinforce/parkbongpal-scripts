@@ -17,14 +17,11 @@ public class Player : DontDestroy<Player>
 
     }
 
-    
+
     public void AddGold(int gold)
     {
-        if (userData.gold < gold)
-            return ;
         _userData.gold += gold;
         topUIDatatViewer.UpdateGold();
-
     }
 
     public void SetGoldPerMin(int goldPerMin)

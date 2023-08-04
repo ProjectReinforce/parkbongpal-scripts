@@ -65,7 +65,7 @@ public class Post : Singleton<Post>
         notifyer.Clear();
         SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Admin, bro => {
             if(!bro.IsSuccess()) {
-                Debug.Log("우편 일괄 수령에 실패했습니다.");
+                Debug.LogError("우편 일괄 수령에 실패했습니다.");
             }
         });
         foreach (var slot in slots)
@@ -81,7 +81,7 @@ public class Post : Singleton<Post>
         Remove(slot);
         SendQueue.Enqueue(Backend.UPost.ReceivePostItem, PostType.Admin, slot.postData.inDate, bro => {
             if(!bro.IsSuccess()) {
-                Debug.Log("우편 수령에 실패했습니다.");
+                Debug.LogError("우편 수령에 실패했습니다.");
             }
             Destroy(slot.gameObject);
         });

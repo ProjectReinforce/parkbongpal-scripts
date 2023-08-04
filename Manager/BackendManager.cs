@@ -42,10 +42,4 @@ public class BackendManager : DontDestroy<BackendManager>
         Backend.Chat.Poll();
     }
 
-    public void BaseLoad()
-    {        
-        
-
-
-    }
 }

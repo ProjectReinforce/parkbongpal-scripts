@@ -70,7 +70,8 @@ namespace Manager
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
-
+            SetLastLogin();
+            
             GetVersionChart();
         }
 
@@ -580,6 +581,22 @@ namespace Manager
                 materials[data.ownedWeaponId].color = Color.white;
             });
 
+        }
+
+        private System.DateTime _lastLogin;
+        public System.DateTime lastLogin => _lastLogin;
+        private System.DateTime _serverTime;
+        public System.DateTime serverTime => _serverTime;
+        void  SetLastLogin()
+        {
+            SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
+            {
+                if(!bro.IsSuccess()) {
+                    Debug.LogError("최근 접속시간 받아오기 실패.");
+                }
+                _lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
+            });
+            _serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
     }
 }
