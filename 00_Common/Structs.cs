@@ -55,12 +55,12 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         mineId = -1;
         magic = new int []{-1,-1};
 
-        defaultStat = _weaponData.defaultStat;
-        PromoteStat = _weaponData.PromoteStat;
-        AdditionalStat = _weaponData.AdditionalStat;
-        NormalStat = _weaponData.NormalStat;
-        SoulStat = _weaponData.SoulStat;
-        RefineStat = _weaponData.RefineStat;
+        defaultStat = (int[])_weaponData.defaultStat.Clone();
+        PromoteStat = (int[])_weaponData.PromoteStat.Clone();
+        AdditionalStat = (int[])_weaponData.AdditionalStat.Clone();
+        NormalStat = (int[])_weaponData.NormalStat.Clone();
+        SoulStat = (int[])_weaponData.SoulStat.Clone();
+        RefineStat = (int[])_weaponData.RefineStat.Clone();
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
     }
@@ -350,6 +350,12 @@ public struct BaseWeaponData//기본 무기정보 차트
 }
 
 [Serializable]
+public struct GachaData
+{
+    public int trash, old, normal, rare, unique, legendary;
+}
+
+[Serializable]
 public struct NormalGarchar
 {
     public int trash, old, normal, rare;
@@ -361,31 +367,40 @@ public struct AdvencedGarchar
 }
 
 [Serializable]
-public struct NormalReinforceData
-{
-    public int percent;
-    public int baseGold;
-    public int goldPerRarity;
-    public int atkUp;
-}
-
-[Serializable]
-public struct SoulCraftingData
-{
-    public int goldCost, soulCost;
-    public int option1, option2, option3, option4, option5;
-}
-
-[Serializable]
 public struct AdditionalData
 {
+    public int levelQuilfication;
     public int goldCost;
     public int option2, option4, option6, option8, option10;
 }
 
 [Serializable]
+public struct NormalReinforceData
+{
+    public int levelQuilfication;
+    public int percent;
+    public int baseGold;
+    public int goldPerRarity;
+    public int atkUp;
+
+    public readonly int GetGoldCost(Rarity _rarity)
+    {
+        return baseGold + (int)_rarity * goldPerRarity;
+    }
+}
+
+[Serializable]
+public struct SoulCraftingData
+{
+    public int levelQuilfication;
+    public int goldCost, soulCost;
+    public int option1, option2, option3, option4, option5;
+}
+
+[Serializable]
 public struct RefinementData
 {
+    public int levelQuilfication;
     public int baseGold, goldPerTry;
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;

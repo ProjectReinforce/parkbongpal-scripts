@@ -12,8 +12,8 @@ namespace Manager
         public MineData[] mineDatas;
         public List< WeaponData> WeaponDatas;
         public UserData userData;
-        public NormalGarchar normalGarchar;
-        public AdvencedGarchar advencedGarchar;
+        public GachaData normalGarchar;
+        public GachaData advencedGarchar;
         public NormalReinforceData normalReinforceData;
         public SoulCraftingData soulCraftingData;
         public AdditionalData additionalData;
@@ -75,7 +75,7 @@ namespace Manager
             GetVersionChart();
         }
 
-        const string VERSION_CHART_ID = "87504";
+        const string VERSION_CHART_ID = "87814";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -127,7 +127,7 @@ namespace Manager
             string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<NormalGarchar>(ChartName.normalGachaPercentage, out normalGarchar))
+            if (GetLocalChartData(ChartName.normalGachaPercentage, out normalGarchar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -148,7 +148,7 @@ namespace Manager
             // }
             else
             {
-                GetBackEndChartData<NormalGarchar>(chartId, (data, index) =>
+                GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     normalGarchar = data;
                 });
@@ -176,7 +176,7 @@ namespace Manager
             string chartId = chartInfos[ChartName.advancedGachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<AdvencedGarchar>(ChartName.advancedGachaPercentage, out advencedGarchar))
+            if (GetLocalChartData(ChartName.advancedGachaPercentage, out advencedGarchar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -197,7 +197,7 @@ namespace Manager
             // }
             else
             {
-                GetBackEndChartData<AdvencedGarchar>(chartId, (data, index) =>
+                GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     advencedGarchar = data;
                 });

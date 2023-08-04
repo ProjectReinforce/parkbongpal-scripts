@@ -77,7 +77,7 @@ public class Weapon
 
     public void ExecuteReinforce(ReinforceType _type)
     {
-        Reinforce reinforce = reinforces[(int)_type];
-        reinforces[(int)_type].Try(this);
+        Debug.Log((int)_type);
+        reinforces[(int)_type-1].Try(this);
     }
 }

@@ -31,7 +31,7 @@ public class Store:Singleton<Store>
       int randomInt = Utills.random.Next(1, 101);
       int limit = 100;
       Rarity rarity;
-      NormalGarchar normalGarchar = ResourceManager.Instance.normalGarchar;
+      GachaData normalGarchar = ResourceManager.Instance.normalGarchar;
     
       if (randomInt > (limit-=normalGarchar.rare))
           rarity =Rarity.rare;
