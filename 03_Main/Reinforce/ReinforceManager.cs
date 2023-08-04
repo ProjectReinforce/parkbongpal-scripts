@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReinforceManager : MonoBehaviour
+public class ReinforceManager : Manager.Singleton<ReinforceManager>
 {
     public System.Action WeaponChangeEvent;
 
-    [SerializeField] ReinforceUIInfo reinforceUIInfo;
+    ReinforceUIInfo reinforceUIInfo;
     public ReinforceUIInfo ReinforceUIInfo { get => reinforceUIInfo; }
 
     [SerializeField] Weapon selectedWeapon;
@@ -18,13 +18,14 @@ public class ReinforceManager : MonoBehaviour
             if (value is null) return;
             selectedWeapon = value;
 
-            if (WeaponChangeEvent != null)
-                WeaponChangeEvent();
+            WeaponChangeEvent?.Invoke();
         }
     }
 
-    private void Awake()
+    void Awake()
     {
-        TryGetComponent<ReinforceUIInfo>(out reinforceUIInfo);
+        base.Awake();
+        
+        TryGetComponent(out reinforceUIInfo);
     }
 }

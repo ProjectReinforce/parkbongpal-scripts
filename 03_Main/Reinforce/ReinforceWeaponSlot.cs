@@ -23,7 +23,7 @@ public class ReinforceWeaponSlot : MonoBehaviour
 
     void Awake()
     {
-        transform.parent.TryGetComponent<ReinforceManager>(out reinforceManager);
+        reinforceManager = ReinforceManager.Instance;
         // transform.parent.TryGetComponent<ReinforceUIInfo>(out reinforceUIInfo);
         gameObject.transform.GetChild(0).TryGetComponent<Image>(out weaponIcon);
     }

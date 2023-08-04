@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ReinforceUIInfo : MonoBehaviour
 {
-    [SerializeField] ReinforceManager reinforceManager;
+    ReinforceManager reinforceManager;
     ReinforceWeaponSlot reinforceWeaponSlot;
     public ReinforceWeaponSlot WeaponSlot
     {
@@ -18,7 +18,7 @@ public class ReinforceUIInfo : MonoBehaviour
 
     private void Awake()
     {
-        TryGetComponent<ReinforceManager>(out reinforceManager);
+        reinforceManager = ReinforceManager.Instance;
         transform.GetChild(1).TryGetComponent<ReinforceWeaponSlot>(out reinforceWeaponSlot);
         transform.GetChild(5).TryGetComponent<NormalReinforceUI>(out reinforceUI);
     }
