@@ -33,7 +33,7 @@ public class Player : DontDestroy<Player>
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log("Plaer:SetGoldPerMin 실패"+callback.GetMessage()+userData.inDate);   
+                Debug.Log("Plaer:SetGoldPerMin 실패"+callback.GetMessage());   
             }
             Debug.Log("Plaer:SetGoldPerMin 성공"+callback);
         });

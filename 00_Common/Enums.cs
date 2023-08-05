@@ -38,3 +38,15 @@
     {
         normalGachaPercentage, advancedGachaPercentage, mineData, weapon, normalReinforce, soulCrafting, additional, refinement
     }
+
+    public enum StatType
+    {
+        upgradeCount, atk, atkSpeed, atkRange, accuracy, criticalRate, criticalDamage, strength, intelligence, wisdom, technique, charm, constitution
+    }
+    
+    public enum InventoryOpenType
+    {
+        Default,
+        Mine,
+        Reinforce
+    }

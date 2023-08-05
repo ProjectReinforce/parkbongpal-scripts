@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum InventoryOpenType
-{
-    Default,
-    Mine,
-    Reinforce
-}
-
 public class InventoryOpener : MonoBehaviour
 {
     [SerializeField] Inventory inventory;
@@ -35,7 +28,9 @@ public class InventoryOpener : MonoBehaviour
                     button.gameObject.SetActive(false);
                 confirmButton.onClick.RemoveAllListeners();
                 if ((InventoryOpenType)_openType == InventoryOpenType.Mine)
+                {
                     confirmButton.onClick.AddListener(() => inventory.ConfirmWeapon());
+                }
                 else
                     confirmButton.onClick.AddListener(() => inventory.ReinforceSelect());
                 confirmButton.onClick.AddListener(() => gameObject.SetActive(false));
