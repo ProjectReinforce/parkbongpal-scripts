@@ -9,7 +9,6 @@ public class Inventory : DontDestroy<Inventory>
     [SerializeField] int weaponSoul;
     [SerializeField] int stone;
     
-    
     [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
     
@@ -70,7 +69,7 @@ public class Inventory : DontDestroy<Inventory>
         Sort();
     }
 
-    [SerializeField]  GameObject inventory;
+    
     public void ConfirmWeapon()
     {
         if (currentWeapon is null) return;
@@ -96,7 +95,6 @@ public class Inventory : DontDestroy<Inventory>
         }
         currentWeapon.Lend(currentMine.GetMineData().index);
         Quarry.Instance.currentMine= currentMine ;
-        inventory.SetActive(false);
     }
 
     public void ReinforceSelect()

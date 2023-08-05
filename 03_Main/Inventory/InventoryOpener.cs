@@ -10,7 +10,7 @@ public class InventoryOpener : MonoBehaviour
     [SerializeField] GameObject detailInfo;
     [SerializeField] Button[] BasicInventoryButtons;
     [SerializeField] Button confirmButton;
-
+    [SerializeField]  GameObject inventoryBody;
     public void Open(int _openType)
     {
         detailInfo.SetActive(false);
@@ -35,6 +35,7 @@ public class InventoryOpener : MonoBehaviour
                     confirmButton.onClick.AddListener(() => inventory.ReinforceSelect());
                 confirmButton.onClick.AddListener(() => gameObject.SetActive(false));
                 confirmButton.gameObject.SetActive(true);
+                inventoryBody.SetActive(false);
                 break;
         }
         gameObject.SetActive(true);
