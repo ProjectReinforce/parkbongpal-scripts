@@ -21,6 +21,18 @@ public class Player : DontDestroy<Player>
     public void AddGold(int gold)
     {
         _userData.gold += gold;
+
+        Param param = new Param {{ nameof(UserData.colum.gold), _userData.gold }};
+        
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log("Plaer:gold 실패"+callback.GetMessage());   
+            }
+            Debug.Log("Plaer:gold 성공"+callback);
+        });
+        
         topUIDatatViewer.UpdateGold();
     }
 
