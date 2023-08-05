@@ -7,7 +7,7 @@ namespace Manager
 {
     public class ResourceManager : DontDestroy<ResourceManager>
     {
-        public Where searchFromMyIndate = new Where();
+        public Where searchFromMyIndate = new();
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
         public List< WeaponData> WeaponDatas;
@@ -18,8 +18,8 @@ namespace Manager
         public SoulCraftingData soulCraftingData;
         public AdditionalData additionalData;
         public RefinementData refinementData;
-       
-        List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
+
+        readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
         public BaseWeaponData GetBaseWeaponData(int index)
         {
@@ -110,15 +110,15 @@ namespace Manager
                 GetAdvancedGachaData();
                 GetBaseWeaponData();
                 // GetNormalReinforceData();
-                
 
-                System.Action<NormalReinforceData> setNormalData = data => {normalReinforceData = data;};
+
+                void setNormalData(NormalReinforceData data) { normalReinforceData = data; }
                 SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
-                System.Action<AdditionalData> setAdditionalData = data => {additionalData = data;};
+                void setAdditionalData(AdditionalData data) { additionalData = data; }
                 SetChartData<AdditionalData>(ChartName.additional, setAdditionalData);
-                System.Action<SoulCraftingData> setSoulData = data => {soulCraftingData = data;};
+                void setSoulData(SoulCraftingData data) { soulCraftingData = data; }
                 SetChartData<SoulCraftingData>(ChartName.soulCrafting, setSoulData);
-                System.Action<RefinementData> setRefineData = data => {refinementData = data;};
+                void setRefineData(RefinementData data) { refinementData = data; }
                 SetChartData<RefinementData>(ChartName.refinement, setRefineData);
             });
         }
@@ -133,42 +133,12 @@ namespace Manager
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
-            // if (loadedChart != "")
-            // {
-            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-            //     JsonData local2 = BackendReturnObject.Flatten(local);
-            //     normalGarchar = new NormalGarchar();
-            //     for (int i = 0; i < local2.Count; ++i)
-            //     {                   
-            //         // 데이터를 디시리얼라이즈 & 데이터 확인
-            //         normalGarchar = JsonMapper.ToObject<NormalGarchar>(local2[i].ToJson());
-            //     }
-
-            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-            //     SceneLoader.ResourceLoadComplete();
-            // }
             else
             {
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     normalGarchar = data;
                 });
-                // SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
-                // {
-                //     if (!bro.IsSuccess())
-                //     {
-                //         Debug.Log(bro);
-                //         return;
-                //     }
-                //     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                //     Debug.Log($"뒤끝 차트 {chartId} 수신 완료 : {json.Count}개");
-                //     for (int i = 0; i < json.Count; ++i)
-                //     {
-                //         // Debug.Log(json[i]["trash"].ToString());
-                //         normalGarchar = JsonMapper.ToObject<NormalGarchar>(json[i].ToJson());
-                //     }
-                //     SceneLoader.ResourceLoadComplete();
-                // });
             }
         }
 
@@ -182,41 +152,12 @@ namespace Manager
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
-            // if (loadedChart != "")
-            // {
-            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-            //     JsonData local2 = BackendReturnObject.Flatten(local);
-            //     advencedGarchar = new AdvencedGarchar();
-            //     for (int i = 0; i < local2.Count; ++i)
-            //     {                   
-            //         // 데이터를 디시리얼라이즈 & 데이터 확인
-            //         advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(local2[i].ToJson());
-            //     }
-
-            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-            //     SceneLoader.ResourceLoadComplete();
-            // }
             else
             {
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     advencedGarchar = data;
                 });
-                // SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
-                // {
-                //     if (!bro.IsSuccess())
-                //     {
-                //         Debug.Log(bro);
-                //         return;
-                //     }
-                //     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                //     Debug.Log($"뒤끝 차트 {chartId} 수신 완료 : {json.Count}개");
-                //     for (int i = 0; i < json.Count; ++i)
-                //     {
-                //         advencedGarchar = JsonMapper.ToObject<AdvencedGarchar>(json[i].ToJson());
-                //     }
-                //     SceneLoader.ResourceLoadComplete();
-                // });
             }
         }
 
@@ -239,25 +180,6 @@ namespace Manager
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
-            // if (loadedChart != "")
-            // {                
-            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-            //     JsonData local2 = BackendReturnObject.Flatten(local);
-            //     baseWeaponDatas = new BaseWeaponData[local2.Count];
-            //     for (int i = 0; i < local2.Count; ++i)
-            //     {
-            //         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-            //         if(i >= 10)
-            //             break;
-            //         // 데이터를 디시리얼라이즈 & 데이터 확인
-            //         BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(local2[i].ToJson());
-            //         baseWeaponDatas[i] = baseWeaponData;
-            //         baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-            //     }
-            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                
-            //     SceneLoader.ResourceLoadComplete();
-            // }
             else
             {  
                 baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
@@ -267,30 +189,6 @@ namespace Manager
                     baseWeaponDatas[index] = data;
                     baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
                 });
-                // SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
-                // {
-                //     if (!bro.IsSuccess())
-                //     {
-                //         Debug.Log(bro);
-                //         return;
-                //     }
-                //
-                //     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                //     baseWeaponDatas = new BaseWeaponData[json.Count];
-                //     Debug.Log($"뒤끝 차트 {chartId} 수신 완료 : {json.Count}개");
-                //     
-                //     for (int i = 0; i < json.Count; ++i)
-                //     {
-                //         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                //         if(i >= 10)
-                //             break;
-                //         // 데이터를 디시리얼라이즈 & 데이터 확인
-                //         BaseWeaponData baseWeaponData = JsonMapper.ToObject<BaseWeaponData>(json[i].ToJson());
-                //         baseWeaponDatas[i] = baseWeaponData;
-                //         baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-                //     }
-                //     SceneLoader.ResourceLoadComplete();
-                // });
             }
         }
          void GetnData()
@@ -335,22 +233,6 @@ namespace Manager
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
-            // if (loadedChart != "")
-            // {
-            //     JsonData local = JsonMapper.ToObject(loadedChart.Substring(8, loadedChart.Length-9));
-            //     JsonData local2 = BackendReturnObject.Flatten(local);
-            //     mineDatas = new MineData[local2.Count];
-            //     for (int i = 0; i < local2.Count; ++i)
-            //     {
-            //         // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-            //         if(i >= 10)
-            //             break;
-                    
-            //         mineDatas[i] = JsonMapper.ToObject<MineData>(local2[i].ToJson());
-            //     }
-            //     Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-            //     SceneLoader.ResourceLoadComplete();
-            // }
             else
             {
                 mineDatas = new MineData[MINE_COUNT];
@@ -363,30 +245,6 @@ namespace Manager
                     mineData.lubricity = (int)(mineData.lubricity * 1.5f);
                     mineDatas[index] = mineData;
                 });
-                // SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
-                // {
-                //     if (!bro.IsSuccess())
-                //     {
-                //         // 요청 실패 처리
-                //         Debug.Log(bro);
-                //         return;
-                //     }
-                //
-                //     JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                //     mineDatas = new MineData[json.Count];
-                //     Debug.Log($"[ResourceM] 광산 정보 수신 완료 : {json.Count}개");
-                //     for (int i = 0; i < json.Count; ++i)
-                //     {
-                //         // 계수, 스테이지 확인 
-                //         MineData mineData = JsonMapper.ToObject<MineData>(json[i].ToJson());
-                //         mineData.defence = (int)((mineData.defence << mineData.stage) * 0.1f);
-                //         mineData.hp = (int)((mineData.hp << mineData.stage) * 0.2f);
-                //         mineData.size = (int)(mineData.size * 1.5f) + 30;
-                //         mineData.lubricity = (int)(mineData.lubricity * 1.5f);
-                //         mineDatas[i] = mineData;
-                //     }
-                //     SceneLoader.ResourceLoadComplete();
-                // });
             }
         }
         
@@ -396,11 +254,6 @@ namespace Manager
             string chartId = chartInfos[_chartName.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            // if(loadedChart != "")
-            // {
-            //     Backend.Chart.DeleteLocalChartData(chartId);
-            //     loadedChart = "";
-            // }
             if (GetLocalChartData<T>(_chartName, _callback))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
@@ -412,7 +265,7 @@ namespace Manager
         
         void GetBackEndChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
         {
-            T result = default(T);
+            T result = default;
 
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
             {
@@ -439,7 +292,6 @@ namespace Manager
         #region For load to local chart
         bool GetLocalChartData<T>(ChartName _chartName, System.Action<T> _callback) where T: struct
         {
-            T result = default(T);
             string chartId = chartInfos[_chartName.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
@@ -448,7 +300,7 @@ namespace Manager
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
-                ChartToStruct<T>(loadedChartJson, out result);
+                ChartToStruct<T>(loadedChartJson, out T result);
 
                 _callback(result);
                 return true;
@@ -472,7 +324,7 @@ namespace Manager
             }
             else
             {
-                _result = default(T);
+                _result = default;
                 return false;
             }
         }
@@ -493,14 +345,14 @@ namespace Manager
             }
             else
             {
-                _results = default(T[]);
+                _results = default;
 
                 return false;
             }
         }
         void GetBackEndChartData<T>(string chartId, System.Action<T,int> _callback) where T: struct
         {
-            T result = default(T);
+            T result = default;
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
             {
                 if (!bro.IsSuccess())
@@ -601,8 +453,10 @@ namespace Manager
         
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
-            Material LockMaterial = new Material(Shader.Find("UI/Default"));
-            LockMaterial.color= Color.black;
+            Material LockMaterial = new(Shader.Find("UI/Default"))
+            {
+                color = Color.black
+            };
             for (int i = 0; i < WEAPON_COUNT; i++)
             {
                 materials[i] = new Material(LockMaterial);

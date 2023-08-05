@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class Utills
 {
-    public static Random random = new Random();
+    public static Random random = new();
     
     public static int Ceil(float target)
     {

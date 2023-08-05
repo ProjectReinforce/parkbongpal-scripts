@@ -139,7 +139,7 @@ public class Login : MonoBehaviour
     }
 
     const int BLINKCOUNT = 3;
-    WaitForSeconds waitForBlinkDelay = new WaitForSeconds(0.1f);
+    readonly WaitForSeconds waitForBlinkDelay = new(0.1f);
     IEnumerator PrintAlertMessage(string _message)
     {
         messageText.text = _message;
