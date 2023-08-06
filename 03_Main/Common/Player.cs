@@ -18,10 +18,11 @@ public class Player : DontDestroy<Player>
     }
 
 
-    public void AddGold(int gold)
+    public void AddGold(int _gold)
     {
-        _userData.gold += gold;
+        _userData.gold += _gold;
 
+        Debug.Log(nameof(_gold).Replace("_", ""));
         Param param = new Param {{ nameof(UserData.colum.gold), _userData.gold }};
         
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
@@ -36,9 +37,17 @@ public class Player : DontDestroy<Player>
         topUIDatatViewer.UpdateGold();
     }
 
-    public void SetGoldPerMin(int goldPerMin)
+    public void AddDiamond(int _diamond)
     {
-        _userData.goldPerMin = goldPerMin;
+        _userData.diamond += _diamond;
+    }
+
+    public int diamond, weaponSoul, stone;
+    public int exp, level, favoriteWeaponId,goldPerMin;
+
+    public void SetGoldPerMin(int _goldPerMin)
+    {
+        _userData.goldPerMin = _goldPerMin;
         Param param = new Param {{ nameof(UserData.colum.goldPerMin), goldPerMin }};
         
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 

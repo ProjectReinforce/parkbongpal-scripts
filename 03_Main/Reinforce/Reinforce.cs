@@ -91,6 +91,30 @@ public class SoulCrafting : Reinforce
 {
     public override void Try(Weapon weapon)
     {
+        SoulCraftingData data = Manager.ResourceManager.Instance.soulCraftingData;
+        int[] soulPercent = {data.option1, data.option2, data.option3, data.option4, data.option5};
+        int[] soulDescription = {1, 2, 3, 4, 5};
+        
+        int resultIndex = Utills.GetResultFromWeightedRandom(soulPercent);
+        if (resultIndex != -1)
+        {
+            Debug.Log($"result : {resultIndex} - {soulDescription[resultIndex]} / {soulPercent[resultIndex]}");
+            weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
+            weapon.data.SoulStat[(int)StatType.upgradeCount] ++;
+        }
+
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.SoulStat), weapon.data.SoulStat);
+
+        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+
+        if (!bro.IsSuccess())
+        {
+            Debug.LogError(bro);
+            // 메시지 출력
+        }
+
+        Player.Instance.AddGold(-1000);
     }
 }
 

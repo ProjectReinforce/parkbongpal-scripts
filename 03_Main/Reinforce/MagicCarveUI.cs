@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdditionalUI : MonoBehaviour
+public class MagicCarveUI : MonoBehaviour
 {
     ReinforceManager reinforceManager;
+    ReinforceUIInfo reinforceUIInfo;
     Text costText;
     Button additionalButton;
 
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
+        if (reinforceManager != null)
+            reinforceUIInfo = reinforceManager.ReinforceUIInfo;
         transform.GetChild(6).GetChild(1).TryGetComponent(out costText);
         transform.GetChild(7).TryGetComponent<Button>(out additionalButton);
     }
@@ -42,7 +45,7 @@ public class AdditionalUI : MonoBehaviour
 
         additionalButton.onClick.RemoveAllListeners();
         additionalButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.additional)
+            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.magicEngrave)
         );
         additionalButton.onClick.AddListener(() =>
             UpdateCost()
@@ -51,18 +54,18 @@ public class AdditionalUI : MonoBehaviour
 
     public void UpdateCost()
     {
-        UserData userData = Player.Instance.userData;
-        int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
+        // UserData userData = Player.Instance.userData;
+        // int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
 
-        if (userData.gold < cost)
-        {
-            costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = false;
-        }
-        else
-        {
-            costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = true;
-        }
+        // if (userData.gold < cost)
+        // {
+        //     costText.text = $"<color=red>{userData.gold}</color> / {cost}";
+        //     additionalButton.interactable = false;
+        // }
+        // else
+        // {
+        //     costText.text = $"<color=white>{userData.gold}</color> / {cost}";
+        //     additionalButton.interactable = true;
+        // }
     }
 }

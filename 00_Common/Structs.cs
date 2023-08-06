@@ -36,6 +36,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
                         PromoteStat[(int)StatType.atk] +
                         AdditionalStat[(int)StatType.atk] +
                         NormalStat[(int)StatType.atk] +
+                        SoulStat[(int)StatType.atk] +
                         RefineStat[(int)StatType.atk];
             return sum;
         }
@@ -193,6 +194,7 @@ public struct BaseWeaponData//기본 무기정보 차트
                         PromoteStat[(int)StatType.atk] +
                         AdditionalStat[(int)StatType.atk] +
                         NormalStat[(int)StatType.atk] +
+                        SoulStat[(int)StatType.atk] +
                         RefineStat[(int)StatType.atk];
             return sum;
         }
