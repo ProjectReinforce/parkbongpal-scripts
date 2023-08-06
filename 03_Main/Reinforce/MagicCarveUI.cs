@@ -8,7 +8,7 @@ public class MagicCarveUI : MonoBehaviour
     ReinforceManager reinforceManager;
     ReinforceUIInfo reinforceUIInfo;
     Text costText;
-    Button additionalButton;
+    Button reinforceButton;
 
     void Awake()
     {
@@ -16,7 +16,7 @@ public class MagicCarveUI : MonoBehaviour
         if (reinforceManager != null)
             reinforceUIInfo = reinforceManager.ReinforceUIInfo;
         transform.GetChild(6).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(7).TryGetComponent<Button>(out additionalButton);
+        transform.GetChild(7).TryGetComponent<Button>(out reinforceButton);
     }
 
     void OnEnable()
@@ -37,35 +37,36 @@ public class MagicCarveUI : MonoBehaviour
     {
         if (reinforceManager.SelectedWeapon is null)
         {
-            additionalButton.interactable = false;
+            reinforceButton.interactable = false;
             return;
         }
 
         UpdateCost();
 
-        additionalButton.onClick.RemoveAllListeners();
-        additionalButton.onClick.AddListener(() =>
+        reinforceButton.onClick.RemoveAllListeners();
+        reinforceButton.onClick.AddListener(() =>
             reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.magicEngrave)
         );
-        additionalButton.onClick.AddListener(() =>
+        reinforceButton.onClick.AddListener(() =>
             UpdateCost()
         );
     }
 
     public void UpdateCost()
     {
-        // UserData userData = Player.Instance.userData;
-        // int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
+        UserData userData = Player.Instance.userData;
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
 
-        // if (userData.gold < cost)
-        // {
-        //     costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-        //     additionalButton.interactable = false;
-        // }
-        // else
-        // {
-        //     costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-        //     additionalButton.interactable = true;
-        // }
+        if (userData.gold < cost)
+        {
+            costText.text = $"<color=red>{userData.gold}</color> / {cost}";
+            reinforceButton.interactable = false;
+        }
+        else
+        {
+            costText.text = $"<color=white>{userData.gold}</color> / {cost}";
+            reinforceButton.interactable = true;
+        }
     }
 }

@@ -53,7 +53,7 @@ public class NormalReinforceUI : MonoBehaviour
             reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce)
         );
         normalReinforceButton.onClick.AddListener(() =>
-            reinforceUIInfo.ReinforceUI.UpdateUpgradeCount()
+            UpdateUpgradeCount()
         );
         normalReinforceButton.onClick.AddListener(() =>
             UpdateCost()

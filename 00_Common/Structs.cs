@@ -356,7 +356,7 @@ public struct RefinementData
     public int baseGold, goldPerTry;
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;
-    public int minus3, minus1, zero, plus1, plus5;
+    public int minus3, minus1, zero, plus1, plus3, plus5;
 }
 
 [Serializable]

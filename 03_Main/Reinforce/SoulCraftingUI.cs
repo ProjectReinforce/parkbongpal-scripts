@@ -52,6 +52,9 @@ public class SoulCraftingUI : MonoBehaviour
             reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.soulCrafting)
         );
         soulButton.onClick.AddListener(() =>
+            UpdateUpgradeCount()
+        );
+        soulButton.onClick.AddListener(() =>
             UpdateCost()
         );
     }
@@ -59,8 +62,18 @@ public class SoulCraftingUI : MonoBehaviour
     public void UpdateUpgradeCount()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        BaseWeaponData originData = Manager.ResourceManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
 
-        upgradeCountText.text = $"{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}";
+        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
+        {
+            upgradeCountText.text = $"<color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color> / {originData.SoulStat[(int)StatType.upgradeCount]}";
+            soulButton.interactable = false;
+        }
+        else
+        {
+            upgradeCountText.text = $"<color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color> / {originData.SoulStat[(int)StatType.upgradeCount]}";
+            soulButton.interactable = true;
+        }
     }
 
     public void UpdateCost()

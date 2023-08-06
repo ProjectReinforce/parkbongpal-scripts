@@ -34,11 +34,11 @@ public class ReinforceUIInfo : MonoBehaviour
     {
         get => soulCraftingUI;
     }
-    //  reinforceUI;
-    // public NormalReinforceUI ReinforceUI
-    // {
-    //     get => reinforceUI;
-    // }
+    RefineUI refineUI;
+    public RefineUI RefineUI
+    {
+        get => refineUI;
+    }
 
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class ReinforceUIInfo : MonoBehaviour
         transform.GetChild(5).TryGetComponent(out reinforceUI);
         transform.GetChild(6).TryGetComponent(out magicCarveUI);
         transform.GetChild(7).TryGetComponent(out soulCraftingUI);
-        // transform.GetChild(8).TryGetComponent(out reinforceUI);
+        transform.GetChild(8).TryGetComponent(out refineUI);
     }
 
     private void OnDisable()
@@ -58,6 +58,6 @@ public class ReinforceUIInfo : MonoBehaviour
         reinforceUI.gameObject.SetActive(false);
         magicCarveUI.gameObject.SetActive(false);
         soulCraftingUI.gameObject.SetActive(false);
-        // additionalUI.gameObject.SetActive(false);
+        refineUI.gameObject.SetActive(false);
     }
 }
