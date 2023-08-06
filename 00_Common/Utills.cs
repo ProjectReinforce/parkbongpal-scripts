@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 using LitJson;
 using Random = System.Random;
 using UnityEngine;
@@ -31,7 +31,7 @@ public static class Utills
         foreach (float value in _targetPercentArray)
             total += value;
 
-        float randomValue = UnityEngine.Random.Range(0, 1f);
+        float randomValue = random.Next(101) / 100f;
         float percent = randomValue * total;
         Debug.Log(percent);
 
@@ -51,7 +51,7 @@ public static class Utills
         foreach (int value in _targetPercentArray)
             total += value;
 
-        float randomValue = UnityEngine.Random.Range(0, 1f);
+        float randomValue = random.Next(101) / 100f;
         float percent = randomValue * total;
         Debug.Log(percent);
 
@@ -63,5 +63,32 @@ public static class Utills
         }
 
         return -1;
+    }
+
+    public static int[] GetNonoverlappingDraw(int _totalCount, int _drawCount)
+    {
+        // 중복 없이 뽑은 인덱스를 담을 배열
+        int[] results = new int[_drawCount];
+        // 중복 없이 뽑을 배열
+        int[] targets = new int[_totalCount];
+
+        // 배열 초기화 및 섞기
+        for (int i = 0; i < targets.Length; i++)
+            targets[i] = i;
+        for (int i = 0; i < targets.Length; i++)
+        {
+            int randomInt1 = random.Next(targets.Length);
+            int randomInt2 = random.Next(targets.Length);
+
+            (targets[randomInt2], targets[randomInt1]) = (targets[randomInt1], targets[randomInt2]);
+        }
+
+        // 결과 저장 및 반환
+        for (int i = 0; i < _drawCount; i++)
+        {
+            results[i] = targets[i];
+        }
+
+        return results;
     }
 }

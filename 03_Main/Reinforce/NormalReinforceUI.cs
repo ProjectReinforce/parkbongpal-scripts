@@ -40,6 +40,7 @@ public class NormalReinforceUI : MonoBehaviour
         if (reinforceManager.SelectedWeapon is null)
         {
             upgradeCountText.transform.parent.gameObject.SetActive(false);
+            normalReinforceButton.interactable = false;
             return;
         }
         upgradeCountText.transform.parent.gameObject.SetActive(true);
@@ -52,7 +53,7 @@ public class NormalReinforceUI : MonoBehaviour
             reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce)
         );
         normalReinforceButton.onClick.AddListener(() =>
-            reinforceUIInfo.ReinforceUI.UpdateUpgradeCount()
+            UpdateUpgradeCount()
         );
         normalReinforceButton.onClick.AddListener(() =>
             UpdateCost()

@@ -28,4 +28,9 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
         
         TryGetComponent(out reinforceUIInfo);
     }
+
+    void OnDisable()
+    {
+        selectedWeapon = null;
+    }
 }
