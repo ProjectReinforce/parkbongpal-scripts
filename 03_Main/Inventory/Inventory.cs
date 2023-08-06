@@ -12,6 +12,8 @@ public class Inventory : DontDestroy<Inventory>
     [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
     
+    [SerializeField] public UpDownVisualer upDownVisualer;
+    
     Weapon _currentWeapon;
     public Weapon currentWeapon
     {

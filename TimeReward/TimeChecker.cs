@@ -10,7 +10,7 @@ public class TimeChecker : Singleton<TimeChecker>
     protected override void Awake()
     {
         base.Awake();
-        timeInterval = ResourceManager.Instance.serverTime - ResourceManager.Instance.lastLogin;
+        timeInterval = ResourceManager.Instance.ServerTime - ResourceManager.Instance.LastLogin;
         IdleReward();
     }
     private void IdleReward()
@@ -27,13 +27,13 @@ public class TimeChecker : Singleton<TimeChecker>
 
     private void AttendanceCheck()
     {
-        if (ResourceManager.Instance.lastLogin.Month != ResourceManager.Instance.serverTime.Month)
+        if (ResourceManager.Instance.LastLogin.Month != ResourceManager.Instance.ServerTime.Month)
         {
             //보살리스트 갱신
             //내 누적일수 갱신
         }
 
-        if (ResourceManager.Instance.lastLogin.Day == ResourceManager.Instance.serverTime.Day)
+        if (ResourceManager.Instance.LastLogin.Day == ResourceManager.Instance.ServerTime.Day)
             return;
         
         

@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class ScrollContoller : MonoBehaviour
 {
- 
-
     [SerializeField] RectTransform contentRect;
     [SerializeField] RectTransform padding;
 

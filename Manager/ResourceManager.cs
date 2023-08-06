@@ -468,10 +468,10 @@ namespace Manager
 
         }
 
-        private System.DateTime _lastLogin;
-        public System.DateTime lastLogin => _lastLogin;
-        private System.DateTime _serverTime;
-        public System.DateTime serverTime => _serverTime;
+        private System.DateTime lastLogin;
+        public System.DateTime LastLogin => lastLogin;
+        private System.DateTime serverTime;
+        public System.DateTime ServerTime => serverTime;
         void  SetLastLogin()
         {
             SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
@@ -479,9 +479,10 @@ namespace Manager
                 if(!bro.IsSuccess()) {
                     Debug.LogError("최근 접속시간 받아오기 실패.");
                 }
-                _lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
+                lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
             });
-            _serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
+        
     }
 }

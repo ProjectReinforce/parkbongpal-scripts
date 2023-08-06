@@ -9,6 +9,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 
     public int[] magic;
     public int rarity;
+    public int power;//todo:관련 로직 추가해야함 
     public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat;
 
     public WeaponData(string _inDate, BaseWeaponData _weaponData)
@@ -16,7 +17,6 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         inDate = _inDate;
         mineId = -1;
         magic = new int []{-1,-1};
-
         defaultStat = (int[])_weaponData.defaultStat.Clone();
         PromoteStat = (int[])_weaponData.PromoteStat.Clone();
         AdditionalStat = (int[])_weaponData.AdditionalStat.Clone();
@@ -25,6 +25,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         RefineStat = (int[])_weaponData.RefineStat.Clone();
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
+        power = 0;//todo: 관련로직 필요
     }
 
     #region Property

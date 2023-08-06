@@ -110,9 +110,6 @@ public class Mine :MonoBehaviour,Rental
         }
         
         _weaponData = rentWeapon.data;
-        Debug.Log(rental);
-        Debug.Log(rentalFactory);
-        Debug.Log(_weaponData.magic);
         for (int i = 0; i < 2; i++)
         {
             rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i]);
