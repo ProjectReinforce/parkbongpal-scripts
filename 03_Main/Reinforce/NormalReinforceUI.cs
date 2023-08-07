@@ -79,7 +79,7 @@ public class NormalReinforceUI : MonoBehaviour
 
     public void UpdateCost()
     {
-        UserData userData = Player.Instance.userData;
+        UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
 

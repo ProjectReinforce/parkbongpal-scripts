@@ -124,7 +124,7 @@ public class Inventory : DontDestroy<Inventory>
             int beforeGoldPerMin = currentMine.goldPerMin;
             currentMine.SetWeapon(currentWeapon);
             Debug.Log("inventory currentmine goldpermin"+currentMine.goldPerMin);
-            Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
+            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
         }
         catch (Exception e)
         {

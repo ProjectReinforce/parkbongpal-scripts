@@ -11,12 +11,14 @@ namespace Manager
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
         public List< WeaponData> WeaponDatas;
+        public int[] expDatas;
         public UserData userData;
         public GachaData normalGarchar;
         public GachaData advencedGarchar;
-        public NormalReinforceData normalReinforceData;
-        public SoulCraftingData soulCraftingData;
         public AdditionalData additionalData;
+        public NormalReinforceData normalReinforceData;
+        public MagicCarveData magicCarveData;
+        public SoulCraftingData soulCraftingData;
         public RefinementData refinementData;
 
         readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
@@ -75,7 +77,7 @@ namespace Manager
             GetVersionChart();
         }
 
-        const string VERSION_CHART_ID = "87960";
+        const string VERSION_CHART_ID = "88033";
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -112,11 +114,13 @@ namespace Manager
                 GetAttendanceData();
                 // GetNormalReinforceData();
 
-
-                void setNormalData(NormalReinforceData data) { normalReinforceData = data; }
-                SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
+                GetExpData();
                 void setAdditionalData(AdditionalData data) { additionalData = data; }
                 SetChartData<AdditionalData>(ChartName.additional, setAdditionalData);
+                void setNormalData(NormalReinforceData data) { normalReinforceData = data; }
+                SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
+                void setMagicData(MagicCarveData data) { magicCarveData = data; }
+                SetChartData<MagicCarveData>(ChartName.magicCarve, setMagicData);
                 void setSoulData(SoulCraftingData data) { soulCraftingData = data; }
                 SetChartData<SoulCraftingData>(ChartName.soulCrafting, setSoulData);
                 void setRefineData(RefinementData data) { refinementData = data; }
@@ -158,6 +162,45 @@ namespace Manager
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
                     advencedGarchar = data;
+                });
+            }
+        }
+
+        void GetExpData()
+        {
+            string chartId = chartInfos[ChartName.exp.ToString()];
+
+            // Backend.Chart.DeleteLocalChartData("87732");
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+
+            // 로컬 차트가 있는 경우
+            if (loadedChart != "")
+            {
+                JsonData loadedChartJson = StringToJson(loadedChart);
+                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+
+                expDatas = new int[loadedChartJson.Count];
+                for (int i = 0; i < loadedChartJson.Count; i++)
+                    expDatas[i] = int.Parse(loadedChartJson[i]["requireExp"].ToString());
+                SceneLoader.ResourceLoadComplete();
+            }
+            else
+            {
+                SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
+                {
+                    if (!bro.IsSuccess())
+                    {
+                        // 요청 실패 처리
+                        Debug.Log(bro);
+                        return;
+                    }
+
+                    JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                    expDatas = new int[json.Count];
+                    Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
+                    for (int i = 0; i < json.Count; ++i)
+                        expDatas[i] = int.Parse(json[i]["requireExp"].ToString());
+                    SceneLoader.ResourceLoadComplete();
                 });
             }
         }
