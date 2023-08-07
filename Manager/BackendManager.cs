@@ -25,8 +25,8 @@ public class BackendManager : DontDestroy<BackendManager>
         {
             // Split the input string by ',' and parse each element into an int
             string[] parts = s.Split(',');
-            
             int[] result = new int[parts.Length];
+            
             for (int i = 0; i < parts.Length; i++)
             {
                 result[i] = int.Parse(parts[i]);
@@ -43,9 +43,8 @@ public class BackendManager : DontDestroy<BackendManager>
     }
 
     public void BaseLoad()
-    {        
+    {
         
-
-
     }
+
 }

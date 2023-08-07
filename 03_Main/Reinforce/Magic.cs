@@ -8,16 +8,16 @@ public class RentalFactory
     {
         Rental returnType = rental;
         switch (type){
-            case MagicType.술수:
+            case MagicType.술:
                 returnType = new Accumulate(returnType);
                 break;
-            case MagicType.묘법:
+            case MagicType.묘:
                 returnType = new FallenKingSword(returnType);
                 break;
-            case MagicType.유일:
+            case MagicType.유:
                 returnType = new Space(returnType);
                 break;
-            case MagicType.신념:
+            case MagicType.신:
                 returnType = new AtomicBlade(returnType);
                 break;
         }

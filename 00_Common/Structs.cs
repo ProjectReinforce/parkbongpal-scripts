@@ -3,43 +3,6 @@
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
-    // public static WeaponData colum;
-    // public int baseWeaponIndex,mineId;
-    // public string inDate;
-
-    // public int[] magic;
-    // public int damage, speed, range, accuracy, rarity, criticalRate, criticalDamage,
-    //             strength, intelligence, wisdom, technique, charm, constitution; 
-    // public int normalReinforceCount;
-
-    // public int rarity;
-    // public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat, collection;
-    // public Sprite icon;
-
-    // public WeaponData(int _damage,int _speed,int _range,int _accuracy,int _rarity,
-    //                     int _baseWeaponIndex, string _inDate,
-    //                     int _criticalRate, int _criticalDamage, int _strength, int _intelligence,
-    //                     int _wisdom, int _technique, int _charm, int _constitution)
-    // {
-    //     damage = _damage;
-    //     speed = _speed;
-    //     range = _range;
-    //     accuracy = _accuracy;
-    //     rarity = _rarity;
-    //     baseWeaponIndex = _baseWeaponIndex;
-    //     inDate = _inDate;
-    //     criticalRate = _criticalRate;
-    //     criticalDamage = _criticalDamage;
-    //     strength = _strength;
-    //     intelligence = _intelligence;
-    //     wisdom = _wisdom;
-    //     technique = _technique;
-    //     charm = _charm;
-    //     constitution = _constitution;
-    //     mineId = -1;
-    //     normalReinforceCount = 0;
-    //     magic = new int []{-1,-1};
-    // }
     public static WeaponData colum;
     public int baseWeaponIndex, mineId;
     public string inDate;
@@ -73,6 +36,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
                         PromoteStat[(int)StatType.atk] +
                         AdditionalStat[(int)StatType.atk] +
                         NormalStat[(int)StatType.atk] +
+                        SoulStat[(int)StatType.atk] +
                         RefineStat[(int)StatType.atk];
             return sum;
         }
@@ -196,7 +160,6 @@ public struct UserData
     public static UserData colum;
     public int gold, diamond, weaponSoul, stone;
     public int exp, level, favoriteWeaponId,goldPerMin;
-    //public string nickName;
     public string inDate;
     public DateTime owner_inDate;
 }
@@ -231,6 +194,7 @@ public struct BaseWeaponData//기본 무기정보 차트
                         PromoteStat[(int)StatType.atk] +
                         AdditionalStat[(int)StatType.atk] +
                         NormalStat[(int)StatType.atk] +
+                        SoulStat[(int)StatType.atk] +
                         RefineStat[(int)StatType.atk];
             return sum;
         }
@@ -355,17 +319,6 @@ public struct GachaData
 }
 
 [Serializable]
-public struct NormalGarchar
-{
-    public int trash, old, normal, rare;
-}
-[Serializable]
-public struct AdvencedGarchar
-{
-    public int trash, old, normal, rare, unique, legendary;
-}
-
-[Serializable]
 public struct AdditionalData
 {
     public int levelQuilfication;
@@ -403,12 +356,14 @@ public struct RefinementData
     public int baseGold, goldPerTry;
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;
-    public int minus3, minus1, zero, plus1, plus5;
+    public int minus3, minus1, zero, plus1, plus3, plus5;
 }
 
 [Serializable]
 public struct PostData
 {
-    public string content, expirationDate, reservationDate, nickname, inDate, title, author, sentDate;
-    public BaseWeaponData[] items;
+    public string content,  title, author, sentDate , inDate;// 필요 없음 expirationDate, reservationDate, nickname, ,
+   
+    // public BaseWeaponData[] items;
+   
 }

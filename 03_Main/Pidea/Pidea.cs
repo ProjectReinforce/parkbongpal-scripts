@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Pidea : Singleton<Pidea>
 {
     [SerializeField] PideaSlot prefab ;
     [SerializeField] List< PideaSlot> pideaSlots;
-    [SerializeField] Transform[] tables;
+    [SerializeField] RectTransform[] rarityTables;
     [SerializeField] PideaCollection collection;
     [SerializeField] PideaDetail pideaDetail;
-    [SerializeField]Notifyer notifyer;
+    Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
     public bool CheckLockWeapon(int index)
     {
@@ -22,6 +23,7 @@ public class Pidea : Singleton<Pidea>
         materials[index].color = Color.white;
         pideaSlots[index].SetNew();
         notifyer.GetNew(pideaSlots[index]);
+        Debug.Log("index="+index);
     }
     
     public void Close()
@@ -34,11 +36,12 @@ public class Pidea : Singleton<Pidea>
     {
         base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
-        notifyer = Instantiate(notifyer,transform);
+        notifyer = Instantiate(ResourceManager.Instance.notifyer,transform);
+        notifyer.Initialized();
         materials = ResourceManager.Instance.materials;
         for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Length; i++)
         {
-            PideaSlot slot = Instantiate(prefab, tables[ResourceManager.Instance.baseWeaponDatas[i].rarity]);
+            PideaSlot slot = Instantiate(prefab, rarityTables[ResourceManager.Instance.baseWeaponDatas[i].rarity]);
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);

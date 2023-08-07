@@ -6,7 +6,9 @@ using Manager;
 [Serializable]
 public class Inventory : DontDestroy<Inventory>
 {
-    public const int SIZE = 40;
+    [SerializeField] int weaponSoul;
+    [SerializeField] int stone;
+    
     
     [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
@@ -30,18 +32,25 @@ public class Inventory : DontDestroy<Inventory>
         return slots[index];
     }
 
-    public int count;
+    int _count;
+    public int count
+    {
+        get => _count;
+        set => _count = value;
+    }
+    int _size;
+    public int size => _size;
     public void Sort()
     {
         slots.Sort();
-        for (int i = 0 ; i<count ; i++)
+        for (int i = 0 ; i<slots.Count; i++)
             slots[i].transform.SetSiblingIndex(i);
         
     }
     public void AddWeapon(Weapon weapon , int index)
     {
         slots[index].SetWeapon(weapon);
-        count++;
+        _count++;
     }
     
     [SerializeField] GameObject box;
@@ -51,19 +60,17 @@ public class Inventory : DontDestroy<Inventory>
         base.Awake();
         
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
-
-        int count = ResourceManager.Instance.WeaponDatas.Count;
-        for (int i = 0; i < count; i++)
+        _size = slots.Count;
+        _count = ResourceManager.Instance.WeaponDatas.Count;
+        for (int i = 0; i < _count; i++)
         {
             AddWeapon( new Weapon(ResourceManager.Instance.WeaponDatas[i], slots[i]) ,i);
+            _count--;
         }
         Sort();
     }
 
-  
-    
     [SerializeField]  GameObject inventory;
-
     public void ConfirmWeapon()
     {
         if (currentWeapon is null) return;

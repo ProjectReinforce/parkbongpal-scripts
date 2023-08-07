@@ -8,7 +8,8 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    const string SCENE_NAME = "Main_V2 IJH";
+    const string SCENE_NAME = "Main_V3_HW";
+
     //const string SCENE_NAME = "Main_V2";
 
 
@@ -21,7 +22,10 @@ public class Login : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인에 성공했습니다");
-            Utills.LoadScene(SCENE_NAME);
+            if(Backend.UserNickName == "")
+                NicknamePopup.SetActive(true);
+            else
+                Utills.LoadScene(SCENE_NAME);
         }
         else
         {
@@ -138,7 +142,7 @@ public class Login : MonoBehaviour
     }
 
     const int BLINKCOUNT = 3;
-    WaitForSeconds waitForBlinkDelay = new WaitForSeconds(0.1f);
+    readonly WaitForSeconds waitForBlinkDelay = new(0.1f);
     IEnumerator PrintAlertMessage(string _message)
     {
         messageText.text = _message;

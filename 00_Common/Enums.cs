@@ -27,7 +27,7 @@
     
     public enum MagicType
     {
-        술수,묘법,유일,신념,
+        자,축,인,묘,진,사,오,미,신,유,술,해
     }
     //자격, 인멸, 술수
     //축복, 해방, 묘법
@@ -37,4 +37,16 @@
     public enum ChartName
     {
         normalGachaPercentage, advancedGachaPercentage, mineData, weapon, normalReinforce, soulCrafting, additional, refinement
+    }
+
+    public enum StatType
+    {
+        upgradeCount, atk, atkSpeed, atkRange, accuracy, criticalRate, criticalDamage, strength, intelligence, wisdom, technique, charm, constitution
+    }
+    
+    public enum InventoryOpenType
+    {
+        Default,
+        Mine,
+        Reinforce
     }

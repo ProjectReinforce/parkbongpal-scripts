@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Notice
-{
-    public void GetNew(NewThing newThing);
-    public void Clear();
-}
-
 public class NewThing:MonoBehaviour
 {
     [SerializeField] GameObject newObject;
@@ -18,7 +12,7 @@ public class NewThing:MonoBehaviour
          newObject.SetActive(true);
     }
 
-    public void Clear()
+    public void NewClear()
     {
         Destroy(newObject);
     }

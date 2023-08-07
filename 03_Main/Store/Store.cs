@@ -23,7 +23,7 @@ public class Store:Singleton<Store>
           UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
           return;
       }
-      if (Inventory.Instance.count>Inventory.SIZE)
+      if (Inventory.Instance.count>Inventory.Instance.size)
       {
           UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
           return;
@@ -93,7 +93,7 @@ public class Store:Singleton<Store>
 
         Player.Instance.AddGold(-pay);
         Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
-
+        Debug.Log("[store]"+baseWeaponData.index);
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
             var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
@@ -105,7 +105,6 @@ public class Store:Singleton<Store>
             {
                 Debug.LogError("게임 정보 삽입 실패 : " + pidea);
             }
-            Debug.Log(Pidea.Instance);
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
         }
         
