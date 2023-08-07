@@ -62,7 +62,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         int beforeGoldPerMin = currentMine.goldPerMin;
         currentMine.SetWeapon(null);
-        Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin-beforeGoldPerMin);
+        Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin-beforeGoldPerMin);
         currentMine = currentMine;
     }
 

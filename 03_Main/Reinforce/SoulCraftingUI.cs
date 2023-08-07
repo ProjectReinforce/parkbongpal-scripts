@@ -78,7 +78,7 @@ public class SoulCraftingUI : MonoBehaviour
 
     public void UpdateCost()
     {
-        UserData userData = Player.Instance.userData;
+        UserData userData = Player.Instance.Data;
         int goldCost = Manager.ResourceManager.Instance.soulCraftingData.goldCost;
         int soulCost = Manager.ResourceManager.Instance.soulCraftingData.soulCost;
 

@@ -32,17 +32,17 @@ public class TopUIDatatViewer : MonoBehaviour
 
     public void UpdateGold()
     {
-        goldText.text = player.userData.gold.ToString();           // 유저 보유 돈
+        goldText.text = player.Data.gold.ToString();           // 유저 보유 돈
     }
 
     public void UpdateDiamond()
     {
-        diamondText.text = player.userData.diamond.ToString();     // 유저 보유 다이아
+        diamondText.text = player.Data.diamond.ToString();     // 유저 보유 다이아
     }
 
     public void UpdateLevel()
     {
-        levelText.text = player.userData.level.ToString(); // 유저 레벨
+        levelText.text = player.Data.level.ToString(); // 유저 레벨
     }
 
     public void UpdateNickname()
@@ -52,7 +52,7 @@ public class TopUIDatatViewer : MonoBehaviour
 
     public void UpdateExp()
     {
-        expSlider.value = player.userData.exp / 100f;                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
+        expSlider.value = (float)player.Data.exp / Manager.ResourceManager.Instance.expDatas[player.Data.level-1];                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
     public void UpdateWeaponIcon()

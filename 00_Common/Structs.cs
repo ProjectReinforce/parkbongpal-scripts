@@ -343,6 +343,12 @@ public struct NormalReinforceData
 }
 
 [Serializable]
+public struct MagicCarveData
+{
+    public int firstRarityQuilfication, secondRarityQuilfication;
+}
+
+[Serializable]
 public struct SoulCraftingData
 {
     public int levelQuilfication;

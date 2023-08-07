@@ -51,7 +51,7 @@ public class AdditionalUI : MonoBehaviour
 
     public void UpdateCost()
     {
-        UserData userData = Player.Instance.userData;
+        UserData userData = Player.Instance.Data;
         int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
 
         if (userData.gold < cost)

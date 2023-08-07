@@ -11,7 +11,7 @@ public class Store : Singleton<Store>
     public void NormalDrawing()
     {
         int pay = 0;
-        if (Player.Instance.userData.gold < pay)
+        if (Player.Instance.Data.gold < pay)
         {
             UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
             return;

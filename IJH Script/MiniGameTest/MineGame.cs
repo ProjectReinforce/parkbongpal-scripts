@@ -136,7 +136,7 @@ public class MineGame : MonoBehaviour
                 Debug.Log("게임 오버 ㅠㅠ");
                 isGameOver = true;
                 Player.Instance.AddGold(Score);
-                Debug.Log(Player.Instance.userData.gold);
+                Debug.Log(Player.Instance.Data.gold);
                 ShowResultScreen();
             }
         }
