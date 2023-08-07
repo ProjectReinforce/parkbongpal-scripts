@@ -148,4 +148,18 @@ public class Mine :MonoBehaviour,Rental
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
     }
+    
+    public void Receipt()
+    {
+        if (rentalWeapon is null) return;
+        TimeSpan timeInterval=
+            rentalWeapon.data.borrowedDate-
+            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        
+        rentalWeapon.Lend(_mineData.index);
+        int gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
+        Player.Instance.AddGold(gold);
+        
+        UIManager.Instance.ShowWarning("알림",$"{gold} gold를 획득 했습니다." );
+    }
 }

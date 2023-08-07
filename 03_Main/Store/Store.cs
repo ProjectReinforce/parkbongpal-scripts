@@ -46,7 +46,6 @@ public class Store : Singleton<Store>
         Inventory.Instance.AddWeapon(baseWeaponData);
         Player.Instance.AddGold(-pay);
         Debug.Log("[store]" + baseWeaponData.index);
-       
-
+        
     }
 }

@@ -48,7 +48,7 @@ public class Player : DontDestroy<Player>
     public void SetGoldPerMin(int _goldPerMin)
     {
         _userData.goldPerMin = _goldPerMin;
-        Param param = new Param {{ nameof(UserData.colum.goldPerMin), goldPerMin }};
+        Param param = new Param {{ nameof(UserData.colum.goldPerMin), _goldPerMin }};
         
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -56,7 +56,7 @@ public class Player : DontDestroy<Player>
             {
                 Debug.Log("Plaer:SetGoldPerMin 실패");   
             }
-            Debug.Log("Plaer:SetGoldPerMin 성공"+ _goldPerMin);
+            Debug.Log("Plaer:SetGoldPerMin 성공");
         });
     }
 

@@ -136,6 +136,7 @@ public class Inventory : DontDestroy<Inventory>
             currentMineWeapon.Lend(-1);
         }
         currentWeapon.Lend(currentMine.GetMineData().index);
+        
         Quarry.Instance.currentMine= currentMine ;
     }
 

@@ -66,5 +66,22 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         currentMine = currentMine;
     }
 
+    public void BatchReceipt()
+    {
+        TimeSpan timeInterval;
+        DateTime currentTime =
+            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        int totalGold=0;
+        for (int i = 0; i < mines.Length; i++)
+        {
+            if (mines[i]?.rentalWeapon is null) continue;
+            timeInterval = mines[i].rentalWeapon.data.borrowedDate - currentTime;
+            totalGold +=  (int)(timeInterval.TotalMilliseconds/60000 * mines[i].goldPerMin);
+            mines[i].rentalWeapon.Lend(mines[i].GetMineData().index);
+        }
+        UIManager.Instance.ShowWarning("알림",$"{totalGold} gold를 획득 했습니다." );
+        Player.Instance.AddGold(totalGold);
+    }
+
 
 }
