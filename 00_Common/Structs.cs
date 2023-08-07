@@ -159,7 +159,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 public struct UserData
 {
     public static UserData colum;
-    public int gold, diamond, weaponSoul, stone;
+    public int gold, diamond, weaponSoul, stone, attendance;
     public int exp, level, favoriteWeaponId,goldPerMin;
     public string inDate;
     public DateTime owner_inDate;
@@ -364,7 +364,11 @@ public struct RefinementData
 public struct PostData
 {
     public string content,  title, author, sentDate , inDate;// 필요 없음 expirationDate, reservationDate, nickname, ,
-   
     // public BaseWeaponData[] items;
-   
+}
+
+public struct AttendanceData
+{
+    public int day, type, value;
+
 }

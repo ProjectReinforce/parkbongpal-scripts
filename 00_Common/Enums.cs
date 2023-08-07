@@ -36,7 +36,7 @@
 
     public enum ChartName
     {
-        normalGachaPercentage, advancedGachaPercentage, mineData, weapon, normalReinforce, soulCrafting, additional, refinement
+        normalGachaPercentage, advancedGachaPercentage, mineData, weapon, normalReinforce, soulCrafting, additional, refinement, attendance
     }
 
     public enum StatType
@@ -49,4 +49,11 @@
         Default,
         Mine,
         Reinforce
+    }
+
+    public enum RewardType
+    {
+        Gold,
+        Diamond,
+        Weapon
     }

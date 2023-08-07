@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Manager;
 
+using BackEnd;
+
 [Serializable]
 public class Inventory : DontDestroy<Inventory>
 {
@@ -48,12 +50,50 @@ public class Inventory : DontDestroy<Inventory>
             slots[i].transform.SetSiblingIndex(i);
         
     }
-    public void AddWeapon(Weapon weapon , int index)
+    public void AddWeapon(BaseWeaponData baseWeaponData )
     {
-        slots[index].SetWeapon(weapon);
+        Param param = new Param
+        {
+            { nameof(WeaponData.colum.mineId), -1 },
+            { nameof(WeaponData.colum.magic), new int[] { -1, -1 } },
+            { nameof(WeaponData.colum.rarity), baseWeaponData.rarity },
+            { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
+            { nameof(WeaponData.colum.defaultStat), baseWeaponData.defaultStat },
+            { nameof(WeaponData.colum.PromoteStat), baseWeaponData.PromoteStat },
+            { nameof(WeaponData.colum.AdditionalStat), baseWeaponData.AdditionalStat },
+            { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
+            { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
+            { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
+        };
+
+        var bro = Backend.GameData.Insert(nameof(WeaponData), param);
+        if (!bro.IsSuccess())
+        {
+            Debug.LogError("게임 정보 삽입 실패 : " + bro);
+        }
+
+        WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
+
+        
+        slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
         _count++;
+        
+        if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
+        {
+            var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
+            {
+                { nameof(PideaData.colum.ownedWeaponId), baseWeaponData.index },
+                { nameof(PideaData.colum.rarity), baseWeaponData.rarity }
+            });
+            if (!pidea.IsSuccess())
+            {
+                Debug.LogError("게임 정보 삽입 실패 : " + pidea);
+            }
+
+            Pidea.Instance.GetNewWeapon(baseWeaponData.index);
+        }
     }
-    
+
     [SerializeField] GameObject box;
 
     protected override void Awake()
@@ -65,8 +105,7 @@ public class Inventory : DontDestroy<Inventory>
         _count = ResourceManager.Instance.WeaponDatas.Count;
         for (int i = 0; i < _count; i++)
         {
-            AddWeapon( new Weapon(ResourceManager.Instance.WeaponDatas[i], slots[i]) ,i);
-            _count--;
+            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.WeaponDatas[i],slots[count]));
         }
         Sort();
     }
@@ -84,6 +123,7 @@ public class Inventory : DontDestroy<Inventory>
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
             int beforeGoldPerMin = currentMine.goldPerMin;
             currentMine.SetWeapon(currentWeapon);
+            Debug.Log("inventory currentmine goldpermin"+currentMine.goldPerMin);
             Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
         }
         catch (Exception e)

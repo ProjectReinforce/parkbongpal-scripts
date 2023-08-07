@@ -54,9 +54,24 @@ public class Player : DontDestroy<Player>
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log("Plaer:SetGoldPerMin 실패"+callback.GetMessage());   
+                Debug.Log("Plaer:SetGoldPerMin 실패");   
             }
-            Debug.Log("Plaer:SetGoldPerMin 성공"+callback);
+            Debug.Log("Plaer:SetGoldPerMin 성공"+ _goldPerMin);
+        });
+    }
+
+    public void SetAttendance(int day)
+    {
+        _userData.attendance = day;
+        Param param = new Param {{ nameof(UserData.colum.attendance), day }};
+        
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log("Plaer:SetAttendance 실패");   
+            }
+            Debug.Log("Plaer:SetAttendance 성공");
         });
     }
 

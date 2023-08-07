@@ -51,7 +51,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         {
             Weapon weapon = Inventory.Instance.GetSlot(i).myWeapon;
            
-            if (weapon.data.mineId >= 0)
+            if (weapon?.data.mineId >= 0)
             {
                 mines[weapon.data.mineId].SetWeapon(weapon);
             }
