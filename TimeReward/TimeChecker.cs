@@ -36,9 +36,9 @@ public class TimeChecker : Singleton<TimeChecker>
         int day = ResourceManager.Instance.userData.attendance;
         if (ResourceManager.Instance.LastLogin.Month != ResourceManager.Instance.ServerTime.Month)
             day = 0;
-        
 
-        if (ResourceManager.Instance.LastLogin.Day == ResourceManager.Instance.ServerTime.Day) return;
+        if (ResourceManager.Instance.LastLogin.Month == ResourceManager.Instance.ServerTime.Month&&
+            ResourceManager.Instance.LastLogin.Day == ResourceManager.Instance.ServerTime.Day) return;
         AttendanceData todayReward = ResourceManager.Instance.attendanceDatas[day];
         switch (todayReward.type)
         {

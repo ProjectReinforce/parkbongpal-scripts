@@ -57,10 +57,10 @@ namespace Manager
             return skills[index];
         }
         public Notifyer notifyer;
+
         protected override void Awake()
         {
             base.Awake();
-            
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             skills = Resources.LoadAll<Skill>("Sprites/Skills");
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
@@ -68,7 +68,6 @@ namespace Manager
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
-            // Backend.Chart.DeleteLocalChartData("87732");
             SetLastLogin();
             GetUserData();
             GetOwnedWeaponData();
