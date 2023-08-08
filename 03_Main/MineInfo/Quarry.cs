@@ -1,5 +1,6 @@
 
 using System;
+using BackEnd;
 using Manager;
 using UnityEngine;
 
@@ -65,27 +66,46 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin-beforeGoldPerMin);
         currentMine = currentMine;
     }
-    public void Reciept()
+    
+    public void Receipt()
     {
-        currentMine.Receipt(true);
+        currentMine.Receipt();
     }
+ 
+    
+  
     private int totalGold;
-    public void CalculateTotalGold()
-    {
-        for (int i = 0; i < mines.Length; i++)
-        {
-            if (mines[i]?.rentalWeapon is null) continue;
-            totalGold += mines[i].Gold;
-        }
-    }
     public void BatchReceipt()
     {
+        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        
+        Utills.transactionList.Clear();
+
         for (int i = 0; i < mines.Length; i++)
         {
-            mines[i].Receipt(false);
+            if(mines[i].rentalWeapon is null)continue;
+            totalGold += mines[i].Gold;
+            Param param = new Param
+            {
+                { nameof(WeaponData.colum.borrowedDate), date }
+            };
+            Utills.transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
         }
-        
-        Player.Instance.AddGold(totalGold);
+       
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.LogError("Quarry: 일괄수령 실패"+callback);
+            }
+            
+            Player.Instance.AddGold(totalGold);
+            totalGold = 0;
+            for (int i = 0; i < mines.Length; i++)
+            {
+                mines[i].Gold = 0;
+            }
+        });
     }
 
 

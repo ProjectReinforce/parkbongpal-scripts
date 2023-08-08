@@ -57,6 +57,7 @@ namespace Manager
         }
         public Notifyer notifyer;
 
+        List<TransactionValue> transactionList = new List<TransactionValue>();
         protected override void Awake()
         {
             base.Awake();
@@ -428,6 +429,7 @@ namespace Manager
         void GetOwnedWeaponData()
         {
             WeaponDatas = new List<WeaponData>();
+            transactionList.Add(TransactionValue.SetGetV2(nameof(WeaponData), "owner_inDate", Backend.UserInDate));
             GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
             {
                 WeaponDatas.Add(data) ;
@@ -436,6 +438,7 @@ namespace Manager
 
         void GetUserData()
         {
+            transactionList.Add(TransactionValue.SetGetV2(nameof(UserData), "row_indate", Backend.UserInDate));
             GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
             {
                 userData = data;
@@ -456,6 +459,7 @@ namespace Manager
             {
                 materials[i] = new Material(LockMaterial);
             }
+            transactionList.Add(TransactionValue.SetGetV2(nameof(PideaData), "owner_inDate", Backend.UserInDate));
             GetMyBackEndData<PideaData>(nameof(PideaData), WEAPON_COUNT, (data, index) =>
             {
                 materials[data.ownedWeaponId].color = Color.white;

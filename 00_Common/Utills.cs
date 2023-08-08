@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using LitJson;
 using Random = System.Random;
 using UnityEngine;
@@ -64,6 +65,7 @@ public static class Utills
 
         return -1;
     }
+
 
     public static int[] GetNonoverlappingDraw(int _totalCount, int _drawCount)
     {
