@@ -13,8 +13,7 @@ namespace Manager
         public List< WeaponData> WeaponDatas;
         public int[] expDatas;
         public UserData userData;
-        public GachaData normalGarchar;
-        public GachaData advencedGarchar;
+        public GachaData[] garchar;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -107,8 +106,7 @@ namespace Manager
 
                 // 수신된 정보로 로컬 차트 로드
                 GetMineData();
-                GetNormalGachaData();
-                GetAdvancedGachaData();
+                GetGachaData();
                 GetBaseWeaponData();
                 GetAttendanceData();
                 // GetNormalReinforceData();
@@ -127,12 +125,12 @@ namespace Manager
             });
         }
         
-        void GetNormalGachaData()
+        void GetGachaData()
         {
-            string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
+            string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.normalGachaPercentage, out normalGarchar))
+            if (GetLocalChartData(ChartName.gachaPercentage, out garchar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -141,29 +139,12 @@ namespace Manager
             {
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
                 {
-                    normalGarchar = data;
+                    garchar[index] = data;
                 });
             }
         }
 
-        void GetAdvancedGachaData()
-        {
-            string chartId = chartInfos[ChartName.advancedGachaPercentage.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.advancedGachaPercentage, out advencedGarchar))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {
-                GetBackEndChartData<GachaData>(chartId, (data, index) =>
-                {
-                    advencedGarchar = data;
-                });
-            }
-        }
+     
 
         void GetExpData()
         {
@@ -377,7 +358,7 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log($"[ResourceM] chartData 수신 완료 : {json.Count}개");
+                Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
                 {
@@ -399,7 +380,7 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log($"[ResourceM] Mydata 수신 완료 : {json.Count}개");
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
                 {
