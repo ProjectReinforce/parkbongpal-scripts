@@ -9,8 +9,8 @@ public class Login : MonoBehaviour
 {
 
     //const string SCENE_NAME = "Main_V3";
-
-    const string SCENE_NAME = "Main_V3_HW";
+    // const string SCENE_NAME = "Main_V3_HW";
+    const string SCENE_NAME = "Main_V3 JG";
 
 
 

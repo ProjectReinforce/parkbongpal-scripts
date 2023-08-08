@@ -3,19 +3,33 @@ using BackEnd;
 
 public abstract class Reinforce
 {
-    public abstract void Try(Weapon weapon);
+    public abstract void Execute(Weapon weapon);
 }
 
 public class Promote : Reinforce
 {
-    public override void Try(Weapon weapon)
+    public override void Execute(Weapon weapon)
     {
+        weapon.Promote();
+
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.PromoteStat), weapon.data.PromoteStat);
+
+        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+
+        if (!bro.IsSuccess())
+        {
+            Debug.LogError(bro);
+            // 메시지 출력
+        }
+
+        Player.Instance.AddGold(-1000);
     }
 }
 
 public class Additional : Reinforce
 {
-    public override void Try(Weapon weapon)
+    public override void Execute(Weapon weapon)
     {
         AdditionalData data = Manager.ResourceManager.Instance.additionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
@@ -46,7 +60,7 @@ public class Additional : Reinforce
 
 public class NormalReinforce : Reinforce
 {
-    public override void Try(Weapon weapon)
+    public override void Execute(Weapon weapon)
     {
         NormalReinforceData data = Manager.ResourceManager.Instance.normalReinforceData;
 
@@ -82,42 +96,46 @@ public class NormalReinforce : Reinforce
 
 public class MagicEngrave : Reinforce
 {
-    public override void Try(Weapon weapon)
+    public override void Execute(Weapon weapon)
     {
-        // RefinementData data = Manager.ResourceManager.Instance.refinementData;
-        // int[] refinePercent = {data.minus3, data.minus1, data.zero, data.plus1, data.plus3, data.plus5};
-        // int[] refineDescription = {-3, -1, 0, 1, 3, 5};
+        int drawCount = 0;
         
-        // int resultIndex = Utills.GetResultFromWeightedRandom(refinePercent);
-        // if (resultIndex != -1)
-        // {
-        //     Debug.Log($"result : {resultIndex} - {refineDescription[resultIndex]} / {refinePercent[resultIndex]}");
-        //     weapon.data.RefineStat[(int)StatType.atk] += refineDescription[resultIndex];
-        //     weapon.data.RefineStat[(int)StatType.upgradeCount] ++;
-        // }
+        if (weapon.data.rarity >= (int)Rarity.legendary)
+            drawCount = 2;
+        else if (weapon.data.rarity >= (int)Rarity.rare)
+            drawCount = 1;
+        else
+        {
+            Debug.Log("등급 부족!");
+            return;
+        }
 
-        int[] results = Utills.GetNonoverlappingDraw(System.Enum.GetValues(typeof(MagicType)).Length, 2);
-        foreach (int i in results)
-            Debug.Log((MagicType)i);
+        int[] results = Utills.GetNonoverlappingDraw(System.Enum.GetValues(typeof(MagicType)).Length, drawCount);
+        
+        for (int i = 0; i < results.Length; i++)
+        {
+            Debug.Log((MagicType)results[i]);
+            weapon.data.magic[i] = results[i];
+        }
 
-        // Param param = new Param();
-        // param.Add(nameof(WeaponData.colum.RefineStat), weapon.data.RefineStat);
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.magic), weapon.data.magic);
 
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
+        if (!bro.IsSuccess())
+        {
+            Debug.LogError(bro);
+            // 메시지 출력
+        }
 
-        // Player.Instance.AddGold(-1000);
+        Player.Instance.AddGold(-10);
     }
 }
 
 public class SoulCrafting : Reinforce
 {
-    public override void Try(Weapon weapon)
+    public override void Execute(Weapon weapon)
     {
         SoulCraftingData data = Manager.ResourceManager.Instance.soulCraftingData;
         
@@ -152,49 +170,55 @@ public class SoulCrafting : Reinforce
 
 public class Refinement : Reinforce
 {
-    public override void Try(Weapon weapon)
+    const int REFINE_DRAW_COUNT = 3;
+    public override void Execute(Weapon weapon)
     {
         RefinementData data = Manager.ResourceManager.Instance.refinementData;
         // 스탯 결정
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
         string[] statDescription = {"atk", "critical", "stat3", "stat6"};
         
-        int resultIndex = Utills.GetResultFromWeightedRandom(statPercent);
-        StatType resultStat = StatType.constitution;
-        if (resultIndex != -1)
+        weapon.data.RefineStat[(int)StatType.upgradeCount] ++;
+        for (int i = 0; i < REFINE_DRAW_COUNT; i++)
         {
-            System.Random random = new();
-            int randomInt;
-            switch (statDescription[resultIndex])
+            int resultIndex = Utills.GetResultFromWeightedRandom(statPercent);
+            StatType resultStat = StatType.constitution;
+            if (resultIndex != -1)
             {
-                case "atk":
-                    resultStat = StatType.atk;
-                    break;
-                case "critical":
-                    randomInt = random.Next(2);
-                    resultStat = (StatType)(randomInt + 5);
-                    break;
-                case "stat3":
-                    randomInt = random.Next(3);
-                    resultStat = (StatType)(randomInt + 2);
-                    break;
-                default:
-                    randomInt = random.Next(6);
-                    resultStat = (StatType)(randomInt + 7);
-                    break;
+                System.Random random = new();
+                int randomInt;
+                switch (statDescription[resultIndex])
+                {
+                    case "atk":
+                        resultStat = StatType.atk;
+                        break;
+                    case "critical":
+                        randomInt = random.Next(2);
+                        // 랜덤 값이 0~1까지 2개 나오므로 이를 criticalRate, criticalDamage로 변환하기 위해서 더해줌
+                        // 아래도 마찬가지
+                        resultStat = randomInt + StatType.criticalRate;
+                        break;
+                    case "stat3":
+                        randomInt = random.Next(3);
+                        resultStat = randomInt + StatType.atkSpeed;
+                        break;
+                    default:
+                        randomInt = random.Next(6);
+                        resultStat = randomInt + StatType.strength;
+                        break;
+                }
             }
-        }
 
-        // 스탯 상승 비율 결정
-        int[] percentPercent = {data.minus3, data.minus1, data.zero, data.plus1, data.plus3, data.plus5};
-        int[] percentDescription = {-3, -1, 0, 1, 3, 5};
-        
-        resultIndex = Utills.GetResultFromWeightedRandom(percentPercent);
-        if (resultIndex != -1)
-        {
-            Debug.Log($"result : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
-            weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
-            weapon.data.RefineStat[(int)StatType.upgradeCount] ++;
+            // 스탯 상승 비율 결정
+            int[] percentPercent = {data.minus3, data.minus1, data.zero, data.plus1, data.plus3, data.plus5};
+            int[] percentDescription = {-3, -1, 0, 1, 3, 5};
+            
+            resultIndex = Utills.GetResultFromWeightedRandom(percentPercent);
+            if (resultIndex != -1)
+            {
+                Debug.Log($"result {i} : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
+                weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
+            }
         }
 
         Param param = new Param();

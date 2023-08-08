@@ -78,6 +78,12 @@ public class Weapon
     public void ExecuteReinforce(ReinforceType _type)
     {
         Debug.Log((int)_type);
-        reinforces[(int)_type-1].Try(this);
+        reinforces[(int)_type-1].Execute(this);
+    }
+
+    public void Promote()
+    {
+        _data.rarity ++;
+        _data.PromoteStat[(int)StatType.atk] += 10;
     }
 }
