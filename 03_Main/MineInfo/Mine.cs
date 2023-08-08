@@ -24,6 +24,7 @@ public class Mine :MonoBehaviour,Rental
     const int BASE_GOLD = 10;
     [SerializeField] UnityEngine.UI.Text mineName;
     [SerializeField] UnityEngine.UI.Text goldPerMinText;
+    [SerializeField] UnityEngine.UI.Text goldText;
 
     float _hpPerDMG;
     public float hpPerDMG => _hpPerDMG;
@@ -117,6 +118,13 @@ public class Mine :MonoBehaviour,Rental
         SetInfo();
         
         rentalWeapon = rentWeapon;
+        
+        TimeSpan timeInterval=
+            rentalWeapon.data.borrowedDate-
+            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        
+        
+        gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
     }
 
     public void SetInfo()
@@ -127,7 +135,6 @@ public class Mine :MonoBehaviour,Rental
         if (miss >= 100)
         {
             throw new Exception($"정확도가 {miss - 99}만큼 부족합니다") ;
-            
         }
 
         float oneHitDMG = rental.GetOneHitDMG();// 함수가있으면 ??
@@ -147,5 +154,29 @@ public class Mine :MonoBehaviour,Rental
         if (miss > 0)
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
+    }
+    
+    public void Receipt(bool onlyOne)
+    {
+        if (rentalWeapon is null) return;
+        
+        rentalWeapon.Lend(_mineData.index);
+        if (onlyOne)
+            Player.Instance.AddGold(Gold);
+        
+        gold = 0;
+    }
+
+    private float elapse = 2f;
+    private int gold;
+    public int Gold => gold;
+    private void FixedUpdate()
+    {
+        if( rentalWeapon is null) return;
+        elapse -= Time.fixedDeltaTime;
+        if (elapse > 0) return;
+        elapse += 2f;
+        gold += (int)(_goldPerMin / 30f);
+        goldText.text = gold.ToString();
     }
 }

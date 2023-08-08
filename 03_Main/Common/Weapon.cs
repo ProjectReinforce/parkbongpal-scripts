@@ -43,7 +43,7 @@ public class Weapon
         _data.mineId = mineId;
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
-        
+        param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {

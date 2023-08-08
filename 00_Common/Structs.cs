@@ -3,15 +3,16 @@
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
-    public static WeaponData colum;
+    public static WeaponData colum;//재귀적 구조더라도 이변수는 포인터 크기만큼 메모리 차지
     public int baseWeaponIndex, mineId;
-    public string inDate;
 
     public int[] magic;
     public int rarity;
     public int power;//todo:관련 로직 추가해야함 
     public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat;
 
+    public string inDate;
+    public DateTime borrowedDate;
     public WeaponData(string _inDate, BaseWeaponData _weaponData)
     {
         inDate = _inDate;
@@ -26,6 +27,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
         power = 0;//todo: 관련로직 필요
+        borrowedDate = default;
     }
 
     #region Property

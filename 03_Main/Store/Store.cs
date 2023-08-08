@@ -7,8 +7,14 @@ using Manager;
 [System.Serializable]
 public class Store : Singleton<Store>
 {
+    private GachaData[] gacharsPercents;
+    protected override void Awake()
+    {
+        base.Awake();
+        gacharsPercents = ResourceManager.Instance.garchar;
+    }
 
-    public void NormalDrawing()
+    public void Drawing(int type)
     {
         int pay = 0;
         if (Player.Instance.Data.gold < pay)
@@ -26,17 +32,18 @@ public class Store : Singleton<Store>
         int randomInt = Utills.random.Next(1, 101);
         int limit = 100;
         Rarity rarity;
-        GachaData normalGarchar = ResourceManager.Instance.normalGarchar;
+        GachaData parcents = gacharsPercents[type];
 
-        if (randomInt > (limit -= normalGarchar.rare))
+        if (randomInt > (limit -= parcents.rare))
             rarity = Rarity.rare;
-        else if (randomInt > (limit -= normalGarchar.normal))
+        else if (randomInt > (limit -= parcents.normal))
             rarity = Rarity.normal;
-        else if (randomInt > (limit -= normalGarchar.old))
+        else if (randomInt > (limit -= parcents.old))
             rarity = Rarity.old;
         else
             rarity = Rarity.trash;
         Debug.Log("rarity: " + rarity + " limit: " + limit);
+        
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
         Debug.Log(baseWeaponData.index);
 
@@ -46,7 +53,6 @@ public class Store : Singleton<Store>
         Inventory.Instance.AddWeapon(baseWeaponData);
         Player.Instance.AddGold(-pay);
         Debug.Log("[store]" + baseWeaponData.index);
-       
-
+        
     }
 }

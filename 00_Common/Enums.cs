@@ -35,8 +35,7 @@ public enum MagicType
 
 public enum ChartName
 {
-    normalGachaPercentage,
-    advancedGachaPercentage,
+    gachaPercentage,
     mineData,
     weapon,
     additional,

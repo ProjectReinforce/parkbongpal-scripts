@@ -65,6 +65,28 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin-beforeGoldPerMin);
         currentMine = currentMine;
     }
+    public void Reciept()
+    {
+        currentMine.Receipt(true);
+    }
+    private int totalGold;
+    public void CalculateTotalGold()
+    {
+        for (int i = 0; i < mines.Length; i++)
+        {
+            if (mines[i]?.rentalWeapon is null) continue;
+            totalGold += mines[i].Gold;
+        }
+    }
+    public void BatchReceipt()
+    {
+        for (int i = 0; i < mines.Length; i++)
+        {
+            mines[i].Receipt(false);
+        }
+        
+        Player.Instance.AddGold(totalGold);
+    }
 
 
 }

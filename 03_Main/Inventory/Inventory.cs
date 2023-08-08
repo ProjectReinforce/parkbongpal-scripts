@@ -64,6 +64,7 @@ public class Inventory : DontDestroy<Inventory>
             { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
             { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
             { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
+            { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
         };
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
@@ -136,6 +137,7 @@ public class Inventory : DontDestroy<Inventory>
             currentMineWeapon.Lend(-1);
         }
         currentWeapon.Lend(currentMine.GetMineData().index);
+        
         Quarry.Instance.currentMine= currentMine ;
     }
 

@@ -69,6 +69,8 @@ public class Player : DontDestroy<Player>
         });
     }
 
+    
+    // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold)
     {
         if (userData.gold + _gold < 0) return false;
@@ -142,7 +144,6 @@ public class Player : DontDestroy<Player>
     public void SetGoldPerMin(int _goldPerMin)
     {
         userData.goldPerMin = _goldPerMin;
-
         UpdateBackEndData(nameof(UserData.colum.goldPerMin), userData.goldPerMin);
     }
 
@@ -151,17 +152,7 @@ public class Player : DontDestroy<Player>
         userData.attendance = day;
 
         // UpdateBackEndData(nameof(UserData.colum.attendance), _userData.attendance);
-        
-        Param param = new() {{ nameof(UserData.colum.attendance), day }};
-        
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), Data.inDate, Backend.UserInDate, param, ( callback ) => 
-        {
-            if (!callback.IsSuccess())
-            {
-                Debug.Log("Plaer:SetAttendance 실패");   
-            }
-            Debug.Log("Plaer:SetAttendance 성공");
-        });
+        UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
  

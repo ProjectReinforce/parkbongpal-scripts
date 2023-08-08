@@ -20,20 +20,28 @@ public class Decomposition : MonoBehaviour
         text.text = isDecompositing?"확정" :"분해";
         if(isDecompositing) return;
         
+        Utills.transactionList.Clear();
         foreach (Slot slot in slots)
         {
             slot.SetsellectChecker(false);
             string indate = slot.myWeapon.data.inDate;
             slot.SetWeapon(null);
-            SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), indate, Backend.UserInDate, ( callback ) => 
-            { 
-                if (!callback.IsSuccess())
-                {
-                    Debug.Log(callback);
-                    return;
-                }
-            });
+            Utills.transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
+            // SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), indate, Backend.UserInDate, ( callback ) => 
+            // { 
+            //     if (!callback.IsSuccess())
+            //     {
+            //         Debug.Log(callback);
+            //         return;
+            //     }
+            // });
         }
+        
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        {
+            if(!callback.IsSuccess())
+                Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패");
+        });
         Inventory.Instance.count -= slots.Count;
         slots.Clear();
         Inventory.Instance.Sort();
