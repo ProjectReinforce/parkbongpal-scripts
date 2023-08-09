@@ -64,7 +64,7 @@ public class SoulCraftingUI : MonoBehaviour
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         BaseWeaponData originData = Manager.ResourceManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
 
-        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
+        if (selectedWeapon.SoulStat[(int)StatType.upgradeCount] <= 0)
         {
             upgradeCountText.text = $"<color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color> / {originData.SoulStat[(int)StatType.upgradeCount]}";
             soulButton.interactable = false;

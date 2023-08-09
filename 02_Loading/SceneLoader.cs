@@ -7,7 +7,7 @@ public class SceneLoader : MonoBehaviour
 {
     static int loadedResourcesCount = 0;
 
-    const int REQUIRE_TO_LOAD_RESOURCES_COUNT = 13;
+    const int REQUIRE_TO_LOAD_RESOURCES_COUNT = 10;
 
     [SerializeField] Slider progressBar;
     [SerializeField] Text persentMessage;

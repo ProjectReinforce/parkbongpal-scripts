@@ -9,11 +9,11 @@ public class ReinforceUIInfo : MonoBehaviour
     {
         get => reinforceWeaponSlot;
     }
-    // AdditionalUI additionalUI;
-    // public AdditionalUI AdditionalUI
-    // {
-    //     get => additionalUI;
-    // }
+    PromoteUI promoteUI;
+    public PromoteUI PromoteUI
+    {
+        get => promoteUI;
+    }
     AdditionalUI additionalUI;
     public AdditionalUI AdditionalUI
     {
@@ -43,7 +43,7 @@ public class ReinforceUIInfo : MonoBehaviour
     private void Awake()
     {
         transform.GetChild(1).TryGetComponent(out reinforceWeaponSlot);
-        // transform.GetChild(3).TryGetComponent<>(out reinforceUI);
+        transform.GetChild(3).TryGetComponent(out promoteUI);
         transform.GetChild(4).TryGetComponent(out additionalUI);
         transform.GetChild(5).TryGetComponent(out reinforceUI);
         transform.GetChild(6).TryGetComponent(out magicCarveUI);
@@ -53,7 +53,7 @@ public class ReinforceUIInfo : MonoBehaviour
 
     private void OnDisable()
     {
-        // additionalUI.gameObject.SetActive(false);
+        promoteUI.gameObject.SetActive(false);
         additionalUI.gameObject.SetActive(false);
         reinforceUI.gameObject.SetActive(false);
         magicCarveUI.gameObject.SetActive(false);
