@@ -11,7 +11,7 @@ public class Store : Singleton<Store>
     protected override void Awake()
     {
         base.Awake();
-        gacharsPercents = ResourceManager.Instance.garchar;
+        gacharsPercents = ResourceManager.Instance.gachar;
     }
     const int Pay = 1000;
     public void Drawing(int type)

@@ -154,10 +154,10 @@ public class Inventory : DontDestroy<Inventory>
         
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
         _size = slots.Count;
-        _count = ResourceManager.Instance.WeaponDatas.Count;
+        _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
         for (int i = 0; i < _count; i++)
         {
-            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.WeaponDatas[i],slots[i]));
+            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.weaponDatas[i],slots[i]));
         }
         Sort();
     }
