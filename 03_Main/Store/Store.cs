@@ -7,7 +7,7 @@ using Manager;
 [System.Serializable]
 public class Store : Singleton<Store>
 {
-    private GachaData[] gacharsPercents;
+    private List<GachaData> gacharsPercents;
     protected override void Awake()
     {
         base.Awake();
