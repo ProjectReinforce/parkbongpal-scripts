@@ -41,9 +41,10 @@ public class Weapon
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
+        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
-        param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
+        param.Add(nameof(WeaponData.colum.borrowedDate),_data.borrowedDate);
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {

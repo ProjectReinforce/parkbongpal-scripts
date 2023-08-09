@@ -1,4 +1,5 @@
 using System;
+using BackEnd;
 using Manager;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class Mine :MonoBehaviour,Rental
     {
         return _mineData;
     }
-    const int BASE_GOLD = 10;
+    const int BASE_GOLD = 1;
     [SerializeField] UnityEngine.UI.Text mineName;
     [SerializeField] UnityEngine.UI.Text goldPerMinText;
     [SerializeField] UnityEngine.UI.Text goldText;
@@ -118,12 +119,11 @@ public class Mine :MonoBehaviour,Rental
         SetInfo();
         
         rentalWeapon = rentWeapon;
-        
-        TimeSpan timeInterval=
-            rentalWeapon.data.borrowedDate-
-            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        
-        
+
+        TimeSpan timeInterval =
+            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()) -
+            rentalWeapon.data.borrowedDate;
+            
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
     }
 
@@ -156,20 +156,37 @@ public class Mine :MonoBehaviour,Rental
         goldPerMin = (int)(oneOreGold * (60 / time));
     }
     
-    public void Receipt(bool onlyOne)
+    public void Receipt()
     {
         if (rentalWeapon is null) return;
-        
-        rentalWeapon.Lend(_mineData.index);
-        if (onlyOne)
-            Player.Instance.AddGold(Gold);
-        
+        Player.Instance.AddGold(Gold);
         gold = 0;
+        
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
+
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), rentalWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log("Mine:수령실패"+callback);
+            }
+        });
+        
     }
 
     private float elapse = 2f;
     private int gold;
-    public int Gold => gold;
+
+    public int Gold
+    {
+        get => gold;
+        set
+        {
+            gold = value;
+        }
+    }
+
     private void FixedUpdate()
     {
         if( rentalWeapon is null) return;

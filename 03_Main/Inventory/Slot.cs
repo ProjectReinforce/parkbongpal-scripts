@@ -51,6 +51,8 @@ public class Slot : MonoBehaviour, IComparable<Slot>
 
     public void UpdateLend()
     {
+        Debug.Log(myWeapon);
+        Debug.Log(myWeapon.data);
         lendImageObject.SetActive(myWeapon.data.mineId>-1);
     }
 

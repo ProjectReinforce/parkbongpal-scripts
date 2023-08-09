@@ -13,7 +13,7 @@ public class PideaSlot : NewThing
     public void Initialized(int index)
     {
         weaponImage.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
-        weaponImage.material = ResourceManager.Instance.materials[index];
+        weaponImage.material = ResourceManager.Instance.ownedWeaponIds[index];
         _baseWeaponIndex = index;
     }
     public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.

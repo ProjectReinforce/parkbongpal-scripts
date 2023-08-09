@@ -10,10 +10,10 @@ namespace Manager
         public Where searchFromMyIndate = new();
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
-        public List< WeaponData> WeaponDatas;
+        public WeaponData[] weaponDatas;
         public int[] expDatas;
-        public UserData userData;
-        public GachaData[] garchar;
+        public UserData[] userData;
+        public GachaData[] gachar;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -57,6 +57,7 @@ namespace Manager
         }
         public Notifyer notifyer;
 
+        List<TransactionValue> transactionList = new List<TransactionValue>();
         protected override void Awake()
         {
             base.Awake();
@@ -127,10 +128,10 @@ namespace Manager
         
         void GetGachaData()
         {
-            string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
+            string chartId = chartInfos[ChartName.gachaPercentage.ToString()];           
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);            
 
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.gachaPercentage, out garchar))
+            if (GetLocalChartData(ChartName.gachaPercentage, out gachar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -138,9 +139,9 @@ namespace Manager
             else
             {
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
-                {
-                    garchar[index] = data;
-                });
+                {                   
+                    gachar[index] = data;
+                }, gachar);
             }
         }
 
@@ -185,7 +186,6 @@ namespace Manager
             }
         }
 
-        public const int ALL_WEAPON_COUNT = 100;
         void GetBaseWeaponData()
         {
             string chartId = chartInfos[ChartName.weapon.ToString()];
@@ -206,18 +206,15 @@ namespace Manager
             }
             else
             {  
-                baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
                 
                 GetBackEndChartData<BaseWeaponData>(chartId, (data, index) =>
                 {
                     baseWeaponDatas[index] = data;
                     baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
-                });
+                }, baseWeaponDatas);
             }
         }
         
-
-        public const int MINE_COUNT=20;
         void GetMineData()
         {
             string chartId = chartInfos[ChartName.mineData.ToString()];
@@ -230,7 +227,6 @@ namespace Manager
             }
             else
             {
-                mineDatas = new MineData[MINE_COUNT];
                 GetBackEndChartData<MineData>(chartId, (data, index) =>
                 {
                     MineData mineData = data;
@@ -239,7 +235,7 @@ namespace Manager
                     mineData.size = (int)(mineData.size * 1.5f) + 30;
                     mineData.lubricity = (int)(mineData.lubricity * 1.5f);
                     mineDatas[index] = mineData;
-                });
+                },mineDatas);
             }
         }
         
@@ -345,7 +341,7 @@ namespace Manager
                 return false;
             }
         }
-        void GetBackEndChartData<T>(string chartId, System.Action<T,int> _callback) where T: struct
+        void GetBackEndChartData<T>(string chartId, System.Action<T,int> _callback,T[] body) where T: struct
         {
             T result = default;
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
@@ -358,6 +354,8 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                body = new T[json.Count];
+
                 Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
@@ -368,7 +366,7 @@ namespace Manager
                 SceneLoader.ResourceLoadComplete();
             });
         }
-        void GetMyBackEndData<T>(string tableName,int length, System.Action<T,int> _callback) where T: struct
+        void GetMyBackEndData<T>(string tableName,int length, System.Action<T,int> _callback, T[] body) where T: struct
         {
             SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, length, bro =>
             {
@@ -380,6 +378,9 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                
+                body = json.Count == 0? System.Array.Empty<T>(): new T[json.Count];
+                
                 Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
@@ -427,39 +428,39 @@ namespace Manager
 
         void GetOwnedWeaponData()
         {
-            WeaponDatas = new List<WeaponData>();
+            
+            transactionList.Add(TransactionValue.SetGetV2(nameof(WeaponData), "owner_inDate", Backend.UserInDate));
             GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
             {
-                WeaponDatas.Add(data) ;
-            });
+                weaponDatas[index]=data ;
+            },weaponDatas);
         }
 
         void GetUserData()
         {
+            
             GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
             {
-                userData = data;
-            });
+                userData[index] = data;
+            }, userData);
             
         }
 
-        public const int WEAPON_COUNT = 150;
-        public Material[] materials=  new Material[WEAPON_COUNT];
-        
+        public Material[] ownedWeaponIds = new Material[150];
+        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
             {
                 color = Color.black
             };
-            for (int i = 0; i < WEAPON_COUNT; i++)
+            
+
+            GetMyBackEndData<PideaData>(nameof(PideaData), 150, (data, index) =>
             {
-                materials[i] = new Material(LockMaterial);
-            }
-            GetMyBackEndData<PideaData>(nameof(PideaData), WEAPON_COUNT, (data, index) =>
-            {
-                materials[data.ownedWeaponId].color = Color.white;
-            });
+                ownedWeaponIds[index] = new Material(LockMaterial);
+                ownedWeaponIds[data.ownedWeaponId].color = Color.white;                
+            }, pideaDatas);
 
         }
 
@@ -489,16 +490,11 @@ namespace Manager
             }
             else
             {
-                Debug.Log(chartInfos);
-                foreach (var VARIABLE in chartInfos)
-                {
-                    Debug.Log(VARIABLE);
-                }
                 string chartId = chartInfos[ChartName.attendance.ToString()];
                 GetBackEndChartData<AttendanceData>(chartId, (data, index) =>
                 {
                     attendanceDatas[index] = data;
-                });
+                },attendanceDatas);
             }
         }
         

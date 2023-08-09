@@ -94,6 +94,57 @@ public class Inventory : DontDestroy<Inventory>
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
         }
     }
+    
+    public void AddWeapon(BaseWeaponData[] baseWeaponData )
+    {
+        Utills.transactionList.Clear();
+        for (int i = 0; i < baseWeaponData.Length; i++)
+        {
+            Param param = new Param
+            {
+                { nameof(WeaponData.colum.mineId), -1 },
+                { nameof(WeaponData.colum.magic), new int[] { -1, -1 } },
+                { nameof(WeaponData.colum.rarity), baseWeaponData[i].rarity },
+                { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData[i].index },
+                { nameof(WeaponData.colum.defaultStat), baseWeaponData[i].defaultStat },
+                { nameof(WeaponData.colum.PromoteStat), baseWeaponData[i].PromoteStat },
+                { nameof(WeaponData.colum.AdditionalStat), baseWeaponData[i].AdditionalStat },
+                { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
+                { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
+                { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
+                { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
+            };
+            
+            Utills.transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
+        }
+        var bro =  Backend.GameData.TransactionWriteV2 ( Utills.transactionList ); 
+        if (!bro.IsSuccess())
+        {
+            Debug.LogError("게임 정보 삽입 실패 : " + bro);
+        }
+        LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
+        Debug.Log("INVENTORY:BRO"+bro.GetInDate());
+        for (int i = 0; i < json.Count; i++)
+        {
+            WeaponData weaponData = new WeaponData(json[i]["inDate"].ToJson(), baseWeaponData[i]);
+            slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
+            _count++;
+        
+            if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
+            {
+                var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
+                {
+                    { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
+                    { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
+                });
+                if (!pidea.IsSuccess())
+                {
+                    Debug.LogError("게임 정보 삽입 실패 : " + pidea);
+                }
+                Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
+            }
+        }
+    }
 
     [SerializeField] GameObject box;
 
@@ -103,10 +154,10 @@ public class Inventory : DontDestroy<Inventory>
         
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
         _size = slots.Count;
-        _count = ResourceManager.Instance.WeaponDatas.Count;
+        _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
         for (int i = 0; i < _count; i++)
         {
-            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.WeaponDatas[i],slots[count]));
+            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.weaponDatas[i],slots[i]));
         }
         Sort();
     }
