@@ -71,6 +71,7 @@ public class Inventory : DontDestroy<Inventory>
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
+            return;
         }
 
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
@@ -89,6 +90,7 @@ public class Inventory : DontDestroy<Inventory>
             if (!pidea.IsSuccess())
             {
                 Debug.LogError("게임 정보 삽입 실패 : " + pidea);
+                return;
             }
 
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
@@ -121,12 +123,17 @@ public class Inventory : DontDestroy<Inventory>
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
+            
+            return;
         }
+        bro.GetInDate();
+        Debug.Log(bro.GetInDate());
         LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
         Debug.Log("INVENTORY:BRO"+bro.GetInDate());
         for (int i = 0; i < json.Count; i++)
         {
-            WeaponData weaponData = new WeaponData(json[i]["inDate"].ToJson(), baseWeaponData[i]);
+            Debug.Log("@@@@@@@@@@"+json[i]["inDate"].ToJson());
+            WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
             slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
             _count++;
         
@@ -140,6 +147,7 @@ public class Inventory : DontDestroy<Inventory>
                 if (!pidea.IsSuccess())
                 {
                     Debug.LogError("게임 정보 삽입 실패 : " + pidea);
+                    return;
                 }
                 Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
             }

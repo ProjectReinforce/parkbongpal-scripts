@@ -417,6 +417,7 @@ namespace Manager
 
         void GetOwnedWeaponData()
         {
+
             GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
             {
                 weaponDatas.Add (data) ;
@@ -425,7 +426,6 @@ namespace Manager
 
         void GetUserData()
         {
-            
             GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
             {
                 userData = data;
@@ -434,7 +434,7 @@ namespace Manager
         }
 
         public Material[] ownedWeaponIds = new Material[150];
-        public PideaData[] pideaDatas = new PideaData[150];
+        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
@@ -445,6 +445,7 @@ namespace Manager
             {
                 ownedWeaponIds[i] = new Material(LockMaterial);
             }
+
 
             GetMyBackEndData<PideaData>(nameof(PideaData), 150, (data, index) =>
             {
