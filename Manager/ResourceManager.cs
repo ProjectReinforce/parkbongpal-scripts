@@ -434,7 +434,7 @@ namespace Manager
         }
 
         public Material[] ownedWeaponIds = new Material[150];
-        public PideaData[] pideaDatas = new PideaData[150];
+        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))

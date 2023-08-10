@@ -67,7 +67,7 @@ public class NormalReinforce : Reinforce
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.NormalStat), weapon.data.NormalStat);
-
+        Debug.Log("reinforce normal"+weapon.data.inDate);
         var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
         if (!bro.IsSuccess())
