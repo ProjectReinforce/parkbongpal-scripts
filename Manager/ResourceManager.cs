@@ -71,7 +71,7 @@ namespace Manager
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
-            
+            GetRankList();
             GetVersionChart();
         }
 
@@ -429,6 +429,13 @@ namespace Manager
             GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
             {
                 userData = data;
+                Param param = new Param
+                {
+                    { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
+                };
+                Debug.Log("@@@@@@@@@@@@"+Backend.UserInDate);
+
+                Backend.URank.User.UpdateUserScore(GoldPerMinUUID, nameof(UserData), userData.inDate, param);
             });
             
         }
@@ -464,6 +471,7 @@ namespace Manager
             {
                 if(!bro.IsSuccess()) {
                     Debug.LogError("최근 접속시간 받아오기 실패.");
+                    return;
                 }
                 lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
             });
@@ -486,6 +494,45 @@ namespace Manager
                     attendanceDatas.Add(data);
                 });
             }
+        }
+        const string GoldPerMinUUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        
+        public List<Rank>[] topRankLists = new List<Rank>[3];
+        public List<Rank>[] myRankLists = new List<Rank>[3];
+        void GetRankList()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, GoldPerMinUUID, callback=> {
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
+                    JsonData json = BackendReturnObject.Flatten(callback.Rows());
+
+                    for (int i = 0; i < json.Count; ++i)
+                    {
+                        topRankLists[i].Add(JsonMapper.ToObject<Rank>(json[i].ToJson()));
+                    }
+                });
+            
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, GoldPerMinUUID,4 , callback => {
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
+                    JsonData json = BackendReturnObject.Flatten(callback.Rows());
+
+                    for (int i = 0; i < json.Count; ++i)
+                    {
+                        myRankLists[i].Add(JsonMapper.ToObject<Rank>(json[i].ToJson()));
+                    }
+                });
+            }
+            
+            SceneLoader.ResourceLoadComplete();
         }
         
     }

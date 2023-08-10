@@ -29,7 +29,6 @@ public class Weapon
     public Weapon(WeaponData _data , Slot slot)//기본데이터
     {
         this._data = _data;
-        Debug.Log("@@@" + _data.baseWeaponIndex);
 
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);

@@ -182,6 +182,13 @@ public struct MineData//광산차트
 }
 
 [Serializable]
+public struct Rank//광산차트
+{
+    public int index, score;
+    public string nickname, rank;
+}
+
+[Serializable]
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;

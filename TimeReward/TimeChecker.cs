@@ -14,7 +14,7 @@ public class TimeChecker : Singleton<TimeChecker>
     }
     private void Start()
     {
-        OffLineReward();
+        //OffLineReward();
         AttendanceCheck();
     }
 
