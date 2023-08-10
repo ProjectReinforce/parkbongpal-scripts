@@ -51,7 +51,7 @@ public class Player : DontDestroy<Player>
     protected override void Awake()
     {
         base.Awake();
-        userData = ResourceManager.Instance.userData[0];
+        userData = ResourceManager.Instance.userData;
 
     }
 

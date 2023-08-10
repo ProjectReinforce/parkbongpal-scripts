@@ -25,7 +25,7 @@ public class TimeChecker : Singleton<TimeChecker>
         string hour = timeInterval.Hours == 0 ? empty : timeInterval.Days+ "시간 ";
         string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Days+ "분 동안 ";
 
-        int reward =  (int)(timeInterval.TotalMilliseconds/60000 * ResourceManager.Instance.userData[0].goldPerMin);
+        int reward =  (int)(timeInterval.TotalMilliseconds/60000 * ResourceManager.Instance.userData.goldPerMin);
         
         UIManager.Instance.ShowWarning("알림",$"{day}{hour}{minute}{reward} gold 를 획득 했습니다." );
         Player.Instance.AddGold(reward);
@@ -33,7 +33,7 @@ public class TimeChecker : Singleton<TimeChecker>
 
     private void AttendanceCheck()
     {
-        int day = ResourceManager.Instance.userData[0].attendance;
+        int day = ResourceManager.Instance.userData.attendance;
         if (ResourceManager.Instance.LastLogin.Month != ResourceManager.Instance.ServerTime.Month)
             day = 0;
 

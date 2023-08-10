@@ -39,7 +39,7 @@ public class Pidea : Singleton<Pidea>
         notifyer = Instantiate(ResourceManager.Instance.notifyer,transform);
         notifyer.Initialized();
         materials = ResourceManager.Instance.ownedWeaponIds;
-        for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Length; i++)
+        for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
         {
             PideaSlot slot = Instantiate(prefab, rarityTables[ResourceManager.Instance.baseWeaponDatas[i].rarity]);
             slot.gameObject.SetActive(true);
