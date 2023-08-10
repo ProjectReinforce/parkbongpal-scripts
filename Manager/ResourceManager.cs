@@ -8,12 +8,12 @@ namespace Manager
     public class ResourceManager : DontDestroy<ResourceManager>
     {
         public Where searchFromMyIndate = new();
-        public BaseWeaponData[] baseWeaponDatas;
-        public MineData[] mineDatas;
-        public List< WeaponData> WeaponDatas;
+        public List<BaseWeaponData> baseWeaponDatas = new ();
+        public List<MineData> mineDatas = new();
+        public List<WeaponData> weaponDatas = new();
         public int[] expDatas;
         public UserData userData;
-        public GachaData[] garchar;
+        public List<GachaData> gachar = new();
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -56,7 +56,6 @@ namespace Manager
             return skills[index];
         }
         public Notifyer notifyer;
-
 
         protected override void Awake()
         {
@@ -128,10 +127,10 @@ namespace Manager
         
         void GetGachaData()
         {
-            string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
+            string chartId = chartInfos[ChartName.gachaPercentage.ToString()];           
+            string loadedChart = Backend.Chart.GetLocalChartData(chartId);            
 
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.gachaPercentage, out garchar))
+            if (GetLocalChartData(ChartName.gachaPercentage, gachar))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
@@ -139,8 +138,8 @@ namespace Manager
             else
             {
                 GetBackEndChartData<GachaData>(chartId, (data, index) =>
-                {
-                    garchar[index] = data;
+                {                   
+                    gachar.Add( data);
                 });
             }
         }
@@ -186,20 +185,18 @@ namespace Manager
             }
         }
 
-        public const int ALL_WEAPON_COUNT = 100;
         void GetBaseWeaponData()
         {
             string chartId = chartInfos[ChartName.weapon.ToString()];
 
             // Backend.Chart.DeleteLocalChartData("87732");
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
+            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon,  baseWeaponDatas))
             {
-                for (int i = 0; i < baseWeaponDatas.Length; ++i)
+                for (int i = 0; i < baseWeaponDatas.Count; ++i)
                 {
                     // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                    if(i >= 10)
-                        break;
+                    
                     baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
                 }
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
@@ -207,39 +204,30 @@ namespace Manager
             }
             else
             {  
-                baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
                 
                 GetBackEndChartData<BaseWeaponData>(chartId, (data, index) =>
                 {
-                    baseWeaponDatas[index] = data;
+                    baseWeaponDatas.Add(data);
                     baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
                 });
             }
         }
         
-
-        public const int MINE_COUNT=20;
         void GetMineData()
         {
             string chartId = chartInfos[ChartName.mineData.ToString()];
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<MineData>(ChartName.mineData, out mineDatas))
+            if (GetLocalChartData<MineData>(ChartName.mineData,  mineDatas))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
             else
             {
-                mineDatas = new MineData[MINE_COUNT];
                 GetBackEndChartData<MineData>(chartId, (data, index) =>
-                {
-                    MineData mineData = data;
-                    mineData.defence = (int)((mineData.defence << mineData.stage) * 0.1f);
-                    mineData.hp = (int)((mineData.hp << mineData.stage) * 0.2f);
-                    mineData.size = (int)(mineData.size * 1.5f) + 30;
-                    mineData.lubricity = (int)(mineData.lubricity * 1.5f);
-                    mineDatas[index] = mineData;
+                {                    
+                    mineDatas.Add(data);
                 });
             }
         }
@@ -290,7 +278,8 @@ namespace Manager
         {
             string chartId = chartInfos[_chartName.ToString()];
 
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            //string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            string loadedChart = "";
             // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
@@ -325,17 +314,18 @@ namespace Manager
             }
         }
 
-        bool GetLocalChartData<T>(ChartName _chartName, out T[] _results) where T: struct
+        bool GetLocalChartData<T>(ChartName _chartName, List <T> _results) where T: struct
         {
             string chartId = chartInfos[_chartName.ToString()];
 
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            //string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            string loadedChart = "";
             // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
-                ChartToStruct<T>(loadedChartJson, out _results);
+                ChartToStruct<T>(loadedChartJson,  _results);
 
                 return true;
             }
@@ -359,6 +349,7 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
+
                 Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
@@ -381,6 +372,8 @@ namespace Manager
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                
+                
                 Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
 
                 for (int i = 0; i < json.Count; ++i)
@@ -402,16 +395,12 @@ namespace Manager
             return flattenedJson;
         }
 
-        void ChartToStruct<T>(JsonData _chartJson, out T[] _results) where T: struct
+        void ChartToStruct<T>(JsonData _chartJson, List <T> _results) where T: struct
         {
-            _results = new T[_chartJson.Count];
             for (int i = 0; i < _chartJson.Count; ++i)
             {
-                // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                if(i >= 10)
-                    break;
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-                _results[i] = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
+                
+                _results.Add(JsonMapper.ToObject<T>(_chartJson[i].ToJson()));
             }
         }
 
@@ -428,17 +417,15 @@ namespace Manager
 
         void GetOwnedWeaponData()
         {
-            WeaponDatas = new List<WeaponData>();
-          
+
             GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
             {
-                WeaponDatas.Add(data) ;
+                weaponDatas.Add (data) ;
             });
         }
 
         void GetUserData()
         {
-          
             GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
             {
                 userData = data;
@@ -446,25 +433,25 @@ namespace Manager
             
         }
 
-        public const int WEAPON_COUNT = 150;
-        public Material[] materials=  new Material[WEAPON_COUNT];
-        
+        public Material[] ownedWeaponIds = new Material[150];
+        public PideaData[] pideaDatas = new PideaData[150];
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
             {
                 color = Color.black
             };
-            for (int i = 0; i < WEAPON_COUNT; i++)
+            for(int i =0; i<150; i++)
             {
-                materials[i] = new Material(LockMaterial);
+                ownedWeaponIds[i] = new Material(LockMaterial);
             }
-           
-            GetMyBackEndData<PideaData>(nameof(PideaData), WEAPON_COUNT, (data, index) =>
-            {
-                materials[data.ownedWeaponId].color = Color.white;
-            });
 
+
+            GetMyBackEndData<PideaData>(nameof(PideaData), 150, (data, index) =>
+            {
+                ownedWeaponIds[data.ownedWeaponId].color = Color.white;
+
+            });
         }
 
         private System.DateTime lastLogin;
@@ -483,25 +470,20 @@ namespace Manager
             serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
         
-        public AttendanceData[] attendanceDatas = new AttendanceData[31];
+        public List<AttendanceData> attendanceDatas= new();
         void GetAttendanceData()
         {
-            if (LastLogin.Month == ServerTime.Month&& GetLocalChartData<AttendanceData>(ChartName.attendance, out attendanceDatas))
+            if (LastLogin.Month == ServerTime.Month&& GetLocalChartData<AttendanceData>(ChartName.attendance,  attendanceDatas))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {ChartName.attendance.ToString()}");
                 SceneLoader.ResourceLoadComplete();
             }
             else
             {
-                Debug.Log(chartInfos);
-                foreach (var VARIABLE in chartInfos)
-                {
-                    Debug.Log(VARIABLE);
-                }
                 string chartId = chartInfos[ChartName.attendance.ToString()];
                 GetBackEndChartData<AttendanceData>(chartId, (data, index) =>
                 {
-                    attendanceDatas[index] = data;
+                    attendanceDatas.Add(data);
                 });
             }
         }
