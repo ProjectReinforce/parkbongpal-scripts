@@ -30,7 +30,9 @@ namespace Manager
 
         public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
-            return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
+            Debug.Log("rarity"+rairity);
+            int countOfRarity = baseWeaponDatasFromRarity[(int)rairity].Count;
+            return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, countOfRarity)];
         }
 
         public Sprite[] weaponRaritySlot;
@@ -303,19 +305,7 @@ namespace Manager
         }
         
         #region Load all chart from local or BackEnd
-        /*
-        void SetChartData<T>(string _chartId, System.Action<T> _dataProcess) where T: struct
-        {
-            string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
-            if (GetLocalChartData<T>(_chartId, _dataProcess))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-                GetBackEndChartData<T>(_chartId, _dataProcess);
-        }
-        */
+     
         void SetChartData<T>(string _chartId, System.Action<T[]> _dataProcess) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -330,29 +320,7 @@ namespace Manager
         #endregion
         
         #region For download to BackEnd chart
-        /*
-        void GetBackEndChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
-        {
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.Log(bro);
-                    return;
-                }
-
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-                // for (int i = 0; i < json.Count; ++i)
-                // {
-                //     _callback(JsonMapper.ToObject<T>(json[i].ToJson()));
-                // }
-                _callback(JsonMapper.ToObject<T>(json[0].ToJson()));
-                SceneLoader.ResourceLoadComplete();
-            });
-        }
-        */
+       
 
         void GetBackEndChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
@@ -367,37 +335,14 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-                // T[] results = new T[json.Count];
-                // for (int i = 0; i < json.Count; ++i)
-                // {
-                //     results[i] = JsonMapper.ToObject<T>(json[i].ToJson());
-                // }
+          
                 _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
 
         void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
-        {/*
-            //todo: getv2 , mydata 둘다 에러는 안나는데 값이 안얻어짐 
-            SendQueue.Enqueue(Backend.GameData.GetV2,tableName, "rowIndate" ,"2023-08-11T09:47:48.166Z",(bro) =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    Debug.LogError(bro);
-                    return;
-                }
-                //JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                JsonData json = bro.GetReturnValuetoJSON();
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 ");
-                
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
-                
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.ToJson()}");
-                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
-                SceneLoader.ResourceLoadComplete();
-            });*/
-            
+        {
             SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, 150, bro =>
             {
                 if (!bro.IsSuccess())
@@ -415,23 +360,7 @@ namespace Manager
         #endregion
 
         #region For load to local chart
-        /*
-        bool GetLocalChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
-        {
-            string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
-            // loadedChart = "";
-            // 로컬 차트가 있는 경우
-            if (loadedChart != "")
-            {
-                JsonData loadedChartJson = StringToJson(loadedChart);
-
-                //ChartToStruct<T>(loadedChartJson, out T result);
-                _callback(JsonMapper.ToObject<T>(loadedChartJson[0].ToJson()));
-                return true;
-            }
-            return false;
-        }
-*/
+      
         bool GetLocalChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -459,28 +388,7 @@ namespace Manager
 
             return flattenedJson;
         }
-/*
-        void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: struct
-        {
-            //_result = new T();
-            for (int i = 0; i < _chartJson.Count; ++i)
-            {                   
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-               
-            }
-            _result = JsonMapper.ToObject<T>(_chartJson[0].ToJson());
-        }
 
-        void ChartToStruct<T>(JsonData _chartJson, out T[] _result) where T: struct
-        {
-            _result = new T[_chartJson.Count];
-            for (int i = 0; i < _chartJson.Count; ++i)
-            {                   
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-                _result[i] = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
-            }
-            _result = JsonMapper.ToObject<T[]>(_chartJson.ToJson());
-        }*/
         #endregion
 
         void GetOwnedWeaponData()

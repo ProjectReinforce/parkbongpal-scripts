@@ -126,13 +126,9 @@ public class Inventory : DontDestroy<Inventory>
             
             return;
         }
-        bro.GetInDate();
-        Debug.Log(bro.GetInDate());
         LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
-        Debug.Log("INVENTORY:BRO"+bro.GetInDate());
         for (int i = 0; i < json.Count; i++)
         {
-            Debug.Log("@@@@@@@@@@"+json[i]["inDate"].ToJson());
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
             slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
             _count++;
