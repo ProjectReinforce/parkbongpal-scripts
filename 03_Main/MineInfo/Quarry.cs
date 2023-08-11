@@ -31,7 +31,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
-        int mineCount = ResourceManager.Instance.mineDatas.Count;
+        // int mineCount = ResourceManager.Instance.mineDatas.Count;
+        int mineCount = ResourceManager.Instance.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
         {
@@ -47,6 +48,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     private void Start()
     {
         int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Count;
+        // int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Length;
         
         for (int i = 0; i < weaponCount; i++)
         {

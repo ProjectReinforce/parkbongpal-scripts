@@ -383,8 +383,15 @@ public struct PostData
     // public BaseWeaponData[] items;
 }
 
+[Serializable]
 public struct AttendanceData
 {
     public int day, type, value;
 
+}
+
+[Serializable]
+public struct VersionInfo
+{
+    public string name, latestfileId, description, updateDate;
 }

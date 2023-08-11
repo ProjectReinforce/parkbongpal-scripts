@@ -7,10 +7,12 @@ using Manager;
 [System.Serializable]
 public class Store : Singleton<Store>
 {
-    private List<GachaData> gacharsPercents;
+    // private List<GachaData> gacharsPercents;
+    private GachaData[] gacharsPercents;
     protected override void Awake()
     {
         base.Awake();
+        // gacharsPercents = ResourceManager.Instance.gachar;
         gacharsPercents = ResourceManager.Instance.gachar;
     }
     const int Pay = 1000;
