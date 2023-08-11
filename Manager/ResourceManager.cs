@@ -8,7 +8,7 @@ namespace Manager
     public class ResourceManager : DontDestroy<ResourceManager>
     {
         public Where searchFromMyIndate = new();
-        public List<WeaponData> weaponDatas = new();
+        public WeaponData[] weaponDatas;
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
         public int[] expDatas;
@@ -218,17 +218,17 @@ namespace Manager
                 // 수신된 정보로 차트 데이터 세팅
                 // 무기 제작 확률 정보
                 string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
-                void GachaDataProcess(GachaData[] data) { gachar = (GachaData[])data.Clone(); }
+                void GachaDataProcess(GachaData[] data) { gachar = data; }
                 SetChartData<GachaData>(chartId, GachaDataProcess);
                 // 광산 정보
                 chartId = chartInfos[ChartName.mineData.ToString()];
-                void MineDataProcess(MineData[] data) { mineDatas = (MineData[])data.Clone(); }
+                void MineDataProcess(MineData[] data) { mineDatas = data; }
                 SetChartData<MineData>(chartId, MineDataProcess);
                 // 무기 기본 정보
                 chartId = chartInfos[ChartName.weapon.ToString()];
                 void BaseWeaponDataProcess(BaseWeaponData[] data)
                 {
-                    baseWeaponDatas = (BaseWeaponData[])data.Clone();
+                    baseWeaponDatas = data;
                     
                     for (int i = 0; i < baseWeaponDatas.Length; ++i)
                         baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
@@ -236,27 +236,27 @@ namespace Manager
                 SetChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
                 // 추가 옵션 정보
                 chartId = chartInfos[ChartName.additional.ToString()];
-                void AdditionalDataProcess(AdditionalData data) { additionalData = data; }
+                void AdditionalDataProcess(AdditionalData[] data) { additionalData = data[0]; }
                 SetChartData<AdditionalData>(chartId, AdditionalDataProcess);
                 // 일반 강화 정보
                 chartId = chartInfos[ChartName.normalReinforce.ToString()];
-                void NormalDataProcess(NormalReinforceData data) { normalReinforceData = data; }
+                void NormalDataProcess(NormalReinforceData[] data) { normalReinforceData = data[0]; }
                 SetChartData<NormalReinforceData>(chartId, NormalDataProcess);
                 // 마법 부여 정보
                 chartId = chartInfos[ChartName.magicCarve.ToString()];
-                void MagicDataProcess(MagicCarveData data) { magicCarveData = data; }
+                void MagicDataProcess(MagicCarveData[] data) { magicCarveData = data[0]; }
                 SetChartData<MagicCarveData>(chartId, MagicDataProcess);
                 // 영혼 세공 정보
                 chartId = chartInfos[ChartName.soulCrafting.ToString()];
-                void SoulDataProcess(SoulCraftingData data) { soulCraftingData = data; }
+                void SoulDataProcess(SoulCraftingData[] data) { soulCraftingData = data[0]; }
                 SetChartData<SoulCraftingData>(chartId, SoulDataProcess);
                 // 재련 정보
                 chartId = chartInfos[ChartName.refinement.ToString()];
-                void RefineDataProcess(RefinementData data) { refinementData = data; }
+                void RefineDataProcess(RefinementData[] data) { refinementData = data[0]; }
                 SetChartData<RefinementData>(chartId, RefineDataProcess);
                 // 출석 보상 정보
                 chartId = chartInfos[ChartName.attendance.ToString()];
-                void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = (AttendanceData[])data.Clone(); }
+                void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = data; }
                 SetChartData<AttendanceData>(chartId, AttendanceDataProcess);
                 // 레벨별 필요 경험치 정보
                 GetExpData();
@@ -303,6 +303,7 @@ namespace Manager
         }
         
         #region Load all chart from local or BackEnd
+        /*
         void SetChartData<T>(string _chartId, System.Action<T> _dataProcess) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -314,6 +315,7 @@ namespace Manager
             else
                 GetBackEndChartData<T>(_chartId, _dataProcess);
         }
+        */
         void SetChartData<T>(string _chartId, System.Action<T[]> _dataProcess) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -328,10 +330,9 @@ namespace Manager
         #endregion
         
         #region For download to BackEnd chart
+        /*
         void GetBackEndChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
         {
-            T result = default;
-
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
             {
                 if (!bro.IsSuccess())
@@ -343,14 +344,15 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    result = JsonMapper.ToObject<T>(json[i].ToJson());
-                    _callback(result);
-                }
+                // for (int i = 0; i < json.Count; ++i)
+                // {
+                //     _callback(JsonMapper.ToObject<T>(json[i].ToJson()));
+                // }
+                _callback(JsonMapper.ToObject<T>(json[0].ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
+        */
 
         void GetBackEndChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
@@ -365,42 +367,55 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-                T[] results = new T[json.Count];
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    results[i] = JsonMapper.ToObject<T>(json[i].ToJson());
-                }
-                _callback(results);
+                // T[] results = new T[json.Count];
+                // for (int i = 0; i < json.Count; ++i)
+                // {
+                //     results[i] = JsonMapper.ToObject<T>(json[i].ToJson());
+                // }
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
 
-        void GetMyBackEndData<T>(string tableName,int length, System.Action<T,int> _callback) where T: struct
-        {
-            SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, length, bro =>
+        void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
+        {/*
+            //todo: getv2 , mydata 둘다 에러는 안나는데 값이 안얻어짐 
+            SendQueue.Enqueue(Backend.GameData.GetV2,tableName, "rowIndate" ,"2023-08-11T09:47:48.166Z",(bro) =>
             {
                 if (!bro.IsSuccess())
                 {
-                    // 요청 실패 처리
                     Debug.LogError(bro);
-                    // todo: 에러 메시지 출력 및 타이틀로
+                    return;
+                }
+                //JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                JsonData json = bro.GetReturnValuetoJSON();
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 ");
+                
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
+                
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.ToJson()}");
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
+                SceneLoader.ResourceLoadComplete();
+            });*/
+            
+            SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, 150, bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    Debug.LogError(bro);
                     return;
                 }
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                
-                
                 Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
-
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    _callback(JsonMapper.ToObject<T>(json[i].ToJson()),i);
-                }
+            
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
         #endregion
 
         #region For load to local chart
+        /*
         bool GetLocalChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -410,14 +425,13 @@ namespace Manager
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
-                ChartToStruct<T>(loadedChartJson, out T result);
-
-                _callback(result);
+                //ChartToStruct<T>(loadedChartJson, out T result);
+                _callback(JsonMapper.ToObject<T>(loadedChartJson[0].ToJson()));
                 return true;
             }
             return false;
         }
-
+*/
         bool GetLocalChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -427,9 +441,9 @@ namespace Manager
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
-                ChartToStruct<T>(loadedChartJson, out T[] results);
+                //ChartToStruct<T>(loadedChartJson, out T[] results);
 
-                _callback(results);
+                _callback(JsonMapper.ToObject<T[]>(loadedChartJson.ToJson()));
                 return true;
             }
             return false;
@@ -445,15 +459,16 @@ namespace Manager
 
             return flattenedJson;
         }
-
+/*
         void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: struct
         {
-            _result = new T();
+            //_result = new T();
             for (int i = 0; i < _chartJson.Count; ++i)
             {                   
                 // 데이터를 디시리얼라이즈 & 데이터 확인
-                _result = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
+               
             }
+            _result = JsonMapper.ToObject<T>(_chartJson[0].ToJson());
         }
 
         void ChartToStruct<T>(JsonData _chartJson, out T[] _result) where T: struct
@@ -464,30 +479,29 @@ namespace Manager
                 // 데이터를 디시리얼라이즈 & 데이터 확인
                 _result[i] = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
             }
-        }
+            _result = JsonMapper.ToObject<T[]>(_chartJson.ToJson());
+        }*/
         #endregion
 
         void GetOwnedWeaponData()
         {
 
-            GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
+            GetMyBackEndData<WeaponData>(nameof(WeaponData),  (data) =>
             {
-                weaponDatas.Add (data) ;
+                weaponDatas=data ;
             });
         }
 
         void GetUserData()
         {
-            GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
+            GetMyBackEndData<UserData>(nameof(UserData),  (data) =>
             {
-                userData = data;
+                userData = data[0];
                 Param param = new Param
                 {
                     { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
                 };
-                Debug.Log("@@@@@@@@@@@@"+Backend.UserInDate);
-
-                Backend.URank.User.UpdateUserScore(GoldPerMinUUID, nameof(UserData), userData.inDate, param);
+                Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             });
             
         }
@@ -506,10 +520,12 @@ namespace Manager
             }
 
 
-            GetMyBackEndData<PideaData>(nameof(PideaData), 150, (data, index) =>
+            GetMyBackEndData<PideaData>(nameof(PideaData),  (data) =>
             {
-                ownedWeaponIds[data.ownedWeaponId].color = Color.white;
-
+                foreach (PideaData pidea in data)
+                {
+                    ownedWeaponIds[pidea.ownedWeaponId].color = Color.white;
+                }
             });
         }
 
@@ -530,40 +546,35 @@ namespace Manager
             serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
         
-        const string GoldPerMinUUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        
-        public List<Rank>[] topRankLists = new List<Rank>[3];
-        public List<Rank>[] myRankLists = new List<Rank>[3];
+        public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public const string Power_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public const string MINI_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public static readonly string[] UUIDs = new[] { GOLD_UUID, Power_UUID, MINI_UUID };
+
+        public Rank[][] topRanks = new Rank[UUIDs.Length][];
+        public Rank[][] myRanks = new Rank[UUIDs.Length][];
         void GetRankList()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < UUIDs.Length; i++)
             {
-                SendQueue.Enqueue(Backend.URank.User.GetRankList, GoldPerMinUUID, callback=> {
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[i], callback=> {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-
-                    for (int i = 0; i < json.Count; ++i)
-                    {
-                        topRankLists[i].Add(JsonMapper.ToObject<Rank>(json[i].ToJson()));
-                    }
+                    topRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
                 });
             
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, GoldPerMinUUID,4 , callback => {
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[i],4 , callback => {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-
-                    for (int i = 0; i < json.Count; ++i)
-                    {
-                        myRankLists[i].Add(JsonMapper.ToObject<Rank>(json[i].ToJson()));
-                    }
+                    myRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
                 });
             }
             

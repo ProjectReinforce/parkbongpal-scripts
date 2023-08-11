@@ -25,7 +25,6 @@ public class Slot : MonoBehaviour, IComparable<Slot>
             myWeapon = null;
             return;
         }
-        Debug.Log("slot: weapon="+weapon);
         backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[weapon.data.rarity];
         ImageObject.SetActive(true);
         button.enabled = true;

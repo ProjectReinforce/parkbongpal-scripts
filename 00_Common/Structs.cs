@@ -182,7 +182,7 @@ public struct MineData//광산차트
 }
 
 [Serializable]
-public struct Rank//광산차트
+public struct Rank
 {
     public int index, score;
     public string nickname, rank;
