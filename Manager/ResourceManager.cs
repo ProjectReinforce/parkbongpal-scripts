@@ -455,34 +455,40 @@ namespace Manager
         }
         
         public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public const string Power_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public const string MINI_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public static readonly string[] UUIDs = new[] { GOLD_UUID, Power_UUID, MINI_UUID };
+        public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
+        public const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
+        public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID };
 
-        public Rank[][] topRanks = new Rank[UUIDs.Length][];
+        public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
         public Rank[][] myRanks = new Rank[UUIDs.Length][];
+
         void GetRankList()
         {
-            for (int i = 0; i < UUIDs.Length; i++)
+            int topRankIndex = 0;
+            int myRankIndex = 0;
+            for (int j = 0; j < UUIDs.Length; j++)
             {
-                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[i], callback=> {
+                //샌드큐는 비동기이기 때문에 j 값이 타이밍 안맞게 들어감 
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[topRankIndex], callback=> {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    topRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    topRanks[topRankIndex]= JsonMapper.ToObject<Rank[]>(json.ToJson())  ;
+                    topRankIndex++;
                 });
             
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[i],4 , callback => {
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[myRankIndex],4 , callback => {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    myRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    myRanks[myRankIndex]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    myRankIndex++;
                 });
             }
             

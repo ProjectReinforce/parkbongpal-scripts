@@ -63,7 +63,7 @@ public static class Utills
             percent -= _targetPercentArray[i];
         }
 
-        return -1;
+        return _targetPercentArray.Length-1;
     }
 
 

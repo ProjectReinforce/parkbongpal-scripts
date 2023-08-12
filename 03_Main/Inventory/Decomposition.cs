@@ -47,8 +47,9 @@ public class Decomposition : MonoBehaviour
             });
             limit = 0;
         }
-      
-     
+
+        Inventory.Instance.UpdateHighPowerWeaponData();
+
     }
     static public bool ChooseWeaponSlot(Slot slot)
     {

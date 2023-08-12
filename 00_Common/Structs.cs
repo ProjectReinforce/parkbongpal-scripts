@@ -8,7 +8,6 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 
     public int[] magic;
     public int rarity;
-    public int power;//todo:관련 로직 추가해야함 
     public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat;
 
     public string inDate;
@@ -26,8 +25,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         RefineStat = (int[])_weaponData.RefineStat.Clone();
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
-        power = 0;//todo: 관련로직 필요
-        borrowedDate = default;
+        borrowedDate = DateTime.Parse(_inDate) ;
     }
 
     #region Property
@@ -162,7 +160,7 @@ public struct UserData
 {
     public static UserData colum;
     public int gold, diamond, weaponSoul, stone, attendance;
-    public int exp, level, favoriteWeaponId,goldPerMin;
+    public int exp, level, favoriteWeaponId,goldPerMin, mineGameScore, combatScore;
     public string inDate;
     public DateTime owner_inDate;
 }
@@ -184,8 +182,8 @@ public struct MineData//광산차트
 [Serializable]
 public struct Rank
 {
-    public int index, score;
-    public string nickname, rank;
+    public int index, score, rank;
+    public string nickname;
 }
 
 [Serializable]

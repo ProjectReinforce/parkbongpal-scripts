@@ -162,7 +162,6 @@ public class Inventory : DontDestroy<Inventory>
         // _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
         for (int i = 0; i < _count; i++)
         {
-            Debug.Log(ResourceManager.Instance.weaponDatas[i]);
             slots[i].SetWeapon(new Weapon( ResourceManager.Instance.weaponDatas[i],slots[i]));
         }
         Sort();
@@ -180,6 +179,7 @@ public class Inventory : DontDestroy<Inventory>
             if (currentWeapon.data.mineId >= 0)
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
             int beforeGoldPerMin = currentMine.goldPerMin;
+            currentWeapon.SetBorrowedDate();
             currentMine.SetWeapon(currentWeapon);
             Debug.Log("inventory currentmine goldpermin"+currentMine.goldPerMin);
             Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
@@ -213,6 +213,23 @@ public class Inventory : DontDestroy<Inventory>
             currentWeapon = null;
         Sort();
     }
- 
 
+    public void UpdateHighPowerWeaponData()
+    {
+        int highPower = 0;
+        Weapon highPowerWeapon = default;
+        Weapon currentWeapon ;
+        foreach (Slot slot in slots)
+        {
+            if (slot.myWeapon is null) break;
+            currentWeapon = slot.myWeapon;
+            if(highPower>=currentWeapon.power)continue;
+            
+            highPower = currentWeapon.power;
+            highPowerWeapon = currentWeapon;
+        }
+
+        if( highPowerWeapon.power== Player.Instance.Data.combatScore) return;
+        Player.Instance.SetCombatScore(highPowerWeapon.power);
+    }
 }
