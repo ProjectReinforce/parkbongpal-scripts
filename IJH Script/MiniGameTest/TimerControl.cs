@@ -25,6 +25,7 @@ public class TimerControl : MonoBehaviour
 
     void Update()
     {
+        if(!mineGame.IsAttackAble) return;
         UpdateTimer();
     }
 
@@ -46,6 +47,7 @@ public class TimerControl : MonoBehaviour
 
     public void ResetTimer()
     {
+        isOperating = false;
         timerBar.value = 1.0f;
         currentTime = MAX_TIME;
     }

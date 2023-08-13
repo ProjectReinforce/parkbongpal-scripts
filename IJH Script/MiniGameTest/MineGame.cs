@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,10 +11,18 @@ public class MineGame : MonoBehaviour
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
     [SerializeField] Text currentText;    // 현재 체력 / 전체 체력 텍스트
-    [SerializeField] Button button;
+    [SerializeField] Button mainButton;
+    [SerializeField] Button pauseButton;
     [SerializeField] Image PBP;
     [SerializeField] GameObject resultPanel;
+    Coroutine starter;
     bool isAttackAble = false;
+    public bool IsAttackAble
+    {
+        get { return isAttackAble;}
+        set { isAttackAble = value;}
+    }
+    bool isStarting = false;
 
     void OnEnable() // 게임을 다시 켰을때도 초기화
     {
@@ -22,8 +31,8 @@ public class MineGame : MonoBehaviour
     
     public void StartBlinkingAndCountdown()
     {
-        button.interactable = false;
-        StartCoroutine(Countdown());
+        mainButton.interactable = false;
+        starter =  StartCoroutine(Countdown());
     }
     WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
     IEnumerator Countdown()
@@ -38,7 +47,7 @@ public class MineGame : MonoBehaviour
 
         isAttackAble = true;
         timerControl.IsOperating = true;
-        button.gameObject.SetActive(false);
+        mainButton.gameObject.SetActive(false);
     }
 
     // public void ControlRock()
@@ -85,12 +94,26 @@ public class MineGame : MonoBehaviour
         Player.Instance.AddGold(rock.Score);
         Debug.Log(rock.Score);
         Debug.Log(Player.Instance.Data.gold);
-        ShowResultScreen();
-    }
-    void ShowResultScreen()
-    {
         resultPanel.SetActive(true);
     }
+
+    public void ClickPauseButton()
+    {
+        isAttackAble = !isAttackAble;
+
+        if(!isAttackAble&&(isStarting=!isStarting))
+        {
+            starter= StartCoroutine(Countdown());
+        }
+        else
+        {
+            StopCoroutine(starter);
+        }
+        
+        resultPanel.SetActive(isAttackAble);
+    }
+
+ 
 
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
     {
@@ -102,10 +125,12 @@ public class MineGame : MonoBehaviour
         rock.ResetRockInfo();
         timerControl.ResetTimer();
         text.text = "Touch to Start!";
-        button.gameObject.SetActive(true);
-        button.interactable = true;
+        mainButton.gameObject.SetActive(true);
+        mainButton.interactable = true;
         resultPanel.SetActive(false);
+        isAttackAble = false;
     }
+
     void Update() 
     {
         if(isAttackAble)

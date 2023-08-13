@@ -8,10 +8,9 @@ public class Rock : MonoBehaviour
     [SerializeField] TimerControl timerControl;
     [SerializeField] RockHpSlider rockHpSlider;
     [SerializeField] Sprite[] sprites;
-    [SerializeField] Vector3 originalPosition;
+    Vector3 originalPosition;
     Vector2 originalSizeDelta;
     Image image;
-    float yMove = 30f;
     int score;
     public int Score
     {
@@ -25,6 +24,8 @@ public class Rock : MonoBehaviour
         TryGetComponent(out image);
         hp = maxHp;
         originalSizeDelta = image.rectTransform.sizeDelta;
+        originalPosition = image.rectTransform.anchoredPosition3D;
+        Debug.Log(originalPosition);
     }
 
     public void ResetRockInfo()
@@ -35,7 +36,9 @@ public class Rock : MonoBehaviour
         image.sprite = sprites[0];
         currentRockIndex = 0;
         image.rectTransform.sizeDelta = originalSizeDelta;
-        image.rectTransform.localPosition = originalPosition;
+        image.rectTransform.anchoredPosition3D = originalPosition;
+        Debug.Log("이미지 로컬포지션" + image.rectTransform.anchoredPosition3D);
+        Debug.Log("오리지널 포지션" + originalPosition);
     }
 
     public void GetDamage(float damage)
@@ -50,15 +53,15 @@ public class Rock : MonoBehaviour
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
+
             image.sprite = sprites[currentRockIndex = ++currentRockIndex%sprites.Length];
 
-            Vector2 newSize = new (image.rectTransform.sizeDelta.x * 0.9f, image.rectTransform.sizeDelta.y * 0.9f);
+            Vector2 newSize = image.rectTransform.sizeDelta* 0.9f;
             image.rectTransform.sizeDelta = newSize;
 
-            Vector3 newPosition = image.rectTransform.localPosition;
-            newPosition.y -= yMove;
-            image.rectTransform.localPosition = newPosition;
-            yMove *= 0.9f;
+            Vector3 newPosition = image.rectTransform.anchoredPosition3D;
+            newPosition.y -= ((newSize.y/0.9f) - newSize.y) / 2;
+            image.rectTransform.anchoredPosition3D = newPosition;
 
             timerControl.CurrentTime += 20f;
         }
