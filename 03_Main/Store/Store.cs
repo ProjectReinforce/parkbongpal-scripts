@@ -18,7 +18,6 @@ public class Store : Singleton<Store>
     const int Pay = 1000;
     public void Drawing(int type)
     {
-        
         if (Player.Instance.Data.gold < Pay)
         {
             UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
@@ -31,19 +30,15 @@ public class Store : Singleton<Store>
             return;
         }
 
-
         GachaData gachaData = gacharsPercents[type];
        
         int[] percents = { gachaData.trash, gachaData.old, gachaData.normal, gachaData.unique, gachaData.legendary };
-
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
-        
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
 
         Inventory.Instance.AddWeapon(baseWeaponData);
         Player.Instance.AddGold(-Pay);
         Debug.Log("[store]" + baseWeaponData.index);
-        
     }
 
     private const int TEN = 10;
@@ -64,15 +59,14 @@ public class Store : Singleton<Store>
 
         GachaData gachaData = gacharsPercents[type];
         int[] percents = { gachaData.trash, gachaData.old, gachaData.normal, gachaData.unique, gachaData.legendary };
-
+      
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
         for (int i = 0; i < TEN; i++)
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
             baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
         }
-        
-        
+
         Inventory.Instance.AddWeapon(baseWeaponDatas);
         Player.Instance.AddGold(-Pay*TEN);
         
