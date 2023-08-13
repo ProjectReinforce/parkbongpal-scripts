@@ -403,6 +403,7 @@ namespace Manager
             else
                 GetBackEndChartData<T>(_chartId, _dataProcess);
         }
+        #endregion
         
         #region For download to BackEnd chart
        
