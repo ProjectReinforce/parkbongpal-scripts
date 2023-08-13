@@ -15,9 +15,9 @@ public class RefineUI : MonoBehaviour
     {
         reinforceManager = ReinforceManager.Instance;
         // transform.GetChild(6).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
-        transform.GetChild(6).GetChild(1).TryGetComponent(out goldCostText);
-        transform.GetChild(7).GetChild(1).TryGetComponent(out stoneCostText);
-        transform.GetChild(8).TryGetComponent<Button>(out normalReinforceButton);
+        transform.GetChild(5).GetChild(1).TryGetComponent(out goldCostText);
+        transform.GetChild(6).GetChild(1).TryGetComponent(out stoneCostText);
+        transform.GetChild(7).TryGetComponent<Button>(out normalReinforceButton);
     }
 
     void OnEnable()

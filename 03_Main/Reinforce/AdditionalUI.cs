@@ -12,8 +12,8 @@ public class AdditionalUI : MonoBehaviour
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(6).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(7).TryGetComponent<Button>(out additionalButton);
+        transform.GetChild(4).GetChild(4).GetChild(1).TryGetComponent(out costText);
+        transform.GetChild(5).TryGetComponent<Button>(out additionalButton);
     }
 
     void OnEnable()

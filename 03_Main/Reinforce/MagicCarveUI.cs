@@ -6,17 +6,14 @@ using UnityEngine.UI;
 public class MagicCarveUI : MonoBehaviour
 {
     ReinforceManager reinforceManager;
-    ReinforceUIInfo reinforceUIInfo;
     Text costText;
     Button reinforceButton;
 
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
-        if (reinforceManager != null)
-            reinforceUIInfo = reinforceManager.ReinforceUIInfo;
-        transform.GetChild(6).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(7).TryGetComponent<Button>(out reinforceButton);
+        transform.GetChild(5).GetChild(1).TryGetComponent(out costText);
+        transform.GetChild(6).TryGetComponent<Button>(out reinforceButton);
     }
 
     void OnEnable()

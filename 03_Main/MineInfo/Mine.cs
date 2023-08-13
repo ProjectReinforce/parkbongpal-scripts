@@ -152,10 +152,12 @@ public class Mine :MonoBehaviour,Rental
     
     public void Receipt()
     {
+        if(rentalWeapon is null) return;
         Player.Instance.AddGold(Gold);
         gold = 0;
         
         goldText.text = gold.ToString();
+
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
 
