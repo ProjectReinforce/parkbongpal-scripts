@@ -49,6 +49,7 @@ public class Rock : MonoBehaviour
             score += (int)maxHp;
             maxHp *= 2f;
             hp = maxHp;
+            rockHpSlider.SetHpValue(hp, maxHp);
             image.sprite = sprites[currentRockIndex = ++currentRockIndex%sprites.Length];
 
             Vector2 newSize = new (image.rectTransform.sizeDelta.x * 0.9f, image.rectTransform.sizeDelta.y * 0.9f);

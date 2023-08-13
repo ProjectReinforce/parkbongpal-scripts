@@ -84,7 +84,7 @@ public class MineGame : MonoBehaviour
         isAttackAble = false;
         Player.Instance.AddGold(rock.Score);
         Debug.Log(rock.Score);
-        Debug.Log(Player.Instance.userData.gold);
+        Debug.Log(Player.Instance.Data.gold);
         ShowResultScreen();
     }
     void ShowResultScreen()
