@@ -19,32 +19,37 @@ public class Decomposition : MonoBehaviour
         _isDecompositing = !_isDecompositing;
         text.text = isDecompositing?"확정" :"분해";
         if(isDecompositing) return;
-        
-        Utills.transactionList.Clear();
-        foreach (Slot slot in slots)
+        int limit = 0;
+        while (slots.Count > 0)
         {
-            string indate = slot.myWeapon.data.inDate;
-            Utills.transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
-          
-        }
-        
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
-        {
-            if (!callback.IsSuccess())
+            List<TransactionValue> transactionList = new List<TransactionValue>();
+            while (limit<10&&slots.Count > 0)
             {
-                Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패");
-                return;
-            }
-            foreach (Slot slot in slots)
-            {
+                Slot slot = slots.First.Value;
+                if (slot == null) continue;
+                string indate = slot.myWeapon.data.inDate;
                 slot.SetsellectChecker(false);
                 slot.SetWeapon(null);
+                slots.RemoveFirst();
+                transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
+                limit++;
             }
-            Inventory.Instance.count -= slots.Count;
-            slots.Clear();
-            Inventory.Instance.Sort();
-        });
-     
+            Debug.Log($"limit={limit}");
+            Inventory.Instance.count -= limit;
+            SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
+            {
+                if (!callback.IsSuccess())
+                {
+                    Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패"+callback);
+                    return;
+                }
+                Inventory.Instance.Sort();
+            });
+            limit = 0;
+        }
+
+        Inventory.Instance.UpdateHighPowerWeaponData();
+
     }
     static public bool ChooseWeaponSlot(Slot slot)
     {

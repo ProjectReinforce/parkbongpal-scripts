@@ -9,7 +9,6 @@ using UnityEngine;
 public class Weapon 
 {
     public readonly Sprite sprite;
-    public readonly Rarity birthRairity;
     //private NSubject.ISubject subjects;
     [SerializeField] WeaponData _data;
     public WeaponData data => _data;
@@ -32,17 +31,20 @@ public class Weapon
 
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
-        birthRairity= (Rarity)baseWeaponData.rarity;
         description = baseWeaponData.description;
         name = baseWeaponData.name;
         SetPower();
         myslot = slot;
     }
 
+    public void SetBorrowedDate()
+    {
+        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+    }
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
-        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        SetBorrowedDate();
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
         param.Add(nameof(WeaponData.colum.borrowedDate),_data.borrowedDate);
@@ -80,7 +82,9 @@ public class Weapon
     public void ExecuteReinforce(ReinforceType _type)
     {
         Debug.Log((int)_type);
+        
         reinforces[(int)_type-1].Execute(this);
+        Inventory.Instance.UpdateHighPowerWeaponData();
     }
 
     public void Promote()

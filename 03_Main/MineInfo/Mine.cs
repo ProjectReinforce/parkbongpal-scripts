@@ -56,21 +56,16 @@ public class Mine :MonoBehaviour,Rental
     {
         _mineData = _data;
         mineName.text = _data.name;
-
     }
 
     static RentalFactory rentalFactory;
     Rental rental;
-    
-    
+
     private void Awake()
     {
         rentalFactory = new RentalFactory();
         rental = this;
     }
-
-
-    
 
     public void SetCurrentMine()// *dip 위배중, 리팩토링 대상.
     {
@@ -110,7 +105,6 @@ public class Mine :MonoBehaviour,Rental
             goldPerMin = 0;
             return;
         }
-        
         _weaponData = rentWeapon.data;
         for (int i = 0; i < 2; i++)
         {

@@ -11,6 +11,7 @@ public class SceneLoader : MonoBehaviour
 
     [SerializeField] Slider progressBar;
     [SerializeField] Text persentMessage;
+    [SerializeField] Image loadingIcon;
 
     public static void ResourceLoadComplete()
     {
@@ -35,7 +36,7 @@ public class SceneLoader : MonoBehaviour
         while(true)
         {
             yield return null;
-            if( operation.progress < 0.9f || loadedResourcesCount < REQUIRE_TO_LOAD_RESOURCES_COUNT)
+            if ( operation.progress < 0.9f || loadedResourcesCount < REQUIRE_TO_LOAD_RESOURCES_COUNT)
             {
                 // progressBar.value = operation.progress;
                 // persentMessage.text = (System.Math.Round(operation.progress, 2) * 100).ToString() + "%";

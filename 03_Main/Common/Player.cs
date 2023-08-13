@@ -64,6 +64,22 @@ public class Player : DontDestroy<Player>
             if (!callback.IsSuccess())
             {
                 Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                return;
+            }
+            Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
+        });
+    }
+    void UpdateBackEndScore(string uuid, string columnName, int _data)
+    {
+        Param param = new() { { columnName, _data }};
+        
+       
+        SendQueue.Enqueue(Backend.URank.User.UpdateUserScore,uuid, nameof(UserData), userData.inDate, param, callback => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                return;
             }
             Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
         });
@@ -144,14 +160,23 @@ public class Player : DontDestroy<Player>
     public void SetGoldPerMin(int _goldPerMin)
     {
         userData.goldPerMin = _goldPerMin;
-        UpdateBackEndData(nameof(UserData.colum.goldPerMin), userData.goldPerMin);
+        UpdateBackEndScore(ResourceManager.GOLD_UUID,nameof(UserData.colum.goldPerMin), userData.goldPerMin);
+    }
+    public void ComparisonMineGameScore(int score)
+    {
+        if(userData.mineGameScore<=score) return;
+        userData.mineGameScore = score;
+        UpdateBackEndScore(ResourceManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
+    }
+    public void SetCombatScore(int score)
+    {
+        userData.combatScore = score;
+        UpdateBackEndScore(ResourceManager.Power_UUID,nameof(UserData.colum.combatScore), userData.combatScore);
     }
 
     public void SetAttendance(int day)
     {
         userData.attendance = day;
-
-        // UpdateBackEndData(nameof(UserData.colum.attendance), _userData.attendance);
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 

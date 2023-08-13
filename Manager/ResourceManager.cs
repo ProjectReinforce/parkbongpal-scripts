@@ -30,7 +30,9 @@ namespace Manager
 
         public BaseWeaponData GetBaseWeaponData(Rarity rairity)
         {
-            return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, baseWeaponDatasFromRarity[(int)rairity].Count)];
+            Debug.Log("rarity"+rairity);
+            int countOfRarity = baseWeaponDatasFromRarity[(int)rairity].Count;
+            return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, countOfRarity)];
         }
 
         public Sprite[] weaponRaritySlot;
@@ -388,6 +390,8 @@ namespace Manager
             }
         }
         
+        #region Load all chart from local or BackEnd
+     
         void SetChartData<T>(string _chartId, System.Action<T[]> _dataProcess) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -401,6 +405,8 @@ namespace Manager
         }
         
         #region For download to BackEnd chart
+       
+
         void GetBackEndChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
@@ -414,33 +420,14 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-
+          
                 _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
 
         void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
-        {/*
-            //todo: getv2 , mydata 둘다 에러는 안나는데 값이 안얻어짐 
-            SendQueue.Enqueue(Backend.GameData.GetV2,tableName, "rowIndate" ,"2023-08-11T09:47:48.166Z",(bro) =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    Debug.LogError(bro);
-                    return;
-                }
-                //JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                JsonData json = bro.GetReturnValuetoJSON();
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 ");
-                
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
-                
-                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.ToJson()}");
-                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
-                SceneLoader.ResourceLoadComplete();
-            });*/
-            
+        {
             SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, 150, bro =>
             {
                 if (!bro.IsSuccess())
@@ -458,6 +445,7 @@ namespace Manager
         #endregion
 
         #region For load to local chart
+      
         bool GetLocalChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
             string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -549,34 +537,40 @@ namespace Manager
         }
         
         public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public const string Power_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public const string MINI_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-        public static readonly string[] UUIDs = new[] { GOLD_UUID, Power_UUID, MINI_UUID };
+        public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
+        public const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
+        public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID };
 
-        public Rank[][] topRanks = new Rank[UUIDs.Length][];
+        public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
         public Rank[][] myRanks = new Rank[UUIDs.Length][];
+
         void GetRankList()
         {
-            for (int i = 0; i < UUIDs.Length; i++)
+            int topRankIndex = 0;
+            int myRankIndex = 0;
+            for (int j = 0; j < UUIDs.Length; j++)
             {
-                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[i], callback=> {
+                //샌드큐는 비동기이기 때문에 j 값이 타이밍 안맞게 들어감 
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[topRankIndex], callback=> {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    topRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    topRanks[topRankIndex]= JsonMapper.ToObject<Rank[]>(json.ToJson())  ;
+                    topRankIndex++;
                 });
             
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[i],4 , callback => {
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[myRankIndex],4 , callback => {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    myRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    myRanks[myRankIndex]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    myRankIndex++;
                 });
             }
             

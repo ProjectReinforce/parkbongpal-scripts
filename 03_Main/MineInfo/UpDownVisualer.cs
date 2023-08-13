@@ -15,7 +15,7 @@ public class UpDownVisualer : MonoBehaviour
     public void UpdateArrows(Weapon currentWeapon, Weapon sellectWeapon) {
         int[] stats =
         {
-            sellectWeapon.data.power - currentWeapon.data.power,
+            sellectWeapon.power - currentWeapon.power,
             
             sellectWeapon.data.atk - currentWeapon.data.atk,
             sellectWeapon.data.atkSpeed- currentWeapon.data.atkSpeed,
