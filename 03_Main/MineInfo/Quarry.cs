@@ -1,5 +1,6 @@
 
 using System;
+using BackEnd;
 using Manager;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
+        // int mineCount = ResourceManager.Instance.mineDatas.Count;
         int mineCount = ResourceManager.Instance.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
@@ -45,13 +47,14 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     private void Start()
     {
-        int weaponCount = ResourceManager.Instance.WeaponDatas.Count;
+        int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Length;
+        // int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Length;
         
         for (int i = 0; i < weaponCount; i++)
         {
             Weapon weapon = Inventory.Instance.GetSlot(i).myWeapon;
            
-            if (weapon.data.mineId >= 0)
+            if (weapon?.data.mineId >= 0)
             {
                 mines[weapon.data.mineId].SetWeapon(weapon);
             }
@@ -61,9 +64,52 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     public void ClearWeapon()
     {
         int beforeGoldPerMin = currentMine.goldPerMin;
+        Receipt();
         currentMine.SetWeapon(null);
-        Player.Instance.SetGoldPerMin(Player.Instance.userData.goldPerMin-beforeGoldPerMin);
+        Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin-beforeGoldPerMin);
         currentMine = currentMine;
+    }
+    
+    public void Receipt()
+    {
+        currentMine.Receipt();
+    }
+ 
+    
+  
+    private int totalGold;
+    public void BatchReceipt()
+    {
+        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        
+        Utills.transactionList.Clear();
+
+        for (int i = 0; i < mines.Length; i++)
+        {
+            if(mines[i].rentalWeapon is null)continue;
+            totalGold += mines[i].Gold;
+            Param param = new Param
+            {
+                { nameof(WeaponData.colum.borrowedDate), date }
+            };
+            Utills.transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+        }
+       
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.LogError("Quarry: 일괄수령 실패"+callback);
+                return;
+            }
+            
+            Player.Instance.AddGold(totalGold);
+            totalGold = 0;
+            for (int i = 0; i < mines.Length; i++)
+            {
+                mines[i].Gold = 0;
+            }
+        });
     }
 
 

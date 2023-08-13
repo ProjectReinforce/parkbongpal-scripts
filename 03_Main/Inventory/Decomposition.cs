@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
+using Manager;
 using UnityEngine;
 
 public class Decomposition : MonoBehaviour
@@ -19,27 +20,41 @@ public class Decomposition : MonoBehaviour
         text.text = isDecompositing?"확정" :"분해";
         if(isDecompositing) return;
         
+        Utills.transactionList.Clear();
         foreach (Slot slot in slots)
         {
-            slot.SetsellectChecker(false);
             string indate = slot.myWeapon.data.inDate;
-            slot.SetWeapon(null);
-            SendQueue.Enqueue(Backend.GameData.DeleteV2, nameof(WeaponData), indate, Backend.UserInDate, ( callback ) => 
-            { 
-                if (!callback.IsSuccess())
-                {
-                    Debug.Log(callback);
-                    return;
-                }
-            });
+            Utills.transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
+          
         }
-        Inventory.Instance.count -= slots.Count;
-        slots.Clear();
-        Inventory.Instance.Sort();
+        
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패");
+                return;
+            }
+            foreach (Slot slot in slots)
+            {
+                slot.SetsellectChecker(false);
+                slot.SetWeapon(null);
+            }
+            Inventory.Instance.count -= slots.Count;
+            slots.Clear();
+            Inventory.Instance.Sort();
+        });
+     
     }
     static public bool ChooseWeaponSlot(Slot slot)
     {
+        if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
+        {
+            UIManager.Instance.ShowWarning("알림", "광산에 대여중인 무기입니다.");
+            return false;
+        }
         if (!isDecompositing) return false;
+        
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
         if (findingSlot is null)
         {            
@@ -52,6 +67,18 @@ public class Decomposition : MonoBehaviour
             return false;
         }
     }
-   
-    
+
+    public void Reset()
+    {
+        _isDecompositing = false;
+        foreach (Slot slot in slots)
+        {
+            slot.SetsellectChecker(false);
+        }
+
+        text.text = "분해";
+        slots.Clear();
+    }
+
+
 }

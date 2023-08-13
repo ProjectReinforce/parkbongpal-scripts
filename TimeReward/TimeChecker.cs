@@ -10,40 +10,48 @@ public class TimeChecker : Singleton<TimeChecker>
     protected override void Awake()
     {
         base.Awake();
-        timeInterval = ResourceManager.Instance.serverTime - ResourceManager.Instance.lastLogin;
-        IdleReward();
+        timeInterval = ResourceManager.Instance.ServerTime - ResourceManager.Instance.LastLogin;
     }
-    private void IdleReward()
+    private void Start()
     {
-        int reward =  (int)timeInterval.TotalMilliseconds * Player.Instance.userData.goldPerMin;
+        //OffLineReward();
+        AttendanceCheck();
+    }
+
+    private void OffLineReward()
+    {
         string empty = "";
         string day = timeInterval.Days == 0 ? empty : timeInterval.Days+ "일 ";
         string hour = timeInterval.Hours == 0 ? empty : timeInterval.Days+ "시간 ";
         string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Days+ "분 동안 ";
 
+        int reward =  (int)(timeInterval.TotalMilliseconds/60000 * ResourceManager.Instance.userData.goldPerMin);
+        
         UIManager.Instance.ShowWarning("알림",$"{day}{hour}{minute}{reward} gold 를 획득 했습니다." );
         Player.Instance.AddGold(reward);
     }
 
     private void AttendanceCheck()
     {
-        if (ResourceManager.Instance.lastLogin.Month != ResourceManager.Instance.serverTime.Month)
+        int day = ResourceManager.Instance.userData.attendance;
+        if (ResourceManager.Instance.LastLogin.Month != ResourceManager.Instance.ServerTime.Month)
+            day = 0;
+
+        if (ResourceManager.Instance.LastLogin.Month == ResourceManager.Instance.ServerTime.Month&&
+            ResourceManager.Instance.LastLogin.Day == ResourceManager.Instance.ServerTime.Day) return;
+        AttendanceData todayReward = ResourceManager.Instance.attendanceDatas[day];
+        switch (todayReward.type)
         {
-            //보살리스트 갱신
-            //내 누적일수 갱신
+            case (int)RewardType.Gold:
+                Player.Instance.AddGold(ResourceManager.Instance.attendanceDatas[day].value);
+                break;
+            case (int)RewardType.Diamond:
+                Player.Instance.AddDiamond(ResourceManager.Instance.attendanceDatas[day].value);
+                break;
+            case (int)RewardType.Weapon:
+                Inventory.Instance.AddWeapon(ResourceManager.Instance.baseWeaponDatas[todayReward.value]);
+                break;
         }
-
-        if (ResourceManager.Instance.lastLogin.Day == ResourceManager.Instance.serverTime.Day)
-            return;
-        
-        
-        /*내 누적일수 =0*/
-         
-        // 
-        //보상리스트에서 내 누적 일수 갱신 
-        //
-        
+        Player.Instance.SetAttendance(++day);
     }
-
-
 }

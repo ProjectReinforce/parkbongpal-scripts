@@ -10,20 +10,23 @@ public class InventoryOpener : MonoBehaviour
     [SerializeField] GameObject detailInfo;
     [SerializeField] Button[] BasicInventoryButtons;
     [SerializeField] Button confirmButton;
-
+    [SerializeField] GameObject decompositButton;
     public void Open(int _openType)
     {
         detailInfo.SetActive(false);
         detailDefault.SetActive(true);
+        Inventory.Instance.upDownVisualer.gameObject.SetActive(false);
         switch ((InventoryOpenType)_openType)
         {
             case InventoryOpenType.Default:
                 foreach (Button button in BasicInventoryButtons)
                     button.gameObject.SetActive(true);
                 confirmButton.gameObject.SetActive(false);
+                decompositButton.SetActive(true);
                 break;
             case InventoryOpenType.Mine:
             case InventoryOpenType.Reinforce:
+                Inventory.Instance.upDownVisualer.gameObject.SetActive(true);
                 foreach (Button button in BasicInventoryButtons)
                     button.gameObject.SetActive(false);
                 confirmButton.onClick.RemoveAllListeners();

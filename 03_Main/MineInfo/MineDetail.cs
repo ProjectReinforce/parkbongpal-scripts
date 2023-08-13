@@ -15,6 +15,8 @@ public class MineDetail : MonoBehaviour
     [SerializeField] private Text weaponName;
     [SerializeField] private Text mineWithWeaponStats;
     [SerializeField] private Text skillDescription;
+   // [SerializeField] private Text gold;
+    
     
     
     public void SetCurrentMine(Mine mine)
@@ -32,6 +34,7 @@ public class MineDetail : MonoBehaviour
             weaponName.text = "";
             mineWithWeaponStats.text = $"0\n0\n0";
             skillDescription.text = "";
+           // gold.text = "";
         }
         else
         {
@@ -39,6 +42,7 @@ public class MineDetail : MonoBehaviour
             weaponName.text = mine.rentalWeapon.name;
             mineWithWeaponStats.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
             //skillDescription.text = 
+          //  gold.text = mine.Gold.ToString();
         }
     }
 }

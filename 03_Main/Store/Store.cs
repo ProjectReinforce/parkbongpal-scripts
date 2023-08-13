@@ -2,114 +2,80 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using LitJson;
 using Manager;
-using BackEnd;
 
 [System.Serializable]
-public class Store:Singleton<Store>
-{ 
-    /*
-    * 등급별 나올확률.
-    * 일반 51 27 14 8
-    * 고급 48 25 14 9 3.8 0.2;
-    */
-    
-   public void NormalDrawing()
-   {
-      int pay = 0;
-      if (Player.Instance.userData.gold < pay)
-      {
-          UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
-          return;
-      }
-      if (Inventory.Instance.count>Inventory.Instance.size)
-      {
-          UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
-          return;
-      }
-      int randomInt = Utills.random.Next(1, 101);
-      int limit = 100;
-      Rarity rarity;
-      GachaData normalGarchar = ResourceManager.Instance.normalGarchar;
-    
-      if (randomInt > (limit-=normalGarchar.rare))
-          rarity =Rarity.rare;
-      else if (randomInt > (limit-=normalGarchar.normal))
-          rarity =Rarity.normal;
-      else if (randomInt > (limit-=normalGarchar.old))
-          rarity =Rarity.old;
-      else
-          rarity = Rarity.trash;
-      Debug.Log("rarity: "+rarity+" limit: "+limit);
-      BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
-        Debug.Log(baseWeaponData.index);
-
-        // Param param = new Param
-        // {
-        //     { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
-        //     { nameof(WeaponData.colum.damage), baseWeaponData.atk },
-        //     { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
-        //     { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
-        //     { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
-        //     { nameof(WeaponData.colum.rarity), baseWeaponData.rarity},
-        //     { nameof(WeaponData.colum.criticalRate), baseWeaponData.criticalRate},
-        //     { nameof(WeaponData.colum.criticalDamage), baseWeaponData.criticalDamage},
-        //     { nameof(WeaponData.colum.strength), baseWeaponData.strength},
-        //     { nameof(WeaponData.colum.intelligence), baseWeaponData.intelligence},
-        //     { nameof(WeaponData.colum.wisdom), baseWeaponData.wisdom},
-        //     { nameof(WeaponData.colum.technique), baseWeaponData.technique},
-        //     { nameof(WeaponData.colum.charm), baseWeaponData.charm},
-        //     { nameof(WeaponData.colum.constitution), baseWeaponData.constitution},
-        //     { nameof(WeaponData.colum.magic), new int []{-1,-1}}
-        // };
-        Param param = new Param
+public class Store : Singleton<Store>
+{
+    // private List<GachaData> gacharsPercents;
+    private GachaData[] gacharsPercents;
+    protected override void Awake()
+    {
+        base.Awake();
+        // gacharsPercents = ResourceManager.Instance.gachar;
+        gacharsPercents = ResourceManager.Instance.gachar;
+    }
+    const int Pay = 1000;
+    public void Drawing(int type)
+    {
+        
+        if (Player.Instance.Data.gold < Pay)
         {
-            { nameof(WeaponData.colum.mineId), -1},
-            { nameof(WeaponData.colum.magic), new int []{-1,-1}},
-            { nameof(WeaponData.colum.rarity), baseWeaponData.rarity},
-            { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
-            { nameof(WeaponData.colum.defaultStat), baseWeaponData.defaultStat },
-            { nameof(WeaponData.colum.PromoteStat), baseWeaponData.PromoteStat },
-            { nameof(WeaponData.colum.AdditionalStat), baseWeaponData.AdditionalStat },
-            { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
-            { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
-            { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
-        };
-
-        var bro = Backend.GameData.Insert(nameof(WeaponData), param);
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError("게임 정보 삽입 실패 : " + bro);
+            UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+            return;
         }
 
-        // WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
-        //     baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index,
-        //     bro.GetInDate(), baseWeaponData.criticalRate, baseWeaponData.criticalDamage,
-        //     baseWeaponData.strength, baseWeaponData.intelligence, baseWeaponData.wisdom,
-        //     baseWeaponData.technique, baseWeaponData.charm, baseWeaponData.constitution);
-
-        WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
-
-        Player.Instance.AddGold(-pay);
-        Inventory.Instance.AddWeapon(new Weapon(weaponData,Inventory.Instance.GetSlot(Inventory.Instance.count)), Inventory.Instance.count);
-        Debug.Log("[store]"+baseWeaponData.index);
-        if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
+        if (Inventory.Instance.count >= Inventory.Instance.size)
         {
-            var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
-            {
-                {nameof(PideaData.colum.ownedWeaponId),baseWeaponData.index},
-                {nameof(PideaData.colum.rarity),baseWeaponData.rarity}
-            });
-            if (!pidea.IsSuccess())
-            {
-                Debug.LogError("게임 정보 삽입 실패 : " + pidea);
-            }
-            Pidea.Instance.GetNewWeapon(baseWeaponData.index);
+            UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
+            return;
+        }
+
+
+        GachaData gachaData = gacharsPercents[type];
+       
+        int[] percents = { gachaData.trash, gachaData.old, gachaData.normal, gachaData.unique, gachaData.legendary };
+
+        Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
+        
+        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
+
+        Inventory.Instance.AddWeapon(baseWeaponData);
+        Player.Instance.AddGold(-Pay);
+        Debug.Log("[store]" + baseWeaponData.index);
+        
+    }
+
+    private const int TEN = 10;
+    public void BatchDrawing(int type)
+    {
+        
+        if (Player.Instance.Data.gold < Pay*TEN)
+        {
+            UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+            return;
+        }
+
+        if (Inventory.Instance.count+TEN >= Inventory.Instance.size)
+        {
+            UIManager.Instance.ShowWarning("알림", "인벤토리가 부족합니다.");
+            return;
+        }
+
+        GachaData gachaData = gacharsPercents[type];
+        int[] percents = { gachaData.trash, gachaData.old, gachaData.normal, gachaData.unique, gachaData.legendary };
+
+        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
+        for (int i = 0; i < TEN; i++)
+        {
+            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
+            baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
         }
         
-        Debug.Log("구입완료" + bro.GetInDate());
-
-
+        
+        Inventory.Instance.AddWeapon(baseWeaponDatas);
+        Player.Instance.AddGold(-Pay*TEN);
+        
     }
+   
 }

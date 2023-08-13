@@ -8,9 +8,9 @@ using BackEnd;
 public class Login : MonoBehaviour
 {
 
-    const string SCENE_NAME = "Main_V3_HW";
+    //const string SCENE_NAME = "Main_V3";
 
-    //const string SCENE_NAME = "Main_V2";
+    const string SCENE_NAME = "Main_V3 JG";
 
 
 
@@ -22,10 +22,7 @@ public class Login : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인에 성공했습니다");
-            if(Backend.UserNickName == "")
-                NicknamePopup.SetActive(true);
-            else
-                Utills.LoadScene(SCENE_NAME);
+            Utills.LoadScene(SCENE_NAME);
         }
         else
         {
