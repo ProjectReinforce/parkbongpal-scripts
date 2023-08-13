@@ -13,9 +13,9 @@ public class NormalReinforceUI : MonoBehaviour
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(6).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
-        transform.GetChild(7).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(8).TryGetComponent<Button>(out normalReinforceButton);
+        transform.GetChild(4).GetChild(2).GetChild(1).GetChild(5).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
+        transform.GetChild(5).GetChild(1).TryGetComponent(out costText);
+        transform.GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
     }
 
     void OnEnable()

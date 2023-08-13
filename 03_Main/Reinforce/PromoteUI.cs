@@ -12,8 +12,9 @@ public class PromoteUI : MonoBehaviour
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(5).GetChild(6).GetChild(5).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
+        transform.GetChild(4).GetChild(4).GetChild(5).GetChild(1).TryGetComponent(out costText);
+        // transform.GetChild(4).GetChild(4).GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
+        transform.GetChild(5).TryGetComponent<Button>(out normalReinforceButton);
     }
 
     void OnEnable()
