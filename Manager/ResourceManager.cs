@@ -8,15 +8,17 @@ namespace Manager
     public class ResourceManager : DontDestroy<ResourceManager>
     {
         public Where searchFromMyIndate = new();
+        public WeaponData[] weaponDatas;
         public BaseWeaponData[] baseWeaponDatas;
         public MineData[] mineDatas;
-        public List< WeaponData> WeaponDatas;
+        public int[] expDatas;
         public UserData userData;
-        public GachaData normalGarchar;
-        public GachaData advencedGarchar;
-        public NormalReinforceData normalReinforceData;
-        public SoulCraftingData soulCraftingData;
+        public GachaData[] gachar;
+        public AttendanceData[] attendanceDatas;
         public AdditionalData additionalData;
+        public NormalReinforceData normalReinforceData;
+        public MagicCarveData magicCarveData;
+        public SoulCraftingData soulCraftingData;
         public RefinementData refinementData;
 
         readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
@@ -55,10 +57,10 @@ namespace Manager
             return skills[index];
         }
         public Notifyer notifyer;
+
         protected override void Awake()
         {
             base.Awake();
-            
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             skills = Resources.LoadAll<Skill>("Sprites/Skills");
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
@@ -66,16 +68,209 @@ namespace Manager
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
-            // Backend.Chart.DeleteLocalChartData("87732");
+            SetLastLogin();
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
-            SetLastLogin();
-            
-            GetVersionChart();
+            GetRankList();
+            // GetVersionChart();
+
+            LoadAllChart();
         }
 
-        const string VERSION_CHART_ID = "87960";
+        const string VERSION_CHART_ID = "88033";
+        const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
+        Dictionary<string, VersionInfo> localChartLists;
+        Dictionary<string, VersionInfo> backEndChartLists;
+        Dictionary<string, string> downLoadChartLists;
+        Dictionary<string, string> loadChartLists;
+        void LoadAllChart()
+        {
+            localChartLists = new();
+
+            // 1. 차트인포 로컬 파일 로드
+            string loadedChart = Backend.Chart.GetLocalChartData(VERSION_CHART_ID);
+            // loadedChart = "";
+            // 2. 차트인포 로컬 차트가 있는 경우, 로드
+            if (loadedChart != "")
+            {
+                // 차트 변환 및 저장
+                JsonData loadedChartJson = StringToJson(loadedChart);
+
+                VersionInfo versionInfo = new();
+                for (int i = 0; i < loadedChartJson.Count; ++i)
+                {
+                    versionInfo = JsonMapper.ToObject<VersionInfo>(loadedChartJson[i].ToJson());
+                    localChartLists.Add(versionInfo.name, versionInfo);
+                }
+
+                // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+                // foreach (var one in localChartLists)
+                //     Debug.Log($"Local : {one} / {one.Value.latestfileId}");
+            }
+            // 차트인포 로컬 차트 유무에 상관 없이 뒤끝 차트 수신 및 저장
+            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, VERSION_CHART_ID, bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    // 요청 실패 처리
+                    Debug.Log(bro);
+                    return;
+                }
+
+                backEndChartLists = new();
+                downLoadChartLists = new();
+                loadChartLists = new();
+                // 차트 변환 및 저장
+                JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                Debug.Log($"[ResourceM] {VERSION_CHART_ID} 수신 완료 : {json.Count}개");
+                VersionInfo versionInfo = new();
+                for (int i = 0; i < json.Count; ++i)
+                {
+                    versionInfo = JsonMapper.ToObject<VersionInfo>(json[i].ToJson());
+                    backEndChartLists.Add(versionInfo.name, versionInfo);
+                }
+
+                // foreach (var one in backEndChartLists)
+                //     Debug.Log($"BackEnd : {one} / {one.Value.latestfileId}");
+
+                SceneLoader.ResourceLoadComplete();
+                // 3. 차트인포 로컬 차트 있으면 다운로드 대상 차트 선정, 없으면 올로드
+                // 차트인포 로컬 차트 있는 경우,
+                if (loadedChart != "")
+                {
+                    // 업데이트 일자 비교 후 리스트 정리
+                    int count = Mathf.Max(localChartLists.Count, backEndChartLists.Count);
+                    for (int i = 0; i < count; i++)
+                    {
+                        string chartName = ((ChartName)i).ToString();
+
+                        // 로컬 업데이트 정보
+                        string stringLocalChartUpdateDate;
+                        if (localChartLists.TryGetValue(chartName, out VersionInfo localVersionInfo))
+                            stringLocalChartUpdateDate = localVersionInfo.updateDate;
+                        else
+                            stringLocalChartUpdateDate = DEFAULT_UPDATE_DATE;
+
+                        // 뒤끝 업데이트 정보
+                        string stringBackEndChartUpdateDate;
+                        if (backEndChartLists.TryGetValue(chartName, out VersionInfo backEndVersionInfo))
+                            stringBackEndChartUpdateDate = backEndVersionInfo.updateDate;
+                        else
+                            stringBackEndChartUpdateDate = DEFAULT_UPDATE_DATE;
+
+                        if (stringLocalChartUpdateDate != stringBackEndChartUpdateDate)
+                            downLoadChartLists.Add(chartName, backEndChartLists[chartName].latestfileId);
+                        else
+                            loadChartLists.Add(chartName, backEndChartLists[chartName].latestfileId);
+
+                    }
+
+                    foreach (var one in downLoadChartLists)
+                        LoadLocalOrBackEndChart((ChartName)System.Enum.Parse(typeof(ChartName), one.Key), true);
+                    foreach (var one in loadChartLists)
+                        LoadLocalOrBackEndChart((ChartName)System.Enum.Parse(typeof(ChartName), one.Key), false);
+                }
+                // 없는 경우
+                else
+                {
+                    foreach (var one in backEndChartLists)
+                        LoadLocalOrBackEndChart((ChartName)System.Enum.Parse(typeof(ChartName), one.Key), true);
+                }
+            });
+        }
+
+        void LoadLocalOrBackEndChart(ChartName _chartName, bool _fromBackEnd = false)
+        {
+            // 수신된 정보로 차트 데이터 세팅
+            string chartId = backEndChartLists[_chartName.ToString()].latestfileId;
+            switch (_chartName)
+            {
+                // 무기 제작 확률 정보
+                case ChartName.gachaPercentage:
+                    void GachaDataProcess(GachaData[] data) { gachar = data; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<GachaData>(chartId, GachaDataProcess);
+                    else
+                        SetChartData<GachaData>(chartId, GachaDataProcess);
+                    break;
+                // 광산 정보
+                case ChartName.mineData:
+                    void MineDataProcess(MineData[] data) { mineDatas = data; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<MineData>(chartId, MineDataProcess);
+                    else
+                        SetChartData<MineData>(chartId, MineDataProcess);
+                    break;
+                // 무기 기본 정보
+                case ChartName.weapon:
+                    void BaseWeaponDataProcess(BaseWeaponData[] data)
+                    {
+                        baseWeaponDatas = data;
+                        
+                        for (int i = 0; i < baseWeaponDatas.Length; ++i)
+                            baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+                    }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
+                    else
+                        SetChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
+                    break;
+                // 추가 옵션 정보
+                case ChartName.additional:
+                    void AdditionalDataProcess(AdditionalData[] data) { additionalData = data[0]; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<AdditionalData>(chartId, AdditionalDataProcess);
+                    else
+                        SetChartData<AdditionalData>(chartId, AdditionalDataProcess);
+                    break;
+                // 일반 강화 정보
+                case ChartName.normalReinforce:
+                    void NormalDataProcess(NormalReinforceData[] data) { normalReinforceData = data[0]; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<NormalReinforceData>(chartId, NormalDataProcess);
+                    else
+                        SetChartData<NormalReinforceData>(chartId, NormalDataProcess);
+                    break;
+                // 마법 부여 정보
+                case ChartName.magicCarve:
+                    void MagicDataProcess(MagicCarveData[] data) { magicCarveData = data[0]; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<MagicCarveData>(chartId, MagicDataProcess);
+                    else
+                        SetChartData<MagicCarveData>(chartId, MagicDataProcess);
+                    break;
+                // 영혼 세공 정보
+                case ChartName.soulCrafting:
+                    void SoulDataProcess(SoulCraftingData[] data) { soulCraftingData = data[0]; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<SoulCraftingData>(chartId, SoulDataProcess);
+                    else
+                        SetChartData<SoulCraftingData>(chartId, SoulDataProcess);
+                    break;
+                // 재련 정보
+                case ChartName.refinement:
+                    void RefineDataProcess(RefinementData[] data) { refinementData = data[0]; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<RefinementData>(chartId, RefineDataProcess);
+                    else
+                        SetChartData<RefinementData>(chartId, RefineDataProcess);
+                    break;
+                // 출석 보상 정보
+                case ChartName.attendance:
+                    void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = data; }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<AttendanceData>(chartId, AttendanceDataProcess);
+                    else
+                        SetChartData<AttendanceData>(chartId, AttendanceDataProcess);
+                    break;
+                // 레벨별 필요 경험치 정보
+                case ChartName.exp:
+                    GetExpData(_fromBackEnd);
+                    break;
+            }
+        }
+
         Dictionary<string, string> chartInfos;
         void GetVersionChart()
         {
@@ -104,169 +299,110 @@ namespace Manager
                 foreach (var one in chartInfos)
                     Debug.Log(one);
 
-                // 수신된 정보로 로컬 차트 로드
-                GetMineData();
-                GetNormalGachaData();
-                GetAdvancedGachaData();
-                GetBaseWeaponData();
-                // GetNormalReinforceData();
-
-
-                void setNormalData(NormalReinforceData data) { normalReinforceData = data; }
-                SetChartData<NormalReinforceData>(ChartName.normalReinforce, setNormalData);
-                void setAdditionalData(AdditionalData data) { additionalData = data; }
-                SetChartData<AdditionalData>(ChartName.additional, setAdditionalData);
-                void setSoulData(SoulCraftingData data) { soulCraftingData = data; }
-                SetChartData<SoulCraftingData>(ChartName.soulCrafting, setSoulData);
-                void setRefineData(RefinementData data) { refinementData = data; }
-                SetChartData<RefinementData>(ChartName.refinement, setRefineData);
+                // 수신된 정보로 차트 데이터 세팅
+                // 무기 제작 확률 정보
+                string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
+                void GachaDataProcess(GachaData[] data) { gachar = data; }
+                SetChartData<GachaData>(chartId, GachaDataProcess);
+                // 광산 정보
+                chartId = chartInfos[ChartName.mineData.ToString()];
+                void MineDataProcess(MineData[] data) { mineDatas = data; }
+                SetChartData<MineData>(chartId, MineDataProcess);
+                // 무기 기본 정보
+                chartId = chartInfos[ChartName.weapon.ToString()];
+                void BaseWeaponDataProcess(BaseWeaponData[] data)
+                {
+                    baseWeaponDatas = data;
+                    
+                    for (int i = 0; i < baseWeaponDatas.Length; ++i)
+                        baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+                }
+                SetChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
+                // 추가 옵션 정보
+                chartId = chartInfos[ChartName.additional.ToString()];
+                void AdditionalDataProcess(AdditionalData[] data) { additionalData = data[0]; }
+                SetChartData<AdditionalData>(chartId, AdditionalDataProcess);
+                // 일반 강화 정보
+                chartId = chartInfos[ChartName.normalReinforce.ToString()];
+                void NormalDataProcess(NormalReinforceData[] data) { normalReinforceData = data[0]; }
+                SetChartData<NormalReinforceData>(chartId, NormalDataProcess);
+                // 마법 부여 정보
+                chartId = chartInfos[ChartName.magicCarve.ToString()];
+                void MagicDataProcess(MagicCarveData[] data) { magicCarveData = data[0]; }
+                SetChartData<MagicCarveData>(chartId, MagicDataProcess);
+                // 영혼 세공 정보
+                chartId = chartInfos[ChartName.soulCrafting.ToString()];
+                void SoulDataProcess(SoulCraftingData[] data) { soulCraftingData = data[0]; }
+                SetChartData<SoulCraftingData>(chartId, SoulDataProcess);
+                // 재련 정보
+                chartId = chartInfos[ChartName.refinement.ToString()];
+                void RefineDataProcess(RefinementData[] data) { refinementData = data[0]; }
+                SetChartData<RefinementData>(chartId, RefineDataProcess);
+                // 출석 보상 정보
+                chartId = chartInfos[ChartName.attendance.ToString()];
+                void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = data; }
+                SetChartData<AttendanceData>(chartId, AttendanceDataProcess);
+                // 레벨별 필요 경험치 정보
+                // GetExpData();
             });
-        }
-        
-        void GetNormalGachaData()
+        }     
+
+        void GetExpData(bool _fromBackEnd)
+        // void GetExpData()
         {
-            string chartId = chartInfos[ChartName.normalGachaPercentage.ToString()];
+            // string chartId = chartInfos[ChartName.exp.ToString()];
+            string chartId = backEndChartLists[ChartName.exp.ToString()].latestfileId;
 
             string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.normalGachaPercentage, out normalGarchar))
+            // loadedChart = "";
+
+            // 로컬 차트가 있는 경우
+            if (loadedChart != "" && !_fromBackEnd)
             {
+                JsonData loadedChartJson = StringToJson(loadedChart);
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
+
+                expDatas = new int[loadedChartJson.Count];
+                for (int i = 0; i < loadedChartJson.Count; i++)
+                    expDatas[i] = int.Parse(loadedChartJson[i]["requireExp"].ToString());
                 SceneLoader.ResourceLoadComplete();
             }
             else
             {
-                GetBackEndChartData<GachaData>(chartId, (data, index) =>
+                SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
                 {
-                    normalGarchar = data;
-                });
-            }
-        }
+                    if (!bro.IsSuccess())
+                    {
+                        // 요청 실패 처리
+                        Debug.Log(bro);
+                        return;
+                    }
 
-        void GetAdvancedGachaData()
-        {
-            string chartId = chartInfos[ChartName.advancedGachaPercentage.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData(ChartName.advancedGachaPercentage, out advencedGarchar))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {
-                GetBackEndChartData<GachaData>(chartId, (data, index) =>
-                {
-                    advencedGarchar = data;
-                });
-            }
-        }
-
-        public const int ALL_WEAPON_COUNT = 100;
-        void GetBaseWeaponData()
-        {
-            string chartId = chartInfos[ChartName.weapon.ToString()];
-
-            // Backend.Chart.DeleteLocalChartData("87732");
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
-            {
-                for (int i = 0; i < baseWeaponDatas.Length; ++i)
-                {
-                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                    if(i >= 10)
-                        break;
-                    baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-                }
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {  
-                baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
-                
-                GetBackEndChartData<BaseWeaponData>(chartId, (data, index) =>
-                {
-                    baseWeaponDatas[index] = data;
-                    baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
-                });
-            }
-        }
-         void GetnData()
-        {
-            string chartId = chartInfos[ChartName.weapon.ToString()];
-
-            // Backend.Chart.DeleteLocalChartData("87732");
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<BaseWeaponData>(ChartName.weapon, out baseWeaponDatas))
-            {
-                for (int i = 0; i < baseWeaponDatas.Length; ++i)
-                {
-                    // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                    if(i >= 10)
-                        break;
-                    baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-                }
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-            {  
-                baseWeaponDatas = new BaseWeaponData[ALL_WEAPON_COUNT];
-                
-                GetBackEndChartData<BaseWeaponData>(chartId, (data, index) =>
-                {
-                    baseWeaponDatas[index] = data;
-                    baseWeaponDatasFromRarity[baseWeaponDatas[index].rarity].Add(baseWeaponDatas[index]);
+                    JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                    expDatas = new int[json.Count];
+                    Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
+                    for (int i = 0; i < json.Count; ++i)
+                        expDatas[i] = int.Parse(json[i]["requireExp"].ToString());
+                    SceneLoader.ResourceLoadComplete();
                 });
             }
         }
         
-
-        public const int MINE_COUNT=20;
-        void GetMineData()
+        void SetChartData<T>(string _chartId, System.Action<T[]> _dataProcess) where T: struct
         {
-            string chartId = chartInfos[ChartName.mineData.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<MineData>(ChartName.mineData, out mineDatas))
+            string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
+            if (GetLocalChartData<T>(_chartId, _dataProcess))
             {
                 Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 SceneLoader.ResourceLoadComplete();
             }
             else
-            {
-                mineDatas = new MineData[MINE_COUNT];
-                GetBackEndChartData<MineData>(chartId, (data, index) =>
-                {
-                    MineData mineData = data;
-                    mineData.defence = (int)((mineData.defence << mineData.stage) * 0.1f);
-                    mineData.hp = (int)((mineData.hp << mineData.stage) * 0.2f);
-                    mineData.size = (int)(mineData.size * 1.5f) + 30;
-                    mineData.lubricity = (int)(mineData.lubricity * 1.5f);
-                    mineDatas[index] = mineData;
-                });
-            }
+                GetBackEndChartData<T>(_chartId, _dataProcess);
         }
         
         #region For download to BackEnd chart
-        void SetChartData<T>(ChartName _chartName, System.Action<T> _callback) where T: struct
+        void GetBackEndChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
-            string chartId = chartInfos[_chartName.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            if (GetLocalChartData<T>(_chartName, _callback))
-            {
-                Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-                SceneLoader.ResourceLoadComplete();
-            }
-            else
-                GetBackEndChartData<T>(chartId, _callback);
-        }
-        
-        void GetBackEndChartData<T>(string _chartId, System.Action<T> _callback) where T: struct
-        {
-            T result = default;
-
             SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
             {
                 if (!bro.IsSuccess())
@@ -278,121 +414,63 @@ namespace Manager
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
                 Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
-                for (int i = 0; i < json.Count; ++i)
+
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
+                SceneLoader.ResourceLoadComplete();
+            });
+        }
+
+        void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
+        {/*
+            //todo: getv2 , mydata 둘다 에러는 안나는데 값이 안얻어짐 
+            SendQueue.Enqueue(Backend.GameData.GetV2,tableName, "rowIndate" ,"2023-08-11T09:47:48.166Z",(bro) =>
+            {
+                if (!bro.IsSuccess())
                 {
-                    // 계수, 스테이지 확인 
-                    result = JsonMapper.ToObject<T>(json[i].ToJson());
-                    _callback(result);
+                    Debug.LogError(bro);
+                    return;
                 }
+                //JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                JsonData json = bro.GetReturnValuetoJSON();
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 ");
+                
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
+                
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.ToJson()}");
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
+                SceneLoader.ResourceLoadComplete();
+            });*/
+            
+            SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, 150, bro =>
+            {
+                if (!bro.IsSuccess())
+                {
+                    Debug.LogError(bro);
+                    return;
+                }
+                JsonData json = BackendReturnObject.Flatten(bro.Rows());
+                Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
+            
+                _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
         }
         #endregion
 
         #region For load to local chart
-        bool GetLocalChartData<T>(ChartName _chartName, System.Action<T> _callback) where T: struct
+        bool GetLocalChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
         {
-            string chartId = chartInfos[_chartName.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
+            string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
+            // loadedChart = "";
             // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
-                ChartToStruct<T>(loadedChartJson, out T result);
-
-                _callback(result);
+                _callback(JsonMapper.ToObject<T[]>(loadedChartJson.ToJson()));
                 return true;
             }
             return false;
-        }
-
-        bool GetLocalChartData<T>(ChartName _chartName, out T _result) where T: struct
-        {
-            string chartId = chartInfos[_chartName.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            // 로컬 차트가 있는 경우
-            if (loadedChart != "")
-            {
-                JsonData loadedChartJson = StringToJson(loadedChart);
-
-                ChartToStruct<T>(loadedChartJson, out _result);
-
-                return true;
-            }
-            else
-            {
-                _result = default;
-                return false;
-            }
-        }
-
-        bool GetLocalChartData<T>(ChartName _chartName, out T[] _results) where T: struct
-        {
-            string chartId = chartInfos[_chartName.ToString()];
-
-            string loadedChart = Backend.Chart.GetLocalChartData(chartId);
-            // 로컬 차트가 있는 경우
-            if (loadedChart != "")
-            {
-                JsonData loadedChartJson = StringToJson(loadedChart);
-
-                ChartToStruct<T>(loadedChartJson, out _results);
-
-                return true;
-            }
-            else
-            {
-                _results = default;
-
-                return false;
-            }
-        }
-        void GetBackEndChartData<T>(string chartId, System.Action<T,int> _callback) where T: struct
-        {
-            T result = default;
-            SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, chartId, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.LogError(bro);
-                    // todo: 에러 메시지 출력 및 타이틀로
-                    return;
-                }
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log($"[ResourceM] chartData 수신 완료 : {json.Count}개");
-
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    result = JsonMapper.ToObject<T>(json[i].ToJson());
-                    _callback(result,i);
-                }
-                SceneLoader.ResourceLoadComplete();
-            });
-        }
-        void GetMyBackEndData<T>(string tableName,int length, System.Action<T,int> _callback) where T: struct
-        {
-            SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, length, bro =>
-            {
-                if (!bro.IsSuccess())
-                {
-                    // 요청 실패 처리
-                    Debug.LogError(bro);
-                    // todo: 에러 메시지 출력 및 타이틀로
-                    return;
-                }
-                JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                Debug.Log($"[ResourceM] Mydata 수신 완료 : {json.Count}개");
-
-                for (int i = 0; i < json.Count; ++i)
-                {
-                    _callback(JsonMapper.ToObject<T>(json[i].ToJson()),i);
-                }
-                SceneLoader.ResourceLoadComplete();
-            });
         }
 
         const int CUT_LENGTH = 8;
@@ -405,83 +483,105 @@ namespace Manager
 
             return flattenedJson;
         }
-
-        void ChartToStruct<T>(JsonData _chartJson, out T[] _results) where T: struct
-        {
-            _results = new T[_chartJson.Count];
-            for (int i = 0; i < _chartJson.Count; ++i)
-            {
-                // 임시, 무기 스프라이트 갯수와 baseWeaponData 갯수를 맞추기 위함
-                if(i >= 10)
-                    break;
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-                _results[i] = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
-            }
-        }
-
-        void ChartToStruct<T>(JsonData _chartJson, out T _result) where T: struct
-        {
-            _result = new T();
-            for (int i = 0; i < _chartJson.Count; ++i)
-            {                   
-                // 데이터를 디시리얼라이즈 & 데이터 확인
-                _result = JsonMapper.ToObject<T>(_chartJson[i].ToJson());
-            }
-        }
         #endregion
 
         void GetOwnedWeaponData()
         {
-            WeaponDatas = new List<WeaponData>();
-            GetMyBackEndData<WeaponData>(nameof(WeaponData), 50, (data, index) =>
+
+            GetMyBackEndData<WeaponData>(nameof(WeaponData),  (data) =>
             {
-                WeaponDatas.Add(data) ;
+                weaponDatas=data ;
             });
         }
 
         void GetUserData()
         {
-            GetMyBackEndData<UserData>(nameof(UserData), 1, (data, index) =>
+            GetMyBackEndData<UserData>(nameof(UserData),  (data) =>
             {
-                userData = data;
+                userData = data[0];
+                Param param = new Param
+                {
+                    { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
+                };
+                Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             });
             
         }
 
-        public const int WEAPON_COUNT = 150;
-        public Material[] materials=  new Material[WEAPON_COUNT];
-        
+        public Material[] ownedWeaponIds = new Material[150];
+        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
             {
                 color = Color.black
             };
-            for (int i = 0; i < WEAPON_COUNT; i++)
+            for(int i =0; i<150; i++)
             {
-                materials[i] = new Material(LockMaterial);
+                ownedWeaponIds[i] = new Material(LockMaterial);
             }
-            GetMyBackEndData<PideaData>(nameof(PideaData), WEAPON_COUNT, (data, index) =>
-            {
-                materials[data.ownedWeaponId].color = Color.white;
-            });
 
+
+            GetMyBackEndData<PideaData>(nameof(PideaData),  (data) =>
+            {
+                foreach (PideaData pidea in data)
+                {
+                    ownedWeaponIds[pidea.ownedWeaponId].color = Color.white;
+                }
+            });
         }
 
-        private System.DateTime _lastLogin;
-        public System.DateTime lastLogin => _lastLogin;
-        private System.DateTime _serverTime;
-        public System.DateTime serverTime => _serverTime;
+        private System.DateTime lastLogin;
+        public System.DateTime LastLogin => lastLogin;
+        private System.DateTime serverTime;
+        public System.DateTime ServerTime => serverTime;
         void  SetLastLogin()
         {
             SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
             {
                 if(!bro.IsSuccess()) {
                     Debug.LogError("최근 접속시간 받아오기 실패.");
+                    return;
                 }
-                _lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
+                lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
             });
-            _serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
+        
+        public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public const string Power_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public const string MINI_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
+        public static readonly string[] UUIDs = new[] { GOLD_UUID, Power_UUID, MINI_UUID };
+
+        public Rank[][] topRanks = new Rank[UUIDs.Length][];
+        public Rank[][] myRanks = new Rank[UUIDs.Length][];
+        void GetRankList()
+        {
+            for (int i = 0; i < UUIDs.Length; i++)
+            {
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[i], callback=> {
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
+                    JsonData json = BackendReturnObject.Flatten(callback.Rows());
+                    topRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                });
+            
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[i],4 , callback => {
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
+                    JsonData json = BackendReturnObject.Flatten(callback.Rows());
+                    myRanks[i]=JsonMapper.ToObject<Rank[]>(json.ToJson());
+                });
+            }
+            
+            SceneLoader.ResourceLoadComplete();
+        }
+        
     }
 }

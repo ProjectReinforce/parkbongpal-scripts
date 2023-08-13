@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using LitJson;
 using Random = System.Random;
 using UnityEngine;
@@ -65,6 +66,7 @@ public static class Utills
         return -1;
     }
 
+
     public static int[] GetNonoverlappingDraw(int _totalCount, int _drawCount)
     {
         // 중복 없이 뽑은 인덱스를 담을 배열
@@ -91,4 +93,6 @@ public static class Utills
 
         return results;
     }
+    public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
+    
 }

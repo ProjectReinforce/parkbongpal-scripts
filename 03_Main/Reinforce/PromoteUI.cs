@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdditionalUI : MonoBehaviour
+public class PromoteUI : MonoBehaviour
 {
     ReinforceManager reinforceManager;
     Text costText;
-    Button additionalButton;
+    Button normalReinforceButton;
 
     void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(6).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(7).TryGetComponent<Button>(out additionalButton);
+        transform.GetChild(5).GetChild(6).GetChild(5).GetChild(1).TryGetComponent(out costText);
+        transform.GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
     }
 
     void OnEnable()
@@ -34,17 +34,17 @@ public class AdditionalUI : MonoBehaviour
     {
         if (reinforceManager.SelectedWeapon is null)
         {
-            additionalButton.interactable = false;
+            normalReinforceButton.interactable = false;
             return;
         }
 
         UpdateCost();
 
-        additionalButton.onClick.RemoveAllListeners();
-        additionalButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.additional)
+        normalReinforceButton.onClick.RemoveAllListeners();
+        normalReinforceButton.onClick.AddListener(() =>
+            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.promote)
         );
-        additionalButton.onClick.AddListener(() =>
+        normalReinforceButton.onClick.AddListener(() =>
             UpdateCost()
         );
     }
@@ -52,17 +52,19 @@ public class AdditionalUI : MonoBehaviour
     public void UpdateCost()
     {
         UserData userData = Player.Instance.Data;
-        int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
+        // WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        // int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        int cost = 1000;
 
         if (userData.gold < cost)
         {
             costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = false;
+            normalReinforceButton.interactable = false;
         }
         else
         {
             costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = true;
+            normalReinforceButton.interactable = true;
         }
     }
 }

@@ -29,6 +29,7 @@ public class Weapon
     public Weapon(WeaponData _data , Slot slot)//기본데이터
     {
         this._data = _data;
+
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         birthRairity= (Rarity)baseWeaponData.rarity;
@@ -41,9 +42,10 @@ public class Weapon
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
+        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.mineId),mineId);
-        
+        param.Add(nameof(WeaponData.colum.borrowedDate),_data.borrowedDate);
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -78,6 +80,12 @@ public class Weapon
     public void ExecuteReinforce(ReinforceType _type)
     {
         Debug.Log((int)_type);
-        reinforces[(int)_type-1].Try(this);
+        reinforces[(int)_type-1].Execute(this);
+    }
+
+    public void Promote()
+    {
+        _data.rarity ++;
+        _data.PromoteStat[(int)StatType.atk] += 10;
     }
 }

@@ -3,20 +3,21 @@
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
 {
-    public static WeaponData colum;
+    public static WeaponData colum;//재귀적 구조더라도 이변수는 포인터 크기만큼 메모리 차지
     public int baseWeaponIndex, mineId;
-    public string inDate;
 
     public int[] magic;
     public int rarity;
+    public int power;//todo:관련 로직 추가해야함 
     public int[] defaultStat, PromoteStat, AdditionalStat, NormalStat, SoulStat, RefineStat;
 
+    public string inDate;
+    public DateTime borrowedDate;
     public WeaponData(string _inDate, BaseWeaponData _weaponData)
     {
         inDate = _inDate;
         mineId = -1;
         magic = new int []{-1,-1};
-
         defaultStat = (int[])_weaponData.defaultStat.Clone();
         PromoteStat = (int[])_weaponData.PromoteStat.Clone();
         AdditionalStat = (int[])_weaponData.AdditionalStat.Clone();
@@ -25,6 +26,8 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         RefineStat = (int[])_weaponData.RefineStat.Clone();
         rarity = _weaponData.rarity;
         baseWeaponIndex = _weaponData.index;
+        power = 0;//todo: 관련로직 필요
+        borrowedDate = default;
     }
 
     #region Property
@@ -158,7 +161,7 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 public struct UserData
 {
     public static UserData colum;
-    public int gold, diamond, weaponSoul, stone;
+    public int gold, diamond, weaponSoul, stone, attendance;
     public int exp, level, favoriteWeaponId,goldPerMin;
     public string inDate;
     public DateTime owner_inDate;
@@ -176,6 +179,13 @@ public struct MineData//광산차트
     public int index, stage, defence,hp,size, lubricity;
     
     public string name, description;
+}
+
+[Serializable]
+public struct Rank
+{
+    public int index, score;
+    public string nickname, rank;
 }
 
 [Serializable]
@@ -316,6 +326,7 @@ public struct BaseWeaponData//기본 무기정보 차트
 public struct GachaData
 {
     public int trash, old, normal, rare, unique, legendary;
+
 }
 
 [Serializable]
@@ -342,6 +353,12 @@ public struct NormalReinforceData
 }
 
 [Serializable]
+public struct MagicCarveData
+{
+    public int firstRarityQuilfication, secondRarityQuilfication;
+}
+
+[Serializable]
 public struct SoulCraftingData
 {
     public int levelQuilfication;
@@ -363,7 +380,18 @@ public struct RefinementData
 public struct PostData
 {
     public string content,  title, author, sentDate , inDate;// 필요 없음 expirationDate, reservationDate, nickname, ,
-   
     // public BaseWeaponData[] items;
-   
+}
+
+[Serializable]
+public struct AttendanceData
+{
+    public int day, type, value;
+
+}
+
+[Serializable]
+public struct VersionInfo
+{
+    public string name, latestfileId, description, updateDate;
 }

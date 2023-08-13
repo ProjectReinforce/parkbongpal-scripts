@@ -39,6 +39,9 @@ public class Slot : MonoBehaviour, IComparable<Slot>
         if(myWeapon is  null) return;
         Inventory.Instance.currentWeapon = myWeapon;
         SelletChecker.SetActive( Decomposition.ChooseWeaponSlot(this));
+        if(Quarry.Instance.currentMine?.rentalWeapon is null) return;
+        
+        Inventory.Instance.upDownVisualer.UpdateArrows( Quarry.Instance.currentMine.rentalWeapon, myWeapon);
     }
     public void SetsellectChecker(bool isOn)
     {
@@ -47,6 +50,8 @@ public class Slot : MonoBehaviour, IComparable<Slot>
 
     public void UpdateLend()
     {
+        Debug.Log(myWeapon);
+        Debug.Log(myWeapon.data);
         lendImageObject.SetActive(myWeapon.data.mineId>-1);
     }
 
