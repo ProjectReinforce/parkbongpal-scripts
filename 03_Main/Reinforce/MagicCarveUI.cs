@@ -3,68 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MagicCarveUI : MonoBehaviour, ICheckReinforceQualification
+public class MagicCarveUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text[] currentSkillTexts;
+    [SerializeField] Text[] currentSkillTexts;
     // GameObject[] newSkills;
-    Text costText;
-    Button reinforceButton;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        currentSkillTexts = new Text[2];
-        transform.GetChild(4).GetChild(2).GetChild(1).GetChild(1).TryGetComponent(out currentSkillTexts[0]);
-        transform.GetChild(4).GetChild(3).GetChild(1).GetChild(1).TryGetComponent(out currentSkillTexts[1]);
-        transform.GetChild(5).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(6).TryGetComponent<Button>(out reinforceButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
-    {
-        if (reinforceManager.SelectedWeapon is null)
-        {
-            reinforceButton.interactable = false;
-            return;
-        }
-
-        CheckQualification();
-        UpdateSkill();
-
-        reinforceButton.onClick.RemoveAllListeners();
-        reinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.magicEngrave)
-        );
-        reinforceButton.onClick.AddListener(() => CheckQualification());
-        reinforceButton.onClick.AddListener(() => UpdateSkill());
-    }
-
-    public void CheckQualification()
-    {
-        Weapon weapon = reinforceManager.SelectedWeapon;
-
-        if (CheckCost() && CheckRarity() && CheckUpgradeCount() && weapon is not null)
-            reinforceButton.interactable = true;
-        else
-            reinforceButton.interactable = false;
-    }
-
-    public void UpdateSkill()
+    void UpdateSkill()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
@@ -72,7 +31,25 @@ public class MagicCarveUI : MonoBehaviour, ICheckReinforceQualification
         currentSkillTexts[1].text = weapon is not null && weapon.data.magic[1] != -1 ? $"{(MagicType)weapon.data.magic[1]}" : "";
     }
 
-    public bool CheckCost()
+    protected override void ActiveElements()
+    {
+    }
+
+    protected override void DeactiveElements()
+    {
+    }
+
+    protected override void UpdateInformations()
+    {
+        UpdateSkill();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => UpdateSkill());
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -80,17 +57,17 @@ public class MagicCarveUI : MonoBehaviour, ICheckReinforceQualification
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
         else
         {
-            costText.text = $"<color=white>{cost}</color>";
+            goldCostText.text = $"<color=white>{cost}</color>";
             return true;
         }
     }
 
-    public bool CheckRarity()
+    protected override bool CheckRarity()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
 
@@ -100,7 +77,7 @@ public class MagicCarveUI : MonoBehaviour, ICheckReinforceQualification
             return true;
     }
 
-    public bool CheckUpgradeCount()
+    protected override bool CheckUpgradeCount()
     {
         return true;
     }

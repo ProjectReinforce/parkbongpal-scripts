@@ -3,75 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RefineUI : MonoBehaviour, ICheckReinforceQualification
+public class RefineUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text[] resultStatTexts;
-    Text[] resultValueTexts;
-    Text goldCostText;
-    Text stoneCostText;
-    Button normalReinforceButton;
+    [SerializeField] Text[] resultStatTexts;
+    [SerializeField] Text[] resultValueTexts;
+    [SerializeField] Text stoneCostText;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        resultStatTexts = new Text[3];
-        transform.GetChild(4).GetChild(3).GetChild(0).GetChild(0).TryGetComponent(out resultStatTexts[0]);
-        transform.GetChild(4).GetChild(3).GetChild(1).GetChild(0).TryGetComponent(out resultStatTexts[1]);
-        transform.GetChild(4).GetChild(3).GetChild(2).GetChild(0).TryGetComponent(out resultStatTexts[2]);
-        resultValueTexts = new Text[3];
-        transform.GetChild(4).GetChild(3).GetChild(0).GetChild(3).TryGetComponent(out resultValueTexts[0]);
-        transform.GetChild(4).GetChild(3).GetChild(1).GetChild(3).TryGetComponent(out resultValueTexts[1]);
-        transform.GetChild(4).GetChild(3).GetChild(2).GetChild(3).TryGetComponent(out resultValueTexts[2]);
-        transform.GetChild(5).GetChild(1).TryGetComponent(out goldCostText);
-        transform.GetChild(6).GetChild(1).TryGetComponent(out stoneCostText);
-        transform.GetChild(7).TryGetComponent<Button>(out normalReinforceButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    void UpdateStat()
     {
-        if (reinforceManager.SelectedWeapon is null)
+        if (reinforceManager.RefineResults is null) return;
+        for (int i = 0; i < reinforceManager.RefineResults.Length; i++)
         {
-            normalReinforceButton.interactable = false;
-            return;
+            resultStatTexts[i].text = $"{reinforceManager.RefineResults[i].stat}";
+            resultValueTexts[i].text = $"{reinforceManager.RefineResults[i].value}";
         }
-
-        CheckQualification();
-        UpdateStat();
-
-        normalReinforceButton.onClick.RemoveAllListeners();
-        normalReinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.refineMent)
-        );
-        normalReinforceButton.onClick.AddListener(() => CheckQualification());
-        normalReinforceButton.onClick.AddListener(() => UpdateStat());
     }
 
-    public void CheckQualification()
+    protected override void ActiveElements()
     {
-        Weapon weapon = reinforceManager.SelectedWeapon;
-
-        if (CheckCost() && CheckRarity() && CheckUpgradeCount() && weapon is not null)
-            normalReinforceButton.interactable = true;
-        else
-            normalReinforceButton.interactable = false;
     }
 
-    public bool CheckCost()
+    protected override void DeactiveElements()
+    {
+    }
+
+    protected override void UpdateInformations()
+    {
+        UpdateStat();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => UpdateStat());
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
@@ -94,23 +75,13 @@ public class RefineUI : MonoBehaviour, ICheckReinforceQualification
         }
     }
 
-    public bool CheckRarity()
+    protected override bool CheckRarity()
     {
         return true;
     }
 
-    public bool CheckUpgradeCount()
+    protected override bool CheckUpgradeCount()
     {
         return true;
-    }
-
-    public void UpdateStat()
-    {
-        if (reinforceManager.RefineResults is null) return;
-        for (int i = 0; i < reinforceManager.RefineResults.Length; i++)
-        {
-            resultStatTexts[i].text = $"{reinforceManager.RefineResults[i].stat}";
-            resultValueTexts[i].text = $"{reinforceManager.RefineResults[i].value}";
-        }
     }
 }

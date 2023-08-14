@@ -93,6 +93,14 @@ public static class Utills
 
         return results;
     }
+    
+    public static string CapitalizeFirstLetter(string _targetString)
+    {
+        if (_targetString.Length == 0) return "";
+        else if (_targetString.Length == 1) return $"{_targetString[0]}";
+        else return $"{_targetString[0].ToString().ToUpper()}{_targetString[1..]}";
+    }
+
     public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
     
 }
