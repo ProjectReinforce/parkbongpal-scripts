@@ -22,6 +22,7 @@ public class Weapon
         new Promote(), new Additional(), new NormalReinforce(),
         new MagicEngrave(), new SoulCrafting(), new Refinement()
     };
+    public Refinement refinement => reinforces[(int)ReinforceType.refineMent-1] as Refinement;
 
     public Slot myslot;
 
@@ -89,6 +90,8 @@ public class Weapon
 
     public void Promote()
     {
+        if (_data.rarity >= (int)Rarity.legendary) return;
+
         _data.rarity ++;
         _data.PromoteStat[(int)StatType.atk] += 10;
     }

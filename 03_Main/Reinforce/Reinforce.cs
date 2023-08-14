@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BackEnd;
 using Manager;
+using System.Collections.Generic;
 
 public abstract class Reinforce
 {
@@ -14,6 +15,7 @@ public class Promote : Reinforce
         weapon.Promote();
 
         Param param = new Param();
+        param.Add(nameof(WeaponData.colum.rarity), weapon.data.rarity);
         param.Add(nameof(WeaponData.colum.PromoteStat), weapon.data.PromoteStat);
 
         var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
@@ -40,7 +42,7 @@ public class Additional : Reinforce
         if (resultIndex != -1)
         {
             Debug.Log($"result : {resultIndex} - {additionalDescription[resultIndex]} / {additionalPercent[resultIndex]}");
-            weapon.data.AdditionalStat[(int)StatType.atk] += additionalDescription[resultIndex];
+            weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
             weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
         }
 
@@ -55,7 +57,9 @@ public class Additional : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-10000);
+        int cost = data.goldCost;
+        Player.Instance.AddGold(-10);
+        // Player.Instance.AddGold(-cost);
     }
 }
 
@@ -199,8 +203,10 @@ public class SoulCrafting : Reinforce
 public class Refinement : Reinforce
 {
     const int REFINE_DRAW_COUNT = 3;
+
     public override void Execute(Weapon weapon)
     {
+        RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
         RefinementData data = ResourceManager.Instance.refinementData;
         // 스탯 결정
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
@@ -244,10 +250,20 @@ public class Refinement : Reinforce
             resultIndex = Utills.GetResultFromWeightedRandom(percentPercent);
             if (resultIndex != -1)
             {
-                Debug.Log($"result {i} : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
+                // Debug.Log($"result {i} : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
                 weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
             }
+
+            RefineResult refineResult = new(resultStat, percentDescription[resultIndex]);
+            refineResults[i] = refineResult;
         }
+
+        ReinforceManager.Instance.RefineResults = refineResults;
+
+        // foreach (var item in refineResults)
+        // {
+        //     Debug.Log($"{item.stat} - {item.value}");
+        // }
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.RefineStat), weapon.data.RefineStat);

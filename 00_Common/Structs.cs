@@ -35,9 +35,9 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         {
             int sum = defaultStat[(int)StatType.atk] +
                         PromoteStat[(int)StatType.atk] +
-                        AdditionalStat[(int)StatType.atk] +
+                        (defaultStat[(int)StatType.atk] + PromoteStat[(int)StatType.atk]) * AdditionalStat[(int)StatType.atk] / 100 +
                         NormalStat[(int)StatType.atk] +
-                        SoulStat[(int)StatType.atk] +
+                        (defaultStat[(int)StatType.atk] + PromoteStat[(int)StatType.atk]) * SoulStat[(int)StatType.atk] / 100 +
                         RefineStat[(int)StatType.atk];
             return sum;
         }
@@ -198,12 +198,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.atk] +
-                        PromoteStat[(int)StatType.atk] +
-                        AdditionalStat[(int)StatType.atk] +
-                        NormalStat[(int)StatType.atk] +
-                        SoulStat[(int)StatType.atk] +
-                        RefineStat[(int)StatType.atk];
+            int sum = defaultStat[(int)StatType.atk];
             return sum;
         }
     }
@@ -212,8 +207,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.atkSpeed] +
-                        RefineStat[(int)StatType.atkSpeed];
+            int sum = defaultStat[(int)StatType.atkSpeed];
             return sum;
         }
     }
@@ -222,8 +216,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.atkSpeed] +
-                        RefineStat[(int)StatType.atkSpeed];
+            int sum = defaultStat[(int)StatType.atkSpeed];
             return sum;
         }
     }
@@ -232,8 +225,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.accuracy] +
-                        RefineStat[(int)StatType.accuracy];
+            int sum = defaultStat[(int)StatType.accuracy];
             return sum;
         }
     }
@@ -242,8 +234,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.criticalRate] +
-                        RefineStat[(int)StatType.criticalRate];
+            int sum = defaultStat[(int)StatType.criticalRate];
             return sum;
         }
     }
@@ -252,8 +243,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.criticalDamage] +
-                        RefineStat[(int)StatType.criticalDamage];
+            int sum = defaultStat[(int)StatType.criticalDamage];
             return sum;
         }
     }
@@ -262,8 +252,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.strength] +
-                        RefineStat[(int)StatType.strength];
+            int sum = defaultStat[(int)StatType.strength];
             return sum;
         }
     }
@@ -272,8 +261,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.intelligence] +
-                        RefineStat[(int)StatType.intelligence];
+            int sum = defaultStat[(int)StatType.intelligence];
             return sum;
         }
     }
@@ -282,8 +270,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.wisdom] +
-                        RefineStat[(int)StatType.wisdom];
+            int sum = defaultStat[(int)StatType.wisdom];
             return sum;
         }
     }
@@ -292,8 +279,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.technique] +
-                        RefineStat[(int)StatType.technique];
+            int sum = defaultStat[(int)StatType.technique];
             return sum;
         }
     }
@@ -302,8 +288,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.charm] +
-                        RefineStat[(int)StatType.charm];
+            int sum = defaultStat[(int)StatType.charm];
             return sum;
         }
     }
@@ -312,8 +297,7 @@ public struct BaseWeaponData//기본 무기정보 차트
     {
         get
         {
-            int sum = defaultStat[(int)StatType.constitution] +
-                        RefineStat[(int)StatType.constitution];
+            int sum = defaultStat[(int)StatType.constitution];
             return sum;
         }
     }
@@ -392,4 +376,17 @@ public struct AttendanceData
 public struct VersionInfo
 {
     public string name, latestfileId, description, updateDate;
+}
+
+[Serializable]
+public struct RefineResult
+{
+    public StatType stat;
+    public int value;
+
+    public RefineResult(StatType _stat, int _value)
+    {
+        stat = _stat;
+        value = _value;
+    }
 }
