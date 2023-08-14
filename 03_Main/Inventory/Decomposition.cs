@@ -35,7 +35,7 @@ public class Decomposition : MonoBehaviour
                 limit++;
             }
             Debug.Log($"limit={limit}");
-            Inventory.Instance.count -= limit;
+            Inventory.Instance.Count -= limit;
             SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
             {
                 if (!callback.IsSuccess())
@@ -49,9 +49,8 @@ public class Decomposition : MonoBehaviour
         }
 
         Inventory.Instance.UpdateHighPowerWeaponData();
-
     }
-    static public bool ChooseWeaponSlot(Slot slot)
+    public static bool ChooseWeaponSlot(Slot slot)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {

@@ -8,13 +8,10 @@ using BackEnd;
 [Serializable]
 public class Inventory : DontDestroy<Inventory>
 {
-    [SerializeField] int weaponSoul;
-    [SerializeField] int stone;
     
     [SerializeField] GameObject nullImage;
     [SerializeField] WeaponDetail weaponDetail;
-    
-    [SerializeField] public UpDownVisualer upDownVisualer;
+    [SerializeField] UpDownVisualer upDownVisualer;
     
     Weapon _currentWeapon;
     public Weapon currentWeapon
@@ -26,29 +23,47 @@ public class Inventory : DontDestroy<Inventory>
             weaponDetail.SetWeapon(value);
             nullImage.SetActive(value is null);
             _currentWeapon = value;
+            upDownVisualer.UpdateArrows(Quarry.Instance.currentMine.rentalWeapon,value);
         } 
     }
     
     List<Slot> slots;
+
     public Slot GetSlot(int index)
     {
         return slots[index];
     }
-
-    int _count;
-    public int count
+    int count;
+    public int Count
     {
-        get => _count;
-        set => _count = value;
+        get => count;
+        set => count = value;
     }
-    int _size;
-    public int size => _size;
+    int size;
+    public int Size => size;
     public void Sort()
     {
         slots.Sort();
         for (int i = 0 ; i<slots.Count; i++)
             slots[i].transform.SetSiblingIndex(i);
         
+    }
+    [SerializeField] GameObject box;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
+        size = slots.Count;
+        count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
+        // _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
+        for (int i = 0; i < count; i++)
+        {
+            Weapon weapon = new Weapon(ResourceManager.Instance.weaponDatas[i], slots[i]);
+            slots[i].SetWeapon(weapon);
+        }
+        Sort();
     }
     public void AddWeapon(BaseWeaponData baseWeaponData )
     {
@@ -77,8 +92,8 @@ public class Inventory : DontDestroy<Inventory>
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
 
         
-        slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
-        _count++;
+        slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
+        count++;
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
@@ -130,8 +145,8 @@ public class Inventory : DontDestroy<Inventory>
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
-            _count++;
+            slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
+            count++;
         
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {
@@ -150,69 +165,7 @@ public class Inventory : DontDestroy<Inventory>
         }
     }
 
-    [SerializeField] GameObject box;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
-        _size = slots.Count;
-        _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
-        // _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
-        for (int i = 0; i < _count; i++)
-        {
-            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.weaponDatas[i],slots[i]));
-        }
-        Sort();
-    }
-
-    
-    public void ConfirmWeapon()
-    {
-        if (currentWeapon is null) return;
-        Mine currentMine = Quarry.Instance.currentMine;
-        Weapon currentMineWeapon = currentMine.rentalWeapon;
-        
-        try
-        {
-            if (currentWeapon.data.mineId >= 0)
-                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
-            int beforeGoldPerMin = currentMine.goldPerMin;
-            currentWeapon.SetBorrowedDate();
-            currentMine.SetWeapon(currentWeapon);
-            Debug.Log("inventory currentmine goldpermin"+currentMine.goldPerMin);
-            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
-        }
-        catch (Exception e)
-        {
-            UIManager.Instance.ShowWarning("안내", e.Message);
-            return;
-        }
-        if (currentMineWeapon is not null)
-        {
-            currentMineWeapon.Lend(-1);
-        }
-        currentWeapon.Lend(currentMine.GetMineData().index);
-        
-        Quarry.Instance.currentMine= currentMine ;
-    }
-
-    public void ReinforceSelect()
-    {
-        ReinforceManager.Instance.SelectedWeapon = currentWeapon;
-    }
-
-    bool _isShowLend;
-    public bool isShowLend =>_isShowLend;
-
-    public void ShowLendWeapon()
-    {
-        _isShowLend = !_isShowLend;
-        if(isShowLend)
-            currentWeapon = null;
-        Sort();
-    }
+   
 
     public void UpdateHighPowerWeaponData()
     {
@@ -229,7 +182,7 @@ public class Inventory : DontDestroy<Inventory>
             highPowerWeapon = currentWeapon;
         }
 
-        if( highPowerWeapon.power== Player.Instance.Data.combatScore) return;
+        if(highPowerWeapon is null|| highPowerWeapon.power== Player.Instance.Data.combatScore) return;
         Player.Instance.SetCombatScore(highPowerWeapon.power);
     }
 }

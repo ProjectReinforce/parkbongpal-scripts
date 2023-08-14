@@ -5,7 +5,7 @@ using BackEnd;
 using Manager;
 
 [Serializable]
-public class Slot : MonoBehaviour, IComparable<Slot> 
+public class Slot : NewThing, IComparable<Slot>
 {
     // Start is called before the first frame update
     [SerializeField] Image backgroundImage;
@@ -13,8 +13,8 @@ public class Slot : MonoBehaviour, IComparable<Slot>
     [SerializeField] GameObject ImageObject;
     [SerializeField] GameObject lendImageObject;//광산에 빌려줫다는 표시
     [SerializeField] Image weaponImage;
-    
     public Weapon myWeapon { get; set; }
+    
     public void SetWeapon(Weapon weapon)
     {
         if (weapon is null)
@@ -39,9 +39,6 @@ public class Slot : MonoBehaviour, IComparable<Slot>
         if(myWeapon is  null) return;
         Inventory.Instance.currentWeapon = myWeapon;
         SelletChecker.SetActive( Decomposition.ChooseWeaponSlot(this));
-        if(Quarry.Instance.currentMine?.rentalWeapon is null) return;
-        
-        Inventory.Instance.upDownVisualer.UpdateArrows( Quarry.Instance.currentMine.rentalWeapon, myWeapon);
     }
     public void SetsellectChecker(bool isOn)
     {
@@ -50,8 +47,6 @@ public class Slot : MonoBehaviour, IComparable<Slot>
 
     public void UpdateLend()
     {
-        Debug.Log(myWeapon);
-        Debug.Log(myWeapon.data);
         lendImageObject.SetActive(myWeapon.data.mineId>-1);
     }
 
@@ -59,7 +54,6 @@ public class Slot : MonoBehaviour, IComparable<Slot>
 
     public int CompareTo(Slot obj)
     {
-        
         if (myWeapon is null&&obj.myWeapon is not null)
             return 1;
         if (obj.myWeapon is null&&myWeapon is not null)
@@ -68,7 +62,7 @@ public class Slot : MonoBehaviour, IComparable<Slot>
             return 1;
         ImageObject.SetActive(true);
         button.enabled = true;
-        if (Inventory.Instance.isShowLend)
+        if (LendWeaponRenderer.isShowLend)
         {
             if (myWeapon.data.mineId>=0)
             {
@@ -81,12 +75,10 @@ public class Slot : MonoBehaviour, IComparable<Slot>
                 obj.ImageObject.SetActive(false);
                 obj.button.enabled = false;
                 return -1;
-            } 
-            
+            }
         }
-     
-        
-        
+
+
         switch ((SortedMethod)SortingDropDown.currentSortingMethod)
         {
             case SortedMethod.Rarity:
@@ -110,4 +102,5 @@ public class Slot : MonoBehaviour, IComparable<Slot>
         }
     }
 
+    
 }

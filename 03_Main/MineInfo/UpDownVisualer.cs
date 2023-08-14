@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
@@ -12,7 +13,10 @@ public class UpDownVisualer : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image[] arrowPositions;
     [SerializeField] private UnityEngine.UI.Text[] quantity;
     
+
     public void UpdateArrows(Weapon currentWeapon, Weapon sellectWeapon) {
+        if(currentWeapon is null || sellectWeapon is null) return;
+        
         int[] stats =
         {
             sellectWeapon.power - currentWeapon.power,
