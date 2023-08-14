@@ -35,7 +35,6 @@ public class Decomposition : MonoBehaviour
                 limit++;
             }
             Debug.Log($"limit={limit}");
-            Inventory.Instance.Count -= limit;
             SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
             {
                 if (!callback.IsSuccess())
@@ -43,7 +42,7 @@ public class Decomposition : MonoBehaviour
                     Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패"+callback);
                     return;
                 }
-                Inventory.Instance.Sort();
+                Inventory.Instance.SortSlots();
             });
             limit = 0;
         }

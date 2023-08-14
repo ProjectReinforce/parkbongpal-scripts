@@ -15,6 +15,9 @@ public class Slot : NewThing, IComparable<Slot>
     [SerializeField] Image weaponImage;
     public Weapon myWeapon { get; set; }
     
+    public static int  weaponCount=0;
+    
+    
     public void SetWeapon(Weapon weapon)
     {
         if (weapon is null)
@@ -23,6 +26,7 @@ public class Slot : NewThing, IComparable<Slot>
             ImageObject.SetActive(false);
             button.enabled = false;
             myWeapon = null;
+            weaponCount--;
             return;
         }
         backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[weapon.data.rarity];
@@ -31,7 +35,7 @@ public class Slot : NewThing, IComparable<Slot>
         myWeapon = weapon;
         lendImageObject.SetActive(weapon.data.mineId>-1);
         weaponImage.sprite = weapon.sprite;
-   
+        weaponCount++;
     }
     [SerializeField] GameObject SelletChecker;
     public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.

@@ -49,16 +49,15 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     private void Start()
     {
-        for (int i = 0; i < Inventory.Instance.Size; i++)
+        Inventory.Instance.travelInventory((weapon) =>
         {
-            Weapon weapon = Inventory.Instance.GetSlot(i).myWeapon;
-
             if (weapon?.data.mineId >= 0)
             {
                 mines[weapon.data.mineId].SetWeapon(weapon);
             }
-        }
+        });
     }
+    
 
     public void UnlockMines(int playerLevel)
     {
