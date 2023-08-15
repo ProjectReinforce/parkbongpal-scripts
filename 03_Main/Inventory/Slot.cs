@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using BackEnd;
 using Manager;
 
+
+
 [Serializable]
 public class Slot : NewThing, IComparable<Slot>
 {

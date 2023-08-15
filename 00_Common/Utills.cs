@@ -93,6 +93,5 @@ public static class Utills
 
         return results;
     }
-    public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
     
 }

@@ -1,12 +1,14 @@
 
 using System;
+using System.Collections.Generic;
 using BackEnd;
 using Manager;
 using UnityEngine;
 
 public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
-    [SerializeField] MineDetail mineDetail;
+    IDetailViewer<Mine> mineDetail;
+    [SerializeField] MineDetail detailObject;
     [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
     
     Sprite plusImage;
@@ -16,7 +18,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         get => _currentMine;
         set
         {
-            mineDetail.SetCurrentMine(value);
+            mineDetail.ViewUpdate(value);
             selectedWeaponImage.sprite =value.rentalWeapon is null? 
                 plusImage : value.rentalWeapon.sprite;
             _currentMine = value;
@@ -24,13 +26,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     }
 
     Mine[] mines;
-
-   
     [SerializeField] GameObject quarry;
     protected override void Awake()
     {
         base.Awake();
-        
+        mineDetail = detailObject;
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
@@ -116,7 +116,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         
-        Utills.transactionList.Clear();
+        
+        List<TransactionValue> transactionList = new List<TransactionValue>();
 
         for (int i = 0; i < mines.Length; i++)
         {
@@ -126,10 +127,10 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             {
                 { nameof(WeaponData.colum.borrowedDate), date }
             };
-            Utills.transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+            transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
         }
        
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
         {
             if (!callback.IsSuccess())
             {

@@ -64,6 +64,6 @@ public class Pidea : Singleton<Pidea>
     }
     public void SetCurrentWeapon(int index)
     {
-        pideaDetail.SetDetail(index);
+        pideaDetail.ViewUpdate(index);
     }
 }
