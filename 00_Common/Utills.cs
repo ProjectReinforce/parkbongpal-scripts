@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LitJson;
 using Random = System.Random;
 using UnityEngine;
+using System;
 
 public static class Utills
 {
@@ -101,6 +102,11 @@ public static class Utills
         else return $"{_targetString[0].ToString().ToUpper()}{_targetString[1..]}";
     }
 
+    public static T StringToEnum<T>(string _targetString) where T : Enum
+    {
+        return (T)Enum.Parse(typeof(T), _targetString);
+    }
+    
     public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
     
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 [Serializable]
 public struct WeaponData// 유저마다 바뀔수 있는 데이터
@@ -370,6 +371,18 @@ public struct AttendanceData
 {
     public int day, type, value;
 
+}
+
+[Serializable]
+public struct QuestData
+{
+    public int questId,	precedeQuestId;
+    public string questContent;
+    public long requestCount;
+    public RecordType recordType;
+    public QuestType questRepeatType;
+    public Dictionary<RewardType, int> rewardItem;
+    // public Dictionary<string, string> rewardItem;
 }
 
 [Serializable]

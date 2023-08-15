@@ -15,6 +15,7 @@ namespace Manager
         public UserData userData;
         public GachaData[] gachar;
         public AttendanceData[] attendanceDatas;
+        public QuestData[] questDatas;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -75,12 +76,25 @@ namespace Manager
             GetOwnedWeaponData();
             SetOwnedWeaponId();
             GetRankList();
-            // GetVersionChart();
 
             LoadAllChart();
+
+            // 테스트용
+            // void QuestDataProcess(QuestData[] data) { questDatas = data; }
+            // void QuestDataProcess(QuestData[] data)
+            // {
+            //     questDatas = data;
+            //     foreach (var item in questDatas)
+            //     {
+            //         foreach (var a in item.rewardItem)
+            //             Debug.Log($"{a.Key} {a.Value}");
+            //     }
+            // }
+            // GetBackEndChartData<QuestData>("89001", QuestDataProcess);
+            // GetLocalChartData<QuestData>("89001", QuestDataProcess);
         }
 
-        const string VERSION_CHART_ID = "88033";
+        const string VERSION_CHART_ID = "89012";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
@@ -270,6 +284,22 @@ namespace Manager
                 case ChartName.exp:
                     GetExpData(_fromBackEnd);
                     break;
+                case ChartName.quest:
+                    void QuestDataProcess(QuestData[] data) { questDatas = data; }
+                    // void QuestDataProcess(QuestData[] data)
+                    // {
+                    //     questDatas = data;
+                    //     foreach (var item in questDatas)
+                    //     {
+                    //         foreach (var a in item.rewardItem)
+                    //             Debug.Log($"{a.Key} {a.Value}");
+                    //     }
+                    // }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<QuestData>(chartId, QuestDataProcess);
+                    else
+                        SetChartData<QuestData>(chartId, QuestDataProcess);
+                    break;
             }
         }
 
@@ -454,6 +484,7 @@ namespace Manager
             // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
+                // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
                 _callback(JsonMapper.ToObject<T[]>(loadedChartJson.ToJson()));
