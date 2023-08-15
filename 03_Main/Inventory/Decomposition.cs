@@ -35,7 +35,6 @@ public class Decomposition : MonoBehaviour
                 limit++;
             }
             Debug.Log($"limit={limit}");
-            Inventory.Instance.count -= limit;
             SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
             {
                 if (!callback.IsSuccess())
@@ -43,15 +42,14 @@ public class Decomposition : MonoBehaviour
                     Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패"+callback);
                     return;
                 }
-                Inventory.Instance.Sort();
+                Inventory.Instance.SortSlots();
             });
             limit = 0;
         }
 
         Inventory.Instance.UpdateHighPowerWeaponData();
-
     }
-    static public bool ChooseWeaponSlot(Slot slot)
+    public static bool ChooseWeaponSlot(Slot slot)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {

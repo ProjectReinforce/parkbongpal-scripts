@@ -26,7 +26,8 @@ public class Mine :MonoBehaviour,Rental
     [SerializeField] UnityEngine.UI.Text mineName;
     [SerializeField] UnityEngine.UI.Text goldPerMinText;
     [SerializeField] UnityEngine.UI.Text goldText;
-
+    [SerializeField] UnityEngine.UI.Image selfImage;
+    [SerializeField] UnityEngine.UI.Button myButton;
     float _hpPerDMG;
     public float hpPerDMG => _hpPerDMG;
 
@@ -191,5 +192,12 @@ public class Mine :MonoBehaviour,Rental
         elapse += 2f;
         gold += (int)(_goldPerMin / 30f);
         goldText.text = gold.ToString();
+    }
+
+    public void Unlock(int playerLevel)
+    { 
+        if (_mineData.stage * 10 - 10 > playerLevel) return;//레벨이 스테이보다 낮으면 안열림
+        myButton.enabled = true;
+        selfImage.sprite = ResourceManager.Instance.EmptySprite;
     }
 }

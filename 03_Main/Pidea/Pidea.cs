@@ -14,6 +14,14 @@ public class Pidea : Singleton<Pidea>
     [SerializeField] PideaDetail pideaDetail;
     Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
+    [SerializeField] RectTransform currentTap;
+
+    public void ClickTap(int index)
+    {
+        currentTap.gameObject.SetActive(false);
+        currentTap = rarityTables[index];
+        currentTap.gameObject.SetActive(true);
+    }
     public bool CheckLockWeapon(int index)
     {
         return materials[index].color == Color.black;

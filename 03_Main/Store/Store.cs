@@ -24,7 +24,7 @@ public class Store : Singleton<Store>
             return;
         }
 
-        if (Inventory.Instance.count >= Inventory.Instance.size)
+        if (Inventory.Instance.Count >= Inventory.Instance.Size)
         {
             UIManager.Instance.ShowWarning("알림", "인벤토리가 가득찼습니다.");
             return;
@@ -51,7 +51,7 @@ public class Store : Singleton<Store>
             return;
         }
 
-        if (Inventory.Instance.count+TEN >= Inventory.Instance.size)
+        if (Inventory.Instance.Count +TEN >= Inventory.Instance.Size)
         {
             UIManager.Instance.ShowWarning("알림", "인벤토리가 부족합니다.");
             return;
@@ -67,7 +67,7 @@ public class Store : Singleton<Store>
             baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
         }
 
-        Inventory.Instance.AddWeapon(baseWeaponDatas);
+        Inventory.Instance.AddWeapons(baseWeaponDatas);
         Player.Instance.AddGold(-Pay*TEN);
         
     }

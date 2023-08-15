@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
@@ -16,10 +17,15 @@ public class MineDetail : MonoBehaviour
     [SerializeField] private Text mineWithWeaponStats;
     [SerializeField] private Text skillDescription;
    // [SerializeField] private Text gold;
-    
-    
-    
-    public void SetCurrentMine(Mine mine)
+
+   [SerializeField] UpDownVisualer upDownVisualer;
+   
+   private void OnDisable()
+   {
+       upDownVisualer.gameObject.SetActive(false);
+   }
+
+   public void SetCurrentMine(Mine mine)
     {
         mineName.text = mine.GetMineData().name;
         description.text = mine.GetMineData().description;
@@ -38,6 +44,8 @@ public class MineDetail : MonoBehaviour
         }
         else
         {
+            upDownVisualer.gameObject.SetActive(true);
+            
             weaponImage.sprite = mine.rentalWeapon.sprite;
             weaponName.text = mine.rentalWeapon.name;
             mineWithWeaponStats.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
