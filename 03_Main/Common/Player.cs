@@ -8,51 +8,16 @@ public class Player : DontDestroy<Player>
     [SerializeField] TopUIDatatViewer topUIDatatViewer;
     [SerializeField] UserData userData;
     public UserData Data => userData;
-   
-    public void aaaaaaa(int _a)
-    {
-        int amount = 100;
-        switch (_a)
-        {
-            case 0:
-                AddDiamond(amount);
-                break;
-            case 1:
-                AddSoul(amount);
-                break;
-            case 2:
-                AddStone(amount);
-                break;
-            case 3:
-                AddExp(amount);
-                break;
-        }
-    }
-    public void bbbbbbb(int _b)
-    {
-        int amount = -100;
-        switch (_b)
-        {
-            case 0:
-                AddDiamond(amount);
-                break;
-            case 1:
-                AddSoul(amount);
-                break;
-            case 2:
-                AddStone(amount);
-                break;
-            case 3:
-                AddExp(amount);
-                break;
-        }
-    }
+    RecordData recordData;
+    public RecordData Record => recordData;
 
     protected override void Awake()
     {
         base.Awake();
         userData = ResourceManager.Instance.userData;
 
+        recordData = new RecordData();
+        recordData.LoadOrInitRecord(userData.inDate);
     }
 
     void UpdateBackEndData(string columnName, int _data)
@@ -85,12 +50,17 @@ public class Player : DontDestroy<Player>
         });
     }
 
-    
+    public void test(int _gold)
+    {
+        AddGold(_gold);
+    }
     // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold)
     {
         if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
+
+        recordData.ModifyGoldRecord(_gold);
 
         UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
         topUIDatatViewer.UpdateGold();
@@ -180,5 +150,9 @@ public class Player : DontDestroy<Player>
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
- 
+    // public void TryAdditional(int _goldCost)
+    // {
+    //     AddGold(_goldCost);
+    //     recordData.SaveRecord();
+    // }
 }

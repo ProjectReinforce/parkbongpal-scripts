@@ -382,7 +382,6 @@ public struct QuestData
     public RecordType recordType;
     public QuestType questRepeatType;
     public Dictionary<RewardType, int> rewardItem;
-    // public Dictionary<string, string> rewardItem;
 }
 
 [Serializable]

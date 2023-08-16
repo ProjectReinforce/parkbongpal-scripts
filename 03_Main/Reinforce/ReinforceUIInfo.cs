@@ -9,55 +9,26 @@ public class ReinforceUIInfo : MonoBehaviour
     {
         get => reinforceWeaponSlot;
     }
-    PromoteUI promoteUI;
-    public PromoteUI PromoteUI
-    {
-        get => promoteUI;
-    }
-    AdditionalUI additionalUI;
-    public AdditionalUI AdditionalUI
-    {
-        get => additionalUI;
-    }
-    NormalReinforceUI reinforceUI;
-    public NormalReinforceUI ReinforceUI
-    {
-        get => reinforceUI;
-    }
-    MagicCarveUI magicCarveUI;
-    public MagicCarveUI MagicCarveUI
-    {
-        get => magicCarveUI;
-    }
-    SoulCraftingUI soulCraftingUI;
-    public SoulCraftingUI SoulCraftingUI
-    {
-        get => soulCraftingUI;
-    }
-    RefineUI refineUI;
-    public RefineUI RefineUI
-    {
-        get => refineUI;
-    }
+
+    ReinforceUI[] reinforceUIs;
+    public ReinforceUI[] ReinforceUIs => reinforceUIs;
 
     private void Awake()
     {
         transform.GetChild(1).TryGetComponent(out reinforceWeaponSlot);
-        transform.GetChild(3).TryGetComponent(out promoteUI);
-        transform.GetChild(4).TryGetComponent(out additionalUI);
-        transform.GetChild(5).TryGetComponent(out reinforceUI);
-        transform.GetChild(6).TryGetComponent(out magicCarveUI);
-        transform.GetChild(7).TryGetComponent(out soulCraftingUI);
-        transform.GetChild(8).TryGetComponent(out refineUI);
+
+        reinforceUIs = transform.GetComponentsInChildren<ReinforceUI>(true);
     }
 
     private void OnDisable()
     {
-        promoteUI.gameObject.SetActive(false);
-        additionalUI.gameObject.SetActive(false);
-        reinforceUI.gameObject.SetActive(false);
-        magicCarveUI.gameObject.SetActive(false);
-        soulCraftingUI.gameObject.SetActive(false);
-        refineUI.gameObject.SetActive(false);
+        foreach (var item in reinforceUIs)
+        {
+            if (item.gameObject.activeSelf)
+            {
+                item.gameObject.SetActive(false);
+                return;
+            }
+        }
     }
 }

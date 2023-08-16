@@ -59,6 +59,8 @@ public class Additional : Reinforce
 
         int cost = data.goldCost;
         Player.Instance.AddGold(-10);
+        // Player.Instance.TryAdditional(-10);
+
         // Player.Instance.AddGold(-cost);
     }
 }
