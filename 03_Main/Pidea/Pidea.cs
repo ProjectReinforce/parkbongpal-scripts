@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Pidea : Singleton<Pidea>
 {
@@ -64,6 +63,6 @@ public class Pidea : Singleton<Pidea>
     }
     public void SetCurrentWeapon(int index)
     {
-        pideaDetail.SetDetail(index);
+        pideaDetail.ViewUpdate(index);
     }
 }

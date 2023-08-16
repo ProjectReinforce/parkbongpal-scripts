@@ -1,11 +1,15 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using BackEnd;
 using Manager;
 
+public interface ISlotable
+{
+    public void SetCurrent();
+}
+
 [Serializable]
-public class Slot : NewThing, IComparable<Slot>
+public class Slot : NewThing, IComparable<Slot>,ISlotable
 {
     // Start is called before the first frame update
     [SerializeField] Image backgroundImage;
@@ -38,7 +42,7 @@ public class Slot : NewThing, IComparable<Slot>
         weaponCount++;
     }
     [SerializeField] GameObject SelletChecker;
-    public void SetCurrentWeapon()//dip 위배 , 리팩토링 대상.
+    public void SetCurrent()//dip 위배 , 리팩토링 대상.
     {
         if(myWeapon is  null) return;
         Inventory.Instance.currentWeapon = myWeapon;

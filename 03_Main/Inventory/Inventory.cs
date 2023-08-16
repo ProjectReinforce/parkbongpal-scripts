@@ -4,48 +4,50 @@ using UnityEngine;
 using Manager;
 
 using BackEnd;
-public interface IInventory
+
+
+
+public class Inventory : DontDestroy<Inventory>
 {
-    void AddWeapon(BaseWeaponData baseWeaponData);
-    void AddWeapons(BaseWeaponData[] baseWeaponData);
-    void UpdateHighPowerWeaponData();
     
-    int Count { get; }
-    int Size { get; }
-}
-
-public class Inventory : DontDestroy<Inventory>, IInventory
-{
+    [SerializeField] GameObject inventory;
     [SerializeField] GameObject nullImage;
-    [SerializeField] WeaponDetail weaponDetail;
-    [SerializeField] UpDownVisualer upDownVisualer;
-
+    [SerializeField] GameObject currentSlotImage;
+    [SerializeField] GameObject box;
+    [SerializeField] WeaponUpdater updaterObject;
     private Weapon _currentWeapon;
+    private IWeaponUpdater weaponUpdater;
     public Weapon currentWeapon
     {
         get => _currentWeapon;
         set
         {
             weaponUpdater.UpdateCurrentWeapon(value);
-            nullImage.SetActive(value is null);
             _currentWeapon = value;
+            if (value is null)
+            {
+                nullImage.SetActive(true);
+            }
+            else
+            {
+                currentSlotImage.SetActive(true);
+                currentSlotImage.transform.SetParent(value.myslot.transform,false);
+                currentSlotImage.transform.SetSiblingIndex(0);
+            }
         }
     }
-
-    private IWeaponUpdater weaponUpdater;
-
-
-    [SerializeField] GameObject box;
+   
 
 
-    public int Size { get; private set; }
-    public int Count => Slot.weaponCount;
+    private int size;
+    private int Count => Slot.weaponCount;
     
     private List<Slot> slots;
 
     
-    public void SetWeapon(WeaponData weaponData)
+    public void AddWeapon(WeaponData weaponData)
     {
+        slots[Count].SetNew();
         slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
 
@@ -84,13 +86,13 @@ public class Inventory : DontDestroy<Inventory>, IInventory
 
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
       
-        Size = slots.Count;
+        size = slots.Count;
         
-        weaponUpdater = new WeaponUpdater(weaponDetail, upDownVisualer);
+        weaponUpdater = updaterObject;
 
-        foreach (var t in ResourceManager.Instance.weaponDatas)
+        foreach (var weaponData in ResourceManager.Instance.weaponDatas)
         {
-            SetWeapon(t);
+            slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
 
     }
@@ -102,9 +104,18 @@ public class Inventory : DontDestroy<Inventory>, IInventory
             slotAction(slot.myWeapon);
         }
     }
+    public void CloseInventory()
+    {
+        inventory.SetActive(false);
+        foreach (var slot in slots)
+        {
+            slot.NewClear();
+        }
+    }
     
     public void AddWeapon(BaseWeaponData baseWeaponData )
     {
+        if (Count >= size) throw new Exception("인벤토리 공간이 부족합니다.");
         Param param = new Param
         {
             { nameof(WeaponData.colum.mineId), -1 },
@@ -130,7 +141,7 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
 
         
-        SetWeapon(weaponData);
+        AddWeapon(weaponData);
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
@@ -151,7 +162,9 @@ public class Inventory : DontDestroy<Inventory>, IInventory
 
      public void AddWeapons(BaseWeaponData[] baseWeaponData )
     {
-        Utills.transactionList.Clear();
+        if (Count+10 >= size) throw new Exception("인벤토리 공간이 부족합니다.");
+        List<TransactionValue> transactionList = new List<TransactionValue>();
+
         for (int i = 0; i < baseWeaponData.Length; i++)
         {
             Param param = new Param
@@ -169,9 +182,9 @@ public class Inventory : DontDestroy<Inventory>, IInventory
                 { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
             };
             
-            Utills.transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
+            transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
         }
-        var bro =  Backend.GameData.TransactionWriteV2 ( Utills.transactionList ); 
+        var bro =  Backend.GameData.TransactionWriteV2 ( transactionList ); 
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
@@ -182,7 +195,7 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            SetWeapon(weaponData);
+            AddWeapon(weaponData);
         
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {

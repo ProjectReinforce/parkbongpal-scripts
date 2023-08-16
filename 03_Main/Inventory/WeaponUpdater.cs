@@ -1,24 +1,31 @@
 ﻿
+using System;
+using UnityEngine;
+
 public interface IWeaponUpdater
 {
     void UpdateCurrentWeapon(Weapon currentWeapon);
 }
 
-public class WeaponUpdater : IWeaponUpdater
+public class WeaponUpdater : MonoBehaviour,IWeaponUpdater
 {
-    private WeaponDetail weaponDetail;
-    private UpDownVisualer upDownVisualer;
+    private IDetailViewer<Weapon>[] viewers =  new IDetailViewer<Weapon>[2];
+    [SerializeField] private WeaponDetail detailObject;
+    [SerializeField] private UpDownVisualer upDownVisualer;
 
-    public WeaponUpdater(WeaponDetail weaponDetail, UpDownVisualer upDownVisualer)
+    private void Awake()
     {
-        this.weaponDetail = weaponDetail;
-        this.upDownVisualer = upDownVisualer;
+        viewers[0] = detailObject;
+        viewers[1] = upDownVisualer;
     }
 
+  
     public void UpdateCurrentWeapon(Weapon currentWeapon)
     {
-        weaponDetail.gameObject.SetActive(true);
-        weaponDetail.SetWeapon(currentWeapon);
-        upDownVisualer.UpdateArrows(Quarry.Instance.currentMine.rentalWeapon, currentWeapon);
+        gameObject.SetActive(true);
+        foreach (var viwer in viewers)
+        {
+            viwer.ViewUpdate(currentWeapon);
+        }
     }
 }
