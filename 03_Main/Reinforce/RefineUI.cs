@@ -3,84 +3,85 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RefineUI : MonoBehaviour
+public class RefineUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text upgradeCountText;
-    Text goldCostText;
-    Text stoneCostText;
-    Button normalReinforceButton;
+    [SerializeField] Text[] resultStatTexts;
+    [SerializeField] Text[] resultValueTexts;
+    [SerializeField] Text stoneCostText;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        // transform.GetChild(6).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
-        transform.GetChild(5).GetChild(1).TryGetComponent(out goldCostText);
-        transform.GetChild(6).GetChild(1).TryGetComponent(out stoneCostText);
-        transform.GetChild(7).TryGetComponent<Button>(out normalReinforceButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    void UpdateStat()
     {
-        // if (reinforceManager.SelectedWeapon is null)
-        // {
-        //     // upgradeCountText.transform.parent.gameObject.SetActive(false);
-        //     normalReinforceButton.interactable = false;
-        //     return;
-        // }
-        // upgradeCountText.transform.parent.gameObject.SetActive(true);
-
-        UpdateCost();
-        // UpdateUpgradeCount();
-
-        normalReinforceButton.onClick.RemoveAllListeners();
-        normalReinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.refineMent)
-        );
-        // normalReinforceButton.onClick.AddListener(() =>
-        //     UpdateUpgradeCount()
-        // );
-        normalReinforceButton.onClick.AddListener(() =>
-            UpdateCost()
-        );
+        if (reinforceManager.RefineResults is null) return;
+        for (int i = 0; i < reinforceManager.RefineResults.Length; i++)
+        {
+            resultStatTexts[i].text = $"{reinforceManager.RefineResults[i].stat}";
+            resultValueTexts[i].text = $"{reinforceManager.RefineResults[i].value}";
+        }
     }
 
-    public void UpdateUpgradeCount()
+    protected override void ActiveElements()
     {
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-
-        upgradeCountText.text = $"{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}";
     }
 
-    public void UpdateCost()
+    protected override void DeactiveElements()
     {
-        // UserData userData = Player.Instance.userData;
-        // WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        // int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+    }
 
-        // if (userData.gold < cost)
-        // {
-        //     costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-        //     normalReinforceButton.interactable = false;
-        // }
-        // else
-        // {
-        //     costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-        //     normalReinforceButton.interactable = true;
-        // }
+    protected override void UpdateInformations()
+    {
+        UpdateStat();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => UpdateStat());
+    }
+
+    protected override bool CheckCost()
+    {
+        UserData userData = Player.Instance.Data;
+        RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+
+        int goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
+        int soulCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
+
+        if (userData.gold >= goldCost && userData.weaponSoul >= soulCost)
+        {
+            goldCostText.text = $"<color=white>{goldCost}</color>";
+            stoneCostText.text = $"<color=white>{soulCost}</color>";
+            return true;
+        }
+        else
+        {
+            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+            stoneCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
+            return false;
+        }
+    }
+
+    protected override bool CheckRarity()
+    {
+        return true;
+    }
+
+    protected override bool CheckUpgradeCount()
+    {
+        return true;
     }
 }

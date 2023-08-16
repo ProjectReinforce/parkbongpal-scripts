@@ -8,6 +8,7 @@ public class ReinforceWeaponSlot : MonoBehaviour
     [SerializeField] ReinforceManager reinforceManager;
     // [SerializeField] ReinforceUIInfo reinforceUIInfo;
     Image weaponIcon;
+    Sprite nullIcon;
     // [SerializeField] Weapon selectedWeapon;
     // public Weapon SelectedWeapon
     // {
@@ -26,6 +27,7 @@ public class ReinforceWeaponSlot : MonoBehaviour
         reinforceManager = ReinforceManager.Instance;
         // transform.parent.TryGetComponent<ReinforceUIInfo>(out reinforceUIInfo);
         gameObject.transform.GetChild(1).TryGetComponent<Image>(out weaponIcon);
+        nullIcon = weaponIcon.sprite;
     }
 
     void OnEnable()
@@ -35,7 +37,7 @@ public class ReinforceWeaponSlot : MonoBehaviour
             reinforceManager.WeaponChangeEvent -= UpdateWeaponIcon;
             reinforceManager.WeaponChangeEvent += UpdateWeaponIcon;
         }
-        weaponIcon.sprite = null;
+        weaponIcon.sprite = nullIcon;
     }
 
     void UpdateWeaponIcon()

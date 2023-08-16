@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LitJson;
 using Random = System.Random;
 using UnityEngine;
+using System;
 
 public static class Utills
 {
@@ -43,7 +44,7 @@ public static class Utills
             percent -= _targetPercentArray[i];
         }
 
-        return -1;
+        return _targetPercentArray.Length-1;
     }
 
     public static int GetResultFromWeightedRandom(int[] _targetPercentArray)
@@ -93,6 +94,20 @@ public static class Utills
 
         return results;
     }
+    
+    public static string CapitalizeFirstLetter(string _targetString)
+    {
+        if (_targetString.Length == 0) return "";
+        else if (_targetString.Length == 1) return $"{_targetString[0]}";
+        else return $"{_targetString[0].ToString().ToUpper()}{_targetString[1..]}";
+    }
+
+    public static T StringToEnum<T>(string _targetString) where T : Enum
+    {
+        return (T)Enum.Parse(typeof(T), _targetString);
+    }
+    
     public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
+
     
 }

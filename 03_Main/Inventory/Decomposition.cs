@@ -7,7 +7,7 @@ using UnityEngine;
 public class Decomposition : MonoBehaviour
 {
    
-    static LinkedList<Slot> slots=new LinkedList<Slot>();
+    static LinkedList<Slot> slots=new ();
     // 전달받은 무기를 삭제하고 , 삭제된 무기의 등급에 따라 유저 재화 갱신 
 
     static bool _isDecompositing;
@@ -35,7 +35,6 @@ public class Decomposition : MonoBehaviour
                 limit++;
             }
             Debug.Log($"limit={limit}");
-            Inventory.Instance.count -= limit;
             SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
             {
                 if (!callback.IsSuccess())
@@ -43,15 +42,14 @@ public class Decomposition : MonoBehaviour
                     Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패"+callback);
                     return;
                 }
-                Inventory.Instance.Sort();
+                Inventory.Instance.SortSlots();
             });
             limit = 0;
         }
 
         Inventory.Instance.UpdateHighPowerWeaponData();
-
     }
-    static public bool ChooseWeaponSlot(Slot slot)
+    public static bool ChooseWeaponSlot(Slot slot)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {

@@ -1,18 +1,24 @@
 
-using System.Collections;
-using System.Collections.Generic;
-using Manager;
 using UnityEngine;
 
-public class UpDownVisualer : MonoBehaviour
+public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
 {
  
     // Start is called before the first frame update
     [SerializeField] private Sprite[] Arrows; //down,stay, up 순서
     [SerializeField] private UnityEngine.UI.Image[] arrowPositions;
     [SerializeField] private UnityEngine.UI.Text[] quantity;
-    
-    public void UpdateArrows(Weapon currentWeapon, Weapon sellectWeapon) {
+
+    private static Weapon currentWeapon;
+
+    public static void SetTarget(Weapon target)
+    {
+        currentWeapon = target;
+    }
+
+    public void ViewUpdate(Weapon sellectWeapon) {
+        if(currentWeapon is null || sellectWeapon is null) return;
+        
         int[] stats =
         {
             sellectWeapon.power - currentWeapon.power,
@@ -59,5 +65,6 @@ public class UpDownVisualer : MonoBehaviour
         }
         
     }
-    
+
+   
 }

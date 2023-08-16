@@ -3,105 +3,89 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SoulCraftingUI : MonoBehaviour
+public class SoulCraftingUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text upgradeCountText;
-    Text goldCostText;
-    Text soulCostText;
-    Button soulButton;
+    [SerializeField] Text upgradeCountText;
+    [SerializeField] Text atkText;
+    [SerializeField] Text soulCostText;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(4).GetChild(2).GetChild(2).GetChild(1).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
-        transform.GetChild(5).GetChild(1).TryGetComponent(out goldCostText);
-        transform.GetChild(6).GetChild(1).TryGetComponent(out soulCostText);
-        transform.GetChild(7).TryGetComponent<Button>(out soulButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    void UpdateAtk()
     {
-        if (reinforceManager.SelectedWeapon is null)
-        {
-            upgradeCountText.transform.parent.gameObject.SetActive(false);
-            soulButton.interactable = false;
-            return;
-        }
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
+        int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.SoulStat[(int)StatType.atk] / 100;
+
+        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.SoulStat[(int)StatType.atk]}%</color>))";
+    }
+
+    protected override void ActiveElements()
+    {
         upgradeCountText.transform.parent.gameObject.SetActive(true);
-
-        UpdateCost();
-        UpdateUpgradeCount();
-
-        soulButton.onClick.RemoveAllListeners();
-        soulButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.soulCrafting)
-        );
-        soulButton.onClick.AddListener(() =>
-            UpdateUpgradeCount()
-        );
-        soulButton.onClick.AddListener(() =>
-            UpdateCost()
-        );
     }
 
-    public void UpdateUpgradeCount()
+    protected override void DeactiveElements()
     {
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        BaseWeaponData originData = Manager.ResourceManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
-
-        if (selectedWeapon.SoulStat[(int)StatType.upgradeCount] <= 0)
-        {
-            upgradeCountText.text = $"<color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color> / {originData.SoulStat[(int)StatType.upgradeCount]}";
-            soulButton.interactable = false;
-        }
-        else
-        {
-            upgradeCountText.text = $"<color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color> / {originData.SoulStat[(int)StatType.upgradeCount]}";
-            soulButton.interactable = true;
-        }
+        upgradeCountText.transform.parent.gameObject.SetActive(false);
     }
 
-    public void UpdateCost()
+    protected override void UpdateInformations()
+    {
+        UpdateAtk();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => UpdateAtk());
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         int goldCost = Manager.ResourceManager.Instance.soulCraftingData.goldCost;
         int soulCost = Manager.ResourceManager.Instance.soulCraftingData.soulCost;
 
-        if (userData.gold < goldCost)
+        if (userData.gold >= goldCost && userData.weaponSoul >= soulCost)
         {
-            goldCostText.text = $"<color=red>{userData.gold}</color> / {goldCost}";
-            soulButton.interactable = false;
+            goldCostText.text = $"<color=white>{goldCost}</color>";
+            soulCostText.text = $"<color=white>{soulCost}</color>";
+            return true;
         }
         else
         {
-            goldCostText.text = $"<color=white>{userData.gold}</color> / {goldCost}";
-            soulButton.interactable = true;
+            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+            soulCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
+            return false;
         }
+    }
 
-        if (userData.weaponSoul < soulCost)
-        {
-            soulCostText.text = $"<color=red>{userData.weaponSoul}</color> / {soulCost}";
-            soulButton.interactable = false;
-        }
+    protected override bool CheckRarity()
+    {
+        return true;
+    }
+
+    protected override bool CheckUpgradeCount()
+    {
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+
+        if (selectedWeapon.SoulStat[(int)StatType.upgradeCount] <= 0)
+            upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
         else
-        {
-            soulCostText.text = $"<color=white>{userData.weaponSoul}</color> / {soulCost}";
-            soulButton.interactable = true;
-        }
+            upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
+        return true;
     }
 }

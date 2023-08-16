@@ -3,78 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NormalReinforceUI : MonoBehaviour
+public class NormalReinforceUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text upgradeCountText;
-    Text costText;
-    Button normalReinforceButton;
+    [SerializeField] Text[] currentSuccessCountText;
+    [SerializeField] Image weaponIcon;
+    [SerializeField] Text weaponNameText;
+    [SerializeField] Text nextSuccessCountText;
+    [SerializeField] Text upgradeCountText;
+    [SerializeField] Text costText;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(4).GetChild(2).GetChild(1).GetChild(5).GetChild(0).TryGetComponent<Text>(out upgradeCountText);
-        transform.GetChild(5).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    public void UpdateWeaponIcon()
     {
-        if (reinforceManager.SelectedWeapon is null)
-        {
-            upgradeCountText.transform.parent.gameObject.SetActive(false);
-            normalReinforceButton.interactable = false;
-            return;
-        }
+        Weapon weapon = reinforceManager.SelectedWeapon;
+
+        weaponIcon.sprite = weapon.sprite;
+        weaponNameText.text = weapon.name;
+    }
+
+    protected override void ActiveElements()
+    {
         upgradeCountText.transform.parent.gameObject.SetActive(true);
-
-        UpdateCost();
-        UpdateUpgradeCount();
-
-        normalReinforceButton.onClick.RemoveAllListeners();
-        normalReinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce)
-        );
-        normalReinforceButton.onClick.AddListener(() =>
-            UpdateUpgradeCount()
-        );
-        normalReinforceButton.onClick.AddListener(() =>
-            UpdateCost()
-        );
     }
 
-    public void UpdateUpgradeCount()
+    protected override void DeactiveElements()
     {
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        BaseWeaponData originData = Manager.ResourceManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
-
-        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
-        {
-            upgradeCountText.text = $"<color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
-            normalReinforceButton.interactable = false;
-        }
-        else
-        {
-            upgradeCountText.text = $"<color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color> / {originData.NormalStat[(int)StatType.upgradeCount]}";
-            normalReinforceButton.interactable = true;
-        }
+        upgradeCountText.transform.parent.gameObject.SetActive(false);
     }
 
-    public void UpdateCost()
+    protected override void UpdateInformations()
+    {
+        UpdateWeaponIcon();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -82,13 +62,38 @@ public class NormalReinforceUI : MonoBehaviour
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-            normalReinforceButton.interactable = false;
+            costText.text = $"<color=red>{cost}</color>";
+            return false;
         }
         else
         {
-            costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-            normalReinforceButton.interactable = true;
+            costText.text = $"<color=white>{cost}</color>";
+            return true;
         }
+    }
+
+    protected override bool CheckRarity()
+    {
+        return true;
+    }
+
+    protected override bool CheckUpgradeCount()
+    {
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
+
+        foreach (var item in currentSuccessCountText)
+            item.text = $"+ {successCount}";
+        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
+        {
+            nextSuccessCountText.text = $"+ {successCount}";
+            upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
+        }
+        else
+        {
+            nextSuccessCountText.text = $"+ {successCount + 1}";
+            upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
+        }
+        return true;
     }
 }

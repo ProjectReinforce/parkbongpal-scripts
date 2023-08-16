@@ -28,10 +28,6 @@ public enum MagicType
 {
     자,축,인,묘,진,사,오,미,신,유,술,해
 }
-//자격, 인멸, 술수
-//축복, 해방, 묘법
-//진섬, 오폭, 유일
-//미세, 사철, 신념
 
 public enum ChartName
 {
@@ -44,7 +40,8 @@ public enum ChartName
     soulCrafting,
     refinement,
     attendance,
-    exp
+    exp,
+    quest
 }
 
 public enum StatType
@@ -61,7 +58,39 @@ public enum InventoryOpenType
 
 public enum RewardType
 {
+    Exp,
     Gold,
     Diamond,
     Weapon
+}
+
+public enum RecordType
+{
+    LevelUp,
+    Activate,
+    UseGold,
+    GetGold,
+    UseDiamond,
+    GetDiamond,
+    GetItem,
+    RegisterItem,
+    DisassembleItem,
+    ProduceWeapon,
+    AdvanceProduceWeapon,
+    TryPromote,
+    TryAdditional,
+    TryReinforce,
+    TryMagic,
+    TrySoul,
+    Attendance,
+    GetBonus,
+    SeeAds,
+    Tutorial
+}
+
+public enum QuestType
+{
+    Once,
+    Day,
+    Week
 }

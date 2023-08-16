@@ -1,13 +1,16 @@
 
 using System;
+using System.Collections.Generic;
 using BackEnd;
 using Manager;
 using UnityEngine;
 
 public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 {
-    [SerializeField] MineDetail mineDetail;
+    IDetailViewer<Mine> mineDetail;
+    [SerializeField] MineDetail detailObject;
     [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
+    
     Sprite plusImage;
     private Mine _currentMine;
     public Mine currentMine
@@ -15,11 +18,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         get => _currentMine;
         set
         {
-            mineDetail.SetCurrentMine(value);
+            mineDetail.ViewUpdate(value);
             selectedWeaponImage.sprite =value.rentalWeapon is null? 
                 plusImage : value.rentalWeapon.sprite;
-            
             _currentMine = value;
+            UpDownVisualer.SetTarget(value.rentalWeapon);
         }
     }
 
@@ -28,7 +31,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     protected override void Awake()
     {
         base.Awake();
-        
+        mineDetail = detailObject;
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
@@ -39,25 +42,29 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             if (i >= mines.Length)
                 break;
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
-            
+            mines[i].Unlock(ResourceManager.Instance.userData.level);
         }
         
+       
     }
-
 
     private void Start()
     {
-        int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Length;
-        // int weaponCount = ResourceManager.Instance.weaponDatas is null ? 0 : ResourceManager.Instance.weaponDatas.Length;
-        
-        for (int i = 0; i < weaponCount; i++)
+        Inventory.Instance.travelInventory((weapon) =>
         {
-            Weapon weapon = Inventory.Instance.GetSlot(i).myWeapon;
-           
             if (weapon?.data.mineId >= 0)
             {
                 mines[weapon.data.mineId].SetWeapon(weapon);
             }
+        });
+    }
+    
+
+    public void UnlockMines(int playerLevel)
+    {
+        for (int i = 0; i < mines.Length; i++)
+        {
+            mines[i].Unlock(playerLevel);
         }
     }
 
@@ -74,7 +81,35 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         currentMine.Receipt();
     }
- 
+    public void ConfirmWeapon()
+    {
+        Weapon currentWeapon = Inventory.Instance.currentWeapon;
+        if (currentWeapon is null) return;
+        Mine tempMine = currentMine;
+        Weapon currentMineWeapon = tempMine.rentalWeapon;
+        
+        try
+        {
+            if (currentWeapon.data.mineId >= 0)
+                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
+            int beforeGoldPerMin = tempMine.goldPerMin;
+            currentWeapon.SetBorrowedDate();
+            tempMine.SetWeapon(currentWeapon);
+            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+        }
+        catch (Exception e)
+        {
+            UIManager.Instance.ShowWarning("안내", e.Message);
+            return;
+        }
+        if (currentMineWeapon is not null)
+        {
+            currentMineWeapon.Lend(-1);
+        }
+        currentWeapon.Lend(tempMine.GetMineData().index);
+        
+        currentMine= tempMine ;
+    }
     
   
     private int totalGold;
@@ -82,7 +117,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         
-        Utills.transactionList.Clear();
+        
+        List<TransactionValue> transactionList = new List<TransactionValue>();
 
         for (int i = 0; i < mines.Length; i++)
         {
@@ -92,10 +128,10 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             {
                 { nameof(WeaponData.colum.borrowedDate), date }
             };
-            Utills.transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+            transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
         }
        
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, Utills.transactionList, ( callback ) => 
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
         {
             if (!callback.IsSuccess())
             {

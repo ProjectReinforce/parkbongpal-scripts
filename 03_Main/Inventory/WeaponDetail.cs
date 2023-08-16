@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-public class WeaponDetail : MonoBehaviour
+public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
 {
     
     [SerializeField] Text weaponName;
@@ -17,7 +17,7 @@ public class WeaponDetail : MonoBehaviour
     [SerializeField] Image WeaponImage;
     [SerializeField] Image MagicImage;
 
-    public void SetWeapon(Weapon weapon)
+    public void ViewUpdate(Weapon weapon)
     {
         if (weapon is null)
         {
@@ -33,6 +33,7 @@ public class WeaponDetail : MonoBehaviour
         stats3.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
         WeaponImage.sprite = weapon.sprite;
     }
+
 
     
 }

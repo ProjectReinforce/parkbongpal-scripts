@@ -3,66 +3,76 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdditionalUI : MonoBehaviour
+public class AdditionalUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text costText;
-    Button additionalButton;
+    [SerializeField] Text atkText;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(4).GetChild(4).GetChild(1).TryGetComponent(out costText);
-        transform.GetChild(5).TryGetComponent<Button>(out additionalButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    void UpdateAtk()
     {
-        if (reinforceManager.SelectedWeapon is null)
-        {
-            additionalButton.interactable = false;
-            return;
-        }
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
+        int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.AdditionalStat[(int)StatType.atk] / 100;
 
-        UpdateCost();
-
-        additionalButton.onClick.RemoveAllListeners();
-        additionalButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.additional)
-        );
-        additionalButton.onClick.AddListener(() =>
-            UpdateCost()
-        );
+        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.AdditionalStat[(int)StatType.atk]}%</color>))";
     }
 
-    public void UpdateCost()
+    protected override void ActiveElements()
+    {
+    }
+
+    protected override void DeactiveElements()
+    {
+    }
+
+    protected override void UpdateInformations()
+    {
+        UpdateAtk();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => UpdateAtk());
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = false;
+            goldCostText.text = $"<color=red>{cost}</color>";
+            return false;
         }
         else
         {
-            costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-            additionalButton.interactable = true;
+            goldCostText.text = $"<color=white>{cost}</color>";
+            return true;
         }
+    }
+
+    protected override bool CheckRarity()
+    {
+        return true;
+    }
+
+    protected override bool CheckUpgradeCount()
+    {
+        return true;
     }
 }

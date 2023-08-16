@@ -21,6 +21,18 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
             WeaponChangeEvent?.Invoke();
         }
     }
+    Weapon[] selectedMaterials;
+    public Weapon[] SelectedMaterials
+    {
+        get => selectedMaterials;
+        set => selectedMaterials = value;
+    }
+    RefineResult[] refineResults;
+    public RefineResult[] RefineResults
+    {
+        get => refineResults;
+        set => refineResults = value;
+    }
 
     protected override void Awake()
     {
@@ -32,5 +44,6 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
     void OnDisable()
     {
         selectedWeapon = null;
+        selectedMaterials = null;
     }
 }

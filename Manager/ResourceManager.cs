@@ -15,6 +15,7 @@ namespace Manager
         public UserData userData;
         public GachaData[] gachar;
         public AttendanceData[] attendanceDatas;
+        public QuestData[] questDatas;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -75,12 +76,13 @@ namespace Manager
             GetOwnedWeaponData();
             SetOwnedWeaponId();
             GetRankList();
-            // GetVersionChart();
 
             LoadAllChart();
+
+            // 테스트용
         }
 
-        const string VERSION_CHART_ID = "88033";
+        const string VERSION_CHART_ID = "89012";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
@@ -270,84 +272,24 @@ namespace Manager
                 case ChartName.exp:
                     GetExpData(_fromBackEnd);
                     break;
+                case ChartName.quest:
+                    void QuestDataProcess(QuestData[] data) { questDatas = data; }
+                    // void QuestDataProcess(QuestData[] data)
+                    // {
+                    //     questDatas = data;
+                    //     foreach (var item in questDatas)
+                    //     {
+                    //         foreach (var a in item.rewardItem)
+                    //             Debug.Log($"{a.Key} {a.Value}");
+                    //     }
+                    // }
+                    if (_fromBackEnd)
+                        GetBackEndChartData<QuestData>(chartId, QuestDataProcess);
+                    else
+                        SetChartData<QuestData>(chartId, QuestDataProcess);
+                    break;
             }
         }
-
-        Dictionary<string, string> chartInfos;
-        void GetVersionChart()
-        {
-            // 버전 차트 뒤끝에서 수신
-            chartInfos = new Dictionary<string, string>();
-            SendQueue.Enqueue(Backend.Chart.GetChartContents, VERSION_CHART_ID, callback =>
-            {
-                if (!callback.IsSuccess())
-                {
-                    Debug.LogError($"버전 차트 수신 실패 : {callback}");
-                    // todo: 에러 메시지 출력 및 타이틀로
-                    
-                    return;
-                }
-
-                JsonData results = callback.FlattenRows();
-
-                foreach (JsonData result in results)
-                {
-                    // 현재 임시데이터이므로 빈칸이 존재하기 때문, 완성 후에는 필요 없음
-                    if (result["name"].ToString() == "")
-                        continue;
-                    chartInfos.TryAdd(result["name"].ToString(), result["latestfileId"].ToString());
-                }
-
-                foreach (var one in chartInfos)
-                    Debug.Log(one);
-
-                // 수신된 정보로 차트 데이터 세팅
-                // 무기 제작 확률 정보
-                string chartId = chartInfos[ChartName.gachaPercentage.ToString()];
-                void GachaDataProcess(GachaData[] data) { gachar = data; }
-                SetChartData<GachaData>(chartId, GachaDataProcess);
-                // 광산 정보
-                chartId = chartInfos[ChartName.mineData.ToString()];
-                void MineDataProcess(MineData[] data) { mineDatas = data; }
-                SetChartData<MineData>(chartId, MineDataProcess);
-                // 무기 기본 정보
-                chartId = chartInfos[ChartName.weapon.ToString()];
-                void BaseWeaponDataProcess(BaseWeaponData[] data)
-                {
-                    baseWeaponDatas = data;
-                    
-                    for (int i = 0; i < baseWeaponDatas.Length; ++i)
-                        baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
-                }
-                SetChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
-                // 추가 옵션 정보
-                chartId = chartInfos[ChartName.additional.ToString()];
-                void AdditionalDataProcess(AdditionalData[] data) { additionalData = data[0]; }
-                SetChartData<AdditionalData>(chartId, AdditionalDataProcess);
-                // 일반 강화 정보
-                chartId = chartInfos[ChartName.normalReinforce.ToString()];
-                void NormalDataProcess(NormalReinforceData[] data) { normalReinforceData = data[0]; }
-                SetChartData<NormalReinforceData>(chartId, NormalDataProcess);
-                // 마법 부여 정보
-                chartId = chartInfos[ChartName.magicCarve.ToString()];
-                void MagicDataProcess(MagicCarveData[] data) { magicCarveData = data[0]; }
-                SetChartData<MagicCarveData>(chartId, MagicDataProcess);
-                // 영혼 세공 정보
-                chartId = chartInfos[ChartName.soulCrafting.ToString()];
-                void SoulDataProcess(SoulCraftingData[] data) { soulCraftingData = data[0]; }
-                SetChartData<SoulCraftingData>(chartId, SoulDataProcess);
-                // 재련 정보
-                chartId = chartInfos[ChartName.refinement.ToString()];
-                void RefineDataProcess(RefinementData[] data) { refinementData = data[0]; }
-                SetChartData<RefinementData>(chartId, RefineDataProcess);
-                // 출석 보상 정보
-                chartId = chartInfos[ChartName.attendance.ToString()];
-                void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = data; }
-                SetChartData<AttendanceData>(chartId, AttendanceDataProcess);
-                // 레벨별 필요 경험치 정보
-                // GetExpData();
-            });
-        }     
 
         void GetExpData(bool _fromBackEnd)
         // void GetExpData()
@@ -454,6 +396,7 @@ namespace Manager
             // 로컬 차트가 있는 경우
             if (loadedChart != "")
             {
+                // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 JsonData loadedChartJson = StringToJson(loadedChart);
 
                 _callback(JsonMapper.ToObject<T[]>(loadedChartJson.ToJson()));

@@ -5,53 +5,117 @@ using Manager;
 
 using BackEnd;
 
-[Serializable]
+
+
 public class Inventory : DontDestroy<Inventory>
 {
-    [SerializeField] int weaponSoul;
-    [SerializeField] int stone;
     
+    [SerializeField] GameObject inventory;
     [SerializeField] GameObject nullImage;
-    [SerializeField] WeaponDetail weaponDetail;
-    
-    [SerializeField] public UpDownVisualer upDownVisualer;
-    
-    Weapon _currentWeapon;
+    [SerializeField] GameObject currentSlotImage;
+    [SerializeField] GameObject box;
+    [SerializeField] WeaponUpdater updaterObject;
+    private Weapon _currentWeapon;
+    private IWeaponUpdater weaponUpdater;
     public Weapon currentWeapon
     {
         get => _currentWeapon;
         set
         {
-            weaponDetail.gameObject.SetActive(true);
-            weaponDetail.SetWeapon(value);
-            nullImage.SetActive(value is null);
+            weaponUpdater.UpdateCurrentWeapon(value);
             _currentWeapon = value;
-        } 
+            if (value is null)
+            {
+                nullImage.SetActive(true);
+            }
+            else
+            {
+                currentSlotImage.SetActive(true);
+                currentSlotImage.transform.SetParent(value.myslot.transform,false);
+                currentSlotImage.transform.SetSiblingIndex(0);
+            }
+        }
     }
+   
+
+
+    private int size;
+    private int Count => Slot.weaponCount;
     
-    List<Slot> slots;
-    public Slot GetSlot(int index)
+    private List<Slot> slots;
+
+    
+    public void AddWeapon(WeaponData weaponData)
     {
-        return slots[index];
+        slots[Count].SetNew();
+        slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
 
-    int _count;
-    public int count
+    public void UpdateHighPowerWeaponData()
     {
-        get => _count;
-        set => _count = value;
+        int highPower = 0;
+        Weapon highPowerWeapon = default;
+        Weapon currentWeapon ;
+        
+        for (int i = 0; i < Count; i++)
+        {
+            Slot slot =  slots[i];
+            currentWeapon = slot.myWeapon;
+            if(highPower>=currentWeapon.power)continue;
+            
+            highPower = currentWeapon.power;
+            highPowerWeapon = currentWeapon;
+        }
+
+        if(highPowerWeapon is null|| highPowerWeapon.power== Player.Instance.Data.combatScore) return;
+        Player.Instance.SetCombatScore(highPowerWeapon.power);
     }
-    int _size;
-    public int size => _size;
-    public void Sort()
+
+
+    public void SortSlots()
     {
         slots.Sort();
-        for (int i = 0 ; i<slots.Count; i++)
+        for (int i = 0; i < slots.Count; i++)
+        {
             slots[i].transform.SetSiblingIndex(i);
-        
+        }
     }
+    protected override void Awake()
+    {
+        base.Awake();
+
+        slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
+      
+        size = slots.Count;
+        
+        weaponUpdater = updaterObject;
+
+        foreach (var weaponData in ResourceManager.Instance.weaponDatas)
+        {
+            slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
+        }
+
+    }
+
+    public void travelInventory(Action<Weapon> slotAction)
+    {
+        foreach (var slot in slots)
+        {
+            slotAction(slot.myWeapon);
+        }
+    }
+    public void CloseInventory()
+    {
+        inventory.SetActive(false);
+        foreach (var slot in slots)
+        {
+            slot.NewClear();
+        }
+    }
+    
     public void AddWeapon(BaseWeaponData baseWeaponData )
     {
+        if (Count >= size) throw new Exception("인벤토리 공간이 부족합니다.");
         Param param = new Param
         {
             { nameof(WeaponData.colum.mineId), -1 },
@@ -77,8 +141,7 @@ public class Inventory : DontDestroy<Inventory>
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
 
         
-        slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
-        _count++;
+        AddWeapon(weaponData);
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
@@ -96,10 +159,12 @@ public class Inventory : DontDestroy<Inventory>
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
         }
     }
-    
-    public void AddWeapon(BaseWeaponData[] baseWeaponData )
+
+     public void AddWeapons(BaseWeaponData[] baseWeaponData )
     {
-        Utills.transactionList.Clear();
+        if (Count+10 >= size) throw new Exception("인벤토리 공간이 부족합니다.");
+        List<TransactionValue> transactionList = new List<TransactionValue>();
+
         for (int i = 0; i < baseWeaponData.Length; i++)
         {
             Param param = new Param
@@ -117,9 +182,9 @@ public class Inventory : DontDestroy<Inventory>
                 { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
             };
             
-            Utills.transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
+            transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
         }
-        var bro =  Backend.GameData.TransactionWriteV2 ( Utills.transactionList ); 
+        var bro =  Backend.GameData.TransactionWriteV2 ( transactionList ); 
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
@@ -130,8 +195,7 @@ public class Inventory : DontDestroy<Inventory>
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            slots[count].SetWeapon(new Weapon(weaponData,slots[count]));
-            _count++;
+            AddWeapon(weaponData);
         
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {
@@ -150,86 +214,7 @@ public class Inventory : DontDestroy<Inventory>
         }
     }
 
-    [SerializeField] GameObject box;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
-        _size = slots.Count;
-        _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
-        // _count = ResourceManager.Instance.weaponDatas is null ? 0: ResourceManager.Instance.weaponDatas.Length;
-        for (int i = 0; i < _count; i++)
-        {
-            slots[i].SetWeapon(new Weapon( ResourceManager.Instance.weaponDatas[i],slots[i]));
-        }
-        Sort();
-    }
+   
 
     
-    public void ConfirmWeapon()
-    {
-        if (currentWeapon is null) return;
-        Mine currentMine = Quarry.Instance.currentMine;
-        Weapon currentMineWeapon = currentMine.rentalWeapon;
-        
-        try
-        {
-            if (currentWeapon.data.mineId >= 0)
-                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
-            int beforeGoldPerMin = currentMine.goldPerMin;
-            currentWeapon.SetBorrowedDate();
-            currentMine.SetWeapon(currentWeapon);
-            Debug.Log("inventory currentmine goldpermin"+currentMine.goldPerMin);
-            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+currentMine.goldPerMin-beforeGoldPerMin );
-        }
-        catch (Exception e)
-        {
-            UIManager.Instance.ShowWarning("안내", e.Message);
-            return;
-        }
-        if (currentMineWeapon is not null)
-        {
-            currentMineWeapon.Lend(-1);
-        }
-        currentWeapon.Lend(currentMine.GetMineData().index);
-        
-        Quarry.Instance.currentMine= currentMine ;
-    }
-
-    public void ReinforceSelect()
-    {
-        ReinforceManager.Instance.SelectedWeapon = currentWeapon;
-    }
-
-    bool _isShowLend;
-    public bool isShowLend =>_isShowLend;
-
-    public void ShowLendWeapon()
-    {
-        _isShowLend = !_isShowLend;
-        if(isShowLend)
-            currentWeapon = null;
-        Sort();
-    }
-
-    public void UpdateHighPowerWeaponData()
-    {
-        int highPower = 0;
-        Weapon highPowerWeapon = default;
-        Weapon currentWeapon ;
-        foreach (Slot slot in slots)
-        {
-            if (slot.myWeapon is null) break;
-            currentWeapon = slot.myWeapon;
-            if(highPower>=currentWeapon.power)continue;
-            
-            highPower = currentWeapon.power;
-            highPowerWeapon = currentWeapon;
-        }
-
-        if( highPowerWeapon.power== Player.Instance.Data.combatScore) return;
-        Player.Instance.SetCombatScore(highPowerWeapon.power);
-    }
 }

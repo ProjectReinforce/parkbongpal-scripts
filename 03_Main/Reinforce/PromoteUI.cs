@@ -3,54 +3,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PromoteUI : MonoBehaviour
+public class PromoteUI : ReinforceUI
 {
-    ReinforceManager reinforceManager;
-    Text costText;
-    Button normalReinforceButton;
+    [SerializeField] Image nextRarityNameImage;
+    [SerializeField] Text nextRarityNameText;
+    [SerializeField] Text weaponNameText;
+    [SerializeField] Image currentRarityNameImage;
+    [SerializeField] Text currentRarityNameText;
+    [SerializeField] Image[] weaponIcons;
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
-        transform.GetChild(4).GetChild(4).GetChild(5).GetChild(1).TryGetComponent(out costText);
-        // transform.GetChild(4).GetChild(4).GetChild(6).TryGetComponent<Button>(out normalReinforceButton);
-        transform.GetChild(5).TryGetComponent<Button>(out normalReinforceButton);
+        Initialize();
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
-
-        SelectWeapon();
+        RegisterWeaponChangeEvent();
     }
 
     void OnDisable()
     {
-        if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+        DeregisterWeaponChangeEvent();
     }
 
-    public void SelectWeapon()
+    void UpdateWeaponIcon()
     {
-        if (reinforceManager.SelectedWeapon is null)
-        {
-            normalReinforceButton.interactable = false;
-            return;
-        }
+        Weapon weapon = reinforceManager.SelectedWeapon;
 
-        UpdateCost();
-
-        normalReinforceButton.onClick.RemoveAllListeners();
-        normalReinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.promote)
-        );
-        normalReinforceButton.onClick.AddListener(() =>
-            UpdateCost()
-        );
+        foreach (var item in weaponIcons)
+            item.sprite = weapon.sprite;
+        weaponNameText.text = weapon.name;
     }
 
-    public void UpdateCost()
+    protected override void ActiveElements()
+    {
+    }
+
+    protected override void DeactiveElements()
+    {
+    }
+
+    protected override void UpdateInformations()
+    {
+        UpdateWeaponIcon();
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+    }
+
+    protected override bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         // WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -59,13 +62,62 @@ public class PromoteUI : MonoBehaviour
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{userData.gold}</color> / {cost}";
-            normalReinforceButton.interactable = false;
+            goldCostText.text = $"<color=red>{cost}</color>";
+            return false;
         }
         else
         {
-            costText.text = $"<color=white>{userData.gold}</color> / {cost}";
-            normalReinforceButton.interactable = true;
+            goldCostText.text = $"<color=white>{cost}</color>";
+            return true;
         }
+    }
+
+    protected override bool CheckRarity()
+    {
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+
+        switch (weaponData.rarity)
+        {
+            case (int)Rarity.trash:
+                currentRarityNameImage.color = Color.black;
+                nextRarityNameImage.color = Color.gray;
+                break;
+            case (int)Rarity.old:
+                currentRarityNameImage.color = Color.gray;
+                nextRarityNameImage.color = Color.blue;
+                break;
+            case (int)Rarity.normal:
+                currentRarityNameImage.color = Color.blue;
+                nextRarityNameImage.color = Color.red;
+                break;
+            case (int)Rarity.rare:
+                currentRarityNameImage.color = Color.red;
+                nextRarityNameImage.color = Color.green;
+                break;
+            case (int)Rarity.unique:
+                currentRarityNameImage.color = Color.green;
+                nextRarityNameImage.color = Color.yellow;
+                break;
+            case (int)Rarity.legendary:
+                currentRarityNameImage.color = Color.yellow;
+                nextRarityNameImage.color = Color.yellow;
+                break;
+        }
+        currentRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity).ToString());
+        if (weaponData.rarity < (int)Rarity.legendary)
+        {
+            nextRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity + 1).ToString());
+            return true;
+        }
+        else
+        {
+            nextRarityNameText.text = currentRarityNameText.text;
+            return false;
+        }
+    }
+
+    protected override bool CheckUpgradeCount()
+    {
+        return true;
     }
 }
