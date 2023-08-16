@@ -14,7 +14,7 @@ public class NewThing:MonoBehaviour
 
     public void NewClear()
     {
-        Destroy(newObject);
+        newObject.SetActive(false);
     }
 }
 

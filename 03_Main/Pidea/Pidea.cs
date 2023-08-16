@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Pidea : Singleton<Pidea>
 {

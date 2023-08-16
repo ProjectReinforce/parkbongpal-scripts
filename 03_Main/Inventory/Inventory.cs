@@ -5,19 +5,18 @@ using Manager;
 
 using BackEnd;
 
-public interface IInventory
-{
-    void AddWeapon(BaseWeaponData baseWeaponData);
-    void AddWeapons(BaseWeaponData[] baseWeaponData);
-    void UpdateHighPowerWeaponData();
-    
-}
 
-public class Inventory : DontDestroy<Inventory>, IInventory
+
+public class Inventory : DontDestroy<Inventory>
 {
+    
+    [SerializeField] GameObject inventory;
     [SerializeField] GameObject nullImage;
     [SerializeField] GameObject currentSlotImage;
+    [SerializeField] GameObject box;
+    [SerializeField] WeaponUpdater updaterObject;
     private Weapon _currentWeapon;
+    private IWeaponUpdater weaponUpdater;
     public Weapon currentWeapon
     {
         get => _currentWeapon;
@@ -37,9 +36,7 @@ public class Inventory : DontDestroy<Inventory>, IInventory
             }
         }
     }
-    [SerializeField] GameObject box;
-    private IWeaponUpdater weaponUpdater;
-    [SerializeField] WeaponUpdater updaterObject;
+   
 
 
     private int size;
@@ -48,8 +45,9 @@ public class Inventory : DontDestroy<Inventory>, IInventory
     private List<Slot> slots;
 
     
-    public void SetWeapon(WeaponData weaponData)
+    public void AddWeapon(WeaponData weaponData)
     {
+        slots[Count].SetNew();
         slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
 
@@ -92,9 +90,9 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         
         weaponUpdater = updaterObject;
 
-        foreach (var t in ResourceManager.Instance.weaponDatas)
+        foreach (var weaponData in ResourceManager.Instance.weaponDatas)
         {
-            SetWeapon(t);
+            slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
 
     }
@@ -104,6 +102,14 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         foreach (var slot in slots)
         {
             slotAction(slot.myWeapon);
+        }
+    }
+    public void CloseInventory()
+    {
+        inventory.SetActive(false);
+        foreach (var slot in slots)
+        {
+            slot.NewClear();
         }
     }
     
@@ -135,7 +141,7 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
 
         
-        SetWeapon(weaponData);
+        AddWeapon(weaponData);
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
@@ -189,7 +195,7 @@ public class Inventory : DontDestroy<Inventory>, IInventory
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            SetWeapon(weaponData);
+            AddWeapon(weaponData);
         
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {

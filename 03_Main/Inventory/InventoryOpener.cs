@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class InventoryOpener : MonoBehaviour
 {
-    [SerializeField] Inventory inventory;
     [SerializeField] GameObject detailDefault;
     [SerializeField] GameObject detailInfo;
     [SerializeField] Button[] BasicInventoryButtons;

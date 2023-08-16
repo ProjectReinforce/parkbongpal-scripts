@@ -9,19 +9,23 @@ public interface IWeaponUpdater
 
 public class WeaponUpdater : MonoBehaviour,IWeaponUpdater
 {
-    private IDetailViewer<Weapon> weaponDetail;
+    private IDetailViewer<Weapon>[] viewers =  new IDetailViewer<Weapon>[2];
     [SerializeField] private WeaponDetail detailObject;
     [SerializeField] private UpDownVisualer upDownVisualer;
 
     private void Awake()
     {
-        weaponDetail = detailObject;
+        viewers[0] = detailObject;
+        viewers[1] = upDownVisualer;
     }
 
+  
     public void UpdateCurrentWeapon(Weapon currentWeapon)
     {
         gameObject.SetActive(true);
-        weaponDetail.ViewUpdate(currentWeapon);
-        upDownVisualer.UpdateArrows(Quarry.Instance.currentMine?.rentalWeapon, currentWeapon);
+        foreach (var viwer in viewers)
+        {
+            viwer.ViewUpdate(currentWeapon);
+        }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class Decomposition : MonoBehaviour
 {
    
-    static LinkedList<Slot> slots=new LinkedList<Slot>();
+    static LinkedList<Slot> slots=new ();
     // 전달받은 무기를 삭제하고 , 삭제된 무기의 등급에 따라 유저 재화 갱신 
 
     static bool _isDecompositing;

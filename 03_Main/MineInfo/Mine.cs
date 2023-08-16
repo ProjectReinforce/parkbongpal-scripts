@@ -13,7 +13,7 @@ public interface Rental
     public float GetHpPerDMG();
 }
 
-public class Mine :MonoBehaviour,Rental
+public class Mine :MonoBehaviour,Rental,ISlotable
 {
     // Start is called before the first frame update
     private MineData _mineData;
@@ -68,7 +68,7 @@ public class Mine :MonoBehaviour,Rental
         rental = this;
     }
 
-    public void SetCurrentMine()// *dip 위배중, 리팩토링 대상.
+    public void SetCurrent()// *dip 위배중, 리팩토링 대상.
     {
         Quarry.Instance.currentMine = this;
     }
