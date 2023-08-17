@@ -12,13 +12,15 @@ public class Store : Singleton<Store>
         gacharsPercents = ResourceManager.Instance.gachar;
     }
 
-    const int Pay = 1000;
+    // 서버에서 받는 부분이 없음
+    const int COST_GOLD = 10000;
+    const int COST_DIAMOND = 300;
 
     public void Drawing(int type)
     {
         try
         {
-            Player.Instance.AddGold(-Pay);
+            Player.Instance.AddGold(-COST_GOLD);
             GachaData gachaData = gacharsPercents[type];
             int[] percents =
                 { gachaData.trash, gachaData.old, gachaData.normal, gachaData.unique, gachaData.legendary };
@@ -39,7 +41,7 @@ public class Store : Singleton<Store>
     {
         try
         {
-            Player.Instance.AddGold(-Pay * TEN);
+            Player.Instance.AddGold(-COST_GOLD * TEN);
 
             GachaData gachaData = gacharsPercents[type];
             int[] percents =
