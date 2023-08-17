@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
@@ -57,6 +58,7 @@ public class RecordData
     public ulong GetBonus => getBonus;
     uint seeAds;
     public uint SeeAds => seeAds;
+    public Action testEvent;
 
     public void LoadOrInitRecord(string _userInDate)
     {
@@ -111,6 +113,8 @@ public class RecordData
         Debug.Log($"UsedGold : {useGold}");
         ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
         Debug.Log($"GetedGold : {getGold}");
+
+        testEvent?.Invoke();
     }
 }
 

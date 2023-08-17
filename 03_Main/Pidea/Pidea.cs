@@ -15,6 +15,20 @@ public class Pidea : Singleton<Pidea>
     Material[] materials;//가진 웨폰아이디
     [SerializeField] RectTransform currentTap;
 
+    public int RegisteredWeaponCount
+    {
+        get
+        {
+            int result = 0;
+            foreach (var item in materials)
+            {
+                if (item.color == Color.white)
+                    result ++;
+            }
+            return result;
+        }
+    }
+
     public void ClickTap(int index)
     {
         currentTap.gameObject.SetActive(false);
