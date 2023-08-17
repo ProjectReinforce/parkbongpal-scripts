@@ -59,18 +59,18 @@ public class RefineUI : ReinforceUI
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         int goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
-        int soulCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
+        int oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
 
-        if (userData.gold >= goldCost && userData.weaponSoul >= soulCost)
+        if (userData.gold >= goldCost && userData.stone >= oreCost)
         {
             goldCostText.text = $"<color=white>{goldCost}</color>";
-            stoneCostText.text = $"<color=white>{soulCost}</color>";
+            stoneCostText.text = $"<color=white>{oreCost}</color>";
             return true;
         }
         else
         {
             goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
-            stoneCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
+            stoneCostText.text = userData.stone < oreCost ? $"<color=red>{oreCost}</color>" : $"<color=white>{oreCost}</color>";
             return false;
         }
     }
