@@ -504,6 +504,7 @@ namespace Manager
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
                     topRanks[topRankIndex]= JsonMapper.ToObject<Rank[]>(json.ToJson())  ;
                     topRankIndex++;
+                    Debug.Log(topRanks[topRankIndex][0].nickname);
                 });
             
                 SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[myRankIndex],4 , callback => {

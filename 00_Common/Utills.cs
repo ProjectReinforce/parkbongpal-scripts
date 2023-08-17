@@ -106,8 +106,5 @@ public static class Utills
     {
         return (T)Enum.Parse(typeof(T), _targetString);
     }
-    
-    public static List<BackEnd.TransactionValue> transactionList = new List<BackEnd.TransactionValue>();
 
-    
 }

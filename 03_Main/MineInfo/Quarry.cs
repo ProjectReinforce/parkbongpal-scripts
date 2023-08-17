@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BackEnd;
 using Manager;
 using UnityEngine;
@@ -62,10 +63,16 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     public void UnlockMines(int playerLevel)
     {
+        List<string> mineNames = new List<string>(); 
         for (int i = 0; i < mines.Length; i++)
         {
-            mines[i].Unlock(playerLevel);
+            string unlockMine= mines[i].Unlock(playerLevel);
+            if(unlockMine is null) continue;
+            mineNames.Add(unlockMine);
         }
+        if(mineNames.Count<1)return;
+
+        UIManager.Instance.ShowWarning("알림", $"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
     }
 
     public void ClearWeapon()

@@ -194,10 +194,11 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         goldText.text = gold.ToString();
     }
 
-    public void Unlock(int playerLevel)
-    { 
-        if (_mineData.stage * 10 - 10 > playerLevel) return;//레벨이 스테이보다 낮으면 안열림
+    public string Unlock(int playerLevel)
+    {
+        if (_mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
         myButton.enabled = true;
         selfImage.sprite = ResourceManager.Instance.EmptySprite;
+        return _mineData.name;
     }
 }

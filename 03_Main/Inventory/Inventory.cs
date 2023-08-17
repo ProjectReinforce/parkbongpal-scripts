@@ -17,6 +17,8 @@ public class Inventory : DontDestroy<Inventory>
     [SerializeField] WeaponUpdater updaterObject;
     private Weapon _currentWeapon;
     private IWeaponUpdater weaponUpdater;
+
+    
     public Weapon currentWeapon
     {
         get => _currentWeapon;
