@@ -57,14 +57,11 @@ public class Player : DontDestroy<Player>
     // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold)
     {
-        if (userData.gold + _gold < 0) return false;
+        if (userData.gold + _gold < 0) throw new Exception("Gold가 부족합니다.");
         userData.gold += _gold;
-
         recordData.ModifyGoldRecord(_gold);
-
         UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
         topUIDatatViewer.UpdateGold();
-
         return true;
     }
 
