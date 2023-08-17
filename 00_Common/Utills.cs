@@ -59,7 +59,7 @@ public static class Utills
 
         for (int i = 0; i < _targetPercentArray.Length; i++)
         {
-            if (percent < _targetPercentArray[i])
+            if (percent <= _targetPercentArray[i])
                 return i;
             percent -= _targetPercentArray[i];
         }
@@ -78,7 +78,7 @@ public static class Utills
         // 배열 초기화 및 섞기
         for (int i = 0; i < targets.Length; i++)
             targets[i] = i;
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i <= targets.Length; i++)
         {
             int randomInt1 = random.Next(targets.Length);
             int randomInt2 = random.Next(targets.Length);
