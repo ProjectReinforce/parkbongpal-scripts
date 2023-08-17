@@ -88,11 +88,13 @@ public class MineGame : MonoBehaviour
         float damage = 40f;
         rock.GetDamage(damage);
     }
+    // ReSharper disable Unity.PerformanceAnalysis
     public void GameOver()
     {
         isAttackAble = false;
         Player.Instance.AddGold(rock.Score);
         Debug.Log(rock.Score);
+        Player.Instance.ComparisonMineGameScore(rock.Score);
         Debug.Log(Player.Instance.Data.gold);
         resultPanel.SetActive(true);
     }

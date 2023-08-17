@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using LitJson;
@@ -441,7 +442,6 @@ namespace Manager
         }
 
         public Material[] ownedWeaponIds = new Material[150];
-        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
@@ -487,37 +487,44 @@ namespace Manager
 
         public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
         public Rank[][] myRanks = new Rank[UUIDs.Length][];
-
-        void GetRankList()
+        Action<int>[] deligate = new Action<int>[2];
+     
+        void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
         {
-            int topRankIndex = 0;
-            int myRankIndex = 0;
-            for (int j = 0; j < UUIDs.Length; j++)
+            deligate[0] = (count) =>
             {
-                //샌드큐는 비동기이기 때문에 j 값이 타이밍 안맞게 들어감 
-                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[topRankIndex], callback=> {
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], callback =>
+                {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
+
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    topRanks[topRankIndex]= JsonMapper.ToObject<Rank[]>(json.ToJson())  ;
-                    topRankIndex++;
-                    Debug.Log(topRanks[topRankIndex][0].nickname);
+                    topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    if(count>=UUIDs.Length) return;
+                    deligate[0](++count);
                 });
-            
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[myRankIndex],4 , callback => {
+            };
+            deligate[1] = (count) =>
+            {
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 4, callback =>
+                {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
+
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    myRanks[myRankIndex]=JsonMapper.ToObject<Rank[]>(json.ToJson());
-                    myRankIndex++;
+                    myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    if (count >= UUIDs.Length) return;
+                    deligate[1](++count);
                 });
-            }
+            };
+            foreach (var action in deligate)
+                action(0);
             
             SceneLoader.ResourceLoadComplete();
         }
