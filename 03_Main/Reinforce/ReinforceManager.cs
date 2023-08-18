@@ -45,5 +45,6 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
     {
         selectedWeapon = null;
         selectedMaterials = null;
+        refineResults?.Initialize();
     }
 }

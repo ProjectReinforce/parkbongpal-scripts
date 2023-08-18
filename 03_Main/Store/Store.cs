@@ -22,9 +22,9 @@ public class Store : Singleton<Store>
         try
         {
             if (type == 0)
-                Player.Instance.AddGold(-COST_GOLD);
+                Player.Instance.TryProduceWeapon(-COST_GOLD, 1);
             else
-                Player.Instance.AddDiamond(-COST_DIAMOND);
+                Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND, 1);
             
             GachaData gachaData = gacharsPercents[type];
             int[] percents =
@@ -47,9 +47,9 @@ public class Store : Singleton<Store>
         try
         {
             if (type == 0)
-                Player.Instance.AddGold(-COST_GOLD * TEN);
+                Player.Instance.TryProduceWeapon(-COST_GOLD * TEN, TEN);
             else
-                Player.Instance.AddDiamond(-COST_DIAMOND * TEN);
+                Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND * TEN, TEN);
 
             GachaData gachaData = gacharsPercents[type];
             int[] percents =

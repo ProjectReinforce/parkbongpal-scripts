@@ -83,6 +83,7 @@ public enum RecordType
     TryReinforce,
     TryMagic,
     TrySoul,
+    TryRefine,
     Attendance,
     GetBonus,
     SeeAds,

@@ -58,76 +58,79 @@ public class QuestContent : MonoBehaviour
         // UpdateText(descriptionText, ResourceManager.Instance.questDatas[targetIndex].questContent);
         descriptionText.text = targetData.questContent;
 
-        ulong goal = long.MaxValue;
+        long current = -1;
         switch (targetData.recordType)
         {
             case RecordType.LevelUp:
-                goal = (ulong)player.Data.level;
+                current = player.Data.level;
                 break;
             case RecordType.UseGold:
-                goal = player.Record.UseGold;
+                current = (long)player.Record.UseGold;
                 break;
             case RecordType.GetGold:
-                goal = player.Record.GetGold;
+                current = (long)player.Record.GetGold;
                 break;
             case RecordType.UseDiamond:
-                goal = player.Record.UseDiamond;
+                current = (long)player.Record.UseDiamond;
                 break;
             case RecordType.GetDiamond:
-                goal = player.Record.GetDiamond;
+                current = (long)player.Record.GetDiamond;
                 break;
             case RecordType.GetItem:
                 break;
             case RecordType.RegisterItem:
-                goal = (ulong)Pidea.Instance.RegisteredWeaponCount;
+                current = Pidea.Instance.RegisteredWeaponCount;
                 break;
             case RecordType.DisassembleItem:
-                goal = player.Record.DisassembleItem;
+                current = player.Record.DisassembleItem;
                 break;
             case RecordType.ProduceWeapon:
-                goal = player.Record.ProduceWeapon;
+                current = player.Record.ProduceWeapon;
                 break;
             case RecordType.AdvanceProduceWeapon:
-                goal = player.Record.AdvanceProduceWeapon;
+                current = player.Record.AdvanceProduceWeapon;
                 break;
             case RecordType.TryPromote:
-                goal = player.Record.TryPromote;
+                current = player.Record.TryPromote;
                 break;
             case RecordType.TryAdditional:
-                goal = player.Record.TryAdditional;
+                current = player.Record.TryAdditional;
                 break;
             case RecordType.TryReinforce:
-                goal = player.Record.TryReinforce;
+                current = player.Record.TryReinforce;
                 break;
             case RecordType.TryMagic:
-                goal = player.Record.TryMagic;
+                current = player.Record.TryMagic;
                 break;
             case RecordType.TrySoul:
-                goal = player.Record.TrySoul;
+                current = player.Record.TrySoul;
                 break;
             case RecordType.Attendance:
-                goal = player.Record.Attendance;
+                current = player.Record.Attendance;
                 break;
             case RecordType.GetBonus:
-                goal = player.Record.GetBonus;
+                current = (long)player.Record.GetBonus;
                 break;
             case RecordType.SeeAds:
-                goal = player.Record.SeeAds;
+                current = player.Record.SeeAds;
                 break;
             case RecordType.Activate:
             case RecordType.Tutorial:
                 break;
         }
-        if (goal != long.MaxValue)
-            processText.text = $"{goal} / {targetData.requestCount}";
+        if (current != -1)
+            processText.text = $"{current} / {targetData.requestCount}";
         else
             processText.text = "";
 
-        if (goal > (ulong)targetData.requestCount)
+        if (isCleared)
+            transform.SetSiblingIndex(transform.parent.childCount - 1);
+        if (current >= targetData.requestCount && !isCleared)
+        {
             getRewardButton.interactable = true;
+            transform.SetSiblingIndex(0);
+        }
         else
             getRewardButton.interactable = false;
-
-        // processText.text = $"{Player.Instance.Record}";
     }
 }

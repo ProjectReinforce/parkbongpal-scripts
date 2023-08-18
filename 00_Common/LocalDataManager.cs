@@ -52,13 +52,33 @@ public class RecordData
     public uint TryMagic => tryMagic;
     uint trySoul;
     public uint TrySoul => trySoul;
+    uint tryRefine;
+    public uint TryRefine => tryRefine;
     uint attendance;
     public uint Attendance => attendance;
     ulong getBonus;
     public ulong GetBonus => getBonus;
     uint seeAds;
     public uint SeeAds => seeAds;
-    public Action testEvent;
+    public Action levelUpEvent;
+    public Action getGoldEvent;
+    public Action useGoldEvent;
+    public Action useDiamondEvent;
+    public Action getDiamondEvent;
+    // public Action getItemEvent;
+    public Action registerItemEvent;
+    public Action disassembleItemEvent;
+    public Action produceWeaponEvent;
+    public Action advanceProduceWeaponEvent;
+    public Action tryPromoteEvent;
+    public Action tryAdditionalEvent;
+    public Action tryReinforceEvent;
+    public Action tryMagicEvent;
+    public Action trySoulEvent;
+    public Action tryRefineEvent;
+    public Action attendanceEvent;
+    public Action getBonusEvent;
+    public Action seeAdsEvent;
 
     public void LoadOrInitRecord(string _userInDate)
     {
@@ -67,32 +87,27 @@ public class RecordData
         // if (_userInDate == UserID)
         // {
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
-            Debug.Log($"UsedGold : {useGold}");
+            // Debug.Log($"UsedGold : {useGold}");
             ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
-            Debug.Log($"GetedGold : {getGold}");
-        //     useDiamond = PlayerPrefs.GetString("UserID");
-        //     getDiamond = PlayerPrefs.GetString("UserID");
-        //     // public uint GetItem = PlayerPrefs.GetString("UserID");
-        //     registerItem = PlayerPrefs.GetString("UserID");
-        //     disassembleItem = PlayerPrefs.GetString("UserID");
-        //     produceWeapon = PlayerPrefs.GetString("UserID");
-        //     advanceProduceWeapon = PlayerPrefs.GetString("UserID");
-        //     tryPromote = PlayerPrefs.GetString("UserID");
-            // uint.TryParse(PlayerPrefs.GetString("TryAdditional"), out tryAdditional);
-        //     tryReinforce = PlayerPrefs.GetString("UserID");
-        //     tryMagic = PlayerPrefs.GetString("UserID");
-        //     trySoul = PlayerPrefs.GetString("UserID");
-        //     attendance = PlayerPrefs.GetString("UserID");
-        //     getBonus = PlayerPrefs.GetString("UserID");
-        //     seeAds = PlayerPrefs.GetString("UserID");
+            // Debug.Log($"GetedGold : {getGold}");
+            ulong.TryParse(PlayerPrefs.GetString("UseDiamond"), out useDiamond);
+            ulong.TryParse(PlayerPrefs.GetString("GetDiamond"), out getDiamond);
+            uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
+            uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
+            uint.TryParse(PlayerPrefs.GetString("ProduceWeapon"), out produceWeapon);
+            uint.TryParse(PlayerPrefs.GetString("AdvanceProduceWeapon"), out advanceProduceWeapon);
+            uint.TryParse(PlayerPrefs.GetString("TryPromote"), out tryPromote);
+            uint.TryParse(PlayerPrefs.GetString("TryAdditional"), out tryAdditional);
+            uint.TryParse(PlayerPrefs.GetString("TryReinforce"), out tryReinforce);
+            uint.TryParse(PlayerPrefs.GetString("TryMagic"), out tryMagic);
+            uint.TryParse(PlayerPrefs.GetString("TrySoul"), out trySoul);
+            uint.TryParse(PlayerPrefs.GetString("TryRefine"), out tryRefine);
+            uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
+            ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
+            uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
+            // public uint GetItem = PlayerPrefs.GetString("UserID");
         // }
         //     userID = BackEnd.Backend.UserInDate;
-    }
-
-    public void SaveRecord()
-    {
-        tryAdditional++;
-        PlayerPrefs.SetString("TryAdditional", tryAdditional.ToString());
     }
 
     public void ModifyGoldRecord(int _gold)
@@ -102,20 +117,96 @@ public class RecordData
         {
             getGold += (ulong)_gold;
             PlayerPrefs.SetString("GetGold", getGold.ToString());
+            getGoldEvent?.Invoke();
         }
         else
         {
             useGold += (ulong)Mathf.Abs(_gold);
             PlayerPrefs.SetString("UseGold", useGold.ToString());
+            useGoldEvent?.Invoke();
         }
-        
-        ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
-        Debug.Log($"UsedGold : {useGold}");
-        ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
-        Debug.Log($"GetedGold : {getGold}");
-
-        testEvent?.Invoke();
     }
+
+    public void ModifyDiamondRecord(int _diamond)
+    {
+        if (_diamond == 0) return;
+        else if (_diamond > 0)
+        {
+            getDiamond += (ulong)_diamond;
+            PlayerPrefs.SetString("GetDiamond", getDiamond.ToString());
+            getDiamondEvent?.Invoke();
+        }
+        else
+        {
+            useDiamond += (ulong)Mathf.Abs(_diamond);
+            PlayerPrefs.SetString("UseDiamond", useDiamond.ToString());
+            useDiamondEvent?.Invoke();
+        }
+    }
+
+    public void ModifyProduceRecord(int _count)
+    {
+        if (_count <= 0) return;
+        produceWeapon += (uint)_count;
+        PlayerPrefs.SetString("ProduceWeapon", produceWeapon.ToString());
+        produceWeaponEvent?.Invoke();
+    }
+
+    public void ModifyAdvanceProduceRecord(int _count)
+    {
+        if (_count <= 0) return;
+        advanceProduceWeapon += (uint)_count;
+        PlayerPrefs.SetString("AdvanceProduceWeapon", advanceProduceWeapon.ToString());
+        advanceProduceWeaponEvent?.Invoke();
+    }
+
+    public void ModifyTryPromoteRecord()
+    {
+        tryPromote ++;
+        PlayerPrefs.SetString("TryPromote", tryPromote.ToString());
+        tryPromoteEvent?.Invoke();
+    }
+
+    public void ModifyTryAdditionalRecord()
+    {
+        tryAdditional ++;
+        PlayerPrefs.SetString("TryAdditional", tryAdditional.ToString());
+        tryAdditionalEvent?.Invoke();
+    }
+
+    public void ModifyTryReinforceRecord()
+    {
+        tryReinforce ++;
+        PlayerPrefs.SetString("TryReinforce", tryReinforce.ToString());
+        tryReinforceEvent?.Invoke();
+    }
+
+    public void ModifyTryMagicRecord()
+    {
+        tryMagic ++;
+        PlayerPrefs.SetString("TryMagic", tryMagic.ToString());
+        tryMagicEvent?.Invoke();
+    }
+
+    public void ModifyTrySoulRecord()
+    {
+        trySoul ++;
+        PlayerPrefs.SetString("TrySoul", trySoul.ToString());
+        trySoulEvent?.Invoke();
+    }
+
+    public void ModifyTryRefineRecord()
+    {
+        tryRefine ++;
+        PlayerPrefs.SetString("TryRefine", tryRefine.ToString());
+        tryRefineEvent?.Invoke();
+    }
+
+    // uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
+    // uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
+    // uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
+    // ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
+    // uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
 }
 
 

@@ -46,27 +46,63 @@ public class QuestContentsInitializer : MonoBehaviour
         }
 
         ClearCheck();
-        UpdateContent();
+        UpdateAllContent();
 
-        Player.Instance.Record.testEvent -= UpdateContent;
-        Player.Instance.Record.testEvent += UpdateContent;
+        Player.Instance.Record.levelUpEvent -= () => UpdateLevelContent(RecordType.LevelUp);
+        Player.Instance.Record.levelUpEvent += () => UpdateLevelContent(RecordType.LevelUp);
+
+        Player.Instance.Record.getGoldEvent -= () => UpdateLevelContent(RecordType.GetGold);
+        Player.Instance.Record.getGoldEvent += () => UpdateLevelContent(RecordType.GetGold);
+
+        Player.Instance.Record.useGoldEvent -= () => UpdateLevelContent(RecordType.UseGold);
+        Player.Instance.Record.useGoldEvent += () => UpdateLevelContent(RecordType.UseGold);
+
+        Player.Instance.Record.getDiamondEvent -= () => UpdateLevelContent(RecordType.GetDiamond);
+        Player.Instance.Record.getDiamondEvent += () => UpdateLevelContent(RecordType.GetDiamond);
+        
+        Player.Instance.Record.useDiamondEvent -= () => UpdateLevelContent(RecordType.UseDiamond);
+        Player.Instance.Record.useDiamondEvent += () => UpdateLevelContent(RecordType.UseDiamond);
+        
+        Player.Instance.Record.produceWeaponEvent -= () => UpdateLevelContent(RecordType.ProduceWeapon);
+        Player.Instance.Record.produceWeaponEvent += () => UpdateLevelContent(RecordType.ProduceWeapon);
+        
+        Player.Instance.Record.advanceProduceWeaponEvent -= () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
+        Player.Instance.Record.advanceProduceWeaponEvent += () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
+        
+        Player.Instance.Record.tryPromoteEvent -= () => UpdateLevelContent(RecordType.TryPromote);
+        Player.Instance.Record.tryPromoteEvent += () => UpdateLevelContent(RecordType.TryPromote);
+        
+        Player.Instance.Record.tryAdditionalEvent -= () => UpdateLevelContent(RecordType.TryAdditional);
+        Player.Instance.Record.tryAdditionalEvent += () => UpdateLevelContent(RecordType.TryAdditional);
+        
+        Player.Instance.Record.tryReinforceEvent -= () => UpdateLevelContent(RecordType.TryReinforce);
+        Player.Instance.Record.tryReinforceEvent += () => UpdateLevelContent(RecordType.TryReinforce);
+        
+        Player.Instance.Record.tryMagicEvent -= () => UpdateLevelContent(RecordType.TryMagic);
+        Player.Instance.Record.tryMagicEvent += () => UpdateLevelContent(RecordType.TryMagic);
+        
+        Player.Instance.Record.trySoulEvent -= () => UpdateLevelContent(RecordType.TrySoul);
+        Player.Instance.Record.trySoulEvent += () => UpdateLevelContent(RecordType.TrySoul);
+        
+        Player.Instance.Record.tryRefineEvent -= () => UpdateLevelContent(RecordType.TryRefine);
+        Player.Instance.Record.tryRefineEvent += () => UpdateLevelContent(RecordType.TryRefine);
     }
 
-    void UpdateContent()
+    void UpdateAllContent()
     {
-        foreach (var one in questContents)
-        {
-            foreach (var two in one.Value)
-                two.UpdateContent();
-        }
+        foreach (var one in quests)
+            one.Value.UpdateContent();
+    }
+
+    void UpdateLevelContent(RecordType _recordType)
+    {
+        foreach (var item in questContents[_recordType])
+            item.UpdateContent();
     }
 
     void ClearCheck()
     {
         foreach (var one in ResourceManager.Instance.questRecordDatas)
-        {
             quests[one.questId].Cleared();
-            quests[one.questId].UpdateContent();
-        }
     }
 }
