@@ -41,7 +41,9 @@ public enum ChartName
     refinement,
     attendance,
     exp,
-    quest
+    quest,
+    skillData
+    
 }
 
 public enum StatType

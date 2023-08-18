@@ -17,6 +17,7 @@ namespace Manager
         public GachaData[] gachar;
         public AttendanceData[] attendanceDatas;
         public QuestData[] questDatas;
+        public SkillData[] skillDatas;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -54,9 +55,9 @@ namespace Manager
         }
 
         
-        [SerializeField]Skill[] skills;
+        [SerializeField]Sprite[] skills;
 
-        public Skill GetSkill(int index)
+        public Sprite GetSkill(int index)
         {
             return skills[index];
         }
@@ -66,7 +67,7 @@ namespace Manager
         {
             base.Awake();
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
-            skills = Resources.LoadAll<Skill>("Sprites/Skills");
+            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
@@ -83,7 +84,7 @@ namespace Manager
             // 테스트용
         }
 
-        const string VERSION_CHART_ID = "89012";
+        const string VERSION_CHART_ID = "89457";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
@@ -289,6 +290,14 @@ namespace Manager
                     else
                         SetChartData<QuestData>(chartId, QuestDataProcess);
                     break;
+                case ChartName.skillData:
+                    void SkillDataDataProcess(SkillData[] data) { skillDatas = data; }
+                    
+                    if (_fromBackEnd)
+                        GetBackEndChartData<SkillData>(chartId, SkillDataDataProcess);
+                    else
+                        SetChartData<SkillData>(chartId, SkillDataDataProcess);
+                    break;
             }
         }
 
@@ -438,7 +447,6 @@ namespace Manager
                 };
                 Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             });
-            
         }
 
         public Material[] ownedWeaponIds = new Material[150];
@@ -463,10 +471,10 @@ namespace Manager
             });
         }
 
-        private System.DateTime lastLogin;
-        public System.DateTime LastLogin => lastLogin;
-        private System.DateTime serverTime;
-        public System.DateTime ServerTime => serverTime;
+        private DateTime lastLogin;
+        public DateTime LastLogin => lastLogin;
+        private DateTime serverTime;
+        public DateTime ServerTime => serverTime;
         void  SetLastLogin()
         {
             SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
@@ -475,9 +483,9 @@ namespace Manager
                     Debug.LogError("최근 접속시간 받아오기 실패.");
                     return;
                 }
-                lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
+                lastLogin = DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
             });
-            serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
         
         public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
