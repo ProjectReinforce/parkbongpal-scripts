@@ -409,3 +409,10 @@ public struct RefineResult
         value = _value;
     }
 }
+
+[Serializable]
+public struct SkillData
+{
+    public int index,coefficient;
+    public string skillName,		description,	Effect;
+}

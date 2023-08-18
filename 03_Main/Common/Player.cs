@@ -116,6 +116,7 @@ public class Player : DontDestroy<Player>
 
         UpdateBackEndData(nameof(UserData.colum.level), userData.level);
         topUIDatatViewer.UpdateLevel();
+        Quarry.Instance.UnlockMines(userData.level);
     }
     
     public void SetFavoriteWeaponId(int _weaponId)

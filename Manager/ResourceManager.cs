@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using LitJson;
@@ -16,6 +17,7 @@ namespace Manager
         public GachaData[] gachar;
         public AttendanceData[] attendanceDatas;
         public QuestData[] questDatas;
+        public SkillData[] skillDatas;
         public AdditionalData additionalData;
         public NormalReinforceData normalReinforceData;
         public MagicCarveData magicCarveData;
@@ -53,9 +55,9 @@ namespace Manager
         }
 
         
-        [SerializeField]Skill[] skills;
+        [SerializeField]Sprite[] skills;
 
-        public Skill GetSkill(int index)
+        public Sprite GetSkill(int index)
         {
             return skills[index];
         }
@@ -65,7 +67,7 @@ namespace Manager
         {
             base.Awake();
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
-            skills = Resources.LoadAll<Skill>("Sprites/Skills");
+            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
@@ -83,7 +85,7 @@ namespace Manager
             // 테스트용
         }
 
-        const string VERSION_CHART_ID = "89012";
+        const string VERSION_CHART_ID = "89457";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
@@ -289,6 +291,14 @@ namespace Manager
                     else
                         SetChartData<QuestData>(chartId, QuestDataProcess);
                     break;
+                case ChartName.skillData:
+                    void SkillDataDataProcess(SkillData[] data) { skillDatas = data; }
+                    
+                    if (_fromBackEnd)
+                        GetBackEndChartData<SkillData>(chartId, SkillDataDataProcess);
+                    else
+                        SetChartData<SkillData>(chartId, SkillDataDataProcess);
+                    break;
             }
         }
 
@@ -438,11 +448,9 @@ namespace Manager
                 };
                 Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             });
-            
         }
 
         public Material[] ownedWeaponIds = new Material[150];
-        public PideaData[] pideaDatas;
         void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
         {
             Material LockMaterial = new(Shader.Find("UI/Default"))
@@ -464,10 +472,10 @@ namespace Manager
             });
         }
 
-        private System.DateTime lastLogin;
-        public System.DateTime LastLogin => lastLogin;
-        private System.DateTime serverTime;
-        public System.DateTime ServerTime => serverTime;
+        private DateTime lastLogin;
+        public DateTime LastLogin => lastLogin;
+        private DateTime serverTime;
+        public DateTime ServerTime => serverTime;
         void  SetLastLogin()
         {
             SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
@@ -476,9 +484,9 @@ namespace Manager
                     Debug.LogError("최근 접속시간 받아오기 실패.");
                     return;
                 }
-                lastLogin = System.DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
+                lastLogin = DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
             });
-            serverTime = System.DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
         }
         
         public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
@@ -488,36 +496,44 @@ namespace Manager
 
         public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
         public Rank[][] myRanks = new Rank[UUIDs.Length][];
-
-        void GetRankList()
+        Action<int>[] deligate = new Action<int>[2];
+     
+        void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
         {
-            int topRankIndex = 0;
-            int myRankIndex = 0;
-            for (int j = 0; j < UUIDs.Length; j++)
+            deligate[0] = (count) =>
             {
-                //샌드큐는 비동기이기 때문에 j 값이 타이밍 안맞게 들어감 
-                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[topRankIndex], callback=> {
+                SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], callback =>
+                {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
+
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    topRanks[topRankIndex]= JsonMapper.ToObject<Rank[]>(json.ToJson())  ;
-                    topRankIndex++;
+                    topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    if(count>=UUIDs.Length) return;
+                    deligate[0](++count);
                 });
-            
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[myRankIndex],4 , callback => {
+            };
+            deligate[1] = (count) =>
+            {
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 4, callback =>
+                {
                     if (!callback.IsSuccess())
                     {
                         Debug.LogError(callback);
                         return;
                     }
+
                     JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                    myRanks[myRankIndex]=JsonMapper.ToObject<Rank[]>(json.ToJson());
-                    myRankIndex++;
+                    myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                    if (count >= UUIDs.Length) return;
+                    deligate[1](++count);
                 });
-            }
+            };
+            foreach (var action in deligate)
+                action(0);
             
             SceneLoader.ResourceLoadComplete();
         }
