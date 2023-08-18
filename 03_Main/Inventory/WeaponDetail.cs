@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
 {
+    [SerializeField] private Sprite LockSkill;
     
     [SerializeField] Text weaponName;
     [SerializeField] Text combatPower;
@@ -15,7 +17,8 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
     
     
     [SerializeField] Image WeaponImage;
-    [SerializeField] Image MagicImage;
+    [SerializeField] Image MagicImage1;
+    [SerializeField] Image MagicImage2;
 
     public void ViewUpdate(Weapon weapon)
     {
@@ -32,6 +35,9 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
         stats2.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";
         stats3.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
         WeaponImage.sprite = weapon.sprite;
+        MagicImage1.sprite = weapon.data.magic[0] < 0 ? LockSkill : ResourceManager.Instance.GetSkill(weapon.data.magic[0]);
+        MagicImage2.sprite = weapon.data.magic[1] < 0 ? LockSkill : ResourceManager.Instance.GetSkill(weapon.data.magic[1]);
+
     }
 
 

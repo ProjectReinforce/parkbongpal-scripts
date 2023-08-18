@@ -54,8 +54,16 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine>
             weaponImage.sprite = mine.rentalWeapon.sprite;
             weaponName.text = mine.rentalWeapon.name;
             mineWithWeaponStats.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
-            //skillDescription.text = 
-          //  gold.text = mine.Gold.ToString();
+            string[] skillNames= new string[2];
+            for (int i = 0; i < 2; i++)
+            {
+                int magicIndex = mine.rentalWeapon.data.magic[i];
+                if(magicIndex<0) break;
+                skillNames[i] = ResourceManager.Instance.skillDatas[magicIndex].skillName;
+ 
+            }
+            skillDescription.text = String.Join(", ", skillNames);
+            //  gold.text = mine.Gold.ToString();
         }
     }
    

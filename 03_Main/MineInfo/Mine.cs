@@ -93,7 +93,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         return  Utills.Ceil(GetMineData().hp / GetOneHitDMG());
     }
 
-    private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
+    //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
     public void SetWeapon(Weapon rentWeapon)
     {
 
@@ -110,7 +110,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         _weaponData = rentWeapon.data;
         for (int i = 0; i < 2; i++)
         {
-            rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i],skillViewer[i]);
+            if(_weaponData.magic[i] <0) continue;
+            rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i]);
         }
         SetInfo();
         
