@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SoulCraftingUI : ReinforceUI
+public class SoulCraftingUI : ReinforceUIBase
 {
     [SerializeField] Text upgradeCountText;
     [SerializeField] Text atkText;

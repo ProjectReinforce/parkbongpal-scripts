@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MagicCarveUI : ReinforceUI
+public class MagicCarveUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSkillTexts;
     // GameObject[] newSkills;

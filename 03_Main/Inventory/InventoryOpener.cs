@@ -24,13 +24,14 @@ public class InventoryOpener : MonoBehaviour
                 break;
             case InventoryOpenType.Mine:
             case InventoryOpenType.Reinforce:
+            case InventoryOpenType.ReinforceMaterial:
                 foreach (Button button in BasicInventoryButtons)
                     button.gameObject.SetActive(false);
                 confirmButton.onClick.RemoveAllListeners();
                 if ((InventoryOpenType)_openType == InventoryOpenType.Mine)
-                {
                     confirmButton.onClick.AddListener(() => Quarry.Instance.ConfirmWeapon());
-                }
+                else if ((InventoryOpenType)_openType == InventoryOpenType.Reinforce)
+                    confirmButton.onClick.AddListener(() => ReinforceManager.Instance.SelectedWeapon = Inventory.Instance.currentWeapon);
                 else
                     confirmButton.onClick.AddListener(() => ReinforceManager.Instance.SelectedWeapon = Inventory.Instance.currentWeapon);
                 confirmButton.onClick.AddListener(() => gameObject.SetActive(false));

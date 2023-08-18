@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RefineUI : ReinforceUI
+public class RefineUI : ReinforceUIBase
 {
     [SerializeField] Text[] resultStatTexts;
     [SerializeField] Text[] resultValueTexts;

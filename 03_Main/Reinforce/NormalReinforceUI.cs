@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NormalReinforceUI : ReinforceUI
+public class NormalReinforceUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSuccessCountText;
     [SerializeField] Image weaponIcon;

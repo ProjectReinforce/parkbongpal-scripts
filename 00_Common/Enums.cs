@@ -53,7 +53,8 @@ public enum InventoryOpenType
 {
     Default,
     Mine,
-    Reinforce
+    Reinforce,
+    ReinforceMaterial
 }
 
 public enum RewardType
