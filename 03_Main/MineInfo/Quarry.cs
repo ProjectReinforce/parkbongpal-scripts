@@ -95,20 +95,20 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         Mine tempMine = currentMine;
         Weapon currentMineWeapon = tempMine.rentalWeapon;
         
-        try
-        {
+        // try
+        // {
             if (currentWeapon.data.mineId >= 0)
                 throw  new Exception("다른 광산에서 사용중인 무기입니다.");
             int beforeGoldPerMin = tempMine.goldPerMin;
             currentWeapon.SetBorrowedDate();
             tempMine.SetWeapon(currentWeapon);
             Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
-        }
-        catch (Exception e)
-        {
-            UIManager.Instance.ShowWarning("안내", e.Message);
-            return;
-        }
+        // }
+        // catch (Exception e)
+        // {
+        //     UIManager.Instance.ShowWarning("안내", e.Message);
+        //     return;
+        // }
         if (currentMineWeapon is not null)
         {
             currentMineWeapon.Lend(-1);

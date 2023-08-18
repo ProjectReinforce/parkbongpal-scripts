@@ -5,11 +5,11 @@ using UnityEngine;
 //팩토리메서드 패턴
 public class RentalFactory
 {
-    public Rental createRental(Rental rental, MagicType type, IDetailViewer<SkillData> skillViewr)
+    public Rental createRental(Rental rental, MagicType type)
     {
         Rental returnType = rental;
         SkillData data = ResourceManager.Instance.skillDatas[(int)type];
-        skillViewr.ViewUpdate(data);
+        //skillViewr.ViewUpdate(data);
         switch (type){
             case MagicType.술:
                 returnType = new Sulsu(returnType, data.coefficient);
@@ -156,7 +156,7 @@ public class Inmyul : Magic //유일
    {
        WeaponData weaponData = base.GetWeaponData();
        weaponData.defaultStat[(int)StatType.atkSpeed] = coefficient;
-       weaponData.defaultStat[(int)StatType.atk] = (int)(1.5f*weaponData.defaultStat[(int)StatType.atk]);
+       weaponData.defaultStat[(int)StatType.atk] = (int)(1.5f*weaponData.atk- weaponData.defaultStat[(int)StatType.atk]);
        return weaponData;
    }
 
@@ -182,35 +182,95 @@ public class Ohpock : Magic //유일
 {
     public Ohpock(Rental mine, int _coefficient) : base(mine,_coefficient) {}
    /* 6	오폭	50	화약성을 띈 날붙이가 폭발을 일으킴	공격력의 절반만큼 공격 범위가 증가합니다.*/
+   public override WeaponData GetWeaponData()
+   {
+       WeaponData weaponData = base.GetWeaponData();
+
+       weaponData.defaultStat[(int)StatType.atkRange] += weaponData.atk * coefficient * (1 / 100);  
+           
+       return weaponData;
+   }
   
 }
 public class Zagyuck : Magic //유일
 {
     public Zagyuck(Rental mine,int _coefficient) : base(mine,_coefficient) {}
    /* 7	자격	20	매 타격이 약점을 찌르는 일격이된다.	정확도의 30%만큼 적 방어력을 무시합니다.*/
-
+   public override MineData GetMineData()
+   {
+       MineData mineData= base.GetMineData();
+       mineData.defence -= base.GetWeaponData().accuracy * coefficient * (1 / 100);
+       return mineData;
+   }
 }
 
 public class Jinsum : Magic //유일
 {
     public Jinsum(Rental mine, int _coefficient) : base(mine,_coefficient) {}
    /* 8	진섬	20	침착한 공격으로 보다 넓은 범위를 공격	공격력과 공격속도수치가 20% 감소하지만 공격범위가 500으로 고정됩니다.*/
-
+   public override WeaponData GetWeaponData()
+   {
+       WeaponData weaponData = base.GetWeaponData();
+       weaponData.defaultStat[(int)StatType.atk] -= weaponData.defaultStat[(int)StatType.atk] * coefficient * (1 / 100);
+       weaponData.defaultStat[(int)StatType.atkSpeed] -= weaponData.defaultStat[(int)StatType.atkSpeed] * coefficient * (1 / 100);  
+       weaponData.defaultStat[(int)StatType.atkRange] = 500;  
+           
+       return weaponData;
+   }
 }
 public class Choockbock : Magic //유일
-{
-/*9	축복	100	무기에 축복을 부여하여 보다 빠르게 공격한다	모든 스탯에 일반강화 횟수만큼 수치를 더합니다.*/
+{ /*9	축복	100	무기에 축복을 부여하여 보다 빠르게 공격한다	모든 스탯에 일반강화 횟수만큼 수치를 더합니다.*/
     public Choockbock(Rental mine,int _coefficient) : base(mine,_coefficient) {}
+    public override WeaponData GetWeaponData()
+    {
+        WeaponData weaponData = base.GetWeaponData();
+        weaponData.defaultStat[(int)StatType.atk] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.atkSpeed] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.atkRange] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.accuracy] += weaponData.defaultStat[0]; 
+        weaponData.defaultStat[(int)StatType.strength] += weaponData.defaultStat[0];
+        
+        weaponData.defaultStat[(int)StatType.charm] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.constitution] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.intelligence] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.technique] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.wisdom] += weaponData.defaultStat[0];
+        
+        weaponData.defaultStat[(int)StatType.criticalDamage] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.criticalRate] += weaponData.defaultStat[0];
+        return weaponData;
+    }
+    
 }
 
 public class Mise : Magic //유일
 {
     public Mise(Rental mine, int _coefficient) : base(mine,_coefficient) {}
     /*10	미세	10	무기를 휘두를때마다 미세한 균열을 일으킨다	광석 최대 내구도가 공격속도의 10%에 비례해 감소합니다.*/
+    public override MineData GetMineData()
+    {
+        MineData mineData= base.GetMineData();
+        mineData.hp -=  mineData.hp* base.GetWeaponData().atkSpeed * coefficient * (1 / 10000);
+        return mineData;
+    }
+    
 
 }
 public class Sachul : Magic //유일
 {
 /*    11	사철	100	철광석 성분이 있는 모래가 무기를 재구성함	공격속도, 공격범위 둘중 수치가 낮은 스탯이 높은 스탯의 수치와 같아집니다*/
     public Sachul(Rental mine,int _coefficient) : base(mine,_coefficient) {}
+    public override WeaponData GetWeaponData()
+    {
+        WeaponData weaponData = base.GetWeaponData();
+        int betterStat = weaponData.defaultStat[(int)StatType.atkSpeed] > weaponData.defaultStat[(int)StatType.atkRange]
+            ? weaponData.defaultStat[(int)StatType.atkSpeed]
+            : weaponData.defaultStat[(int)StatType.atkRange];
+        weaponData.defaultStat[(int)StatType.atkSpeed] = betterStat;
+        weaponData.defaultStat[(int)StatType.atkRange] = betterStat;
+           
+        return weaponData;
+    }
+    
+    
 }

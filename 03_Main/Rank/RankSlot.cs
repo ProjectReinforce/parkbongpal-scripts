@@ -9,7 +9,6 @@ public class RankSlot:MonoBehaviour
     
     public void SetData(Rank data)
     {
-        Debug.Log(data.rank+data.nickname+data.score);
         gameObject.SetActive(true);
         rank.text = data.rank.ToString();
         nickName.text = data.nickname;

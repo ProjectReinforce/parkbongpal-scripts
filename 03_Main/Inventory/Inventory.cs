@@ -32,6 +32,7 @@ public class Inventory : DontDestroy<Inventory>
             }
             else
             {
+                nullImage.SetActive(false);
                 currentSlotImage.SetActive(true);
                 currentSlotImage.transform.SetParent(value.myslot.transform,false);
                 currentSlotImage.transform.SetSiblingIndex(0);
@@ -109,6 +110,7 @@ public class Inventory : DontDestroy<Inventory>
     public void CloseInventory()
     {
         inventory.SetActive(false);
+        currentSlotImage.SetActive(false);
         foreach (var slot in slots)
         {
             slot.NewClear();
