@@ -19,59 +19,84 @@ public class Store : Singleton<Store>
 
     public void Drawing(int type)
     {
-        try
-        {
-            if (type == 0)
-                Player.Instance.TryProduceWeapon(-COST_GOLD, 1);
-            else
-                Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND, 1);
-            
-            GachaData gachaData = gacharsPercents[type];
-            int[] percents =
-                { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
-            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
-            BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
 
-            Inventory.Instance.AddWeapon(baseWeaponData);
-        }
-        catch (Exception e)
+        if (type == 0)
         {
-            UIManager.Instance.ShowWarning("알림", e.Message);
+            if (!Player.Instance.TryProduceWeapon(-COST_GOLD, 1))
+            {
+                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+                return;
+            }
         }
+
+        else
+        {
+            if (!Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND, 1))
+            {
+                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                return;
+            }
+        }
+
+        if (!Inventory.Instance.CheckSize(1)){
+             UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+                return;
+        }
+
+        GachaData gachaData = gacharsPercents[type];
+        int[] percents =
+            { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
+        Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
+        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
+
+        Inventory.Instance.AddWeapon(baseWeaponData);
     }
 
     private const int TEN = 10;
 
     public void BatchDrawing(int type)
     {
-        try
+
+        if (type == 0)
         {
-            if (type == 0)
-                Player.Instance.TryProduceWeapon(-COST_GOLD * TEN, TEN);
-            else
-                Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND * TEN, TEN);
-
-            GachaData gachaData = gacharsPercents[type];
-            int[] percents =
-                { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
-
-            BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
-            for (int i = 0; i < TEN; i++)
+            if (!Player.Instance.TryProduceWeapon(-COST_GOLD * TEN, TEN))
             {
-                Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
-                if (rarity >= Rarity.legendary)
-                {
-                    // 레전드리 획득 채팅 메시지 전송되도록
-                    Debug.Log("<color=red>레전드리 획득!!</color>");
-                }
-                baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
+                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+                return;
             }
-
-            Inventory.Instance.AddWeapons(baseWeaponDatas);
         }
-        catch (Exception e)
+        else
         {
-            UIManager.Instance.ShowWarning("알림", e.Message);
+            if (!Player.Instance.TryAdvanceProduceWeapon(-COST_DIAMOND * TEN, TEN))
+            {
+                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                return;
+            }
         }
+
+        if (!Inventory.Instance.CheckSize(10))
+        {
+            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+                return;
+        }
+        GachaData gachaData = gacharsPercents[type];
+        int[] percents =
+            { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
+
+        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
+        for (int i = 0; i < TEN; i++)
+        {
+            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
+            if (rarity >= Rarity.legendary)
+            {
+                // 레전드리 획득 채팅 메시지 전송되도록
+                Debug.Log("<color=red>레전드리 획득!!</color>");
+            }
+            baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
+        }
+
+        Inventory.Instance.AddWeapons(baseWeaponDatas);
+
+
     }
 }

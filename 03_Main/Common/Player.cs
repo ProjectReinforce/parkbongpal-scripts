@@ -57,7 +57,7 @@ public class Player : DontDestroy<Player>
     // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold)
     {
-        if (userData.gold + _gold < 0) throw new Exception("Gold가 부족합니다.");
+        if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
 
         recordData.ModifyGoldRecord(_gold);
@@ -151,16 +151,20 @@ public class Player : DontDestroy<Player>
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
-    public void TryProduceWeapon(int _goldCost, int _count)
+    public bool TryProduceWeapon(int _goldCost, int _count)
     {
-        AddGold(_goldCost);
+       if(!AddGold(_goldCost))
+            return false ;
         recordData.ModifyProduceRecord(_count);
+        return true ;
     }
 
-    public void TryAdvanceProduceWeapon(int _diamondCost, int _count)
+    public bool TryAdvanceProduceWeapon(int _diamondCost, int _count)
     {
-        AddDiamond(_diamondCost);
+        if (AddDiamond(_diamondCost))
+            return false;
         recordData.ModifyAdvanceProduceRecord(_count);
+        return true;
     }
 
     public void TryPromote(int _goldCost)

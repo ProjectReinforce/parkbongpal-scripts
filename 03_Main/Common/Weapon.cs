@@ -42,6 +42,7 @@ public class Weapon
     {
         _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
     }
+
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
@@ -78,6 +79,8 @@ public class Weapon
         // Debug.Log($"{statSumWithFactor} / {speed} / {range} / {criticalRate} / {criticalDamage} / {calculatedDamage}");
         
         _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
+
+        // Inventory.Instance.UpdateHighPowerWeaponData();
     }
 
     public void ExecuteReinforce(ReinforceType _type)

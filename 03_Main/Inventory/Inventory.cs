@@ -116,10 +116,11 @@ public class Inventory : DontDestroy<Inventory>
             slot.NewClear();
         }
     }
-    
-    public void AddWeapon(BaseWeaponData baseWeaponData )
+    public bool CheckSize(int count){
+        return Count+count <= size;
+    }
+    public bool AddWeapon(BaseWeaponData baseWeaponData )
     {
-        if (Count >= size) throw new Exception("인벤토리 공간이 부족합니다.");
         Param param = new Param
         {
             { nameof(WeaponData.colum.mineId), -1 },
@@ -139,7 +140,7 @@ public class Inventory : DontDestroy<Inventory>
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
-            return;
+            return false;
         }
 
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
@@ -157,16 +158,16 @@ public class Inventory : DontDestroy<Inventory>
             if (!pidea.IsSuccess())
             {
                 Debug.LogError("게임 정보 삽입 실패 : " + pidea);
-                return;
+                return false;
             }
 
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
         }
+        return true;
     }
 
-     public void AddWeapons(BaseWeaponData[] baseWeaponData )
-    {
-        if (Count+10 >= size) throw new Exception("인벤토리 공간이 부족합니다.");
+     public bool AddWeapons(BaseWeaponData[] baseWeaponData )
+    {        
         List<TransactionValue> transactionList = new List<TransactionValue>();
 
         for (int i = 0; i < baseWeaponData.Length; i++)
@@ -193,7 +194,7 @@ public class Inventory : DontDestroy<Inventory>
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
             
-            return;
+            return false;
         }
         LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
         for (int i = 0; i < json.Count; i++)
@@ -211,11 +212,12 @@ public class Inventory : DontDestroy<Inventory>
                 if (!pidea.IsSuccess())
                 {
                     Debug.LogError("게임 정보 삽입 실패 : " + pidea);
-                    return;
+                    return false;
                 }
                 Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
             }
         }
+        return true;
     }
 
    
