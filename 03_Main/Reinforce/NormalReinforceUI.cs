@@ -10,7 +10,6 @@ public class NormalReinforceUI : ReinforceUIBase
     [SerializeField] Text weaponNameText;
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
-    [SerializeField] Text costText;
 
     void Awake()
     {
@@ -62,12 +61,12 @@ public class NormalReinforceUI : ReinforceUIBase
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
         else
         {
-            costText.text = $"<color=white>{cost}</color>";
+            goldCostText.text = $"<color=white>{cost}</color>";
             return true;
         }
     }
