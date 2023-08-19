@@ -53,7 +53,7 @@ public class NormalReinforceUI : ReinforceUIBase
     {
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -64,19 +64,11 @@ public class NormalReinforceUI : ReinforceUIBase
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
-    }
-
-    protected override bool CheckRarity()
-    {
+        goldCostText.text = $"<color=white>{cost}</color>";
         return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected bool CheckUpgradeCount()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
@@ -94,5 +86,11 @@ public class NormalReinforceUI : ReinforceUIBase
             upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
         }
         return true;
+    }
+
+    protected override bool Checks()
+    {
+        if (CheckCost() && CheckUpgradeCount()) return true;
+        return false;
     }
 }

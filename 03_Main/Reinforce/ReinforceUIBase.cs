@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,16 +70,12 @@ public abstract class ReinforceUIBase : MonoBehaviour
     public void CheckQualification()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
-
-        if (CheckCost() && CheckRarity() && CheckUpgradeCount() && weapon is not null)
+        
+        if (weapon is not null && Checks())
             reinforceButton.interactable = true;
         else
             reinforceButton.interactable = false;
     }
 
-    protected abstract bool CheckCost();
-
-    protected abstract bool CheckRarity();
-
-    protected abstract bool CheckUpgradeCount();
+    protected abstract bool Checks();
 }

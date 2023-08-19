@@ -49,7 +49,7 @@ public class MagicCarveUI : ReinforceUIBase
         reinforceButton.onClick.AddListener(() => UpdateSkill());
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -60,14 +60,11 @@ public class MagicCarveUI : ReinforceUIBase
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
+        goldCostText.text = $"<color=white>{cost}</color>";
+        return true;
     }
 
-    protected override bool CheckRarity()
+    protected bool CheckRarity()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
 
@@ -77,8 +74,9 @@ public class MagicCarveUI : ReinforceUIBase
             return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected override bool Checks()
     {
-        return true;
+        if (CheckCost() && CheckRarity()) return true;
+        return false;
     }
 }
