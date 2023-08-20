@@ -8,21 +8,6 @@ public class MagicCarveUI : ReinforceUIBase
     [SerializeField] Text[] currentSkillTexts;
     // GameObject[] newSkills;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateSkill()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;

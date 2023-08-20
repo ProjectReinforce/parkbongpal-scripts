@@ -9,21 +9,6 @@ public class SoulCraftingUI : ReinforceUIBase
     [SerializeField] Text atkText;
     [SerializeField] Text soulCostText;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateAtk()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;

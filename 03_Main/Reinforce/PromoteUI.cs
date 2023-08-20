@@ -12,21 +12,6 @@ public class PromoteUI : ReinforceUIBase
     [SerializeField] Text currentRarityNameText;
     [SerializeField] Image[] weaponIcons;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateWeaponIcon()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;

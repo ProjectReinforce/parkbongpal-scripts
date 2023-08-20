@@ -7,21 +7,6 @@ public class AdditionalUI : ReinforceUIBase
 {
     [SerializeField] Text atkText;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateAtk()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;

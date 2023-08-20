@@ -11,21 +11,6 @@ public class NormalReinforceUI : ReinforceUIBase
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     public void UpdateWeaponIcon()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;

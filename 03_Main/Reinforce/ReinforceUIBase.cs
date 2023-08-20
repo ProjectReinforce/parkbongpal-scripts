@@ -11,12 +11,12 @@ public abstract class ReinforceUIBase : MonoBehaviour
     [SerializeField] protected Button reinforceButton;
     protected ReinforceManager reinforceManager;
 
-    protected void Initialize()
+    protected virtual void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
     }
 
-    protected void RegisterWeaponChangeEvent()
+    protected virtual void OnEnable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent += SelectWeapon;
@@ -24,7 +24,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
         SelectWeapon();
     }
 
-    protected void DeregisterWeaponChangeEvent()
+    protected virtual void OnDisable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent -= SelectWeapon;

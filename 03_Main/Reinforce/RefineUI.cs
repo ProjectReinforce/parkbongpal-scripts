@@ -9,21 +9,6 @@ public class RefineUI : ReinforceUIBase
     [SerializeField] Text[] resultValueTexts;
     [SerializeField] Text stoneCostText;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateStat()
     {
         if (reinforceManager.RefineResults is null) return;
