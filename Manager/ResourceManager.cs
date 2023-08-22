@@ -78,6 +78,7 @@ namespace Manager
             GetOwnedWeaponData();
             SetOwnedWeaponId();
             GetRankList();
+            GetQuestClearData();
 
             LoadAllChart();
 
@@ -535,6 +536,15 @@ namespace Manager
                 action(0);
             
             SceneLoader.ResourceLoadComplete();
+        }
+
+        public QuestRecord[] questRecordDatas;
+        void GetQuestClearData()
+        {
+            GetMyBackEndData<QuestRecord>(nameof(QuestRecord),  (data) =>
+            {
+                questRecordDatas = data;
+            });
         }
         
     }

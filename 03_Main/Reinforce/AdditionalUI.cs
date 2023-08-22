@@ -3,24 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdditionalUI : ReinforceUI
+public class AdditionalUI : ReinforceUIBase
 {
     [SerializeField] Text atkText;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     void UpdateAtk()
     {
@@ -49,7 +34,7 @@ public class AdditionalUI : ReinforceUI
         reinforceButton.onClick.AddListener(() => UpdateAtk());
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
@@ -59,20 +44,13 @@ public class AdditionalUI : ReinforceUI
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
-    }
-
-    protected override bool CheckRarity()
-    {
+        goldCostText.text = $"<color=white>{cost}</color>";
         return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected override bool Checks()
     {
-        return true;
+        if (CheckCost()) return true;
+        return false;
     }
 }

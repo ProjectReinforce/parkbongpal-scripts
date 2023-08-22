@@ -1,33 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ReinforceUI : ReinforceUIBase
-{
-    protected abstract override void ActiveElements();
-    protected abstract override void DeactiveElements();
-    protected abstract override void UpdateInformations();
-    protected abstract override void RegisterAdditionalButtonClickEvent();
-
-    protected abstract override bool CheckCost();
-    protected abstract override bool CheckRarity();
-    protected abstract override bool CheckUpgradeCount();
-}
-
-public class ReinforceUIBase : MonoBehaviour
+public abstract class ReinforceUIBase : MonoBehaviour
 {
     [SerializeField] protected ReinforceType reinforceType;
     [SerializeField] protected Text goldCostText;
     [SerializeField] protected Button reinforceButton;
     protected ReinforceManager reinforceManager;
 
-    protected void Initialize()
+    protected virtual void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
     }
 
-    protected void RegisterWeaponChangeEvent()
+    protected virtual void OnEnable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent += SelectWeapon;
@@ -35,7 +24,7 @@ public class ReinforceUIBase : MonoBehaviour
         SelectWeapon();
     }
 
-    protected void DeregisterWeaponChangeEvent()
+    protected virtual void OnDisable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent -= SelectWeapon;
@@ -61,21 +50,13 @@ public class ReinforceUIBase : MonoBehaviour
         RegisterAdditionalButtonClickEvent();
     }
 
-    protected virtual void ActiveElements()
-    {
-    }
+    protected abstract void ActiveElements();
 
-    protected virtual void DeactiveElements()
-    {
-    }
+    protected abstract void DeactiveElements();
 
-    protected virtual void UpdateInformations()
-    {
-    }
+    protected abstract void UpdateInformations();
 
-    protected virtual void RegisterAdditionalButtonClickEvent()
-    {
-    }
+    protected abstract void RegisterAdditionalButtonClickEvent();
 
     protected void RegisterButtonClickEvent()
     {
@@ -89,25 +70,12 @@ public class ReinforceUIBase : MonoBehaviour
     public void CheckQualification()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
-
-        if (CheckCost() && CheckRarity() && CheckUpgradeCount() && weapon is not null)
+        
+        if (weapon is not null && Checks())
             reinforceButton.interactable = true;
         else
             reinforceButton.interactable = false;
     }
 
-    protected virtual bool CheckCost()
-    {
-        return true;
-    }
-
-    protected virtual bool CheckRarity()
-    {
-        return true;
-    }
-
-    protected virtual bool CheckUpgradeCount()
-    {
-        return true;
-    }
+    protected abstract bool Checks();
 }

@@ -55,7 +55,8 @@ public enum InventoryOpenType
 {
     Default,
     Mine,
-    Reinforce
+    Reinforce,
+    ReinforceMaterial
 }
 
 public enum RewardType
@@ -84,6 +85,7 @@ public enum RecordType
     TryReinforce,
     TryMagic,
     TrySoul,
+    TryRefine,
     Attendance,
     GetBonus,
     SeeAds,

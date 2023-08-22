@@ -3,29 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NormalReinforceUI : ReinforceUI
+public class NormalReinforceUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSuccessCountText;
     [SerializeField] Image weaponIcon;
     [SerializeField] Text weaponNameText;
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
-    [SerializeField] Text costText;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     public void UpdateWeaponIcon()
     {
@@ -54,7 +38,7 @@ public class NormalReinforceUI : ReinforceUI
     {
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -62,22 +46,14 @@ public class NormalReinforceUI : ReinforceUI
 
         if (userData.gold < cost)
         {
-            costText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            costText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
-    }
-
-    protected override bool CheckRarity()
-    {
+        goldCostText.text = $"<color=white>{cost}</color>";
         return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected bool CheckUpgradeCount()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
@@ -95,5 +71,11 @@ public class NormalReinforceUI : ReinforceUI
             upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
         }
         return true;
+    }
+
+    protected override bool Checks()
+    {
+        if (CheckCost() && CheckUpgradeCount()) return true;
+        return false;
     }
 }

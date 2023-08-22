@@ -3,26 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SoulCraftingUI : ReinforceUI
+public class SoulCraftingUI : ReinforceUIBase
 {
     [SerializeField] Text upgradeCountText;
     [SerializeField] Text atkText;
     [SerializeField] Text soulCostText;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     void UpdateAtk()
     {
@@ -53,32 +38,35 @@ public class SoulCraftingUI : ReinforceUI
         reinforceButton.onClick.AddListener(() => UpdateAtk());
     }
 
-    protected override bool CheckCost()
+    bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
         int goldCost = Manager.ResourceManager.Instance.soulCraftingData.goldCost;
-        int soulCost = Manager.ResourceManager.Instance.soulCraftingData.soulCost;
 
-        if (userData.gold >= goldCost && userData.weaponSoul >= soulCost)
+        if (userData.gold >= goldCost)
         {
             goldCostText.text = $"<color=white>{goldCost}</color>";
+            return true;
+        }
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+        return false;
+    }
+
+    bool CheckSoul()
+    {
+        UserData userData = Player.Instance.Data;
+        int soulCost = Manager.ResourceManager.Instance.soulCraftingData.soulCost;
+
+        if (userData.weaponSoul >= soulCost)
+        {
             soulCostText.text = $"<color=white>{soulCost}</color>";
             return true;
         }
-        else
-        {
-            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
-            soulCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
-            return false;
-        }
+        soulCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
+        return false;
     }
 
-    protected override bool CheckRarity()
-    {
-        return true;
-    }
-
-    protected override bool CheckUpgradeCount()
+    bool CheckUpgradeCount()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
 
@@ -87,5 +75,11 @@ public class SoulCraftingUI : ReinforceUI
         else
             upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
         return true;
+    }
+
+    protected override bool Checks()
+    {
+        if (CheckGold() && CheckSoul() && CheckUpgradeCount() ) return true;
+        return false;
     }
 }

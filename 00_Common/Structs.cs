@@ -390,6 +390,13 @@ public struct QuestData
 }
 
 [Serializable]
+public struct QuestRecord
+{
+    public int questId;
+    public bool cleared;
+}
+
+[Serializable]
 public struct VersionInfo
 {
     public string name, latestfileId, description, updateDate;

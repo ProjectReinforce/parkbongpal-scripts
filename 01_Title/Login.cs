@@ -7,14 +7,15 @@ using BackEnd;
 
 public class Login : MonoBehaviour
 {
-
     //const string SCENE_NAME = "Main_V4";
-
-    const string SCENE_NAME = "Main_V4_JG";
-
-
+    const string SCENE_NAME = "Main_V5";
 
     [SerializeField] GameObject LoginPopup;
+    [SerializeField] Button tokenLoginButton;
+    Coroutine processCoroutine;
+    /// <summary>
+    /// Touch to start 상태에서 호출되는 함수
+    /// </summary>
     public void TryToLoginWithToken()
     {
         var bro = Backend.BMember.LoginWithTheBackendToken();
@@ -22,19 +23,59 @@ public class Login : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인에 성공했습니다");
-            Utills.LoadScene(SCENE_NAME);
+            if(Backend.UserNickName == "")
+                NicknamePopup.SetActive(true);
+            else
+                Utills.LoadScene(SCENE_NAME);
         }
         else
         {
             Debug.LogError($"자동 로그인 실패 : {bro}");
             LoginPopup.SetActive(true);
         }
+
+        // 비동기식
+        // tokenLoginButton.interactable = false;
+        // processCoroutine = StartCoroutine(PrintProcessText("로그인"));
+        // Backend.BMember.LoginWithTheBackendToken(callback =>
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.LogError($"자동 로그인 실패 : {callback}");
+        //         LoginPopup.SetActive(true);
+        //     }
+        //     Debug.Log("자동 로그인에 성공했습니다");
+        //     // todo : 메인 쓰레드에서 처리되도록 해야함.
+        //     // tokenLoginButton.interactable = true;
+        //     // Utills.LoadScene(SCENE_NAME);
+        // });
+
+        // 동기식 개선
+        // tokenLoginButton.interactable = false;
+        // processCoroutine = StartCoroutine(PrintProcessText("로그인"));
+        // var bro = Backend.BMember.LoginWithTheBackendToken();
+
+        // tokenLoginButton.interactable = true;
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError($"자동 로그인 실패 : {bro}");
+        //     LoginPopup.SetActive(true);
+        // }
+        // else
+        // {
+        //     Debug.Log("자동 로그인에 성공했습니다");
+        //     Utills.LoadScene(SCENE_NAME);
+        // }
     }
 
     [SerializeField] GameObject NicknamePopup;
-    public void OnClickStartGuest()
+    [SerializeField] GameObject dataLoseWarningPopup;
+    /// <summary>
+    /// 
+    /// </summary>
+    public void OnClickConfirmToStartGuest()
     {
-        var bro = BackEnd.Backend.BMember.GuestLogin();
+        var bro = Backend.BMember.GuestLogin();
         
         if(bro.IsSuccess())
         {
@@ -50,7 +91,6 @@ public class Login : MonoBehaviour
                 case 201:
                     Debug.Log("게스트 회원가입 성공!");
                     NicknamePopup.SetActive(true);
-                    //InsertNewUserData();
                     break;
             }
         }
@@ -94,7 +134,7 @@ public class Login : MonoBehaviour
             // 메시지 출력
             if(coroutine != null)
                 StopCoroutine(coroutine);
-            coroutine = StartCoroutine(PrintAlertMessage($"{MINLENGTH}~{MAXLENGTH}글자 사이로 설정해주세요."));
+            coroutine = StartCoroutine(PrintAlertText($"{MINLENGTH}~{MAXLENGTH}글자 사이로 설정해주세요."));
         }
         else
         {
@@ -112,7 +152,7 @@ public class Login : MonoBehaviour
             {
                 if(coroutine != null)
                     StopCoroutine(coroutine);
-                coroutine = StartCoroutine(PrintAlertMessage("이미 존재하는 닉네임입니다."));
+                coroutine = StartCoroutine(PrintAlertText("이미 존재하는 닉네임입니다."));
                 confirmButton.interactable = true;
                 return;
             }
@@ -124,7 +164,6 @@ public class Login : MonoBehaviour
 
     void InsertNewUserData()
     {
-        
         var bro = Backend.GameData.Insert(nameof(UserData), new Param());
 
         if(bro.IsSuccess())
@@ -140,7 +179,7 @@ public class Login : MonoBehaviour
 
     const int BLINKCOUNT = 3;
     readonly WaitForSeconds waitForBlinkDelay = new(0.1f);
-    IEnumerator PrintAlertMessage(string _message)
+    IEnumerator PrintAlertText(string _message)
     {
         messageText.text = _message;
 
@@ -152,6 +191,18 @@ public class Login : MonoBehaviour
 
             nicknameInputImage.color = originColor;
             yield return waitForBlinkDelay;
+        }
+    }
+
+    [SerializeField] Text processText;
+    readonly WaitForSeconds waitForDotDelay = new(0.2f);
+    IEnumerator PrintProcessText(string _message)
+    {
+        for(int i = 1; ; i++)
+        {
+            string dots = new('.', i % 4);
+            processText.text = $"{_message} 진행 중{dots}";
+            yield return waitForDotDelay;
         }
     }
 }

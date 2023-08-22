@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PromoteUI : ReinforceUI
+public class PromoteUI : ReinforceUIBase
 {
     [SerializeField] Image nextRarityNameImage;
     [SerializeField] Text nextRarityNameText;
@@ -11,21 +11,6 @@ public class PromoteUI : ReinforceUI
     [SerializeField] Image currentRarityNameImage;
     [SerializeField] Text currentRarityNameText;
     [SerializeField] Image[] weaponIcons;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     void UpdateWeaponIcon()
     {
@@ -53,26 +38,23 @@ public class PromoteUI : ReinforceUI
     {
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
-        // WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        // int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
-        int cost = 1000;
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        // int cost = 1000;
 
         if (userData.gold < cost)
         {
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
+        goldCostText.text = $"<color=white>{cost}</color>";
+        return true;
     }
 
-    protected override bool CheckRarity()
+    protected bool CheckRarity()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
@@ -109,15 +91,13 @@ public class PromoteUI : ReinforceUI
             nextRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity + 1).ToString());
             return true;
         }
-        else
-        {
-            nextRarityNameText.text = currentRarityNameText.text;
-            return false;
-        }
+        nextRarityNameText.text = currentRarityNameText.text;
+        return false;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected override bool Checks()
     {
-        return true;
+        if (CheckCost() && CheckRarity()) return true;
+        return false;
     }
 }

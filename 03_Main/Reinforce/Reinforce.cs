@@ -26,7 +26,9 @@ public class Promote : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-1000);
+        // Player.Instance.AddGold(-1000);
+        Player.Instance.TryPromote(-1);
+        weapon.SetPower();
     }
 }
 
@@ -58,8 +60,9 @@ public class Additional : Reinforce
         }
 
         int cost = data.goldCost;
-        Player.Instance.AddGold(-10);
-        // Player.Instance.TryAdditional(-10);
+        // Player.Instance.AddGold(-10);
+        Player.Instance.TryAdditional(-5);
+        weapon.SetPower();
 
         // Player.Instance.AddGold(-cost);
     }
@@ -108,7 +111,9 @@ public class NormalReinforce : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-500);
+        // Player.Instance.AddGold(-500);
+        Player.Instance.TryNormalReinforce(-10);
+        weapon.SetPower();
     }
 }
 
@@ -147,7 +152,9 @@ public class MagicEngrave : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-10);
+        // Player.Instance.AddGold(-10);
+        Player.Instance.TryMagicCarve(-50);
+        weapon.SetPower();
     }
 }
 
@@ -195,7 +202,9 @@ public class SoulCrafting : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-1000);
+        // Player.Instance.AddGold(-100);
+        Player.Instance.TrySoulCraft(-100, 0);
+        weapon.SetPower();
         // 트랜잭션 처리 고려
         // Player.Instance.AddGold(goldCost);
         // Player.Instance.AddSoul(soulCost);
@@ -278,6 +287,8 @@ public class Refinement : Reinforce
             // 메시지 출력
         }
 
-        Player.Instance.AddGold(-1000);
+        // Player.Instance.AddGold(-1000);
+        Player.Instance.TryRefine(-500, 0);
+        weapon.SetPower();
     }
 }

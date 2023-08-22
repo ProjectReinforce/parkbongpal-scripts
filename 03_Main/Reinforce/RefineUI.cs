@@ -3,26 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RefineUI : ReinforceUI
+public class RefineUI : ReinforceUIBase
 {
     [SerializeField] Text[] resultStatTexts;
     [SerializeField] Text[] resultValueTexts;
     [SerializeField] Text stoneCostText;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     void UpdateStat()
     {
@@ -52,36 +37,43 @@ public class RefineUI : ReinforceUI
         reinforceButton.onClick.AddListener(() => UpdateStat());
     }
 
-    protected override bool CheckCost()
+    protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
         RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         int goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
-        int oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
 
-        if (userData.gold >= goldCost && userData.stone >= oreCost)
+        if (userData.gold >= goldCost)
         {
             goldCostText.text = $"<color=white>{goldCost}</color>";
+            return true;
+        }
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+        return false;
+    }
+
+    protected bool CheckOre()
+    {
+        UserData userData = Player.Instance.Data;
+        RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+
+        int oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
+
+        if (userData.stone >= oreCost)
+        {
             stoneCostText.text = $"<color=white>{oreCost}</color>";
             return true;
         }
-        else
-        {
-            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
-            stoneCostText.text = userData.stone < oreCost ? $"<color=red>{oreCost}</color>" : $"<color=white>{oreCost}</color>";
-            return false;
-        }
+        stoneCostText.text = userData.stone < oreCost ? $"<color=red>{oreCost}</color>" : $"<color=white>{oreCost}</color>";
+        return false;
     }
 
-    protected override bool CheckRarity()
+    protected override bool Checks()
     {
-        return true;
-    }
-
-    protected override bool CheckUpgradeCount()
-    {
-        return true;
+        if (CheckGold() && CheckOre()) return true;
+        return false;
     }
 }

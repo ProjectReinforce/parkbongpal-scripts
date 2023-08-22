@@ -57,8 +57,9 @@ public class Player : DontDestroy<Player>
     // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold)
     {
-        if (userData.gold + _gold < 0) throw new Exception("Gold가 부족합니다.");
+        if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
+
         recordData.ModifyGoldRecord(_gold);
         UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
         topUIDatatViewer.UpdateGold();
@@ -70,6 +71,7 @@ public class Player : DontDestroy<Player>
         if (userData.diamond + _diamond < 0) return false;
         userData.diamond += _diamond;
 
+        recordData.ModifyDiamondRecord(_diamond);
         UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
         topUIDatatViewer.UpdateDiamond();
 
@@ -110,6 +112,7 @@ public class Player : DontDestroy<Player>
     {
         userData.exp -= ResourceManager.Instance.expDatas[userData.level-1];
         userData.level ++;
+        recordData.levelUpEvent?.Invoke();
 
         UpdateBackEndData(nameof(UserData.colum.level), userData.level);
         topUIDatatViewer.UpdateLevel();
@@ -148,9 +151,57 @@ public class Player : DontDestroy<Player>
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
-    // public void TryAdditional(int _goldCost)
-    // {
-    //     AddGold(_goldCost);
-    //     recordData.SaveRecord();
-    // }
+    public bool TryProduceWeapon(int _goldCost, int _count)
+    {
+       if(!AddGold(_goldCost))
+            return false ;
+        recordData.ModifyProduceRecord(_count);
+        return true ;
+    }
+
+    public bool TryAdvanceProduceWeapon(int _diamondCost, int _count)
+    {
+        if (AddDiamond(_diamondCost))
+            return false;
+        recordData.ModifyAdvanceProduceRecord(_count);
+        return true;
+    }
+
+    public void TryPromote(int _goldCost)
+    {
+        AddGold(_goldCost);
+        recordData.ModifyTryPromoteRecord();
+    }
+
+    public void TryAdditional(int _goldCost)
+    {
+        AddGold(_goldCost);
+        recordData.ModifyTryAdditionalRecord();
+    }
+
+    public void TryNormalReinforce(int _goldCost)
+    {
+        AddGold(_goldCost);
+        recordData.ModifyTryReinforceRecord();
+    }
+
+    public void TryMagicCarve(int _goldCost)
+    {
+        AddGold(_goldCost);
+        recordData.ModifyTryMagicRecord();
+    }
+
+    public void TrySoulCraft(int _goldCost, int _soulCost)
+    {
+        AddGold(_goldCost);
+        AddSoul(_soulCost);
+        recordData.ModifyTrySoulRecord();
+    }
+
+    public void TryRefine(int _goldCost, int _oreCost)
+    {
+        AddGold(_goldCost);
+        AddStone(_oreCost);
+        recordData.ModifyTryRefineRecord();
+    }
 }

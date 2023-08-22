@@ -10,14 +10,14 @@ public class ReinforceUIInfo : MonoBehaviour
         get => reinforceWeaponSlot;
     }
 
-    ReinforceUI[] reinforceUIs;
-    public ReinforceUI[] ReinforceUIs => reinforceUIs;
+    ReinforceUIBase[] reinforceUIs;
+    public ReinforceUIBase[] ReinforceUIs => reinforceUIs;
 
     private void Awake()
     {
         transform.GetChild(1).TryGetComponent(out reinforceWeaponSlot);
 
-        reinforceUIs = transform.GetComponentsInChildren<ReinforceUI>(true);
+        reinforceUIs = transform.GetComponentsInChildren<ReinforceUIBase>(true);
     }
 
     private void OnDisable()

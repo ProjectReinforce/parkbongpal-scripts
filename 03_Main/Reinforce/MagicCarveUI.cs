@@ -3,25 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MagicCarveUI : ReinforceUI
+public class MagicCarveUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSkillTexts;
     // GameObject[] newSkills;
-
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
 
     void UpdateSkill()
     {
@@ -49,7 +34,7 @@ public class MagicCarveUI : ReinforceUI
         reinforceButton.onClick.AddListener(() => UpdateSkill());
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -60,14 +45,11 @@ public class MagicCarveUI : ReinforceUI
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
+        goldCostText.text = $"<color=white>{cost}</color>";
+        return true;
     }
 
-    protected override bool CheckRarity()
+    protected bool CheckRarity()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
 
@@ -77,8 +59,9 @@ public class MagicCarveUI : ReinforceUI
             return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected override bool Checks()
     {
-        return true;
+        if (CheckCost() && CheckRarity()) return true;
+        return false;
     }
 }
