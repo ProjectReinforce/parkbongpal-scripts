@@ -9,7 +9,7 @@ public interface IDetailViewer<T>
 {
     void ViewUpdate(T element);
 }
-public class MineDetail : MonoBehaviour,IDetailViewer<Mine> 
+public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
 {
     [SerializeField] private Text mineName;
     [SerializeField] private Text stat;
@@ -66,5 +66,54 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine>
             //  gold.text = mine.Gold.ToString();
         }
     }
+
+   public void SetOpen()
+   {
+       InventoryPresentor.Instance.SetInventoryOption(this);
+       InventoryPresentor.Instance.OpenInventory();
+   }
+   
+   [SerializeField] Button confirmButton;
+   public void OptionOpen()
+   {
+       confirmButton.gameObject.SetActive(true);
+       confirmButton.onClick.AddListener(InventoryConfirm);
+   }
+
+   private void InventoryConfirm()
+   {
+       Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
+       if (currentWeapon is null) return;
+       Mine tempMine = Quarry.Instance.currentMine;
+       Weapon currentMineWeapon = tempMine.rentalWeapon;
+        
+       try
+       {
+           if (currentWeapon.data.mineId >= 0)
+               throw  new Exception("다른 광산에서 사용중인 무기입니다.");
+           int beforeGoldPerMin = tempMine.goldPerMin;
+           currentWeapon.SetBorrowedDate();
+           tempMine.SetWeapon(currentWeapon);
+           Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+       }
+       catch (Exception e)
+       {
+           UIManager.Instance.ShowWarning("안내", e.Message);
+           return;
+       }
+       if (currentMineWeapon is not null)
+       {
+           currentMineWeapon.Lend(-1);
+       }
+       currentWeapon.Lend(tempMine.GetMineData().index);
+        
+       Quarry.Instance.currentMine= tempMine ;
+   }
+
+   public void OptionClose()
+   {
+       confirmButton.gameObject.SetActive(false);
+       confirmButton.onClick.RemoveAllListeners();
+   }
    
 }

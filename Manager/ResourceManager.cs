@@ -408,7 +408,7 @@ namespace Manager
             {
                 // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
                 JsonData loadedChartJson = StringToJson(loadedChart);
-
+                Debug.Log(loadedChartJson.ToJson());
                 _callback(JsonMapper.ToObject<T[]>(loadedChartJson.ToJson()));
                 return true;
             }

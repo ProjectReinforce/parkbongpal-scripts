@@ -1,7 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BackEnd;
 using Manager;
 using UnityEngine;
@@ -45,13 +44,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
             mines[i].Unlock(ResourceManager.Instance.userData.level);
         }
-        
-       
     }
 
     private void Start()
     {
-        Inventory.Instance.travelInventory((weapon) =>
+        InventoryPresentor.Instance.travelInventory((weapon) =>
         {
             if (weapon?.data.mineId >= 0)
             {
@@ -88,37 +85,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         currentMine.Receipt();
     }
-    public void ConfirmWeapon()
-    {
-        Weapon currentWeapon = Inventory.Instance.currentWeapon;
-        if (currentWeapon is null) return;
-        Mine tempMine = currentMine;
-        Weapon currentMineWeapon = tempMine.rentalWeapon;
-        
-        // try
-        // {
-            if (currentWeapon.data.mineId >= 0)
-                throw  new Exception("다른 광산에서 사용중인 무기입니다.");
-            int beforeGoldPerMin = tempMine.goldPerMin;
-            currentWeapon.SetBorrowedDate();
-            tempMine.SetWeapon(currentWeapon);
-            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
-        // }
-        // catch (Exception e)
-        // {
-        //     UIManager.Instance.ShowWarning("안내", e.Message);
-        //     return;
-        // }
-        if (currentMineWeapon is not null)
-        {
-            currentMineWeapon.Lend(-1);
-        }
-        currentWeapon.Lend(tempMine.GetMineData().index);
-        
-        currentMine= tempMine ;
-    }
-    
-  
+
     private int totalGold;
     public void BatchReceipt()
     {
@@ -154,6 +121,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             }
         });
     }
+
 
 
 }

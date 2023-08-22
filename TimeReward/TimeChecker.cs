@@ -22,8 +22,8 @@ public class TimeChecker : Singleton<TimeChecker>
     {
         string empty = "";
         string day = timeInterval.Days == 0 ? empty : timeInterval.Days+ "일 ";
-        string hour = timeInterval.Hours == 0 ? empty : timeInterval.Days+ "시간 ";
-        string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Days+ "분 동안 ";
+        string hour = timeInterval.Hours == 0 ? empty : timeInterval.Hours+ "시간 ";
+        string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Minutes+ "분 동안 ";
 
         int reward =  (int)(timeInterval.TotalMilliseconds/60000 * ResourceManager.Instance.userData.goldPerMin);
         
@@ -49,7 +49,7 @@ public class TimeChecker : Singleton<TimeChecker>
                 Player.Instance.AddDiamond(ResourceManager.Instance.attendanceDatas[day].value);
                 break;
             case (int)RewardType.Weapon:
-                Inventory.Instance.AddWeapon(ResourceManager.Instance.baseWeaponDatas[todayReward.value]);
+                InventoryPresentor.Instance.AddWeapon(ResourceManager.Instance.baseWeaponDatas[todayReward.value]);
                 break;
         }
         Player.Instance.SetAttendance(++day);

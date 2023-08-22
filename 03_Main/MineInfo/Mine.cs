@@ -17,7 +17,6 @@ public class Mine :MonoBehaviour,Rental,ISlotable
 {
     // Start is called before the first frame update
     private MineData _mineData;
-
     public MineData GetMineData()
     {
         return _mineData;
@@ -42,6 +41,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         set
         {
             goldPerMinText.text = value.ToString();
+            MaxGold = value * 120;
             _goldPerMin = value;
         }
     }
@@ -50,7 +50,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     private WeaponData _weaponData;
     public WeaponData GetWeaponData()
     {
-        return _weaponData;
+        return _weaponData.Clone();
     }
     
     public void Initialized(MineData _data)
@@ -65,7 +65,6 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     private void Awake()
     {
         rentalFactory = new RentalFactory();
-        rental = this;
     }
 
     public void SetCurrent()// *dip 위배중, 리팩토링 대상.
@@ -94,6 +93,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     }
 
     //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
+    private TimeSpan timeInterval;
     public void SetWeapon(Weapon rentWeapon)
     {
 
@@ -108,24 +108,28 @@ public class Mine :MonoBehaviour,Rental,ISlotable
             return;
         }
         _weaponData = rentWeapon.data;
+        rental = this;
         for (int i = 0; i < 2; i++)
         {
-            if(_weaponData.magic[i] <0) continue;
             rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i]);
         }
         SetInfo();
         
         rentalWeapon = rentWeapon;
 
-        TimeSpan timeInterval =
+        timeInterval =
             DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()) -
             rentalWeapon.data.borrowedDate;
+        if (timeInterval.TotalHours >= 2)
+            timeInterval = TimeSpan.FromHours(2);
+       
             
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
     }
 
     public void SetInfo()
     {
+        
         //웨폰템프
         float miss = rental.GetMiss(); //정확도-매끄러움
         
@@ -174,7 +178,9 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         
     }
 
-    private float elapse = 2f;
+    const float INTERVAL = 2;
+    private int MaxGold;
+    private float elapse = INTERVAL;
     private int gold;
 
     public int Gold
@@ -189,11 +195,17 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     private void FixedUpdate()
     {
         if( rentalWeapon is null) return;
+        if (gold >= MaxGold)
+        {
+            gold = MaxGold;
+            return;
+        }
         elapse -= Time.fixedDeltaTime;
         if (elapse > 0) return;
-        elapse += 2f;
-        gold += (int)(_goldPerMin / 30f);
+        elapse += INTERVAL;
+        gold += (int)(_goldPerMin*INTERVAL / 60);
         goldText.text = gold.ToString();
+        
     }
 
     public string Unlock(int playerLevel)

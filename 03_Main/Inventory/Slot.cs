@@ -45,7 +45,7 @@ public class Slot : NewThing, IComparable<Slot>,ISlotable
     public void SetCurrent()//dip 위배 , 리팩토링 대상.
     {
         if(myWeapon is  null) return;
-        Inventory.Instance.currentWeapon = myWeapon;
+        InventoryPresentor.Instance.currentWeapon = myWeapon;
         SelletChecker.SetActive( Decomposition.ChooseWeaponSlot(this));
     }
     public void SetsellectChecker(bool isOn)

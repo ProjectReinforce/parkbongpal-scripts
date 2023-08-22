@@ -7,47 +7,28 @@ using BackEnd;
 
 
 
-public class Inventory : DontDestroy<Inventory>
+public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOption //ViewModel
 {
     
-    [SerializeField] GameObject inventory;
-    [SerializeField] GameObject nullImage;
-    [SerializeField] GameObject currentSlotImage;
-    [SerializeField] GameObject box;
-    [SerializeField] WeaponUpdater updaterObject;
-    private Weapon _currentWeapon;
-    private IWeaponUpdater weaponUpdater;
-
+    [SerializeField] InventoryViewer inventoryViewer;// View
     
+    private int size;
+    private int Count => Slot.weaponCount;
+    
+    private List<Slot> slots;//model
+    [SerializeField] GameObject box;
+    private Weapon _currentWeapon;
     public Weapon currentWeapon
     {
         get => _currentWeapon;
         set
         {
-            weaponUpdater.UpdateCurrentWeapon(value);
+            inventoryViewer.UpdateCurrentWeapon(value);
             _currentWeapon = value;
-            if (value is null)
-            {
-                nullImage.SetActive(true);
-            }
-            else
-            {
-                nullImage.SetActive(false);
-                currentSlotImage.SetActive(true);
-                currentSlotImage.transform.SetParent(value.myslot.transform,false);
-                currentSlotImage.transform.SetSiblingIndex(0);
-            }
+            
         }
     }
    
-
-
-    private int size;
-    private int Count => Slot.weaponCount;
-    
-    private List<Slot> slots;
-
-    
     public void AddWeapon(WeaponData weaponData)
     {
         slots[Count].SetNew();
@@ -75,6 +56,7 @@ public class Inventory : DontDestroy<Inventory>
     }
 
 
+
     public void SortSlots()
     {
         slots.Sort();
@@ -82,7 +64,9 @@ public class Inventory : DontDestroy<Inventory>
         {
             slots[i].transform.SetSiblingIndex(i);
         }
-    }
+    } 
+   
+
     protected override void Awake()
     {
         base.Awake();
@@ -91,13 +75,12 @@ public class Inventory : DontDestroy<Inventory>
       
         size = slots.Count;
         
-        weaponUpdater = updaterObject;
 
         foreach (var weaponData in ResourceManager.Instance.weaponDatas)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
-
+        
     }
 
     public void travelInventory(Action<Weapon> slotAction)
@@ -107,10 +90,27 @@ public class Inventory : DontDestroy<Inventory>
             slotAction(slot.myWeapon);
         }
     }
+    private IInventoryOption inventoryOption;
+
+    public void SetInventoryOption(IInventoryOption option)
+    {
+        inventoryOption = option;
+    }
+
+    public void SetOpen()
+    {
+        SetInventoryOption(this);
+        OpenInventory();
+    }
+    public void OpenInventory()
+    {
+        inventoryViewer.gameObject.SetActive(true);
+        inventoryOption.OptionOpen();
+    }
     public void CloseInventory()
     {
-        inventory.SetActive(false);
-        currentSlotImage.SetActive(false);
+        inventoryViewer.gameObject.SetActive(false);
+        inventoryOption.OptionClose();
         foreach (var slot in slots)
         {
             slot.NewClear();
@@ -164,9 +164,13 @@ public class Inventory : DontDestroy<Inventory>
         }
     }
 
+    public bool CheckSize(int i)
+    {
+        return Count + i <= size;
+    }
      public void AddWeapons(BaseWeaponData[] baseWeaponData )
     {
-        if (Count+10 >= size) throw new Exception("인벤토리 공간이 부족합니다.");
+        
         List<TransactionValue> transactionList = new List<TransactionValue>();
 
         for (int i = 0; i < baseWeaponData.Length; i++)
@@ -218,7 +222,14 @@ public class Inventory : DontDestroy<Inventory>
         }
     }
 
-   
+     [SerializeField] GameObject decompositButton;
+     public void OptionOpen()
+     {
+         decompositButton.SetActive(true);
+     }
 
-    
+     public void OptionClose()
+     {
+         decompositButton.SetActive(false);
+     }
 }
