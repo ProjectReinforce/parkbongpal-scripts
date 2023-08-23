@@ -98,3 +98,12 @@ public enum QuestType
     Day,
     Week
 }
+
+public enum TapType
+{
+    Mine,
+    Reinforce,
+    MiniGame,
+    Pidea,
+    Ranking
+}

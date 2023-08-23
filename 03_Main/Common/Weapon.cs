@@ -30,8 +30,8 @@ public class Weapon
     {
         this._data = _data;
 
-        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
-        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
+        BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
+        sprite = BackEndDataManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         description = baseWeaponData.description;
         name = baseWeaponData.name;
         SetPower();
@@ -85,10 +85,9 @@ public class Weapon
 
     public void ExecuteReinforce(ReinforceType _type)
     {
-        Debug.Log((int)_type);
         
         reinforces[(int)_type-1].Execute(this);
-        Inventory.Instance.UpdateHighPowerWeaponData();
+        HighPowerFinder.UpdateHighPowerWeaponData();
     }
 
     public void Promote()

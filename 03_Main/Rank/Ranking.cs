@@ -18,8 +18,8 @@ public class Ranking : Singleton<Ranking>
 
     private void Awake()
     {
-        ranks[0] = ResourceManager.Instance.topRanks;
-        ranks[1] = ResourceManager.Instance.myRanks;
+        ranks[0] = BackEndDataManager.Instance.topRanks;
+        ranks[1] = BackEndDataManager.Instance.myRanks;
         for (int i = 0; i < PORT_COUNT; i++)
         {
             slotLists[i] = viewPorts[i].GetComponentsInChildren<RankSlot>();

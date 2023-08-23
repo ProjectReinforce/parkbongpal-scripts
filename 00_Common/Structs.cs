@@ -154,6 +154,11 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
         }
     }
     #endregion
+
+    public WeaponData Clone()
+    {
+        return (WeaponData)MemberwiseClone();
+    }
 }
 
 [Serializable]

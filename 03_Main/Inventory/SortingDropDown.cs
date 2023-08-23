@@ -13,7 +13,7 @@ public class SortingDropDown : MonoBehaviour
         if (_currentSortingMethod != sortingMethod.value)
         {
             _currentSortingMethod = sortingMethod.value;
-            Inventory.Instance.SortSlots();
+            InventoryPresentor.Instance.SortSlots();
         }
     }
 }
