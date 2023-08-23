@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using LitJson;
-using UnityEngine.Serialization;
 
 using System.Collections.Generic;
 
@@ -30,7 +28,6 @@ namespace Manager
 
         public void MoveTap(TapType _tapType)
         {
-            Debug.Log($"{_tapType} 오픈 시도\n현재 : {taps[(int)_tapType]}");
             // 현재 열린 탭과 같으면 리턴
             if (currentTap == taps[(int)_tapType]) return;
             
@@ -43,7 +40,6 @@ namespace Manager
                 currentTap.SetActive(false);
             currentTap = taps[(int)_tapType];
             currentTap.SetActive(true);
-            Debug.Log($"{_tapType} 오픈 시도\n현재 : {taps[(int)_tapType]}");
         }
 
         public void RegisterTap(GameObject _tap, TapType _tapType)
