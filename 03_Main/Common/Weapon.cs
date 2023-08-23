@@ -85,10 +85,9 @@ public class Weapon
 
     public void ExecuteReinforce(ReinforceType _type)
     {
-        Debug.Log((int)_type);
         
         reinforces[(int)_type-1].Execute(this);
-        InventoryPresentor.Instance.UpdateHighPowerWeaponData();
+        HighPowerFinder.UpdateHighPowerWeaponData();
     }
 
     public void Promote()

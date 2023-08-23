@@ -5,11 +5,13 @@ using UnityEngine;
 [Serializable]
 public class Store : Singleton<Store>
 {
+    private IAddable inventory;
     private GachaData[] gacharsPercents;
     private int[][] percents;
     protected override void Awake()
     {
         base.Awake();
+        inventory = InventoryPresentor.Instance;
         gacharsPercents = ResourceManager.Instance.gachar;
         percents = new int[gacharsPercents.Length][];
         for (int i = 0; i < gacharsPercents.Length; i++)
@@ -45,7 +47,7 @@ public class Store : Singleton<Store>
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
         BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
 
-        InventoryPresentor.Instance.AddWeapon(baseWeaponData);
+        inventory.AddWeapon(baseWeaponData);
 
     }
 
@@ -83,7 +85,7 @@ public class Store : Singleton<Store>
             baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
         }
 
-        InventoryPresentor.Instance.AddWeapons(baseWeaponDatas);
+        inventory.AddWeapons(baseWeaponDatas);
 
 
 

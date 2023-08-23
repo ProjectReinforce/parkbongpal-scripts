@@ -8,6 +8,7 @@ using BackEnd;
 
 
 public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOption //ViewModel
+,IAddable
 {
     
     [SerializeField] InventoryViewer inventoryViewer;// View
@@ -35,25 +36,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
 
-    public void UpdateHighPowerWeaponData()
-    {
-        int highPower = 0;
-        Weapon highPowerWeapon = default;
-        Weapon currentWeapon ;
-        
-        for (int i = 0; i < Count; i++)
-        {
-            Slot slot =  slots[i];
-            currentWeapon = slot.myWeapon;
-            if(highPower>=currentWeapon.power)continue;
-            
-            highPower = currentWeapon.power;
-            highPowerWeapon = currentWeapon;
-        }
 
-        if(highPowerWeapon is null|| highPowerWeapon.power== Player.Instance.Data.combatScore) return;
-        Player.Instance.SetCombatScore(highPowerWeapon.power);
-    }
 
 
 
@@ -73,6 +56,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
 
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
       
+        HighPowerFinder.SetSlots(slots);
         size = slots.Count;
         
 
