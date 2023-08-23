@@ -21,7 +21,7 @@ public class Post : Singleton<Post>
     protected override void Awake()
     {
         base.Awake();
-        notifyer = Instantiate(ResourceManager.Instance.notifyer,mySelf.transform);
+        notifyer = Instantiate(BackEndDataManager.Instance.notifyer,mySelf.transform);
         notifyer.Initialized();
     }
 

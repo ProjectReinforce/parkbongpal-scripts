@@ -60,7 +60,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         size = slots.Count;
         
 
-        foreach (var weaponData in ResourceManager.Instance.weaponDatas)
+        foreach (var weaponData in BackEndDataManager.Instance.weaponDatas)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
@@ -116,7 +116,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
             { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
             { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
-            { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
+            { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
         };
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
@@ -171,7 +171,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                 { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
                 { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
                 { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
-                { nameof(WeaponData.colum.borrowedDate), ResourceManager.Instance.LastLogin },
+                { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
             };
             
             transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));

@@ -40,7 +40,7 @@ public class RefineUI : ReinforceUIBase
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
+        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         int goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
@@ -57,7 +57,7 @@ public class RefineUI : ReinforceUIBase
     protected bool CheckOre()
     {
         UserData userData = Player.Instance.Data;
-        RefinementData refinementData = Manager.ResourceManager.Instance.refinementData;
+        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         int oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;

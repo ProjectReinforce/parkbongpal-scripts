@@ -31,6 +31,7 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
             weaponCount--;
             return;
         }
+
         weaponCount++;
     }
     [SerializeField] GameObject SelletChecker;
