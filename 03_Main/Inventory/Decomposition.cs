@@ -80,6 +80,8 @@ public class Decomposition : MonoBehaviour
             slot.SetsellectChecker(false);
         }
 
+        InventoryPresentor.Instance.currentWeapon = null;
+        Debug.Log("@@@");
         text.text = "ºÐÇØ";
         slots.Clear();
     }
