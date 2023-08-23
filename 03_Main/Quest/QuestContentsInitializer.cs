@@ -22,7 +22,7 @@ public class QuestContentsInitializer : MonoBehaviour
             questContents.Add(recordType, new List<QuestContent>());
         }
 
-        foreach (var item in ResourceManager.Instance.questDatas)
+        foreach (var item in BackEndChartManager.Instance.questDatas)
         {
             QuestContent questContent = pool.GetOne();
             questContent.Initialize(item);
@@ -102,7 +102,7 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void ClearCheck()
     {
-        foreach (var one in ResourceManager.Instance.questRecordDatas)
+        foreach (var one in BackEndChartManager.Instance.questRecordDatas)
             quests[one.questId].Cleared();
     }
 }

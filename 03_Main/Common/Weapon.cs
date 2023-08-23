@@ -30,8 +30,8 @@ public class Weapon
     {
         this._data = _data;
 
-        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
-        sprite = ResourceManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
+        BaseWeaponData baseWeaponData = BackEndChartManager.Instance.GetBaseWeaponData(_data.baseWeaponIndex);
+        sprite = BackEndChartManager.Instance.GetBaseWeaponSprite(_data.baseWeaponIndex);
         description = baseWeaponData.description;
         name = baseWeaponData.name;
         SetPower();

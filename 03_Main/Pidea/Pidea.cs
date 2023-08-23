@@ -57,19 +57,19 @@ public class Pidea : Singleton<Pidea>
     {
         base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
-        notifyer = Instantiate(ResourceManager.Instance.notifyer,transform);
+        notifyer = Instantiate(BackEndChartManager.Instance.notifyer,transform);
         notifyer.Initialized();
-        materials = ResourceManager.Instance.ownedWeaponIds;
+        materials = BackEndChartManager.Instance.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
-        for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Length; i++)
+        for (int i = 0; i < BackEndChartManager.Instance.baseWeaponDatas.Length; i++)
         {
-            PideaSlot slot = Instantiate(prefab, rarityTables[ResourceManager.Instance.baseWeaponDatas[i].rarity]);
+            PideaSlot slot = Instantiate(prefab, rarityTables[BackEndChartManager.Instance.baseWeaponDatas[i].rarity]);
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);
             
-            if(ResourceManager.Instance.baseWeaponDatas[i].collection is null) continue;
-            foreach (var VARIABLE in ResourceManager.Instance.baseWeaponDatas[i].collection)
+            if(BackEndChartManager.Instance.baseWeaponDatas[i].collection is null) continue;
+            foreach (var VARIABLE in BackEndChartManager.Instance.baseWeaponDatas[i].collection)
             {
                 collection.AddSlot(pideaSlots[i],VARIABLE);
             }

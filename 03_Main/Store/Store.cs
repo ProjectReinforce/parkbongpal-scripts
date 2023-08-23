@@ -10,7 +10,7 @@ public class Store : Singleton<Store>
     protected override void Awake()
     {
         base.Awake();
-        gacharsPercents = ResourceManager.Instance.gachar;
+        gacharsPercents = BackEndChartManager.Instance.gachar;
     }
 
     // 서버에서 받는 부분이 없음
@@ -47,7 +47,7 @@ public class Store : Singleton<Store>
         int[] percents =
             { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents);
-        BaseWeaponData baseWeaponData = ResourceManager.Instance.GetBaseWeaponData(rarity);
+        BaseWeaponData baseWeaponData = BackEndChartManager.Instance.GetBaseWeaponData(rarity);
 
         Inventory.Instance.AddWeapon(baseWeaponData);
     }
@@ -92,7 +92,7 @@ public class Store : Singleton<Store>
                 // 레전드리 획득 채팅 메시지 전송되도록
                 Debug.Log("<color=red>레전드리 획득!!</color>");
             }
-            baseWeaponDatas[i] = ResourceManager.Instance.GetBaseWeaponData(rarity);
+            baseWeaponDatas[i] = BackEndChartManager.Instance.GetBaseWeaponData(rarity);
         }
 
         Inventory.Instance.AddWeapons(baseWeaponDatas);

@@ -52,7 +52,7 @@ public class TopUIDatatViewer : MonoBehaviour
 
     public void UpdateExp()
     {
-        expSlider.value = (float)player.Data.exp / Manager.ResourceManager.Instance.expDatas[player.Data.level-1];                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
+        expSlider.value = (float)player.Data.exp / Manager.BackEndChartManager.Instance.expDatas[player.Data.level-1];                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
     public void UpdateWeaponIcon()

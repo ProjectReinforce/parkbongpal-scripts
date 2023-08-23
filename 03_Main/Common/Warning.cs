@@ -12,4 +12,10 @@ public class Warning : MonoBehaviour
         title.text = _title;
         description.text = _description;
     }
+
+    public void Set(string _title, string _message)
+    {
+        title.text = _title;
+        description.text = _message;
+    }
 }

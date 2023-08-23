@@ -6,7 +6,7 @@ using LitJson;
 
 namespace Manager
 {
-    public class ResourceManager : DontDestroy<ResourceManager>
+    public class BackEndChartManager : DontDestroy<BackEndChartManager>
     {
         public Where searchFromMyIndate = new();
         public WeaponData[] weaponDatas;

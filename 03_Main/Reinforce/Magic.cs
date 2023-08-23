@@ -8,7 +8,7 @@ public class RentalFactory
     public Rental createRental(Rental rental, MagicType type)
     {
         Rental returnType = rental;
-        SkillData data = ResourceManager.Instance.skillDatas[(int)type];
+        SkillData data = BackEndChartManager.Instance.skillDatas[(int)type];
         //skillViewr.ViewUpdate(data);
         switch (type){
             case MagicType.술:

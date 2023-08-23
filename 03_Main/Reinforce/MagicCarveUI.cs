@@ -38,7 +38,7 @@ public class MagicCarveUI : ReinforceUIBase
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int cost = Manager.ResourceManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        int cost = Manager.BackEndChartManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
 
         if (userData.gold < cost)
         {

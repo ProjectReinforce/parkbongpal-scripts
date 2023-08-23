@@ -35,14 +35,14 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
-        int mineCount = ResourceManager.Instance.mineDatas.Length;
+        int mineCount = BackEndChartManager.Instance.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
         {
             if (i >= mines.Length)
                 break;
-            mines[i].Initialized(ResourceManager.Instance.mineDatas[i]);
-            mines[i].Unlock(ResourceManager.Instance.userData.level);
+            mines[i].Initialized(BackEndChartManager.Instance.mineDatas[i]);
+            mines[i].Unlock(BackEndChartManager.Instance.userData.level);
         }
         
        
