@@ -9,43 +9,36 @@ public interface ISlotable
 }
 
 [Serializable]
-public class Slot : NewThing, IComparable<Slot>,ISlotable
+public class Slot : NewThing,  IComparable<Slot>,ISlotable
 {
     // Start is called before the first frame update
-    [SerializeField] Image backgroundImage;
-    [SerializeField] Button button;
-    [SerializeField] GameObject ImageObject;
-    [SerializeField] GameObject lendImageObject;//광산에 빌려줫다는 표시
-    [SerializeField] Image weaponImage;
+    [SerializeField] SlotViewer slotViwer;
+    
     public Weapon myWeapon { get; set; }
     
     public static int  weaponCount=0;
-    
+    public void UpdateLend()
+    {
+        slotViwer.ViewUpdate(myWeapon);
+    }
     
     public void SetWeapon(Weapon weapon)
     {
+        slotViwer.ViewUpdate(weapon);
+        myWeapon = weapon;
         if (weapon is null)
         {
-            backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[6];
-            ImageObject.SetActive(false);
-            button.enabled = false;
-            myWeapon = null;
             weaponCount--;
             return;
         }
-        backgroundImage.sprite = ResourceManager.Instance.weaponRaritySlot[weapon.data.rarity];
-        ImageObject.SetActive(true);
-        button.enabled = true;
-        myWeapon = weapon;
-        lendImageObject.SetActive(weapon.data.mineId>-1);
-        weaponImage.sprite = weapon.sprite;
+
         weaponCount++;
     }
     [SerializeField] GameObject SelletChecker;
     public void SetCurrent()//dip 위배 , 리팩토링 대상.
     {
         if(myWeapon is  null) return;
-        Inventory.Instance.currentWeapon = myWeapon;
+        InventoryPresentor.Instance.currentWeapon = myWeapon;
         SelletChecker.SetActive( Decomposition.ChooseWeaponSlot(this));
     }
     public void SetsellectChecker(bool isOn)
@@ -53,13 +46,7 @@ public class Slot : NewThing, IComparable<Slot>,ISlotable
         SelletChecker.SetActive(isOn);
     }
 
-    public void UpdateLend()
-    {
-        lendImageObject.SetActive(myWeapon.data.mineId>-1);
-    }
-
-   
-
+    
     public int CompareTo(Slot obj)
     {
         if (myWeapon is null&&obj.myWeapon is not null)
@@ -68,20 +55,15 @@ public class Slot : NewThing, IComparable<Slot>,ISlotable
              return -1;
         if (obj.myWeapon is null&&myWeapon is null)
             return 1;
-        ImageObject.SetActive(true);
-        button.enabled = true;
+       
         if (LendWeaponRenderer.isShowLend)
         {
             if (myWeapon.data.mineId>=0)
             {
-                ImageObject.SetActive(false);
-                button.enabled=false;
                 return 1;
             } 
             if (obj.myWeapon.data.mineId>=0)
             {
-                obj.ImageObject.SetActive(false);
-                obj.button.enabled = false;
                 return -1;
             }
         }

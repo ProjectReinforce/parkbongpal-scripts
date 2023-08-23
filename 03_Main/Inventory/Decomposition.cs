@@ -18,6 +18,8 @@ public class Decomposition : MonoBehaviour
     {
         _isDecompositing = !_isDecompositing;
         text.text = isDecompositing?"확정" :"분해";
+        
+        //InventoryPresentor.Instance.currentWeapon = null;
         if(isDecompositing) return;
         int limit = 0;
         while (slots.Count > 0)
@@ -29,6 +31,7 @@ public class Decomposition : MonoBehaviour
                 if (slot == null) continue;
                 string indate = slot.myWeapon.data.inDate;
                 slot.SetsellectChecker(false);
+                slot.NewClear();
                 slot.SetWeapon(null);
                 slots.RemoveFirst();
                 transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
@@ -42,12 +45,12 @@ public class Decomposition : MonoBehaviour
                     Debug.LogError("Deconposition:SetDecomposit: 트렌젝션 실패"+callback);
                     return;
                 }
-                Inventory.Instance.SortSlots();
+                InventoryPresentor.Instance.SortSlots();
             });
             limit = 0;
         }
 
-        Inventory.Instance.UpdateHighPowerWeaponData();
+        HighPowerFinder.UpdateHighPowerWeaponData();
     }
     public static bool ChooseWeaponSlot(Slot slot)
     {

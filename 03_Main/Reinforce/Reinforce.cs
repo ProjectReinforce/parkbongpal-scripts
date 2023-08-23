@@ -36,7 +36,7 @@ public class Additional : Reinforce
 {
     public override void Execute(Weapon weapon)
     {
-        AdditionalData data = Manager.ResourceManager.Instance.additionalData;
+        AdditionalData data = Manager.BackEndDataManager.Instance.additionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
         int[] additionalDescription = {2, 4, 6, 8, 10};
         
@@ -72,7 +72,7 @@ public class NormalReinforce : Reinforce
 {
     public override void Execute(Weapon weapon)
     {
-        ResourceManager resourceManager = ResourceManager.Instance;
+        BackEndDataManager resourceManager = BackEndDataManager.Instance;
         NormalReinforceData data = resourceManager.normalReinforceData;
         int goldCost = data.GetGoldCost((Rarity)weapon.data.rarity);
 
@@ -162,7 +162,7 @@ public class SoulCrafting : Reinforce
 {
     public override void Execute(Weapon weapon)
     {
-        ResourceManager resourceManager = ResourceManager.Instance;
+        BackEndDataManager resourceManager = BackEndDataManager.Instance;
         SoulCraftingData data = resourceManager.soulCraftingData;
         int goldCost = data.goldCost;
         int soulCost = data.soulCost;
@@ -218,7 +218,7 @@ public class Refinement : Reinforce
     public override void Execute(Weapon weapon)
     {
         RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
-        RefinementData data = ResourceManager.Instance.refinementData;
+        RefinementData data = BackEndDataManager.Instance.refinementData;
         // 스탯 결정
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
         string[] statDescription = {"atk", "critical", "stat3", "stat6"};

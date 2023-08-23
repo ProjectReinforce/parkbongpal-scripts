@@ -8,7 +8,7 @@ public class LendWeaponRenderer
     {
         _isShowLend = !_isShowLend;
         if (isShowLend)
-            Inventory.Instance. currentWeapon = null;
-        Inventory.Instance.SortSlots();
+            InventoryPresentor.Instance. currentWeapon = null;
+        InventoryPresentor.Instance.SortSlots();
     }
 }

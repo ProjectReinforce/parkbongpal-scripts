@@ -22,12 +22,12 @@ public class ChatResizer : MonoBehaviour
         if(isExpanded)
         {
             chat.sizeDelta = Vector2.right * chat.sizeDelta.x + Vector2.up * shrinkHeight;
-            chat.position = Vector2.right * chat.position.x + Vector2.up * shrinkPosY;
+            //chat.position = Vector2.right * chat.position.x + Vector2.up * shrinkPosY;
         }
         else
         {
             chat.sizeDelta = Vector2.right * chat.sizeDelta.x + Vector2.up * expandHeight;
-            chat.position = Vector2.right * chat.position.x + Vector2.up * expandPosY;
+           // chat.position = Vector2.right * chat.position.x + Vector2.up * expandPosY;
         }
 
         isExpanded = !isExpanded;

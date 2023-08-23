@@ -10,7 +10,7 @@ public class TimeChecker : Singleton<TimeChecker>
     protected override void Awake()
     {
         base.Awake();
-        timeInterval = ResourceManager.Instance.ServerTime - ResourceManager.Instance.LastLogin;
+        timeInterval = BackEndDataManager.Instance.ServerTime - BackEndDataManager.Instance.LastLogin;
     }
     private void Start()
     {
@@ -22,10 +22,10 @@ public class TimeChecker : Singleton<TimeChecker>
     {
         string empty = "";
         string day = timeInterval.Days == 0 ? empty : timeInterval.Days+ "일 ";
-        string hour = timeInterval.Hours == 0 ? empty : timeInterval.Days+ "시간 ";
-        string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Days+ "분 동안 ";
+        string hour = timeInterval.Hours == 0 ? empty : timeInterval.Hours+ "시간 ";
+        string minute = timeInterval.Minutes == 0 ? empty : timeInterval.Minutes+ "분 동안 ";
 
-        int reward =  (int)(timeInterval.TotalMilliseconds/60000 * ResourceManager.Instance.userData.goldPerMin);
+        int reward =  (int)(timeInterval.TotalMilliseconds/60000 * BackEndDataManager.Instance.userData.goldPerMin);
         
         UIManager.Instance.ShowWarning("알림",$"{day}{hour}{minute}{reward} gold 를 획득 했습니다." );
         Player.Instance.AddGold(reward);
@@ -33,23 +33,24 @@ public class TimeChecker : Singleton<TimeChecker>
 
     private void AttendanceCheck()
     {
-        int day = ResourceManager.Instance.userData.attendance;
-        if (ResourceManager.Instance.LastLogin.Month != ResourceManager.Instance.ServerTime.Month)
+        int day = BackEndDataManager.Instance.userData.attendance;
+        if (BackEndDataManager.Instance.LastLogin.Month != BackEndDataManager.Instance.ServerTime.Month)
             day = 0;
 
-        if (ResourceManager.Instance.LastLogin.Month == ResourceManager.Instance.ServerTime.Month&&
-            ResourceManager.Instance.LastLogin.Day == ResourceManager.Instance.ServerTime.Day) return;
-        AttendanceData todayReward = ResourceManager.Instance.attendanceDatas[day];
+        if (BackEndDataManager.Instance.LastLogin.Month == BackEndDataManager.Instance.ServerTime.Month&&
+            BackEndDataManager.Instance.LastLogin.Day == BackEndDataManager.Instance.ServerTime.Day) return;
+        AttendanceData todayReward = BackEndDataManager.Instance.attendanceDatas[day];
         switch (todayReward.type)
         {
             case (int)RewardType.Gold:
-                Player.Instance.AddGold(ResourceManager.Instance.attendanceDatas[day].value);
+                Player.Instance.AddGold(BackEndDataManager.Instance.attendanceDatas[day].value);
                 break;
             case (int)RewardType.Diamond:
-                Player.Instance.AddDiamond(ResourceManager.Instance.attendanceDatas[day].value);
+                Player.Instance.AddDiamond(BackEndDataManager.Instance.attendanceDatas[day].value);
                 break;
             case (int)RewardType.Weapon:
-                Inventory.Instance.AddWeapon(ResourceManager.Instance.baseWeaponDatas[todayReward.value]);
+                InventoryPresentor.Instance.AddWeapon(BackEndDataManager.Instance.baseWeaponDatas[todayReward.value]);
+
                 break;
         }
         Player.Instance.SetAttendance(++day);

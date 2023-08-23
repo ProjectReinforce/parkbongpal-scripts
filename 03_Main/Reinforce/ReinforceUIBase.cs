@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,12 @@ public abstract class ReinforceUIBase : MonoBehaviour
     [SerializeField] protected Button reinforceButton;
     protected ReinforceManager reinforceManager;
 
-    protected void Initialize()
+    protected virtual void Awake()
     {
         reinforceManager = ReinforceManager.Instance;
     }
 
-    protected void RegisterWeaponChangeEvent()
+    protected virtual void OnEnable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent += SelectWeapon;
@@ -23,7 +24,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
         SelectWeapon();
     }
 
-    protected void DeregisterWeaponChangeEvent()
+    protected virtual void OnDisable()
     {
         if (reinforceManager != null)
             reinforceManager.WeaponChangeEvent -= SelectWeapon;
@@ -69,16 +70,12 @@ public abstract class ReinforceUIBase : MonoBehaviour
     public void CheckQualification()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
-
-        if (CheckCost() && CheckRarity() && CheckUpgradeCount() && weapon is not null)
+        
+        if (weapon is not null && Checks())
             reinforceButton.interactable = true;
         else
             reinforceButton.interactable = false;
     }
 
-    protected abstract bool CheckCost();
-
-    protected abstract bool CheckRarity();
-
-    protected abstract bool CheckUpgradeCount();
+    protected abstract bool Checks();
 }

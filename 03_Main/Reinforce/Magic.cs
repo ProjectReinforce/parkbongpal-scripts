@@ -8,9 +8,11 @@ public class RentalFactory
     public Rental createRental(Rental rental, MagicType type)
     {
         Rental returnType = rental;
-        SkillData data = ResourceManager.Instance.skillDatas[(int)type];
-        //skillViewr.ViewUpdate(data);
+        if (type < 0) return returnType;
+        SkillData data = BackEndDataManager.Instance.skillDatas[(int)type];
+
         switch (type){
+            
             case MagicType.술:
                 returnType = new Sulsu(returnType, data.coefficient);
                 break;
@@ -47,6 +49,7 @@ public class RentalFactory
             case MagicType.사:
                 returnType = new Sachul(returnType,data.coefficient);
                 break;
+            
         }
         return returnType;
     }
@@ -221,23 +224,24 @@ public class Jinsum : Magic //유일
 public class Choockbock : Magic //유일
 { /*9	축복	100	무기에 축복을 부여하여 보다 빠르게 공격한다	모든 스탯에 일반강화 횟수만큼 수치를 더합니다.*/
     public Choockbock(Rental mine,int _coefficient) : base(mine,_coefficient) {}
+    private const int normalCount = 10;
     public override WeaponData GetWeaponData()
     {
         WeaponData weaponData = base.GetWeaponData();
-        weaponData.defaultStat[(int)StatType.atk] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.atkSpeed] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.atkRange] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.accuracy] += weaponData.defaultStat[0]; 
-        weaponData.defaultStat[(int)StatType.strength] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.atk] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.atkSpeed] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.atkRange] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.accuracy] += normalCount-weaponData.defaultStat[0]; 
+        weaponData.defaultStat[(int)StatType.strength] += normalCount-weaponData.defaultStat[0];
         
-        weaponData.defaultStat[(int)StatType.charm] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.constitution] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.intelligence] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.technique] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.wisdom] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.charm] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.constitution] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.intelligence] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.technique] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.wisdom] += normalCount-weaponData.defaultStat[0];
         
-        weaponData.defaultStat[(int)StatType.criticalDamage] += weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.criticalRate] += weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.criticalDamage] += normalCount-weaponData.defaultStat[0];
+        weaponData.defaultStat[(int)StatType.criticalRate] += normalCount-weaponData.defaultStat[0];
         return weaponData;
     }
     

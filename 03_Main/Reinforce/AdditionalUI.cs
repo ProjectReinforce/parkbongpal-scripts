@@ -7,21 +7,6 @@ public class AdditionalUI : ReinforceUIBase
 {
     [SerializeField] Text atkText;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
-    void OnEnable()
-    {
-        RegisterWeaponChangeEvent();
-    }
-
-    void OnDisable()
-    {
-        DeregisterWeaponChangeEvent();
-    }
-
     void UpdateAtk()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
@@ -49,30 +34,23 @@ public class AdditionalUI : ReinforceUIBase
         reinforceButton.onClick.AddListener(() => UpdateAtk());
     }
 
-    protected override bool CheckCost()
+    protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
-        int cost = Manager.ResourceManager.Instance.additionalData.goldCost;
+        int cost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
 
         if (userData.gold < cost)
         {
             goldCostText.text = $"<color=red>{cost}</color>";
             return false;
         }
-        else
-        {
-            goldCostText.text = $"<color=white>{cost}</color>";
-            return true;
-        }
-    }
-
-    protected override bool CheckRarity()
-    {
+        goldCostText.text = $"<color=white>{cost}</color>";
         return true;
     }
 
-    protected override bool CheckUpgradeCount()
+    protected override bool Checks()
     {
-        return true;
+        if (CheckCost()) return true;
+        return false;
     }
 }
