@@ -17,8 +17,7 @@ public class InventoryViewer : MonoBehaviour
         viewers[0] = detailObject;
         viewers[1] = upDownVisualer;
     }
-
-
+    
     public void UpdateCurrentWeapon(Weapon currentWeapon)
     {
         gameObject.SetActive(true);

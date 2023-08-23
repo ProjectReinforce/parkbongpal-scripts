@@ -18,6 +18,8 @@ public class Decomposition : MonoBehaviour
     {
         _isDecompositing = !_isDecompositing;
         text.text = isDecompositing?"확정" :"분해";
+        
+        //InventoryPresentor.Instance.currentWeapon = null;
         if(isDecompositing) return;
         int limit = 0;
         while (slots.Count > 0)
@@ -80,8 +82,6 @@ public class Decomposition : MonoBehaviour
             slot.SetsellectChecker(false);
         }
 
-        InventoryPresentor.Instance.currentWeapon = null;
-        Debug.Log("@@@");
         text.text = "분해";
         slots.Clear();
     }
