@@ -37,7 +37,7 @@ public class AdditionalUI : ReinforceUIBase
     protected bool CheckCost()
     {
         UserData userData = Player.Instance.Data;
-        int cost = Manager.BackEndChartManager.Instance.additionalData.goldCost;
+        int cost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
 
         if (userData.gold < cost)
         {

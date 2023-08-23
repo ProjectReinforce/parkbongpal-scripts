@@ -200,7 +200,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     {
         if (_mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
         myButton.enabled = true;
-        selfImage.sprite = BackEndChartManager.Instance.EmptySprite;
+        selfImage.sprite = BackEndDataManager.Instance.EmptySprite;
         return _mineData.name;
     }
 }

@@ -35,8 +35,8 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
         stats2.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";
         stats3.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
         WeaponImage.sprite = weapon.sprite;
-        MagicImage1.sprite = weapon.data.magic[0] < 0 ? LockSkill : BackEndChartManager.Instance.GetSkill(weapon.data.magic[0]);
-        MagicImage2.sprite = weapon.data.magic[1] < 0 ? LockSkill : BackEndChartManager.Instance.GetSkill(weapon.data.magic[1]);
+        MagicImage1.sprite = weapon.data.magic[0] < 0 ? LockSkill : BackEndDataManager.Instance.GetSkill(weapon.data.magic[0]);
+        MagicImage2.sprite = weapon.data.magic[1] < 0 ? LockSkill : BackEndDataManager.Instance.GetSkill(weapon.data.magic[1]);
 
     }
 

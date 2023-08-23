@@ -41,7 +41,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine>
 
         if (mine.rentalWeapon is null)
         {
-            weaponImage.sprite = BackEndChartManager.Instance.EmptySprite;
+            weaponImage.sprite = BackEndDataManager.Instance.EmptySprite;
             weaponName.text = "";
             mineWithWeaponStats.text = $"0\n0\n0";
             skillDescription.text = "";
@@ -59,7 +59,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine>
             {
                 int magicIndex = mine.rentalWeapon.data.magic[i];
                 if(magicIndex<0) break;
-                skillNames[i] = BackEndChartManager.Instance.skillDatas[magicIndex].skillName;
+                skillNames[i] = BackEndDataManager.Instance.skillDatas[magicIndex].skillName;
  
             }
             skillDescription.text = String.Join(", ", skillNames);

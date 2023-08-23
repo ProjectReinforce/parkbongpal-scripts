@@ -93,7 +93,7 @@ public class Inventory : DontDestroy<Inventory>
         
         weaponUpdater = updaterObject;
 
-        foreach (var weaponData in BackEndChartManager.Instance.weaponDatas)
+        foreach (var weaponData in BackEndDataManager.Instance.weaponDatas)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
@@ -133,7 +133,7 @@ public class Inventory : DontDestroy<Inventory>
             { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
             { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
             { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
-            { nameof(WeaponData.colum.borrowedDate), BackEndChartManager.Instance.LastLogin },
+            { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
         };
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
@@ -184,7 +184,7 @@ public class Inventory : DontDestroy<Inventory>
                 { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
                 { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
                 { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
-                { nameof(WeaponData.colum.borrowedDate), BackEndChartManager.Instance.LastLogin },
+                { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
             };
             
             transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));

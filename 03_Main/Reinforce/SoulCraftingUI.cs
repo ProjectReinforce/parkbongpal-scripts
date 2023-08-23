@@ -41,7 +41,7 @@ public class SoulCraftingUI : ReinforceUIBase
     bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        int goldCost = Manager.BackEndChartManager.Instance.soulCraftingData.goldCost;
+        int goldCost = Manager.BackEndDataManager.Instance.soulCraftingData.goldCost;
 
         if (userData.gold >= goldCost)
         {
@@ -55,7 +55,7 @@ public class SoulCraftingUI : ReinforceUIBase
     bool CheckSoul()
     {
         UserData userData = Player.Instance.Data;
-        int soulCost = Manager.BackEndChartManager.Instance.soulCraftingData.soulCost;
+        int soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
 
         if (userData.weaponSoul >= soulCost)
         {

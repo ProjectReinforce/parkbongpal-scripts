@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Resources;
 using Manager;
 using UnityEngine;
-using BackEndChartManager = Manager.BackEndChartManager;
+using BackEndDataManager = Manager.BackEndDataManager;
 
 public class PideaDetail : MonoBehaviour,IDetailViewer<int>
 {
@@ -16,10 +16,10 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
 
     public void ViewUpdate(int index)
     {
-        BaseWeaponData baseWeaponData = BackEndChartManager.Instance.GetBaseWeaponData(index);
+        BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(index);
         weaponName.text = baseWeaponData.name;
         description.text = baseWeaponData.description;
-        image.sprite = BackEndChartManager.Instance.GetBaseWeaponSprite(index);
+        image.sprite = BackEndDataManager.Instance.GetBaseWeaponSprite(index);
         stats.text = $"{baseWeaponData.atk}\n {baseWeaponData.atkSpeed} \n{baseWeaponData.atkRange}\n{baseWeaponData.accuracy}";
     }
 }

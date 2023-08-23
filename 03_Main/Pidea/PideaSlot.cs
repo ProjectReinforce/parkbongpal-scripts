@@ -12,8 +12,8 @@ public class PideaSlot : NewThing,ISlotable
     public int baseWeaponIndex => _baseWeaponIndex;
     public void Initialized(int index)
     {
-        weaponImage.sprite = BackEndChartManager.Instance.GetBaseWeaponSprite(index);
-        weaponImage.material = BackEndChartManager.Instance.ownedWeaponIds[index];
+        weaponImage.sprite = BackEndDataManager.Instance.GetBaseWeaponSprite(index);
+        weaponImage.material = BackEndDataManager.Instance.ownedWeaponIds[index];
         _baseWeaponIndex = index;
     }
     public void SetCurrent()//dip 위배 , 리팩토링 대상.

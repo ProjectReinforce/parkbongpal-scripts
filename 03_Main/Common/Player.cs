@@ -14,7 +14,7 @@ public class Player : DontDestroy<Player>
     protected override void Awake()
     {
         base.Awake();
-        userData = BackEndChartManager.Instance.userData;
+        userData = BackEndDataManager.Instance.userData;
 
         recordData = new RecordData();
         recordData.LoadOrInitRecord(userData.inDate);
@@ -101,7 +101,7 @@ public class Player : DontDestroy<Player>
     public void AddExp(int _exp)
     {
         userData.exp += _exp;
-        if (userData.exp >= BackEndChartManager.Instance.expDatas[userData.level-1])
+        if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
             LevelUp();
 
         UpdateBackEndData(nameof(UserData.colum.exp), userData.exp);
@@ -110,7 +110,7 @@ public class Player : DontDestroy<Player>
 
     void LevelUp()
     {
-        userData.exp -= BackEndChartManager.Instance.expDatas[userData.level-1];
+        userData.exp -= BackEndDataManager.Instance.expDatas[userData.level-1];
         userData.level ++;
         recordData.levelUpEvent?.Invoke();
 
@@ -131,18 +131,18 @@ public class Player : DontDestroy<Player>
     public void SetGoldPerMin(int _goldPerMin)
     {
         userData.goldPerMin = _goldPerMin;
-        UpdateBackEndScore(BackEndChartManager.GOLD_UUID,nameof(UserData.colum.goldPerMin), userData.goldPerMin);
+        UpdateBackEndScore(BackEndDataManager.GOLD_UUID,nameof(UserData.colum.goldPerMin), userData.goldPerMin);
     }
     public void ComparisonMineGameScore(int score)
     {
         if(userData.mineGameScore<=score) return;
         userData.mineGameScore = score;
-        UpdateBackEndScore(BackEndChartManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
+        UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }
     public void SetCombatScore(int score)
     {
         userData.combatScore = score;
-        UpdateBackEndScore(BackEndChartManager.Power_UUID,nameof(UserData.colum.combatScore), userData.combatScore);
+        UpdateBackEndScore(BackEndDataManager.Power_UUID,nameof(UserData.colum.combatScore), userData.combatScore);
     }
 
     public void SetAttendance(int day)

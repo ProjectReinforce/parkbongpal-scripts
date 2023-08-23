@@ -42,7 +42,7 @@ public class PromoteUI : ReinforceUIBase
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int cost = Manager.BackEndChartManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        int cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
         // int cost = 1000;
 
         if (userData.gold < cost)

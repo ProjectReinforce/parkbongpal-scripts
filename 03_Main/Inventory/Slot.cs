@@ -26,14 +26,14 @@ public class Slot : NewThing, IComparable<Slot>,ISlotable
     {
         if (weapon is null)
         {
-            backgroundImage.sprite = BackEndChartManager.Instance.weaponRaritySlot[6];
+            backgroundImage.sprite = BackEndDataManager.Instance.weaponRaritySlot[6];
             ImageObject.SetActive(false);
             button.enabled = false;
             myWeapon = null;
             weaponCount--;
             return;
         }
-        backgroundImage.sprite = BackEndChartManager.Instance.weaponRaritySlot[weapon.data.rarity];
+        backgroundImage.sprite = BackEndDataManager.Instance.weaponRaritySlot[weapon.data.rarity];
         ImageObject.SetActive(true);
         button.enabled = true;
         myWeapon = weapon;
