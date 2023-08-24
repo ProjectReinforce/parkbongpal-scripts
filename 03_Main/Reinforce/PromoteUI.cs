@@ -38,7 +38,7 @@ public class PromoteUI : ReinforceUIBase
     {
     }
 
-    protected bool CheckCost()
+    protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -97,7 +97,7 @@ public class PromoteUI : ReinforceUIBase
 
     protected override bool Checks()
     {
-        if (CheckCost() && CheckRarity()) return true;
+        if (CheckGold() && CheckRarity()) return true;
         return false;
     }
 }

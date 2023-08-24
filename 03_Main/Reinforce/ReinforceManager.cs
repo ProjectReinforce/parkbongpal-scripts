@@ -6,9 +6,6 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
 {
     public System.Action WeaponChangeEvent;
 
-    ReinforceUIInfo reinforceUIInfo;
-    public ReinforceUIInfo ReinforceUIInfo { get => reinforceUIInfo; }
-
     Weapon selectedWeapon;
     public Weapon SelectedWeapon
     {
@@ -37,8 +34,6 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
     protected override void Awake()
     {
         base.Awake();
-        
-        TryGetComponent(out reinforceUIInfo);
     }
 
     void OnDisable()

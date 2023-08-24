@@ -38,7 +38,7 @@ public class NormalReinforceUI : ReinforceUIBase
     {
     }
 
-    protected bool CheckCost()
+    protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
@@ -75,7 +75,7 @@ public class NormalReinforceUI : ReinforceUIBase
 
     protected override bool Checks()
     {
-        if (CheckCost() && CheckUpgradeCount()) return true;
+        if (CheckGold() && CheckUpgradeCount()) return true;
         return false;
     }
 }

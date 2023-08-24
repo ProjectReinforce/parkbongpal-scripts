@@ -4,19 +4,10 @@ using UnityEngine;
 
 public class ReinforceUIInfo : MonoBehaviour
 {
-    ReinforceWeaponSlot reinforceWeaponSlot;
-    public ReinforceWeaponSlot WeaponSlot
-    {
-        get => reinforceWeaponSlot;
-    }
-
     ReinforceUIBase[] reinforceUIs;
-    public ReinforceUIBase[] ReinforceUIs => reinforceUIs;
 
     private void Awake()
     {
-        transform.GetChild(1).TryGetComponent(out reinforceWeaponSlot);
-
         reinforceUIs = transform.GetComponentsInChildren<ReinforceUIBase>(true);
     }
 

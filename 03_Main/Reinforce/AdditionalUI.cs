@@ -34,7 +34,7 @@ public class AdditionalUI : ReinforceUIBase
         reinforceButton.onClick.AddListener(() => UpdateAtk());
     }
 
-    protected bool CheckCost()
+    bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
         int cost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
@@ -50,7 +50,7 @@ public class AdditionalUI : ReinforceUIBase
 
     protected override bool Checks()
     {
-        if (CheckCost()) return true;
+        if (CheckGold()) return true;
         return false;
     }
 }
