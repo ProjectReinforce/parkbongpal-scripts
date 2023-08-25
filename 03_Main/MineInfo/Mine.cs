@@ -125,6 +125,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
        
             
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
+        
+        goldText.text = gold.ToString();
     }
 
     public void SetInfo()
@@ -163,8 +165,6 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         Player.Instance.AddGold(Gold);
         gold = 0;
         
-        goldText.text = gold.ToString();
-
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
 
@@ -175,6 +175,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
                 Debug.Log("Mine:수령실패"+callback);
             }
         });
+        
+        goldText.text = gold.ToString();
         
     }
 

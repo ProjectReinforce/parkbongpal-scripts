@@ -47,7 +47,6 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
     public void SetOpen()
     {
         InventoryPresentor.Instance.SetInventoryOption(this);
-        InventoryPresentor.Instance.OpenInventory();
     }
 
     [SerializeField] private UnityEngine.UI.Button confirm;

@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using LitJson;
-using UnityEngine.Serialization;
 
 using System.Collections.Generic;
 
@@ -11,10 +9,16 @@ namespace Manager
     {
 
         Stack<GameObject> uiStack = new();
-        GameObject currentTap;
+        [SerializeField]GameObject currentTap;
+        GameObject mainTap;
         GameObject[] taps = new GameObject[Enum.GetNames(typeof(TapType)).Length];
         Queue<Action> InMainThreadQueue = new Queue<System.Action>();
-        
+        protected override void Awake()
+        {
+            base.Awake();
+            mainTap = currentTap;
+        }
+
         void Update()
         {
             if(InMainThreadQueue.Count > 0)
@@ -30,7 +34,6 @@ namespace Manager
 
         public void MoveTap(TapType _tapType)
         {
-            Debug.Log($"{_tapType} 오픈 시도\n현재 : {taps[(int)_tapType]}");
             // 현재 열린 탭과 같으면 리턴
             if (currentTap == taps[(int)_tapType]) return;
             
@@ -43,7 +46,21 @@ namespace Manager
                 currentTap.SetActive(false);
             currentTap = taps[(int)_tapType];
             currentTap.SetActive(true);
-            Debug.Log($"{_tapType} 오픈 시도\n현재 : {taps[(int)_tapType]}");
+        }
+        public void MoveTap(GameObject _tap)
+        {
+            // 현재 열린 탭과 같으면 리턴
+            if (currentTap == _tap) return;
+            
+            // 현재 열려있는 팝업 모두 Off
+            while (uiStack.Count > 0)
+                uiStack.Pop().SetActive(false);
+
+            // 탭 이동 처리
+            if (currentTap != mainTap)
+                currentTap.SetActive(false);
+            currentTap = _tap;
+            currentTap.SetActive(true);
         }
 
         public void RegisterTap(GameObject _tap, TapType _tapType)

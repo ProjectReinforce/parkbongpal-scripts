@@ -10,22 +10,38 @@ public class InventoryViewer : MonoBehaviour
 
     [SerializeField] GameObject nullImage;
     [SerializeField] GameObject currentSlotImage;
-
-
+    private IInventoryOption inventoryOption;
+    public void SetInventoryOption(IInventoryOption option)
+    {
+        inventoryOption = option;
+    }
     private void Awake()
     {
         viewers[0] = detailObject;
         viewers[1] = upDownVisualer;
     }
-    
+
+    private void OnEnable()
+    {
+        inventoryOption.OptionOpen();
+        InventoryPresentor.Instance.SortSlots();
+    }
+
+    private void OnDisable()
+    {
+        inventoryOption.OptionClose();
+        Decomposition.Instance.Reset();
+        InventoryPresentor.Instance.currentWeapon = null;
+    }
+
     public void UpdateCurrentWeapon(Weapon currentWeapon)
     {
-        gameObject.SetActive(true);
         bool active = currentWeapon is not null;
         nullImage.SetActive(!active);
         detailObject.gameObject.SetActive(active);
         currentSlotImage.SetActive(active);
-        currentSlotImage.transform.SetParent(currentWeapon.myslot.transform, false);
+        if (active)
+            currentSlotImage.transform.SetParent(currentWeapon.myslot.transform, false);
         currentSlotImage.transform.SetSiblingIndex(0);
 
         foreach (var viwer in viewers)

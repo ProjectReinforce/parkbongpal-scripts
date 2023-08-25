@@ -90,21 +90,35 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     public void BatchReceipt()
     {
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
-        
+
+        int limit = 0;
         
         List<TransactionValue> transactionList = new List<TransactionValue>();
-
+        
         for (int i = 0; i < mines.Length; i++)
         {
             if(mines[i].rentalWeapon is null)continue;
             totalGold += mines[i].Gold;
+            limit++;
+            if (limit>10)
+            {
+                SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
+                {
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.LogError("Quarry: 일괄수령 실패"+callback);
+                        return;
+                    }
+                });
+                transactionList = new List<TransactionValue>();
+                limit = 0;
+            }
             Param param = new Param
             {
                 { nameof(WeaponData.colum.borrowedDate), date }
             };
             transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
         }
-       
         SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
         {
             if (!callback.IsSuccess())
@@ -120,6 +134,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
                 mines[i].Gold = 0;
             }
         });
+        
     }
 
 
