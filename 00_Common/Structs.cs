@@ -193,6 +193,14 @@ public struct Rank
 }
 
 [Serializable]
+public struct Decomposit
+{
+    public int[] rarity,normalReinforce;
+    //골드, 소울
+}
+
+
+[Serializable]
 public struct BaseWeaponData//기본 무기정보 차트
 {
     public int index,rarity;

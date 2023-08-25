@@ -42,7 +42,8 @@ public enum ChartName
     attendance,
     exp,
     quest,
-    skillData
+    skillData,
+    decomposit
     
 }
 

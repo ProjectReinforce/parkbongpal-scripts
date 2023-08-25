@@ -104,7 +104,6 @@ public class Decomposition : Singleton<Decomposition>
         slots.Clear();
         breakSlots.Clear();
         breakUI.SetActive(false);
-        Debug.Log("@@#@");
     }
 
 
