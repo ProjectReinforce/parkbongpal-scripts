@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TimerControl : MonoBehaviour
 {
-    [SerializeField] Image timerImage;
+    // 퍼즈
     [SerializeField] MineGame mineGame;
     [SerializeField] Slider timerBar;
     const float MAX_TIME = 60f;
@@ -17,16 +17,25 @@ public class TimerControl : MonoBehaviour
     }
     float spendSpeed = 3f;
     bool isOperating = false;
-    public bool IsOperating
-    {
-        get { return isOperating; }
-        set { isOperating = value; }
-    }
+    // public bool IsOperating
+    // {
+    //     get { return isOperating; }
+    //     set { isOperating = value; }
+    // }
 
     void Update()
     {
-        if(!mineGame.IsAttackAble) return;
         UpdateTimer();
+    }
+
+    public void StartOperating()
+    {
+        isOperating = true;
+    }
+
+    public void StopOperating()
+    {
+        isOperating = false;
     }
 
     void UpdateTimer()
