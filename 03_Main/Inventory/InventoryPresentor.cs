@@ -48,7 +48,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             slots[i].transform.SetSiblingIndex(i);
         }
     } 
-   
+ 
 
     protected override void Awake()
     {
@@ -74,31 +74,24 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             slotAction(slot.myWeapon);
         }
     }
-    private IInventoryOption inventoryOption;
+   
 
-    public void SetInventoryOption(IInventoryOption option)
-    {
-        inventoryOption = option;
-    }
-
-    public void SetOpen()
+    public void SetOption()
     {
         SetInventoryOption(this);
-        OpenInventory();
     }
-    public void OpenInventory()
+    public void SetInventoryOption(IInventoryOption option)
     {
-        inventoryViewer.gameObject.SetActive(true);
-        inventoryOption.OptionOpen();
+        inventoryViewer.SetInventoryOption(option);
     }
+
     public void CloseInventory()
     {
-        inventoryViewer.gameObject.SetActive(false);
-        inventoryOption.OptionClose();
         foreach (var slot in slots)
         {
             slot.NewClear();
         }
+        inventoryViewer.gameObject.SetActive(false);
     }
     
     public void AddWeapon(BaseWeaponData baseWeaponData )

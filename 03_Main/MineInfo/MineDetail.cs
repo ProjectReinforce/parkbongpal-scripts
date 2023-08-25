@@ -67,12 +67,11 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
         }
     }
 
-   public void SetOpen()
+   private void OnEnable()
    {
        InventoryPresentor.Instance.SetInventoryOption(this);
-       InventoryPresentor.Instance.OpenInventory();
    }
-   
+
    [SerializeField] Button confirmButton;
    public void OptionOpen()
    {

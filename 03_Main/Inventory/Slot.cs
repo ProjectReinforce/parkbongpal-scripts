@@ -39,7 +39,7 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
     {
         if(myWeapon is  null) return;
         InventoryPresentor.Instance.currentWeapon = myWeapon;
-        SelletChecker.SetActive( Decomposition.ChooseWeaponSlot(this));
+        SelletChecker.SetActive( Decomposition.Instance.ChooseWeaponSlot(this));
     }
     public void SetsellectChecker(bool isOn)
     {

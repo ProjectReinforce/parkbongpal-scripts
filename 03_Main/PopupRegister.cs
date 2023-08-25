@@ -12,7 +12,7 @@ public class PopupRegister : MonoBehaviour
     void Awake()
     {
         TryGetComponent(out button);
-        if (GameManager.Instance != null)
+        //if (GameManager.Instance != null)
             button.onClick.AddListener(() => GameManager.Instance.OpenPopup(popup));
     }
 }
