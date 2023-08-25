@@ -4,7 +4,7 @@ using BackEnd;
 using Manager;
 using UnityEngine;
 
-public class Decomposition : MonoBehaviour
+public class Decomposition : Singleton<Decomposition>
 {
    
     static LinkedList<Slot> slots=new ();
@@ -12,7 +12,7 @@ public class Decomposition : MonoBehaviour
 
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
-
+    [SerializeField] private GameObject breakUI;
     [ SerializeField]UnityEngine.UI.Text text;
     public void SetDecomposit()
     {
@@ -50,9 +50,14 @@ public class Decomposition : MonoBehaviour
             limit = 0;
         }
 
+        Reset();
         HighPowerFinder.UpdateHighPowerWeaponData();
     }
-    public static bool ChooseWeaponSlot(Slot slot)
+    
+    [SerializeField] GameObject contentBox;
+    [SerializeField] private breakSlot prefab;
+    private List<breakSlot> breakSlots = new List<breakSlot>();
+    public bool ChooseWeaponSlot(Slot slot)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
@@ -63,13 +68,20 @@ public class Decomposition : MonoBehaviour
         
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
         if (findingSlot is null)
-        {            
+        {
+            breakSlot a = Instantiate(prefab, contentBox.transform);
+            a.weapon = slot.myWeapon;
+            breakSlots.Add(a);
+            
             slots.AddLast(slot);
             return true;
         }
         else
         {
-            slots.Remove(findingSlot);
+            slots.Remove(findingSlot); 
+            breakSlot a = breakSlots.Find(el => el.weapon == findingSlot.Value.myWeapon);
+            breakSlots.Remove(a);
+            Destroy(a.gameObject);
             return false;
         }
     }
@@ -81,9 +93,18 @@ public class Decomposition : MonoBehaviour
         {
             slot.SetsellectChecker(false);
         }
-
+        
+        foreach (var breakSlot in breakSlots)
+        {
+            Destroy(breakSlot.gameObject);    
+        }
+        
+        breakSlots.Clear();
         text.text = "ºÐÇØ";
         slots.Clear();
+        breakSlots.Clear();
+        breakUI.SetActive(false);
+        Debug.Log("@@#@");
     }
 
 

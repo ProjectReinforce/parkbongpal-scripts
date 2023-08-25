@@ -26,7 +26,7 @@
                 button.enabled=false;
             }
             
-            backgroundImage.sprite =Manager. BackEndDataManager.Instance.weaponRaritySlot[element.data.rarity];
+            backgroundImage.sprite =Manager.BackEndDataManager.Instance.weaponRaritySlot[element.data.rarity];
             ImageObject.SetActive(true);
             button.enabled = true;
             lendImageObject.SetActive(element.data.mineId>-1);

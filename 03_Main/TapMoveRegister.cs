@@ -5,15 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
+// public class TapMoveRegister : MonoBehaviour
+// {
+//     [SerializeField] TapType tapType;
+//     Button button;
+//
+//     void Awake()
+//     {
+//         TryGetComponent(out button);
+//         if (GameManager.Instance != null)
+//             button.onClick.AddListener(() => GameManager.Instance.MoveTap(tapType));
+//     }
+// }
+
 public class TapMoveRegister : MonoBehaviour
 {
-    [SerializeField] TapType tapType;
+    [SerializeField] GameObject tap;
     Button button;
 
     void Awake()
     {
         TryGetComponent(out button);
         if (GameManager.Instance != null)
-            button.onClick.AddListener(() => GameManager.Instance.MoveTap(tapType));
+            button.onClick.AddListener(() => GameManager.Instance.MoveTap(tap));
     }
 }
