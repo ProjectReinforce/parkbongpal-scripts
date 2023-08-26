@@ -1,10 +1,12 @@
 ﻿
-public class LendWeaponRenderer
+using UnityEngine;
+
+public class LendWeaponRenderer:MonoBehaviour
 {
     static bool _isShowLend;
     public static bool isShowLend => _isShowLend;
 
-    public static void ShowLendWeapon()
+    public void ShowLendWeapon()
     {
         _isShowLend = !_isShowLend;
         if (isShowLend)

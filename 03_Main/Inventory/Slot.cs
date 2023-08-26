@@ -55,7 +55,6 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
              return -1;
         if (obj.myWeapon is null&&myWeapon is null)
             return 1;
-       
         if (LendWeaponRenderer.isShowLend)
         {
             if (myWeapon.data.mineId>=0)
@@ -66,6 +65,7 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
             {
                 return -1;
             }
+            
         }
 
 
