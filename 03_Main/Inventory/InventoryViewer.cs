@@ -33,7 +33,7 @@ public class InventoryViewer : MonoBehaviour
         Decomposition.Instance.Reset();
         InventoryPresentor.Instance.currentWeapon = null;
     }
-
+  
     public void UpdateCurrentWeapon(Weapon currentWeapon)
     {
         bool active = currentWeapon is not null;

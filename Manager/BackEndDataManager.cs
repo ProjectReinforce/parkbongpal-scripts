@@ -23,6 +23,7 @@ namespace Manager
         public MagicCarveData magicCarveData;
         public SoulCraftingData soulCraftingData;
         public RefinementData refinementData;
+        public Decomposit[] DecompositData;
 
         readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
             new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
@@ -85,7 +86,7 @@ namespace Manager
             // 테스트용
         }
 
-        const string VERSION_CHART_ID = "89457";
+        const string VERSION_CHART_ID = "90470";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
@@ -292,12 +293,26 @@ namespace Manager
                         SetChartData<QuestData>(chartId, QuestDataProcess);
                     break;
                 case ChartName.skillData:
-                    void SkillDataDataProcess(SkillData[] data) { skillDatas = data; }
+                    void SkillDataProcess(SkillData[] data) { skillDatas = data; }
                     
                     if (_fromBackEnd)
-                        GetBackEndChartData<SkillData>(chartId, SkillDataDataProcess);
+                        GetBackEndChartData<SkillData>(chartId, SkillDataProcess);
                     else
-                        SetChartData<SkillData>(chartId, SkillDataDataProcess);
+                        SetChartData<SkillData>(chartId, SkillDataProcess);
+                    break;
+                case ChartName.decomposit:
+
+                    void DecompositDataProcess(Decomposit[] data)
+                    {
+                        Debug.Log("@@#@#");
+                        Debug.Log(data);
+                        DecompositData = data;
+                    }
+
+                    if (_fromBackEnd)
+                        GetBackEndChartData<Decomposit>(chartId, DecompositDataProcess);
+                    else
+                        SetChartData<Decomposit>(chartId, DecompositDataProcess);
                     break;
             }
         }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : DontDestroy<Player>
 {
     [SerializeField] TopUIDatatViewer topUIDatatViewer;
+    [SerializeField] InventorySourceViewer inventoryUIViwer;
     [SerializeField] UserData userData;
     public UserData Data => userData;
     RecordData recordData;
@@ -18,6 +19,9 @@ public class Player : DontDestroy<Player>
 
         recordData = new RecordData();
         recordData.LoadOrInitRecord(userData.inDate);
+        
+        inventoryUIViwer.SetStone(userData.stone);
+        inventoryUIViwer.SetSoul(userData.weaponSoul);
     }
 
     void UpdateBackEndData(string columnName, int _data)
@@ -84,7 +88,7 @@ public class Player : DontDestroy<Player>
         userData.weaponSoul += _weaponSoul;
 
         UpdateBackEndData(nameof(UserData.colum.weaponSoul), userData.weaponSoul);
-
+        inventoryUIViwer.SetSoul(userData.weaponSoul);
         return true;
     }
 
@@ -94,7 +98,7 @@ public class Player : DontDestroy<Player>
         userData.stone += _stone;
 
         UpdateBackEndData(nameof(UserData.colum.stone), userData.stone);
-
+        inventoryUIViwer.SetStone(userData.stone);
         return true;
     }
     
