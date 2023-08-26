@@ -10,8 +10,7 @@ using GooglePlayGames.BasicApi;
 public class Login : MonoBehaviour
 {
     //const string SCENE_NAME = "Main_V4";
-   // const string SCENE_NAME = "Main_V5_HW";
-     const string SCENE_NAME = "Main_V5_JG";
+    const string SCENE_NAME = "Main_V5_HW";
 
     [SerializeField] GameObject LoginPopup;
     [SerializeField] Button tokenLoginButton;

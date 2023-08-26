@@ -18,14 +18,15 @@ public class GoogleAds : MonoBehaviour
     
     // These ad units are configured to always serve test ads.
     #if UNITY_ANDROID
-    string _adUnitId = "ca-app-pub-3940256099942544/5354046379";
+    // string _adUnitId = "ca-app-pub-3940256099942544/5354046379";
+    string _adUnitId = "ca-app-pub-3920142147368711/8099521950";
     #elif UNITY_IPHONE
     string _adUnitId = "ca-app-pub-3940256099942544/6978759866";
     #else
     string _adUnitId = "unused";
     #endif
 
-    RewardedInterstitialAd rewardedInterstitialAd;
+    RewardedAd rewardedInterstitialAd;
 
     /// <summary>
     /// Loads the rewarded interstitial ad.
@@ -46,8 +47,8 @@ public class GoogleAds : MonoBehaviour
         adRequest.Keywords.Add("unity-admob-sample");
 
         // send the request to load the ad.
-        RewardedInterstitialAd.Load(_adUnitId, adRequest,
-        (RewardedInterstitialAd ad, LoadAdError error) =>
+        RewardedAd.Load(_adUnitId, adRequest,
+        (RewardedAd ad, LoadAdError error) =>
         {
             // if error is not null, the load request failed.
             if (error != null || ad == null)
@@ -81,7 +82,7 @@ public class GoogleAds : MonoBehaviour
 
     // rewardedInterstitialAd.Destroy();
 
-    private void RegisterEventHandlers(RewardedInterstitialAd ad)
+    private void RegisterEventHandlers(RewardedAd ad)
     {
         // Raised when the ad is estimated to have earned money.
         ad.OnAdPaid += (AdValue adValue) =>
@@ -118,7 +119,7 @@ public class GoogleAds : MonoBehaviour
         };
     }
 
-    private void RegisterReloadHandler(RewardedInterstitialAd ad)
+    private void RegisterReloadHandler(RewardedAd ad)
     {
         // Raised when the ad closed full screen content.
         ad.OnAdFullScreenContentClosed += () =>
