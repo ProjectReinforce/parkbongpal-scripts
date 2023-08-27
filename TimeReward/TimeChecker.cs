@@ -7,9 +7,8 @@ using UnityEngine;
 public class TimeChecker : Singleton<TimeChecker>
 {
     private TimeSpan timeInterval;
-    protected override void Awake()
+    protected  void Awake()
     {
-        base.Awake();
         timeInterval = BackEndDataManager.Instance.ServerTime - BackEndDataManager.Instance.LastLogin;
     }
     private void Start()

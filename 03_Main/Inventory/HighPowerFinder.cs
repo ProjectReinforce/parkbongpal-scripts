@@ -18,7 +18,8 @@
             {
                 Slot slot =  slots[i];
                 currentWeapon = slot.myWeapon;
-                if(highPower>=currentWeapon?.power)continue;
+                
+                if(currentWeapon is null||highPower>=currentWeapon.power)continue;
             
                 highPower = currentWeapon.power;
                 highPowerWeapon = currentWeapon;

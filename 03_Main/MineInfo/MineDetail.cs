@@ -89,7 +89,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
        try
        {
            if (currentWeapon.data.mineId >= 0)
-               throw  new Exception("다른 광산에서 사용중인 무기입니다.");
+               throw  new Exception("광산에 대여해준 무기입니다.");
            int beforeGoldPerMin = tempMine.goldPerMin;
            currentWeapon.SetBorrowedDate();
            tempMine.SetWeapon(currentWeapon);
@@ -107,6 +107,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
        currentWeapon.Lend(tempMine.GetMineData().index);
         
        Quarry.Instance.currentMine= tempMine ;
+       InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
    }
 
    public void OptionClose()

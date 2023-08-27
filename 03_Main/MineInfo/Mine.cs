@@ -69,6 +69,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
 
     public void SetCurrent()// *dip 위배중, 리팩토링 대상.
     {
+        Debug.Log("@#@# 싱글톤 바꾸고 확인할거"+Quarry.Instance);
         Quarry.Instance.currentMine = this;
     }
 

@@ -24,9 +24,9 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         get => _currentWeapon;
         set
         {
-            inventoryViewer.UpdateCurrentWeapon(value);
             _currentWeapon = value;
-            
+            inventoryViewer.UpdateCurrentWeapon(value);
+
         }
     }
    
@@ -181,7 +181,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
             AddWeapon(weaponData);
-        
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {
                 var pidea = Backend.GameData.Insert(nameof(PideaData), new Param

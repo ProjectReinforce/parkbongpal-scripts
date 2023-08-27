@@ -224,24 +224,28 @@ public class Jinsum : Magic //유일
 public class Choockbock : Magic //유일
 { /*9	축복	100	무기에 축복을 부여하여 보다 빠르게 공격한다	모든 스탯에 일반강화 횟수만큼 수치를 더합니다.*/
     public Choockbock(Rental mine,int _coefficient) : base(mine,_coefficient) {}
-    private const int normalCount = 10;
     public override WeaponData GetWeaponData()
     {
         WeaponData weaponData = base.GetWeaponData();
-        weaponData.defaultStat[(int)StatType.atk] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.atkSpeed] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.atkRange] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.accuracy] += normalCount-weaponData.defaultStat[0]; 
-        weaponData.defaultStat[(int)StatType.strength] += normalCount-weaponData.defaultStat[0];
-        
-        weaponData.defaultStat[(int)StatType.charm] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.constitution] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.intelligence] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.technique] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.wisdom] += normalCount-weaponData.defaultStat[0];
-        
-        weaponData.defaultStat[(int)StatType.criticalDamage] += normalCount-weaponData.defaultStat[0];
-        weaponData.defaultStat[(int)StatType.criticalRate] += normalCount-weaponData.defaultStat[0];
+        int successCount = weaponData.NormalStat[(int)StatType.atk]/5;
+        for (int i = 0; i < Enum.GetValues(typeof(StatType)).Length; i++)
+        {
+            weaponData.defaultStat[i] += successCount;
+        }
+        // weaponData.defaultStat[(int)StatType.atk] += successCount;
+        // weaponData.defaultStat[(int)StatType.atkSpeed] += successCount;
+        // weaponData.defaultStat[(int)StatType.atkRange] += successCount;
+        // weaponData.defaultStat[(int)StatType.accuracy] += successCount;
+        // weaponData.defaultStat[(int)StatType.strength] += successCount;
+        //
+        // weaponData.defaultStat[(int)StatType.charm] += successCount;
+        // weaponData.defaultStat[(int)StatType.constitution] += successCount;
+        // weaponData.defaultStat[(int)StatType.intelligence] += successCount;
+        // weaponData.defaultStat[(int)StatType.technique] += successCount;
+        // weaponData.defaultStat[(int)StatType.wisdom] += successCount;
+        //
+        // weaponData.defaultStat[(int)StatType.criticalDamage] += successCount;
+        // weaponData.defaultStat[(int)StatType.criticalRate] += successCount;
         return weaponData;
     }
     

@@ -8,9 +8,8 @@ public class Store : Singleton<Store>
     private IAddable inventory;
     private GachaData[] gacharsPercents;
     private int[][] percents;
-    protected override void Awake()
+    protected  void Awake()
     {
-        base.Awake();
         inventory = InventoryPresentor.Instance;
         gacharsPercents = BackEndDataManager.Instance.gachar;
         percents = new int[gacharsPercents.Length][];

@@ -44,21 +44,14 @@ public class Pidea : Singleton<Pidea>
         materials[index].color = Color.white;
         pideaSlots[index].SetNew();
         notifyer.GetNew(pideaSlots[index]);
-        Debug.Log("index="+index);
     }
-    
-    public void Close()
-    {
-        notifyer.Clear();
-        notifyer.gameObject.SetActive(false);
-    }
-    
+
     protected override void Awake()
     {
         base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
         notifyer = Instantiate(BackEndDataManager.Instance.notifyer,transform);
-        notifyer.Initialized();
+      
         materials = BackEndDataManager.Instance.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
         for (int i = 0; i < BackEndDataManager.Instance.baseWeaponDatas.Length; i++)
@@ -69,14 +62,15 @@ public class Pidea : Singleton<Pidea>
             pideaSlots.Add(slot);
             
             if(BackEndDataManager.Instance.baseWeaponDatas[i].collection is null) continue;
-            foreach (var VARIABLE in BackEndDataManager.Instance.baseWeaponDatas[i].collection)
+            foreach (int collectionType in BackEndDataManager.Instance.baseWeaponDatas[i].collection)
             {
-                collection.AddSlot(pideaSlots[i],VARIABLE);
+                collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
     }
-    public void SetCurrentWeapon(int index)
+    public void SetCurrentWeapon(PideaSlot slot)
     {
-        pideaDetail.ViewUpdate(index);
+        pideaDetail.ViewUpdate(slot.baseWeaponIndex);
+        notifyer.Remove(slot);
     }
 }
