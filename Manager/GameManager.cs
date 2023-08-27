@@ -16,6 +16,7 @@ namespace Manager
         protected override void Awake()
         {
             base.Awake();
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
             mainTap = currentTap;
         }
 
