@@ -30,6 +30,13 @@ public class Login : MonoBehaviour
         PlayGamesPlatform.DebugLogEnabled = true; // 디버그 로그를 보고 싶지 않다면 false로 바꿔주세요.
         //GPGS 시작.
         PlayGamesPlatform.Activate();
+
+        Invoke(nameof(AutoLoginOn), 2f);
+    }
+
+    void AutoLoginOn()
+    {
+        tokenLoginButton.interactable = true;
     }
 
     /// <summary>
