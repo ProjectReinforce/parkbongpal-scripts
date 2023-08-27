@@ -31,10 +31,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
         set => refineResults = value;
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+  
 
     void OnDisable()
     {

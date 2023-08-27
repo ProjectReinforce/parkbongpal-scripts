@@ -9,19 +9,25 @@ public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
     [SerializeField] private UnityEngine.UI.Image[] arrowPositions;
     [SerializeField] private UnityEngine.UI.Text[] quantity;
 
-    private static Weapon currentWeapon;
 
-    public static void SetTarget(Weapon target)
+
+    public void ViewUpdate(Weapon sellectWeapon)
     {
-        currentWeapon = target;
-    }
+        Weapon currentWeapon = Quarry.Instance.currentMine?.rentalWeapon;
+        if (currentWeapon is null || sellectWeapon is null)
+        {
+            for (int i = 0; i < arrowPositions.Length; i++)
+            {
+                arrowPositions[i].sprite = Arrows[1];
+                quantity[i].text = System.String.Empty;
+            }
 
-    public void ViewUpdate(Weapon sellectWeapon) {
-        if(currentWeapon is null || sellectWeapon is null) return;
+            return;
+        }
         
         int[] stats =
         {
-            sellectWeapon.power - currentWeapon.power,
+            sellectWeapon.power - Quarry.Instance.currentMine.rentalWeapon.power,
             
             sellectWeapon.data.atk - currentWeapon.data.atk,
             sellectWeapon.data.atkSpeed- currentWeapon.data.atkSpeed,

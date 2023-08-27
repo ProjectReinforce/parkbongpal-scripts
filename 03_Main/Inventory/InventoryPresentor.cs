@@ -24,9 +24,9 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         get => _currentWeapon;
         set
         {
-            inventoryViewer.UpdateCurrentWeapon(value);
             _currentWeapon = value;
-            
+            inventoryViewer.UpdateCurrentWeapon(value);
+
         }
     }
    

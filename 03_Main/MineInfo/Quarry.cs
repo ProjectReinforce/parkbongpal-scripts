@@ -22,7 +22,6 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             selectedWeaponImage.sprite =value.rentalWeapon is null? 
                 plusImage : value.rentalWeapon.sprite;
             _currentMine = value;
-            UpDownVisualer.SetTarget(value.rentalWeapon);
         }
     }
 

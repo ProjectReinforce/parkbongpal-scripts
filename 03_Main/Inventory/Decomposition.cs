@@ -30,7 +30,7 @@ public class Decomposition : Singleton<Decomposition>
                 Slot slot = slots.First.Value;
                 if (slot == null) continue;
                 string indate = slot.myWeapon.data.inDate;
-                slot.SetsellectChecker(false);
+                slot.SetCurrent();
                 slot.NewClear();
                 slot.SetWeapon(null);
                 slots.RemoveFirst();
@@ -57,16 +57,18 @@ public class Decomposition : Singleton<Decomposition>
     [SerializeField] GameObject contentBox;
     [SerializeField] private breakSlot prefab;
     private List<breakSlot> breakSlots = new List<breakSlot>();
-    public bool ChooseWeaponSlot(Slot slot)
+    public void ChooseWeaponSlot(Slot slot, GameObject sellected)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
-            UIManager.Instance.ShowWarning("알림", "광산에 대여중인 무기입니다.");
-            return false;
+            UIManager.Instance.ShowWarning("알림", "광산에 대여해준 무기입니다.");
+            return ;
         }
-        if (!isDecompositing) return false;
+        if (!isDecompositing) return ;
         
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
+        
+        sellected.SetActive(findingSlot is null);
         if (findingSlot is null)
         {
             breakSlot a = Instantiate(prefab, contentBox.transform);
@@ -74,7 +76,6 @@ public class Decomposition : Singleton<Decomposition>
             breakSlots.Add(a);
             
             slots.AddLast(slot);
-            return true;
         }
         else
         {
@@ -82,7 +83,6 @@ public class Decomposition : Singleton<Decomposition>
             breakSlot a = breakSlots.Find(el => el.weapon == findingSlot.Value.myWeapon);
             breakSlots.Remove(a);
             Destroy(a.gameObject);
-            return false;
         }
     }
 
@@ -91,7 +91,7 @@ public class Decomposition : Singleton<Decomposition>
         _isDecompositing = false;
         foreach (Slot slot in slots)
         {
-            slot.SetsellectChecker(false);
+            slot.SetCurrent();
         }
         
         foreach (var breakSlot in breakSlots)

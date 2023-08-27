@@ -53,9 +53,8 @@ public class Pidea : Singleton<Pidea>
         notifyer.gameObject.SetActive(false);
     }
     
-    protected override void Awake()
+    protected  void Awake()
     {
-        base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
         notifyer = Instantiate(BackEndDataManager.Instance.notifyer,transform);
         notifyer.Initialized();
@@ -69,9 +68,9 @@ public class Pidea : Singleton<Pidea>
             pideaSlots.Add(slot);
             
             if(BackEndDataManager.Instance.baseWeaponDatas[i].collection is null) continue;
-            foreach (var VARIABLE in BackEndDataManager.Instance.baseWeaponDatas[i].collection)
+            foreach (int collectionType in BackEndDataManager.Instance.baseWeaponDatas[i].collection)
             {
-                collection.AddSlot(pideaSlots[i],VARIABLE);
+                collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
     }

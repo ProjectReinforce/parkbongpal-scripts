@@ -9,9 +9,8 @@ public class ChatManager : Manager.Singleton<ChatManager>
 {
     public bool ChatConnected { get; private set; }
 
-    protected override void Awake()
+    protected  void Awake()
     {
-        base.Awake();
 
         CheckChatStatus();
     }
