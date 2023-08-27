@@ -9,100 +9,146 @@ public class QuestContentsInitializer : MonoBehaviour
     [SerializeField] Transform dayContents;
     [SerializeField] Transform weekContents;
     [SerializeField] Transform onceContents;
-    Dictionary<RecordType, List<QuestContent>> questContents = new();
-    Dictionary<int, QuestContent> quests = new();
+    // Dictionary<RecordType, List<QuestContent>> questContents = new();
+    // Dictionary<int, QuestContent> quests = new();
+
+    Dictionary<QuestType, Dictionary<RecordType, List<QuestData>>> questDatasGroupByType = new();
 
     void Awake()
     {
+        string[] questTypeNames = System.Enum.GetNames(typeof(QuestType));
+        foreach (var item in questTypeNames)
+        {
+            QuestType questType = Utills.StringToEnum<QuestType>(item);
+
+            // questContents.Add(recordType, new List<QuestContent>());
+            questDatasGroupByType.Add(questType, new());
+        }
         string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
         foreach (var item in recordTypeNames)
         {
             RecordType recordType = Utills.StringToEnum<RecordType>(item);
 
-            questContents.Add(recordType, new List<QuestContent>());
+            foreach (var i in questDatasGroupByType)
+                i.Value.Add(recordType, new());
         }
+
+        // string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
+        // foreach (var item in recordTypeNames)
+        // {
+        //     RecordType recordType = Utills.StringToEnum<RecordType>(item);
+
+        //     // questContents.Add(recordType, new List<QuestContent>());
+        //     questDatasGroupByType.Add(recordType, new());
+        // }
 
         foreach (var item in BackEndDataManager.Instance.questDatas)
         {
-            QuestContent questContent = pool.GetOne();
-            questContent.Initialize(item);
-            // questContent.UpdateContent();
+            // QuestContent questContent = pool.GetOne();
+            // questContent.Initialize(item);
 
-            switch (item.questRepeatType)
-            {
-                case QuestType.Once:
-                    questContent.transform.SetParent(onceContents);
-                    break;
-                case QuestType.Day:
-                    questContent.transform.SetParent(dayContents);
-                    break;
-                case QuestType.Week:
-                    questContent.transform.SetParent(weekContents);
-                    break;
-            }
+            // switch (item.questRepeatType)
+            // {
+            //     case QuestType.Once:
+            //         questContent.transform.SetParent(onceContents);
+            //         break;
+            //     case QuestType.Day:
+            //         questContent.transform.SetParent(dayContents);
+            //         break;
+            //     case QuestType.Week:
+            //         questContent.transform.SetParent(weekContents);
+            //         break;
+            // }
 
-            questContents[item.recordType].Add(questContent);
-            quests.Add(item.questId, questContent);
+            // questContents[item.recordType].Add(questContent);
+            // quests.Add(item.questId, questContent);
+
+            questDatasGroupByType[item.questRepeatType][item.recordType].Add(item);
+            // questDatasGroupByType[item.recordType].Add(item);
         }
 
-        ClearCheck();
-        UpdateAllContent();
+        foreach (var item in questDatasGroupByType)
+        {
+            Transform parentContent = item.Key switch
+            {
+                QuestType.Day => dayContents,
+                QuestType.Week => weekContents,
+                _ => onceContents,
+            };
 
-        Player.Instance.Record.levelUpEvent -= () => UpdateLevelContent(RecordType.LevelUp);
-        Player.Instance.Record.levelUpEvent += () => UpdateLevelContent(RecordType.LevelUp);
+            foreach (var i in item.Value)
+            {
+                if (i.Value.Count <= 0) continue;
+                QuestContent questContent = pool.GetOne();
+                questContent.Initialize(i.Value);
+                questContent.transform.SetParent(parentContent);
+                // questContent.UpdateContent();
 
-        Player.Instance.Record.getGoldEvent -= () => UpdateLevelContent(RecordType.GetGold);
-        Player.Instance.Record.getGoldEvent += () => UpdateLevelContent(RecordType.GetGold);
+                // foreach (var t in i.Value)
+                // {
+                //     Debug.Log(t.questContent);
+                // }
+            }
+        }
 
-        Player.Instance.Record.useGoldEvent -= () => UpdateLevelContent(RecordType.UseGold);
-        Player.Instance.Record.useGoldEvent += () => UpdateLevelContent(RecordType.UseGold);
+        // ClearCheck();
+        // UpdateAllContent();
 
-        Player.Instance.Record.getDiamondEvent -= () => UpdateLevelContent(RecordType.GetDiamond);
-        Player.Instance.Record.getDiamondEvent += () => UpdateLevelContent(RecordType.GetDiamond);
+        // Player.Instance.Record.levelUpEvent -= () => UpdateLevelContent(RecordType.LevelUp);
+        // Player.Instance.Record.levelUpEvent += () => UpdateLevelContent(RecordType.LevelUp);
+
+        // Player.Instance.Record.getGoldEvent -= () => UpdateLevelContent(RecordType.GetGold);
+        // Player.Instance.Record.getGoldEvent += () => UpdateLevelContent(RecordType.GetGold);
+
+        // Player.Instance.Record.useGoldEvent -= () => UpdateLevelContent(RecordType.UseGold);
+        // Player.Instance.Record.useGoldEvent += () => UpdateLevelContent(RecordType.UseGold);
+
+        // Player.Instance.Record.getDiamondEvent -= () => UpdateLevelContent(RecordType.GetDiamond);
+        // Player.Instance.Record.getDiamondEvent += () => UpdateLevelContent(RecordType.GetDiamond);
         
-        Player.Instance.Record.useDiamondEvent -= () => UpdateLevelContent(RecordType.UseDiamond);
-        Player.Instance.Record.useDiamondEvent += () => UpdateLevelContent(RecordType.UseDiamond);
+        // Player.Instance.Record.useDiamondEvent -= () => UpdateLevelContent(RecordType.UseDiamond);
+        // Player.Instance.Record.useDiamondEvent += () => UpdateLevelContent(RecordType.UseDiamond);
         
-        Player.Instance.Record.produceWeaponEvent -= () => UpdateLevelContent(RecordType.ProduceWeapon);
-        Player.Instance.Record.produceWeaponEvent += () => UpdateLevelContent(RecordType.ProduceWeapon);
+        // Player.Instance.Record.produceWeaponEvent -= () => UpdateLevelContent(RecordType.ProduceWeapon);
+        // Player.Instance.Record.produceWeaponEvent += () => UpdateLevelContent(RecordType.ProduceWeapon);
         
-        Player.Instance.Record.advanceProduceWeaponEvent -= () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
-        Player.Instance.Record.advanceProduceWeaponEvent += () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
+        // Player.Instance.Record.advanceProduceWeaponEvent -= () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
+        // Player.Instance.Record.advanceProduceWeaponEvent += () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
         
-        Player.Instance.Record.tryPromoteEvent -= () => UpdateLevelContent(RecordType.TryPromote);
-        Player.Instance.Record.tryPromoteEvent += () => UpdateLevelContent(RecordType.TryPromote);
+        // Player.Instance.Record.tryPromoteEvent -= () => UpdateLevelContent(RecordType.TryPromote);
+        // Player.Instance.Record.tryPromoteEvent += () => UpdateLevelContent(RecordType.TryPromote);
         
-        Player.Instance.Record.tryAdditionalEvent -= () => UpdateLevelContent(RecordType.TryAdditional);
-        Player.Instance.Record.tryAdditionalEvent += () => UpdateLevelContent(RecordType.TryAdditional);
+        // Player.Instance.Record.tryAdditionalEvent -= () => UpdateLevelContent(RecordType.TryAdditional);
+        // Player.Instance.Record.tryAdditionalEvent += () => UpdateLevelContent(RecordType.TryAdditional);
         
-        Player.Instance.Record.tryReinforceEvent -= () => UpdateLevelContent(RecordType.TryReinforce);
-        Player.Instance.Record.tryReinforceEvent += () => UpdateLevelContent(RecordType.TryReinforce);
+        // Player.Instance.Record.tryReinforceEvent -= () => UpdateLevelContent(RecordType.TryReinforce);
+        // Player.Instance.Record.tryReinforceEvent += () => UpdateLevelContent(RecordType.TryReinforce);
         
-        Player.Instance.Record.tryMagicEvent -= () => UpdateLevelContent(RecordType.TryMagic);
-        Player.Instance.Record.tryMagicEvent += () => UpdateLevelContent(RecordType.TryMagic);
+        // Player.Instance.Record.tryMagicEvent -= () => UpdateLevelContent(RecordType.TryMagic);
+        // Player.Instance.Record.tryMagicEvent += () => UpdateLevelContent(RecordType.TryMagic);
         
-        Player.Instance.Record.trySoulEvent -= () => UpdateLevelContent(RecordType.TrySoul);
-        Player.Instance.Record.trySoulEvent += () => UpdateLevelContent(RecordType.TrySoul);
+        // Player.Instance.Record.trySoulEvent -= () => UpdateLevelContent(RecordType.TrySoul);
+        // Player.Instance.Record.trySoulEvent += () => UpdateLevelContent(RecordType.TrySoul);
         
-        Player.Instance.Record.tryRefineEvent -= () => UpdateLevelContent(RecordType.TryRefine);
-        Player.Instance.Record.tryRefineEvent += () => UpdateLevelContent(RecordType.TryRefine);
+        // Player.Instance.Record.tryRefineEvent -= () => UpdateLevelContent(RecordType.TryRefine);
+        // Player.Instance.Record.tryRefineEvent += () => UpdateLevelContent(RecordType.TryRefine);
     }
 
-    void UpdateAllContent()
-    {
-        foreach (var one in quests)
-            one.Value.UpdateContent();
-    }
+    // void UpdateAllContent()
+    // {
+    //     foreach (var one in quests)
+    //         one.Value.UpdateContent();
+    // }
 
-    void UpdateLevelContent(RecordType _recordType)
-    {
-        foreach (var item in questContents[_recordType])
-            item.UpdateContent();
-    }
+    // void UpdateLevelContent(RecordType _recordType)
+    // {
+    //     foreach (var item in questContents[_recordType])
+    //         item.UpdateContent();
+    // }
 
-    void ClearCheck()
-    {
-        foreach (var one in BackEndDataManager.Instance.questRecordDatas)
-            quests[one.questId].Cleared();
-    }
+    // void ClearCheck()
+    // {
+    //     foreach (var one in BackEndDataManager.Instance.questRecordDatas)
+    //         quests[one.questId].Cleared();
+    // }
 }
