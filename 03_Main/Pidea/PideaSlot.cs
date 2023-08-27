@@ -10,7 +10,7 @@ public class PideaSlot : NewThing,ISlotable
     [SerializeField] Image weaponImage;
     int _baseWeaponIndex;
     public int baseWeaponIndex => _baseWeaponIndex;
-    public void Initialized(int index)
+    public void Initialized(int index )
     {
         weaponImage.sprite = BackEndDataManager.Instance.GetBaseWeaponSprite(index);
         weaponImage.material = BackEndDataManager.Instance.ownedWeaponIds[index];
@@ -19,6 +19,6 @@ public class PideaSlot : NewThing,ISlotable
     public void SetCurrent()//dip 위배 , 리팩토링 대상.
     {
         if(weaponImage.material.color == Color.black) return;
-        Pidea.Instance.SetCurrentWeapon(_baseWeaponIndex);
+        Pidea.Instance.SetCurrentWeapon(this);
     }
 }

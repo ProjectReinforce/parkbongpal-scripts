@@ -5,16 +5,15 @@ using UnityEngine;
 public class Notifyer:MonoBehaviour
 {
     [SerializeField]List< NewThing> newThings; 
-    [SerializeField]GameObject body;
     [SerializeField]UnityEngine.UI.Text text;
-    public void Initialized()
+    public void Awake()
     {
         newThings = new List<NewThing>();
     }
 
     private void TextUpdate()
     {
-        body.SetActive(newThings.Count>0);
+        gameObject.SetActive(newThings.Count>0);
         text.text = newThings.Count.ToString();
     }
     public void GetNew(NewThing newThing)
@@ -30,6 +29,7 @@ public class Notifyer:MonoBehaviour
         }
         newThings.Clear();
         TextUpdate();
+        gameObject.SetActive(false);
     }
     public void Remove(NewThing thing)
     {

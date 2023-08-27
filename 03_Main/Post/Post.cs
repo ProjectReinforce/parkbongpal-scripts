@@ -21,7 +21,6 @@ public class Post : Singleton<Post>
     protected  void Awake()
     {
         notifyer = Instantiate(BackEndDataManager.Instance.notifyer,mySelf.transform);
-        notifyer.Initialized();
     }
 
     public void ReciveFromServer()

@@ -12,16 +12,20 @@ public class Decomposition : Singleton<Decomposition>
 
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
-    [SerializeField] private GameObject breakUI;
-    [ SerializeField]UnityEngine.UI.Text text;
+    [SerializeField] GameObject breakUI;
+    [SerializeField] DecompositonReward okUI;
+    [SerializeField]UnityEngine.UI.Text text;
     public void SetDecomposit()
     {
+        if(isDecompositing&&slots.Count < 1) return;
         _isDecompositing = !_isDecompositing;
         text.text = isDecompositing?"확정" :"분해";
-        
-        //InventoryPresentor.Instance.currentWeapon = null;
+        breakUI.SetActive(isDecompositing);
         if(isDecompositing) return;
-        int limit = 0;
+        //InventoryPresentor.Instance.
+        //InventoryPresentor.Instance.currentWeapon = null;
+        int limit = 0,totalGold = 0,totalSoul = 0;
+     
         while (slots.Count > 0)
         {
             List<TransactionValue> transactionList = new List<TransactionValue>();
@@ -29,6 +33,11 @@ public class Decomposition : Singleton<Decomposition>
             {
                 Slot slot = slots.First.Value;
                 if (slot == null) continue;
+                totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[0];
+                totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
+                    
+                totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
+                totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
                 string indate = slot.myWeapon.data.inDate;
                 slot.SetCurrent();
                 slot.NewClear();
@@ -50,7 +59,13 @@ public class Decomposition : Singleton<Decomposition>
             limit = 0;
         }
 
+        
+        Player.Instance.AddGold(totalGold);
+        Player.Instance.AddSoul(totalSoul);
+        
+        okUI.SetText(totalGold,totalSoul);
         Reset();
+        
         HighPowerFinder.UpdateHighPowerWeaponData();
     }
     
@@ -104,6 +119,8 @@ public class Decomposition : Singleton<Decomposition>
         slots.Clear();
         breakSlots.Clear();
         breakUI.SetActive(false);
+        InventoryPresentor.Instance.currentWeapon = null;
+
     }
 
 
