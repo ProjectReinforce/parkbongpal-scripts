@@ -86,7 +86,8 @@ public class QuestContent : MonoBehaviour
             }
             Debug.Log($"{targetData.questContent} 달성!");
             // 보상 획득 처리
-            getRewardButton.interactable = false;
+            // getRewardButton.interactable = false;
+            Cleared();
         });
     }
 

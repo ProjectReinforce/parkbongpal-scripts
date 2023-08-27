@@ -27,23 +27,29 @@ public class Store : Singleton<Store>
 
     public void Drawing(int type)
     {
-        try
+        if (type == 0)
         {
-            Player.Instance.AddGold(-COST_GOLD);
-      
-        }
-        catch (Exception e)
-        {
-            UIManager.Instance.ShowWarning("알림", e.Message);
-        }
-
-
-        if (!InventoryPresentor.Instance.CheckSize(1)){
-             UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+            if (!Player.Instance.AddGold(-COST_GOLD))
+            {
+                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
+            }
+        }
+        else
+        {
+            if (!Player.Instance.AddDiamond(-COST_DIAMOND))
+            {
+                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                return;
+            }
+        }
+        
+        if (!InventoryPresentor.Instance.CheckSize(1))
+        {
+            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+            return;
         }
 
-        
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
         BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
 
@@ -56,17 +62,22 @@ public class Store : Singleton<Store>
 
     public void BatchDrawing(int type)
     {
-        try
+        if (type == 0)
         {
-            Player.Instance.AddGold(-COST_GOLD * TEN);
-
-         
+            if (!Player.Instance.AddGold(-COST_GOLD * TEN))
+            {
+                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+                return;
+            }
         }
-        catch (Exception e)
+        else
         {
-            UIManager.Instance.ShowWarning("알림", e.Message);
+            if (!Player.Instance.AddDiamond(-COST_DIAMOND * TEN))
+            {
+                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                return;
+            }
         }
-
 
         if (!InventoryPresentor.Instance.CheckSize(10))
         {
