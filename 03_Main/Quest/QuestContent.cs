@@ -77,18 +77,43 @@ public class QuestContent : MonoBehaviour
             { nameof(QuestRecord.cleared), true }
         };
 
-        SendQueue.Enqueue(Backend.GameData.Insert, nameof(QuestRecord), param, callback =>
+        // SendQueue.Enqueue(Backend.GameData.Insert, nameof(QuestRecord), param, callback =>
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.LogError("게임 정보 삽입 실패 : " + callback);
+        //         return;
+        //     }
+        //     Debug.Log($"{targetData.questContent} 달성!");
+        //     // 보상 획득 처리
+        //     // getRewardButton.interactable = false;
+        //     Cleared();
+        // });
+
+        List<TransactionValue> transactionValues =  new();
+
+        transactionValues.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
+
+        void callback()
         {
-            if (!callback.IsSuccess())
-            {
-                Debug.LogError("게임 정보 삽입 실패 : " + callback);
-                return;
-            }
             Debug.Log($"{targetData.questContent} 달성!");
-            // 보상 획득 처리
-            // getRewardButton.interactable = false;
+            getRewardButton.interactable = false;
             Cleared();
-        });
+        }
+        Player.Instance.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
+        // transactionValues = Player.Instance.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
+        
+        // SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionValues, ( callback ) => 
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.LogError("게임 정보 삽입 실패 : " + callback);
+        //         return;
+        //     }
+        //     Debug.Log($"{targetData.questContent} 달성!");
+        //     getRewardButton.interactable = false;
+        //     Cleared();
+        // });
     }
 
     public void UpdateContent()

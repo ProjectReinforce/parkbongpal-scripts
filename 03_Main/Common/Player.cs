@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BackEnd;
 using Manager;
 using UnityEngine;
@@ -216,5 +217,36 @@ public class Player : DontDestroy<Player>
         AddStone(_oreCost);
         recordData.ModifyTryRefineRecord();
         AddExp(200);
+    }
+
+    // todo: 개선 필요
+    // public List<TransactionValue> GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond)
+    public void GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond, Action _callback = null)
+    {
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + _exp},
+            {nameof(UserData.colum.gold), Data.gold + _gold},
+            {nameof(UserData.colum.diamond), Data.diamond + _diamond}
+        };
+
+        _transactionValues.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
+
+        // return _transactionValues;
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, _transactionValues, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.LogError("게임 정보 삽입 실패 : " + callback);
+                return;
+            }
+            userData.exp += _exp;
+            topUIDatatViewer.UpdateExp();
+            userData.gold += _gold;
+            topUIDatatViewer.UpdateGold();
+            userData.diamond += _diamond;
+            topUIDatatViewer.UpdateDiamond();
+            _callback.Invoke();
+        });
     }
 }
