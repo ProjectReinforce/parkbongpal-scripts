@@ -82,10 +82,10 @@ public class RecordData
 
     public void LoadOrInitRecord(string _userInDate)
     {
-        // userID = PlayerPrefs.GetString("UserID");
+        userID = PlayerPrefs.GetString("UserID");
         
-        // if (_userInDate == UserID)
-        // {
+        if (_userInDate == UserID)
+        {
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
             // Debug.Log($"UsedGold : {useGold}");
             ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
@@ -106,8 +106,27 @@ public class RecordData
             ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
             uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
             // public uint GetItem = PlayerPrefs.GetString("UserID");
-        // }
-        //     userID = BackEnd.Backend.UserInDate;
+
+            return;
+        }
+        userID = BackEnd.Backend.UserInDate;
+        useGold = 0;
+        getGold = 0;
+        useDiamond = 0;
+        getDiamond = 0;
+        registerItem = 0;
+        disassembleItem = 0;
+        produceWeapon = 0;
+        advanceProduceWeapon = 0;
+        tryPromote = 0;
+        tryAdditional = 0;
+        tryReinforce = 0;
+        tryMagic = 0;
+        trySoul = 0;
+        tryRefine = 0;
+        attendance = 0;
+        getBonus = 0;
+        seeAds = 0;
     }
 
     public void ModifyGoldRecord(int _gold)
