@@ -52,10 +52,14 @@ public class Store : Singleton<Store>
 
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
         BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
-
+        if (rarity >= Rarity.legendary)
+        {
+            // 레전드리 획득 채팅 메시지 전송되도록
+            Debug.Log("<color=red>레전드리 획득!!</color>");
+            SendChat.SendMessage($"레전드리 <color=red>{baseWeaponData.name}</color> 획득!");
+        }
 
         inventory.AddWeapon(baseWeaponData);
-
     }
 
     private const int TEN = 10;
@@ -89,12 +93,13 @@ public class Store : Singleton<Store>
         for (int i = 0; i < TEN; i++)
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
+            baseWeaponDatas[i] = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
             {
                 // 레전드리 획득 채팅 메시지 전송되도록
                 Debug.Log("<color=red>레전드리 획득!!</color>");
+                SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
             }
-            baseWeaponDatas[i] = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
         }
 
         inventory.AddWeapons(baseWeaponDatas);
