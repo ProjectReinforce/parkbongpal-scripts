@@ -11,6 +11,7 @@ public class ChatManager : Manager.Singleton<ChatManager>
 
     protected  void Awake()
     {
+        base.Awake();
 
         CheckChatStatus();
     }

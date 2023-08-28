@@ -12,6 +12,10 @@ public class Login : MonoBehaviour
     //const string SCENE_NAME = "Main_V4";
     const string SCENE_NAME = "Main_V6_JG";
 
+    //const string SCENE_NAME = "Main_V6";
+    // const string SCENE_NAME = "Main_V6_HW";
+
+
     [SerializeField] GameObject LoginPopup;
     [SerializeField] Button tokenLoginButton;
     Coroutine processCoroutine;
@@ -30,6 +34,13 @@ public class Login : MonoBehaviour
         PlayGamesPlatform.DebugLogEnabled = true; // 디버그 로그를 보고 싶지 않다면 false로 바꿔주세요.
         //GPGS 시작.
         PlayGamesPlatform.Activate();
+
+        Invoke(nameof(AutoLoginOn), 2f);
+    }
+
+    void AutoLoginOn()
+    {
+        tokenLoginButton.interactable = true;
     }
 
     /// <summary>

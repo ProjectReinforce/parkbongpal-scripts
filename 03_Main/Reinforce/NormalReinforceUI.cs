@@ -8,6 +8,7 @@ public class NormalReinforceUI : ReinforceUIBase
     [SerializeField] Text[] currentSuccessCountText;
     [SerializeField] Image weaponIcon;
     [SerializeField] Text weaponNameText;
+    [SerializeField] Image arrowImage;
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
 
@@ -62,11 +63,13 @@ public class NormalReinforceUI : ReinforceUIBase
             item.text = $"+ {successCount}";
         if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
         {
-            nextSuccessCountText.text = $"+ {successCount}";
+            arrowImage.enabled = false;
+            nextSuccessCountText.text = "";
             upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
         }
         else
         {
+            arrowImage.enabled = true;
             nextSuccessCountText.text = $"+ {successCount + 1}";
             upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
         }

@@ -8,22 +8,9 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
     // [SerializeField] ReinforceUIInfo reinforceUIInfo;
     UnityEngine.UI.Image weaponIcon;
     Sprite nullIcon;
-    // [SerializeField] Weapon selectedWeapon;
-    // public Weapon SelectedWeapon
-    // {
-    //     get => selectedWeapon;
-    //     set
-    //     {
-    //         if (value is null) return;
-    //         selectedWeapon = value;
-    //         weaponIcon.sprite = selectedWeapon.sprite;
-    //         // reinforceUIInfo.ReinforceUI.SelectWeapon();
-    //     }
-    // }
 
     void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
         // transform.parent.TryGetComponent<ReinforceUIInfo>(out reinforceUIInfo);
         gameObject.transform.GetChild(1).TryGetComponent(out weaponIcon);
         nullIcon = weaponIcon.sprite;

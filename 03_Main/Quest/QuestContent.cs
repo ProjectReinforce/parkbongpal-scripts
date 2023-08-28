@@ -8,17 +8,44 @@ using BackEnd;
 public class QuestContent : MonoBehaviour
 {
     [SerializeField] Text descriptionText;
+    [SerializeField] Slider processSlider;
     [SerializeField] Text processText;
     [SerializeField] Image rewardIcon;
+    [SerializeField] Text rewardAmountText;
     [SerializeField] Button getRewardButton;
+    Transform dayContents;
+    Transform weekContents;
+    Transform onceIngContents;
+    Transform onceClearContents;
 
     // UIUpdater ui = new UIUpdater();
     bool isCleared;
     QuestData targetData;
+    // List<QuestData> targetDatas;
 
-    public void Initialize(QuestData _targetData)
+    public void Initialize(QuestData _targetData, Transform _dayContents, Transform _weekContents, Transform _onceIngContents, Transform _onceClearContents)
+    // public void Initialize(List<QuestData> _targetData)
     {
+        dayContents = _dayContents;
+        weekContents = _weekContents;
+        onceIngContents = _onceIngContents;
+        onceClearContents = _onceClearContents;
+
         targetData = _targetData;
+        // targetDatas = _targetData;
+
+        switch (targetData.questRepeatType)
+        {
+            case QuestType.Once:
+                transform.SetParent(onceIngContents);
+                break;
+            case QuestType.Day:
+                transform.SetParent(dayContents);
+                break;
+            case QuestType.Week:
+                transform.SetParent(weekContents);
+                break;
+        }
 
         getRewardButton.interactable = false;
         gameObject.SetActive(true);
@@ -29,6 +56,17 @@ public class QuestContent : MonoBehaviour
     public void Cleared()
     {
         isCleared = true;
+
+        switch (targetData.questRepeatType)
+        {
+            case QuestType.Once:
+                transform.SetParent(onceClearContents);
+                break;
+            case QuestType.Day:
+            case QuestType.Week:
+                transform.SetSiblingIndex(transform.parent.childCount - 1);
+                break;
+        }
     }
 
     void UpdateQuestRecord()
@@ -48,7 +86,8 @@ public class QuestContent : MonoBehaviour
             }
             Debug.Log($"{targetData.questContent} 달성!");
             // 보상 획득 처리
-            getRewardButton.interactable = false;
+            // getRewardButton.interactable = false;
+            Cleared();
         });
     }
 
@@ -119,12 +158,16 @@ public class QuestContent : MonoBehaviour
                 break;
         }
         if (current != -1)
+        {
             processText.text = $"{current} / {targetData.requestCount}";
+            processSlider.value = (float)current / targetData.requestCount;
+        }
         else
+        {
             processText.text = "";
+            processSlider.value = 0;
+        }
 
-        if (isCleared)
-            transform.SetSiblingIndex(transform.parent.childCount - 1);
         if (current >= targetData.requestCount && !isCleared)
         {
             getRewardButton.interactable = true;
