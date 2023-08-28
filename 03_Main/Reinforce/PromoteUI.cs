@@ -17,6 +17,7 @@ public class PromoteUI : ReinforceUIBase
     // todo: 리소스매니저에서 받아오도록 수정
     [SerializeField] Sprite[] slotSprites;
     Sprite basicSprite;
+    int cost;
 
     protected override void Awake()
     {
@@ -57,19 +58,20 @@ public class PromoteUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateWeaponImage();
+        
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => magicCarveButtonUI.CheckQualification());
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-cost));
     }
 
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
-        // int cost = 1000;
 
         if (userData.gold < cost)
         {

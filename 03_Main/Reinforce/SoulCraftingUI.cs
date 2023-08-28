@@ -8,6 +8,8 @@ public class SoulCraftingUI : ReinforceUIBase
     [SerializeField] Text upgradeCountText;
     [SerializeField] Text atkText;
     [SerializeField] Text soulCostText;
+    int goldCost;
+    int soulCost;
 
     void UpdateAtk()
     {
@@ -31,17 +33,21 @@ public class SoulCraftingUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateAtk();
+
+        goldCost = Manager.BackEndDataManager.Instance.soulCraftingData.goldCost;
+        // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
+        soulCost = 0;
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateAtk());
+        reinforceButton.onClick.AddListener(() => Player.Instance.TrySoulCraft(-goldCost, -soulCost));
     }
 
     bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        int goldCost = Manager.BackEndDataManager.Instance.soulCraftingData.goldCost;
 
         if (userData.gold >= goldCost)
         {
@@ -55,7 +61,6 @@ public class SoulCraftingUI : ReinforceUIBase
     bool CheckSoul()
     {
         UserData userData = Player.Instance.Data;
-        int soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
 
         if (userData.weaponSoul >= soulCost)
         {

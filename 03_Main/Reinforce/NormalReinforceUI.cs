@@ -11,6 +11,7 @@ public class NormalReinforceUI : ReinforceUIBase
     [SerializeField] Image arrowImage;
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
+    int cost;
 
     public void UpdateWeaponIcon()
     {
@@ -33,17 +34,19 @@ public class NormalReinforceUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateWeaponIcon();
+
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryNormalReinforce(-cost));
     }
 
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
 
         if (userData.gold < cost)
         {

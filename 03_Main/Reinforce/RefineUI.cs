@@ -8,6 +8,8 @@ public class RefineUI : ReinforceUIBase
     [SerializeField] Text[] resultStatTexts;
     [SerializeField] Text[] resultValueTexts;
     [SerializeField] Text stoneCostText;
+    int goldCost;
+    int oreCost;
 
     void UpdateStat()
     {
@@ -30,20 +32,24 @@ public class RefineUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateStat();
+
+        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+
+        goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
+        // oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
+        oreCost = 0;
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateStat());
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryRefine(-goldCost, -oreCost));
     }
 
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
-        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-
-        int goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
 
         if (userData.gold >= goldCost)
         {
@@ -57,10 +63,6 @@ public class RefineUI : ReinforceUIBase
     protected bool CheckOre()
     {
         UserData userData = Player.Instance.Data;
-        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
-        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-
-        int oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
 
         if (userData.stone >= oreCost)
         {

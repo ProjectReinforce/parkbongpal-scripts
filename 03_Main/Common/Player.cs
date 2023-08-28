@@ -144,7 +144,7 @@ public class Player : DontDestroy<Player>
     }
     public void ComparisonMineGameScore(int score)
     {
-        if(userData.mineGameScore<=score) return;
+        if (userData.mineGameScore <= score) return;
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }

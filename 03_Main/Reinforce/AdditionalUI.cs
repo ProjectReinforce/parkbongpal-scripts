@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class AdditionalUI : ReinforceUIBase
 {
     [SerializeField] Text atkText;
+    int cost;
 
     void UpdateAtk()
     {
@@ -26,18 +27,20 @@ public class AdditionalUI : ReinforceUIBase
 
     protected override void UpdateInformations()
     {
+        cost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
+
         UpdateAtk();
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateAtk());
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryAdditional(-cost));
     }
 
     bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        int cost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
 
         if (userData.gold < cost)
         {

@@ -42,8 +42,8 @@ public abstract class ReinforceUIBase : MonoBehaviour
         ActiveElements();
 
         // UI 업데이트
-        CheckQualification();
         UpdateInformations();
+        CheckQualification();
 
         // 버튼 클릭 이벤트 등록
         RegisterButtonClickEvent();

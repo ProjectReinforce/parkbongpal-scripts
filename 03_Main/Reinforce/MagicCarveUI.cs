@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MagicCarveUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSkillTexts;
+    int cost;
     // GameObject[] newSkills;
 
     void UpdateSkill()
@@ -27,19 +28,20 @@ public class MagicCarveUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateSkill();
+
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateSkill());
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryMagicCarve(-cost));
     }
 
     bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
-
         if (userData.gold < cost)
         {
             goldCostText.text = $"<color=red>{cost}</color>";
