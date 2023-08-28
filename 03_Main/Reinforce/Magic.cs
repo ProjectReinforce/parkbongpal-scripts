@@ -105,7 +105,7 @@ public class Sulsu:Magic //술수
     /*  0	술수	100	무기에 무언가 술수를 부림.	광석 내구도를 초과한 대미지가 다른 광석에 전달됩니다.*/
     public override float GetHpPerDMG()
     {
-         return  GetMineData().hp / GetOneHitDMG() *coefficient*(1/100);
+         return  GetMineData().hp  *coefficient*(1/100)/ GetOneHitDMG();
     }
 }
 
