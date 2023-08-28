@@ -69,7 +69,6 @@ public class Mine :MonoBehaviour,Rental,ISlotable
 
     public void SetCurrent()// *dip 위배중, 리팩토링 대상.
     {
-        Debug.Log("@#@# 싱글톤 바꾸고 확인할거"+Quarry.Instance);
         Quarry.Instance.currentMine = this;
     }
 
@@ -94,8 +93,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     }
 
     //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
-    private TimeSpan timeInterval;
-    public void SetWeapon(Weapon rentWeapon)
+   
+    public void SetWeapon(Weapon rentWeapon, DateTime currentTime = default)
     {
 
         if (rentalWeapon == rentWeapon) return;
@@ -117,10 +116,13 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         SetInfo();
         
         rentalWeapon = rentWeapon;
+        SetGold(currentTime);
+    }
 
-        timeInterval =
-            DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()) -
-            rentalWeapon.data.borrowedDate;
+    public void SetGold(DateTime currentTime)
+    {
+        if (rentalWeapon is null) return;
+        TimeSpan timeInterval = currentTime - rentalWeapon.data.borrowedDate;
         if (timeInterval.TotalHours >= 2)
             timeInterval = TimeSpan.FromHours(2);
        
@@ -129,7 +131,6 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         
         goldText.text = gold.ToString();
     }
-
     public void SetInfo()
     {
         

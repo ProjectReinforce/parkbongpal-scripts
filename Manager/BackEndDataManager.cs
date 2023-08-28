@@ -40,7 +40,7 @@ namespace Manager
         }
 
         public Sprite[] weaponRaritySlot;
-        
+       
         public Sprite EmptySprite;
         
         Sprite[] baseWeaponSprites;
@@ -304,8 +304,6 @@ namespace Manager
 
                     void DecompositDataProcess(Decomposit[] data)
                     {
-                        Debug.Log("@@#@#");
-                        Debug.Log(data);
                         DecompositData = data;
                     }
 
