@@ -212,11 +212,14 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         
     }
 
+    bool isUnlock;
     public string Unlock(int playerLevel)
     {
-        if (_mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
+         
+        if (isUnlock || _mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
         myButton.enabled = true;
         selfImage.sprite = BackEndDataManager.Instance.EmptySprite;
+        isUnlock = true;
         return _mineData.name;
     }
 }
