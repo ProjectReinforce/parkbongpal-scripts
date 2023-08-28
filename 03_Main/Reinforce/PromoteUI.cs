@@ -11,6 +11,7 @@ public class PromoteUI : ReinforceUIBase
     [SerializeField] Image currentRarityNameImage;
     [SerializeField] Text currentRarityNameText;
     [SerializeField] Image[] weaponIcons;
+    [SerializeField] MagicCarveButtonUI magicCarveButtonUI;
 
     void UpdateWeaponIcon()
     {
@@ -36,6 +37,7 @@ public class PromoteUI : ReinforceUIBase
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() => magicCarveButtonUI.CheckQualification());
     }
 
     protected bool CheckGold()

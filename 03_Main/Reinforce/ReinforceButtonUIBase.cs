@@ -11,7 +11,7 @@ public abstract class ReinforceButtonUIBase : MonoBehaviour
     protected GameObject qualificationUI;
     protected Text qualificationText;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         TryGetComponent(out reinforceButton);
         qualificationUI = transform.GetChild(2).gameObject;
@@ -29,7 +29,7 @@ public abstract class ReinforceButtonUIBase : MonoBehaviour
         qualificationUI.SetActive(true);
     }
 
-    protected void CheckQualification()
+    public void CheckQualification()
     {
         if (reinforceManager.SelectedWeapon != null && Checks())
         {

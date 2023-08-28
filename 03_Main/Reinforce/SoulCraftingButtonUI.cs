@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class SoulCraftingButtonUI : ReinforceButtonUIBase
 {
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Player.Instance.Record.levelUpEvent -= CheckQualification;
+        Player.Instance.Record.levelUpEvent += CheckQualification;
+    }
+    
     protected override bool Checks()
     {
         if (Player.Instance.Data.level < 25)
