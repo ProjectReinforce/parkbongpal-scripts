@@ -65,7 +65,8 @@ public enum RewardType
     Exp,
     Gold,
     Diamond,
-    Weapon
+    Soul,
+    Stone
 }
 
 public enum RecordType

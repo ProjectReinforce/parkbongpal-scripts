@@ -92,7 +92,8 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
                throw  new Exception("광산에 대여해준 무기입니다.");
            int beforeGoldPerMin = tempMine.goldPerMin;
            currentWeapon.SetBorrowedDate();
-           tempMine.SetWeapon(currentWeapon);
+           
+           tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
        }
        catch (Exception e)

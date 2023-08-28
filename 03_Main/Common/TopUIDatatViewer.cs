@@ -13,12 +13,13 @@ public class TopUIDatatViewer : MonoBehaviour
     [SerializeField] Text diamondText;
     Player player;
 
-    void Start()
+    public void Initialize()
     {
         player = Player.Instance;
 
         AllInfoUpdate();
     }
+
 
     public void AllInfoUpdate()
     {

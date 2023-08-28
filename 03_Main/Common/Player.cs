@@ -20,9 +20,10 @@ public class Player : DontDestroy<Player>
 
         recordData = new RecordData();
         recordData.LoadOrInitRecord(userData.inDate);
-        
+        topUIDatatViewer.Initialize();
         inventoryUIViwer.SetStone(userData.stone);
         inventoryUIViwer.SetSoul(userData.weaponSoul);
+        
     }
 
     void UpdateBackEndData(string columnName, int _data)
