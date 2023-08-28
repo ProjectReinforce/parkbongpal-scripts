@@ -94,7 +94,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
 
     //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
    
-    public void SetWeapon(Weapon rentWeapon, DateTime currentTime = default)
+    public void SetWeapon(Weapon rentWeapon, DateTime currentTime=default )// 해제 함수와 분리해야함
     {
 
         if (rentalWeapon == rentWeapon) return;
