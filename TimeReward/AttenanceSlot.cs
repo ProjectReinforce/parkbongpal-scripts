@@ -25,7 +25,6 @@ public class AttenanceSlot:MonoBehaviour
     }
     public void SetToday(Sprite _whatDay)
     {
-        Debug.Log("@#@#@#@@@@@@@@@@@"+_whatDay);
         RectTransform date = whatDay.gameObject.GetComponent<RectTransform>();
         date.sizeDelta = new Vector2(60, 50);
         whatDay.sprite = _whatDay;

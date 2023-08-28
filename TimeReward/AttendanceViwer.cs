@@ -27,7 +27,6 @@ public class AttendanceViwer:MonoBehaviour //출석부 상태 보여주는 역�
 
     public void TodayCheck(int today)
     {
-        Debug.Log("첵크 오늘"+today);
         if (today >= dataLength)//2
             today = dataLength-1;
         
