@@ -7,10 +7,11 @@ public class AttendanceViwer:MonoBehaviour //출석부 상태 보여주는 역�
     [SerializeField] Sprite[] icons;
     [SerializeField] Sprite[] days;
     [SerializeField] AttenanceSlot slot;
-    AttenanceSlot[] slots; 
+    AttenanceSlot[] slots;
+    private int dataLength;
     public void Initialize()
     {
-        int dataLength = BackEndDataManager.Instance.attendanceDatas.Length;
+        dataLength = BackEndDataManager.Instance.attendanceDatas.Length;
         slots = new AttenanceSlot[dataLength];
         for (int i = 0; i < dataLength; i++)
         {
@@ -27,6 +28,9 @@ public class AttendanceViwer:MonoBehaviour //출석부 상태 보여주는 역�
     public void TodayCheck(int today)
     {
         Debug.Log("첵크 오늘"+today);
+        if (today >= dataLength)//2
+            today = dataLength-1;
+        
         for (int i = 0; i < today; i++)
         {
             slots[i].CheckStamp();

@@ -27,6 +27,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     Mine[] mines;
     [SerializeField] GameObject quarry;
+    int mineCount;
     protected override void Awake()
     {
         base.Awake();
@@ -34,12 +35,10 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
-        int mineCount = BackEndDataManager.Instance.mineDatas.Length;
+        mineCount = BackEndDataManager.Instance.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
         {
-            if (i >= mines.Length)
-                break;
             mines[i].Initialized(BackEndDataManager.Instance.mineDatas[i]);
             mines[i].Unlock(BackEndDataManager.Instance.userData.level);
         }
@@ -47,13 +46,25 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
 
     private void Start()
     {
+        DateTime currentTime =
+            DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         InventoryPresentor.Instance.travelInventory((weapon) =>
         {
             if (weapon?.data.mineId >= 0)
             {
-                mines[weapon.data.mineId].SetWeapon(weapon);
+                mines[weapon.data.mineId].SetWeapon(weapon,currentTime);
             }
         });
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        DateTime currentTime =
+            DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        for (int i = 0; i < mineCount; i++)
+        {
+            mines[i].SetGold(currentTime);
+        }
     }
     
 
