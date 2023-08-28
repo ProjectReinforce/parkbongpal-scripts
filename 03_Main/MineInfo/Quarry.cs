@@ -104,10 +104,10 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         int limit = 0;
         
         List<TransactionValue> transactionList = new List<TransactionValue>();
-        
         for (int i = 0; i < mines.Length; i++)
         {
             if(mines[i].rentalWeapon is null)continue;
+            mines[i].rentalWeapon.SetBorrowedDate(date);
             totalGold += mines[i].Gold;
             limit++;
             if (limit>10)
@@ -127,7 +127,9 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             {
                 { nameof(WeaponData.colum.borrowedDate), date }
             };
+            
             transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+            
         }
         SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
         {

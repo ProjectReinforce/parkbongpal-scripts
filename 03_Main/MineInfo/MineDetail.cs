@@ -103,6 +103,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
        }
        if (currentMineWeapon is not null)
        {
+           tempMine.Receipt();
            currentMineWeapon.Lend(-1);
        }
        currentWeapon.Lend(tempMine.GetMineData().index);
