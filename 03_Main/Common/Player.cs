@@ -121,6 +121,9 @@ public class Player : DontDestroy<Player>
         UpdateBackEndData(nameof(UserData.colum.level), userData.level);
         topUIDatatViewer.UpdateLevel();
         Quarry.Instance.UnlockMines(userData.level);
+
+        if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
+            LevelUp();
     }
     
     public void SetFavoriteWeaponId(int _weaponId)
@@ -175,24 +178,28 @@ public class Player : DontDestroy<Player>
     {
         AddGold(_goldCost);
         recordData.ModifyTryPromoteRecord();
+        AddExp(50);
     }
 
     public void TryAdditional(int _goldCost)
     {
         AddGold(_goldCost);
         recordData.ModifyTryAdditionalRecord();
+        AddExp(65);
     }
 
     public void TryNormalReinforce(int _goldCost)
     {
         AddGold(_goldCost);
         recordData.ModifyTryReinforceRecord();
+        AddExp(50);
     }
 
     public void TryMagicCarve(int _goldCost)
     {
         AddGold(_goldCost);
         recordData.ModifyTryMagicRecord();
+        AddExp(65);
     }
 
     public void TrySoulCraft(int _goldCost, int _soulCost)
@@ -200,6 +207,7 @@ public class Player : DontDestroy<Player>
         AddGold(_goldCost);
         AddSoul(_soulCost);
         recordData.ModifyTrySoulRecord();
+        AddExp(130);
     }
 
     public void TryRefine(int _goldCost, int _oreCost)
@@ -207,5 +215,6 @@ public class Player : DontDestroy<Player>
         AddGold(_goldCost);
         AddStone(_oreCost);
         recordData.ModifyTryRefineRecord();
+        AddExp(200);
     }
 }
