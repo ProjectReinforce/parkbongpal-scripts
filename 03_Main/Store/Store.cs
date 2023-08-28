@@ -27,6 +27,12 @@ public class Store : Singleton<Store>
 
     public void Drawing(int type)
     {
+        if (!InventoryPresentor.Instance.CheckSize(1))
+        {
+            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+            return;
+        }
+
         if (type == 0)
         {
             if (!Player.Instance.AddGold(-COST_GOLD))
@@ -43,12 +49,6 @@ public class Store : Singleton<Store>
                 return;
             }
         }
-        
-        if (!InventoryPresentor.Instance.CheckSize(1))
-        {
-            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
-            return;
-        }
 
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
         BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
@@ -62,6 +62,12 @@ public class Store : Singleton<Store>
 
     public void BatchDrawing(int type)
     {
+        if (!InventoryPresentor.Instance.CheckSize(10))
+        {
+            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+                return;
+        }
+
         if (type == 0)
         {
             if (!Player.Instance.AddGold(-COST_GOLD * TEN))
@@ -77,12 +83,6 @@ public class Store : Singleton<Store>
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
             }
-        }
-
-        if (!InventoryPresentor.Instance.CheckSize(10))
-        {
-            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
-                return;
         }
  
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
