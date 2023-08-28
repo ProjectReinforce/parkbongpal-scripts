@@ -83,7 +83,7 @@ public class Decomposition : Singleton<Decomposition>
         
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
         
-        sellected.SetActive(findingSlot is null);
+        
         if (findingSlot is null)
         {
             breakSlot a = Instantiate(prefab, contentBox.transform);
@@ -99,15 +99,17 @@ public class Decomposition : Singleton<Decomposition>
             breakSlots.Remove(a);
             Destroy(a.gameObject);
         }
+        sellected.SetActive(findingSlot is null);
     }
 
     public void Reset()
     {
-        _isDecompositing = false;
-        foreach (Slot slot in slots)
+        while (slots.Count>0)
         {
-            slot.SetCurrent();
+            slots.First.Value.SetCurrent();
         }
+        _isDecompositing = false;
+        
         
         foreach (var breakSlot in breakSlots)
         {
@@ -119,6 +121,7 @@ public class Decomposition : Singleton<Decomposition>
         slots.Clear();
         breakSlots.Clear();
         breakUI.SetActive(false);
+        okUI.gameObject.SetActive(false);
         InventoryPresentor.Instance.currentWeapon = null;
 
     }

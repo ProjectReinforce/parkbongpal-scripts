@@ -37,7 +37,10 @@ public class Weapon
         SetPower();
         myslot = slot;
     }
-
+    public void SetBorrowedDate(DateTime time)
+    {
+        _data.borrowedDate = time;
+    }
     public void SetBorrowedDate()
     {
         _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());

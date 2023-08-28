@@ -122,7 +122,9 @@ public class Mine :MonoBehaviour,Rental,ISlotable
     public void SetGold(DateTime currentTime)
     {
         if (rentalWeapon is null) return;
+        
         TimeSpan timeInterval = currentTime - rentalWeapon.data.borrowedDate;
+  
         if (timeInterval.TotalHours >= 2)
             timeInterval = TimeSpan.FromHours(2);
        
@@ -166,9 +168,9 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         if(rentalWeapon is null) return;
         Player.Instance.AddGold(Gold);
         gold = 0;
-        
+        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.borrowedDate),DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()));
+        param.Add(nameof(WeaponData.colum.borrowedDate),date);
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), rentalWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -177,9 +179,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
                 Debug.Log("Mine:수령실패"+callback);
             }
         });
-        
+        rentalWeapon.SetBorrowedDate(date);
         goldText.text = gold.ToString();
-        
     }
 
     const float INTERVAL = 2;
