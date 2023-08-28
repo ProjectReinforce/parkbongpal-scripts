@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Manager
 {
@@ -18,6 +19,9 @@ namespace Manager
             base.Awake();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             mainTap = currentTap;
+
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         void Update()
@@ -26,6 +30,11 @@ namespace Manager
             {
                 InMainThreadQueue.Dequeue().Invoke();
             }
+        }
+
+        void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)
+        {
+            Debug.Log(_scene.name);
         }
 
         public void MainEnqueue(Action _action)
