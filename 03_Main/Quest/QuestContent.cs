@@ -47,6 +47,8 @@ public class QuestContent : MonoBehaviour
                 break;
         }
 
+        transform.localScale = Vector3.one;
+
         getRewardButton.interactable = false;
         gameObject.SetActive(true);
 
