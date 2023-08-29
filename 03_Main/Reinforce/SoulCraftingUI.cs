@@ -20,9 +20,11 @@ public class SoulCraftingUI : ReinforceUIBase
         atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.SoulStat[(int)StatType.atk]}%</color>))";
     }
 
-    protected override void ActiveElements()
+    protected override void UpdateCosts()
     {
-        upgradeCountText.transform.parent.gameObject.SetActive(true);
+        goldCost = Manager.BackEndDataManager.Instance.soulCraftingData.goldCost;
+        // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
+        soulCost = 0;
     }
 
     protected override void DeactiveElements()
@@ -30,19 +32,24 @@ public class SoulCraftingUI : ReinforceUIBase
         upgradeCountText.transform.parent.gameObject.SetActive(false);
     }
 
+    protected override void ActiveElements()
+    {
+        upgradeCountText.transform.parent.gameObject.SetActive(true);
+    }
+
     protected override void UpdateInformations()
     {
         UpdateAtk();
+    }
 
-        goldCost = Manager.BackEndDataManager.Instance.soulCraftingData.goldCost;
-        // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
-        soulCost = 0;
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TrySoulCraft(-goldCost, -soulCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateAtk());
-        reinforceButton.onClick.AddListener(() => Player.Instance.TrySoulCraft(-goldCost, -soulCost));
     }
 
     bool CheckGold()

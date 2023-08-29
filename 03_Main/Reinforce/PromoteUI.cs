@@ -17,7 +17,6 @@ public class PromoteUI : ReinforceUIBase
     // todo: 리소스매니저에서 받아오도록 수정
     [SerializeField] Sprite[] slotSprites;
     Sprite basicSprite;
-    int cost;
 
     protected override void Awake()
     {
@@ -42,43 +41,53 @@ public class PromoteUI : ReinforceUIBase
             item.sprite = weapon.sprite;
 
         weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
-        weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
+        if (weapon.data.rarity != (int)Rarity.legendary)
+            weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
+        else
+            weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
 
         weaponNameText.text = weapon.name;
     }
 
-    protected override void ActiveElements()
+    protected override void UpdateCosts()
     {
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        goldCost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()
     {
     }
 
+    protected override void ActiveElements()
+    {
+    }
+
     protected override void UpdateInformations()
     {
         UpdateWeaponImage();
-        
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+    }
+
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => magicCarveButtonUI.CheckQualification());
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-cost));
     }
 
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
 
-        if (userData.gold < cost)
+        if (userData.gold < goldCost)
         {
-            goldCostText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{goldCost}</color>";
             return false;
         }
-        goldCostText.text = $"<color=white>{cost}</color>";
+        goldCostText.text = $"<color=white>{goldCost}</color>";
         return true;
     }
 

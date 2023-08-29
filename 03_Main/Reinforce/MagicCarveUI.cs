@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class MagicCarveUI : ReinforceUIBase
 {
     [SerializeField] Text[] currentSkillTexts;
-    int cost;
     // GameObject[] newSkills;
 
     void UpdateSkill()
@@ -17,37 +16,44 @@ public class MagicCarveUI : ReinforceUIBase
         currentSkillTexts[1].text = weapon is not null && weapon.data.magic[1] != -1 ? $"{(MagicType)weapon.data.magic[1]}" : "";
     }
 
-    protected override void ActiveElements()
+    protected override void UpdateCosts()
     {
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        goldCost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()
     {
     }
 
+    protected override void ActiveElements()
+    {
+    }
+
     protected override void UpdateInformations()
     {
         UpdateSkill();
+    }
 
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryMagicCarve(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateSkill());
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryMagicCarve(-cost));
     }
 
     bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
-        if (userData.gold < cost)
+        if (userData.gold < goldCost)
         {
-            goldCostText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{goldCost}</color>";
             return false;
         }
-        goldCostText.text = $"<color=white>{cost}</color>";
+        goldCostText.text = $"<color=white>{goldCost}</color>";
         return true;
     }
 

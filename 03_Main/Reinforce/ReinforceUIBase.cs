@@ -10,6 +10,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
     [SerializeField] protected Text goldCostText;
     [SerializeField] protected Button reinforceButton;
     protected ReinforceManager reinforceManager;
+    protected int goldCost;
 
     protected virtual void Awake()
     {
@@ -46,21 +47,26 @@ public abstract class ReinforceUIBase : MonoBehaviour
         CheckQualification();
 
         // 버튼 클릭 이벤트 등록
+        reinforceButton.onClick.RemoveAllListeners();
+        RegisterPreviousButtonClickEvent();
         RegisterButtonClickEvent();
         RegisterAdditionalButtonClickEvent();
     }
 
-    protected abstract void ActiveElements();
+    protected abstract void UpdateCosts();
 
     protected abstract void DeactiveElements();
 
+    protected abstract void ActiveElements();
+
     protected abstract void UpdateInformations();
+
+    protected abstract void RegisterPreviousButtonClickEvent();
 
     protected abstract void RegisterAdditionalButtonClickEvent();
 
     protected void RegisterButtonClickEvent()
     {
-        reinforceButton.onClick.RemoveAllListeners();
         reinforceButton.onClick.AddListener(() =>
             reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType)
         );
@@ -70,6 +76,8 @@ public abstract class ReinforceUIBase : MonoBehaviour
     public void CheckQualification()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
+
+        UpdateCosts();
         
         if (weapon is not null && Checks())
             reinforceButton.interactable = true;

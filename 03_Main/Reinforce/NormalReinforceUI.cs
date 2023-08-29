@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,6 @@ public class NormalReinforceUI : ReinforceUIBase
     [SerializeField] Image arrowImage;
     [SerializeField] Text nextSuccessCountText;
     [SerializeField] Text upgradeCountText;
-    int cost;
 
     public void UpdateWeaponIcon()
     {
@@ -19,6 +19,13 @@ public class NormalReinforceUI : ReinforceUIBase
 
         weaponIcon.sprite = weapon.sprite;
         weaponNameText.text = weapon.name;
+    }
+
+    protected override void UpdateCosts()
+    {
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
+        goldCost = BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)baseWeaponData.rarity);
     }
 
     protected override void ActiveElements()
@@ -34,26 +41,27 @@ public class NormalReinforceUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateWeaponIcon();
+    }
 
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        cost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryNormalReinforce(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryNormalReinforce(-cost));
     }
 
     protected bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
 
-        if (userData.gold < cost)
+        if (userData.gold < goldCost)
         {
-            goldCostText.text = $"<color=red>{cost}</color>";
+            goldCostText.text = $"<color=red>{goldCost}</color>";
             return false;
         }
-        goldCostText.text = $"<color=white>{cost}</color>";
+        goldCostText.text = $"<color=white>{goldCost}</color>";
         return true;
     }
 

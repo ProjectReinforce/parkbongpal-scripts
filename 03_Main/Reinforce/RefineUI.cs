@@ -8,7 +8,6 @@ public class RefineUI : ReinforceUIBase
     [SerializeField] Text[] resultStatTexts;
     [SerializeField] Text[] resultValueTexts;
     [SerializeField] Text stoneCostText;
-    int goldCost;
     int oreCost;
 
     void UpdateStat()
@@ -21,18 +20,8 @@ public class RefineUI : ReinforceUIBase
         }
     }
 
-    protected override void ActiveElements()
+    protected override void UpdateCosts()
     {
-    }
-
-    protected override void DeactiveElements()
-    {
-    }
-
-    protected override void UpdateInformations()
-    {
-        UpdateStat();
-
         RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
@@ -41,10 +30,27 @@ public class RefineUI : ReinforceUIBase
         oreCost = 0;
     }
 
+    protected override void DeactiveElements()
+    {
+    }
+
+    protected override void ActiveElements()
+    {
+    }
+
+    protected override void UpdateInformations()
+    {
+        UpdateStat();
+    }
+
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() => Player.Instance.TryRefine(-goldCost, -oreCost));
+    }
+
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateStat());
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryRefine(-goldCost, -oreCost));
     }
 
     protected bool CheckGold()
