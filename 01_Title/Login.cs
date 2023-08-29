@@ -6,13 +6,14 @@ using UnityEngine.UI;
 using BackEnd;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using Manager;
 
 public class Login : MonoBehaviour
 {
     //const string SCENE_NAME = "Main_V6_JG";
 
-    const string SCENE_NAME = "Main_V6";
-    // const string SCENE_NAME = "Main_V6_HW";
+    // const string SCENE_NAME = "Main_V6";
+    const string SCENE_NAME = "Main_V6_HW";
 
 
     [SerializeField] GameObject LoginPopup;

@@ -8,6 +8,24 @@ namespace Manager
 {
     public class GameManager: DontDestroy<GameManager>
     {
+        public bool SoundOn
+        {
+            get
+            {
+                int sound = PlayerPrefs.GetInt("SoundOption");
+                Debug.Log($"사운드 : {sound} 불러옴");
+                if (sound != 0)
+                    return true;
+                else
+                    return false;
+            }
+            set
+            {
+                int sound = value == true ? 1 : 0; 
+                PlayerPrefs.SetInt("SoundOption", sound);
+                Debug.Log($"사운드 : {sound} 저장됨");
+            }
+        }
 
         Stack<GameObject> uiStack = new();
         [SerializeField]GameObject currentTap;
