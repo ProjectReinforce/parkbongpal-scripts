@@ -21,6 +21,11 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
     {
         slotViwer.ViewUpdate(myWeapon);
     }
+
+    public void UpdateSlot(Weapon weapon)
+    {
+        slotViwer.ViewUpdate(weapon);
+    }
     
     public void SetWeapon(Weapon weapon)
     {

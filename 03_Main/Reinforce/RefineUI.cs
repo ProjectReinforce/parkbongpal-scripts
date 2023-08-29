@@ -9,6 +9,8 @@ public class RefineUI : ReinforceUIBase
 {
     [SerializeField] Image[] statIndicators;
     [SerializeField] Text[] resultStatTexts;
+    [SerializeField] Text[] previousValueTexts;
+    [SerializeField] Image[] arrowImages;
     [SerializeField] Text[] resultValueTexts;
     [SerializeField] Text stoneCostText;
     int oreCost;
@@ -43,11 +45,31 @@ public class RefineUI : ReinforceUIBase
                 statIndicators[i].color = Color.green;
         }
 
-        if (reinforceManager.RefineResults is null) return;
+        if (reinforceManager.RefineResults is null)
+        {
+            for (int i = 0; i < resultStatTexts.Length; i++)
+            {
+                resultStatTexts[i].text = "";
+                previousValueTexts[i].text = "";
+                arrowImages[i].enabled = false;
+                resultValueTexts[i].text = "";
+            }
+
+            return;
+        }
         for (int i = 0; i < reinforceManager.RefineResults.Length; i++)
         {
             resultStatTexts[i].text = $"{(StatTypeKor)reinforceManager.RefineResults[i].stat}";
-            resultValueTexts[i].text = $"{reinforceManager.RefineResults[i].value}";
+            previousValueTexts[i].text = $"{reinforceManager.RefineResults[i].previousValue}";
+            arrowImages[i].enabled = true;
+            int after = reinforceManager.RefineResults[i].value;
+            int sum = reinforceManager.RefineResults[i].previousValue + after;
+            if (after > 0)
+                resultValueTexts[i].text = $"{sum} <color=green>(+ {after})</color>";
+            else if (after == 0)
+                resultValueTexts[i].text = $"{sum} <color=white>(+ {after})</color>";
+            else
+                resultValueTexts[i].text = $"{sum} <color=red>(+ {after})</color>";
         }
     }
 

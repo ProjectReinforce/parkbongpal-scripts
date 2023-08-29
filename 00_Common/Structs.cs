@@ -415,11 +415,13 @@ public struct RefineResult
 {
     public StatType stat;
     public int value;
+    public int previousValue;
 
-    public RefineResult(StatType _stat, int _value)
+    public RefineResult(StatType _stat, int _value, int _previousValue)
     {
         stat = _stat;
         value = _value;
+        previousValue = _previousValue;
     }
 }
 

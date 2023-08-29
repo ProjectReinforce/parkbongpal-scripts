@@ -28,6 +28,7 @@ public class Promote : Reinforce
 
         // Player.Instance.AddGold(-1000);
         // Player.Instance.TryPromote(-1);
+        weapon.myslot.UpdateSlot(weapon);
         weapon.SetPower();
     }
 }
@@ -259,13 +260,15 @@ public class Refinement : Reinforce
             int[] percentDescription = {-3, -1, 0, 1, 3, 5};
             
             resultIndex = Utills.GetResultFromWeightedRandom(percentPercent);
+            int previousValue = 0;
             if (resultIndex != -1)
             {
                 // Debug.Log($"result {i} : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
+                previousValue = weapon.data.RefineStat[(int)resultStat];
                 weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
             }
 
-            RefineResult refineResult = new(resultStat, percentDescription[resultIndex]);
+            RefineResult refineResult = new(resultStat, percentDescription[resultIndex], previousValue);
             refineResults[i] = refineResult;
         }
 
