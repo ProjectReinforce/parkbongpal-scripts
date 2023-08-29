@@ -52,6 +52,23 @@ public enum StatType
     upgradeCount, atk, atkSpeed, atkRange, accuracy, criticalRate, criticalDamage, strength, intelligence, wisdom, technique, charm, constitution
 }
 
+public enum StatTypeKor
+{
+    업그레이드횟수,
+    공격력,
+    공격속도,
+    공격범위,
+    정확도,
+    치명타율,
+    치명타피해,
+    근력,
+    지능,
+    지혜,
+    기교,
+    매력,
+    체질
+}
+
 public enum InventoryOpenType
 {
     Default,
