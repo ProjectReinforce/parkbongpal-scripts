@@ -212,8 +212,9 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
          smithyButton.onClick.RemoveAllListeners();
          smithyButton.onClick.AddListener(() =>
          {
+             Weapon weapon = currentWeapon;
              GameManager.Instance.MoveTap(smithy);// todo:서순 바꿔야함
-             ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+             ReinforceManager.Instance.SelectedWeapon = weapon;
          });
      }
 
