@@ -26,7 +26,7 @@ public enum Collection
 
 public enum MagicType
 {
-    자,축,인,묘,진,사,오,미,신,유,술,해
+    술,묘,유,신,인,해,오,자,진,축,미,사
 }
 
 public enum ChartName

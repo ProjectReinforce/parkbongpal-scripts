@@ -162,10 +162,13 @@ public class Mine :MonoBehaviour,Rental,ISlotable
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
     }
-    
+
+    private bool isReceipting;
     public void Receipt()
     {
         if(rentalWeapon is null) return;
+        if(isReceipting) return;
+        isReceipting = true;
         Player.Instance.AddGold(Gold);
         gold = 0;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
@@ -178,9 +181,10 @@ public class Mine :MonoBehaviour,Rental,ISlotable
             {
                 Debug.Log("Mine:수령실패"+callback);
             }
+            rentalWeapon.SetBorrowedDate(date);
+            goldText.text = gold.ToString();
+            isReceipting = false;
         });
-        rentalWeapon.SetBorrowedDate(date);
-        goldText.text = gold.ToString();
     }
 
     const float INTERVAL = 2;
