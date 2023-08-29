@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PromoteUI : ReinforceUIBase
+public class PromoteUI : ReinforceUIBase,IInventoryOption
 {
     [SerializeField] Image nextRarityNameImage;
     [SerializeField] Text nextRarityNameText;
@@ -31,20 +32,29 @@ public class PromoteUI : ReinforceUIBase
 
         foreach (var item in weaponSlots)
             item.sprite = basicSprite;
+        
+        for (int i = 0; i < ReinforceManager.Instance.SelectedMaterials.Length; i++)
+        {
+            ReinforceManager.Instance.SelectedMaterials[i] = null;
+        }
     }
 
     void UpdateWeaponImage()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
-        foreach (var item in weaponIcons)
-            item.sprite = weapon.sprite;
+        for (int i =0; i<2; i++){
+            weaponIcons[i].sprite = weapon.sprite;
+        }
+            
 
         weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
         if (weapon.data.rarity != (int)Rarity.legendary)
             weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
         else
             weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
+        
+        
 
         weaponNameText.text = weapon.name;
     }
@@ -70,6 +80,7 @@ public class PromoteUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
+        //ReinforceManager.Instance.SelectedMaterials
         reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
     }
 
@@ -143,4 +154,38 @@ public class PromoteUI : ReinforceUIBase
         if (CheckGold() && CheckRarity()) return true;
         return false;
     }
+
+    
+    [SerializeField] Button confirm;
+    [SerializeField] Text confirmText;
+    private int selectedMaterialIndex;
+    public void SetConfirm(int index)
+    {
+        selectedMaterialIndex = index;
+        InventoryPresentor.Instance.SetInventoryOption(this);
+    }
+
+    public void OptionOpen()
+    {
+        confirmText.text = $"재료 확정";
+        confirm.onClick.RemoveAllListeners();
+        confirm.onClick.AddListener(() =>
+        {
+            Weapon weapon =  InventoryPresentor.Instance.currentWeapon;
+            if (weapon.data.rarity != reinforceManager.SelectedWeapon.data.rarity)
+            {
+                UIManager.Instance.ShowWarning($"알림",$"선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
+                return;
+            }
+            weaponSlots[selectedMaterialIndex+2].sprite = slotSprites[weapon.data.rarity];
+            weaponIcons[selectedMaterialIndex+2].sprite = weapon.sprite;
+            ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
+            
+            InventoryPresentor.Instance.CloseInventory();
+            
+        });
+    }
+
+    public void OptionClose() {    }
+    
 }

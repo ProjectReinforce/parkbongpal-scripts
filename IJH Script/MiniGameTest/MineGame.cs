@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MineGame : MonoBehaviour
+public class MineGame : Singleton<MineGame>
 {
     [SerializeField] TimerControl timerControl;
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
     [SerializeField] Button mainButton;
     [SerializeField] GameObject resultPanel;
+    
     bool isAttackAble = false;
 
     public void Resume()
@@ -25,8 +26,14 @@ public class MineGame : MonoBehaviour
         timerControl.StopOperating();
     }
 
+    public Weapon currentWeapon { get; set; }
+    [SerializeField] WeaponBringer weaponBringer;
+    [SerializeField] GameObject inventory;
+    
     void OnEnable() // 게임을 다시 켰을때도 초기화
     {
+        InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
+        GameManager.Instance.OpenPopup(inventory);
         ResetGame();
     }
     
@@ -93,4 +100,6 @@ public class MineGame : MonoBehaviour
             }
         }
     }
+
+ 
 }

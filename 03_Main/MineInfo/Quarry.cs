@@ -92,14 +92,18 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         currentMine = currentMine;
     }
     
+    
     public void Receipt()
     {
         currentMine.Receipt();
     }
 
     private int totalGold;
+    private bool isReceipting;
     public void BatchReceipt()
     {
+        if(isReceipting) return;
+        isReceipting = true;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
 
         int limit = 0;
@@ -146,6 +150,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             {
                 mines[i].Gold = 0;
             }
+            isReceipting = false;
         });
         
     }

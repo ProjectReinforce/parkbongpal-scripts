@@ -77,7 +77,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     }
    
 
-    public void SetOption()//기본 인벤이 호출할거
+    public void SetOption()//기본 인벤 버튼이 호출할거 // 다른클래스는쓰면안됨.
     {
         SetInventoryOption(this);
     }
@@ -213,7 +213,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
          smithyButton.onClick.AddListener(() =>
          {
              Weapon weapon = currentWeapon;
-             GameManager.Instance.MoveTap(smithy);// todo:서순 바꿔야함
+             GameManager.Instance.MoveTap(smithy);
              ReinforceManager.Instance.SelectedWeapon = weapon;
          });
      }

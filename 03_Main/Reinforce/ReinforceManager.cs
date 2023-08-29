@@ -18,7 +18,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
             WeaponChangeEvent?.Invoke();
         }
     }
-    Weapon[] selectedMaterials;
+    Weapon[] selectedMaterials= new Weapon[2];
     public Weapon[] SelectedMaterials
     {
         get => selectedMaterials;
