@@ -8,13 +8,21 @@ public class Pidea : Singleton<Pidea>
 {
     [SerializeField] PideaSlot prefab ;
     [SerializeField] List< PideaSlot> pideaSlots;
-    [SerializeField] RectTransform[] rarityTables;
     [SerializeField] PideaCollection collection;
     [SerializeField] PideaDetail pideaDetail;
+    [SerializeField] RectTransform currentTap;
+    
+    [SerializeField] RectTransform[] rarityTables;
+    public void ClickTap(int index)
+    {
+        currentTap.gameObject.SetActive(false);
+        currentTap = rarityTables[index];
+        currentTap.gameObject.SetActive(true);
+    }
     Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
-    [SerializeField] RectTransform currentTap;
 
+    [SerializeField] private PideaViwer viwer;
     public int RegisteredWeaponCount
     {
         get
@@ -29,11 +37,16 @@ public class Pidea : Singleton<Pidea>
         }
     }
 
-    public void ClickTap(int index)
+ 
+    public void SetCurrentWeapon(PideaSlot slot)
     {
-        currentTap.gameObject.SetActive(false);
-        currentTap = rarityTables[index];
-        currentTap.gameObject.SetActive(true);
+        pideaDetail.ViewUpdate(slot.baseWeaponIndex);
+        notifyer.Remove(slot);
+    }
+
+    public void NotifyClear()
+    {
+        notifyer.Clear();
     }
     public bool CheckLockWeapon(int index)
     {
@@ -68,9 +81,5 @@ public class Pidea : Singleton<Pidea>
             }
         }
     }
-    public void SetCurrentWeapon(PideaSlot slot)
-    {
-        pideaDetail.ViewUpdate(slot.baseWeaponIndex);
-        notifyer.Remove(slot);
-    }
+  
 }

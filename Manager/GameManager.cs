@@ -14,6 +14,7 @@ namespace Manager
         GameObject mainTap;
         GameObject[] taps = new GameObject[Enum.GetNames(typeof(TapType)).Length];
         Queue<Action> InMainThreadQueue = new Queue<System.Action>();
+
         protected override void Awake()
         {
             base.Awake();
@@ -42,7 +43,7 @@ namespace Manager
             InMainThreadQueue.Enqueue(_action);
         }
 
-        public void MoveTap(TapType _tapType)
+        public void MoveTap(TapType _tapType)//싱글톤 수정하거나, 게임매니저의 taps를 인스펙터로 채워두면 사용해봄직함
         {
             // 현재 열린 탭과 같으면 리턴
             if (currentTap == taps[(int)_tapType]) return;

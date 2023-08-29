@@ -37,9 +37,9 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
     }
 
     [SerializeField] private UnityEngine.UI.Button confirm;
+    [SerializeField] UnityEngine.UI.Text smithyText;
     public void OptionOpen()
     {
-        confirm.gameObject.SetActive(true);
         confirm.onClick.RemoveAllListeners();
         confirm.onClick.AddListener(() =>
         {
@@ -49,8 +49,5 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
         });
     }
 
-    public void OptionClose()
-    {
-        confirm.gameObject.SetActive(false);
-    }
+    public void OptionClose() { }
 }

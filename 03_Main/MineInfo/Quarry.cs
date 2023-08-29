@@ -28,6 +28,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     Mine[] mines;
     [SerializeField] GameObject quarry;
     int mineCount;
+
     protected override void Awake()
     {
         base.Awake();
@@ -48,7 +49,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         DateTime currentTime =
             DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        InventoryPresentor.Instance.travelInventory((weapon) =>
+        InventoryPresentor.Instance.TravelInventory((weapon) =>
         {
             if (weapon?.data.mineId >= 0)
             {

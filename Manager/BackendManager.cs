@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class BackendManager : DontDestroy<BackendManager>
 {
-    
     protected override void Awake()
     {
         base.Awake();

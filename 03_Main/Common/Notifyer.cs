@@ -13,8 +13,8 @@ public class Notifyer:MonoBehaviour
 
     private void TextUpdate()
     {
-        gameObject.SetActive(newThings.Count>0);
         text.text = newThings.Count.ToString();
+        gameObject.SetActive(newThings.Count>0);
     }
     public void GetNew(NewThing newThing)
     {
@@ -29,7 +29,6 @@ public class Notifyer:MonoBehaviour
         }
         newThings.Clear();
         TextUpdate();
-        gameObject.SetActive(false);
     }
     public void Remove(NewThing thing)
     {

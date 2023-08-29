@@ -73,9 +73,11 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
    }
 
    [SerializeField] Button confirmButton;
+   [SerializeField] Text confirmText;
    public void OptionOpen()
    {
-       confirmButton.gameObject.SetActive(true);
+       confirmText.text = $"빌려주기";
+       confirmButton.onClick.RemoveAllListeners();
        confirmButton.onClick.AddListener(InventoryConfirm);
    }
 
@@ -114,8 +116,6 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
 
    public void OptionClose()
    {
-       confirmButton.gameObject.SetActive(false);
-       confirmButton.onClick.RemoveAllListeners();
    }
    
 }

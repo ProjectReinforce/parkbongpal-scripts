@@ -29,7 +29,6 @@ public class InventoryViewer : MonoBehaviour
 
     private void OnDisable()
     {
-        inventoryOption.OptionClose();
         Decomposition.Instance.Reset();
         InventoryPresentor.Instance.currentWeapon = null;
     }

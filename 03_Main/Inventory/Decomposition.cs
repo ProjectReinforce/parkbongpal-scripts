@@ -12,16 +12,18 @@ public class Decomposition : Singleton<Decomposition>
 
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
-    [SerializeField] GameObject breakUI;
+
+    [SerializeField] private DecompositionUI ui;
+    
     [SerializeField] DecompositonReward okUI;
-    [SerializeField]UnityEngine.UI.Text text;
     public void SetDecomposit()
     {
         if(isDecompositing&&slots.Count < 1) return;
         _isDecompositing = !_isDecompositing;
-        text.text = isDecompositing?"확정" :"분해";
-        breakUI.SetActive(isDecompositing);
-        if(isDecompositing) return;
+        ui.ViewUpdate(isDecompositing);
+        if (isDecompositing) return;
+  
+        
         //InventoryPresentor.Instance.
         //InventoryPresentor.Instance.currentWeapon = null;
         int limit = 0,totalGold = 0,totalSoul = 0;
@@ -63,9 +65,9 @@ public class Decomposition : Singleton<Decomposition>
         Player.Instance.AddGold(totalGold);
         Player.Instance.AddSoul(totalSoul);
         
-        okUI.SetText(totalGold,totalSoul);
+       
         Reset();
-        
+        okUI.SetText(totalGold,totalSoul);
         HighPowerFinder.UpdateHighPowerWeaponData();
     }
     
@@ -109,7 +111,7 @@ public class Decomposition : Singleton<Decomposition>
             slots.First.Value.SetCurrent();
         }
         _isDecompositing = false;
-        
+        okUI.gameObject.SetActive(false);
         
         foreach (var breakSlot in breakSlots)
         {
@@ -117,11 +119,9 @@ public class Decomposition : Singleton<Decomposition>
         }
         
         breakSlots.Clear();
-        text.text = "분해";
         slots.Clear();
         breakSlots.Clear();
-        breakUI.SetActive(false);
-        okUI.gameObject.SetActive(false);
+        ui.ViewUpdate(isDecompositing);
         InventoryPresentor.Instance.currentWeapon = null;
 
     }

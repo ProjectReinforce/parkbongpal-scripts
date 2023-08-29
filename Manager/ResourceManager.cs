@@ -22,11 +22,14 @@ namespace Manager
             return skills[index];
         }
 
+        public void initilized()
+        {
+            base.Awake();
+        }
         protected override void Awake()
         {
             base.Awake();
-            gameObject.TryGetComponent(out BillPughSingleTon.instance);
-            
+
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             skills = Resources.LoadAll<Sprite>("Sprites/Skills");
         }

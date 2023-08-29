@@ -69,7 +69,7 @@ namespace Manager
             base.Awake();
             baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
             skills = Resources.LoadAll<Sprite>("Sprites/Skills");
-            gameObject.TryGetComponent(out BillPughSingleTon.instance);
+            //gameObject.TryGetComponent(out BillPughSingleTon.instance);
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();

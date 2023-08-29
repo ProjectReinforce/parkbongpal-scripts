@@ -47,12 +47,13 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         {
             slots[i].transform.SetSiblingIndex(i);
         }
-    } 
- 
+    }
+
 
     protected override void Awake()
     {
         base.Awake();
+        
 
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
       
@@ -67,7 +68,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         
     }
 
-    public void travelInventory(Action<Weapon> slotAction)
+    public void TravelInventory(Action<Weapon> slotAction)
     {
         foreach (var slot in slots)
         {
@@ -76,11 +77,11 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     }
    
 
-    public void SetOption()
+    public void SetOption()//기본 인벤이 호출할거
     {
         SetInventoryOption(this);
     }
-    public void SetInventoryOption(IInventoryOption option)
+    public void SetInventoryOption(IInventoryOption option)//기본,광산,강화,미니게임이 사용
     {
         inventoryViewer.SetInventoryOption(option);
     }
@@ -198,10 +199,22 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         }
     }
 
+     
      [SerializeField] GameObject decompositButton;
+     [SerializeField] UnityEngine.UI.Button smithyButton;
+     [SerializeField] UnityEngine.UI.Text smithyText;
+     [SerializeField] GameObject smithy;
      public void OptionOpen()
      {
          decompositButton.SetActive(true);
+         //smithyButton.gameObject.SetActive(true);
+         smithyText.text = $"강화하기";
+         smithyButton.onClick.RemoveAllListeners();
+         smithyButton.onClick.AddListener(() =>
+         {
+             GameManager.Instance.MoveTap(smithy);// todo:서순 바꿔야함
+             ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+         });
      }
 
      public void OptionClose()
