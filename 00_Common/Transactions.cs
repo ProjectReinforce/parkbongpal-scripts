@@ -34,6 +34,8 @@ public static class Transactions
             // foreach (var item in tvs)
             //     Debug.Log(item.table);
         });
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 
     public static void Add(TransactionValue _transactionValue)

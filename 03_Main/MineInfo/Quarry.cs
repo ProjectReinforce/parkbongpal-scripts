@@ -125,6 +125,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
                         return;
                     }
                 });
+                if (CallChecker.Instance != null)
+                    CallChecker.Instance.CountCall();
                 transactionList = new List<TransactionValue>();
                 limit = 0;
             }
@@ -152,7 +154,8 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             }
             isReceipting = false;
         });
-        
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 
 

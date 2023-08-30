@@ -408,6 +408,8 @@ namespace Manager
                 _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
                 SceneLoader.ResourceLoadComplete();
             });
+            if (CallChecker.Instance != null)
+                CallChecker.Instance.CountCall();
         }
         #endregion
 

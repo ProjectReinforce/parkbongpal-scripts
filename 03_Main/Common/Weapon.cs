@@ -64,6 +64,8 @@ public class Weapon
             Debug.Log("성공"+callback);
         });
         myslot.UpdateLend();
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;

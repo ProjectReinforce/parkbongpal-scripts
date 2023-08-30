@@ -39,6 +39,8 @@ public class Player : DontDestroy<Player>
             }
             Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
         });
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
     void UpdateBackEndScore(string uuid, string columnName, int _data)
     {
@@ -186,8 +188,8 @@ public class Player : DontDestroy<Player>
         
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 200},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -201,8 +203,8 @@ public class Player : DontDestroy<Player>
         
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 65},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -216,8 +218,8 @@ public class Player : DontDestroy<Player>
         
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 50},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -231,8 +233,8 @@ public class Player : DontDestroy<Player>
         
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 65},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -247,9 +249,9 @@ public class Player : DontDestroy<Player>
 
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 130},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
-            {nameof(UserData.colum.weaponSoul), Data.weaponSoul + _soulCost}
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
+            {nameof(UserData.colum.weaponSoul), Data.weaponSoul}
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -264,9 +266,9 @@ public class Player : DontDestroy<Player>
 
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Data.exp + 200},
-            {nameof(UserData.colum.gold), Data.gold + _goldCost},
-            {nameof(UserData.colum.stone), Data.stone + _oreCost}
+            {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.gold), Data.gold},
+            {nameof(UserData.colum.stone), Data.stone}
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
@@ -301,5 +303,7 @@ public class Player : DontDestroy<Player>
             topUIDatatViewer.UpdateDiamond();
             _callback.Invoke();
         });
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 }

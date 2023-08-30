@@ -185,6 +185,8 @@ public class Mine :MonoBehaviour,Rental,ISlotable
             goldText.text = gold.ToString();
             isReceipting = false;
         });
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 
     const float INTERVAL = 2;
