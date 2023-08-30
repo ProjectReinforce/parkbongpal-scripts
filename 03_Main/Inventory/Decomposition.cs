@@ -8,7 +8,7 @@ public class Decomposition : Singleton<Decomposition>
 {
    
     static LinkedList<Slot> slots=new ();
-    // Àü´Þ¹ÞÀº ¹«±â¸¦ »èÁ¦ÇÏ°í , »èÁ¦µÈ ¹«±âÀÇ µî±Þ¿¡ µû¶ó À¯Àú ÀçÈ­ °»½Å 
+    // ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ , ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Þ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ 
 
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
@@ -53,12 +53,14 @@ public class Decomposition : Singleton<Decomposition>
             {
                 if (!callback.IsSuccess())
                 {
-                    Debug.LogError("Deconposition:SetDecomposit: Æ®·»Á§¼Ç ½ÇÆÐ"+callback);
+                    Debug.LogError("Deconposition:SetDecomposit: Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"+callback);
                     return;
                 }
                 InventoryPresentor.Instance.SortSlots();
             });
             limit = 0;
+            if (CallChecker.Instance != null)
+                CallChecker.Instance.CountCall();
         }
 
         
@@ -78,7 +80,7 @@ public class Decomposition : Singleton<Decomposition>
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
-            UIManager.Instance.ShowWarning("¾Ë¸²", "±¤»ê¿¡ ´ë¿©ÇØÁØ ¹«±âÀÔ´Ï´Ù.");
+            UIManager.Instance.ShowWarning("ï¿½Ë¸ï¿½", "ï¿½ï¿½ï¿½ê¿¡ ï¿½ë¿©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
             return ;
         }
         if (!isDecompositing) return ;

@@ -18,16 +18,16 @@ public class Promote : Reinforce
         param.Add(nameof(WeaponData.colum.rarity), weapon.data.rarity);
         param.Add(nameof(WeaponData.colum.PromoteStat), weapon.data.PromoteStat);
 
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
 
-        // Player.Instance.AddGold(-1000);
-        // Player.Instance.TryPromote(-1);
         weapon.myslot.UpdateSlot(weapon);
         weapon.SetPower();
     }
@@ -52,20 +52,17 @@ public class Additional : Reinforce
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.AdditionalStat), weapon.data.AdditionalStat);
 
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
 
-        // int cost = data.goldCost;
-        // Player.Instance.AddGold(-10);
-        // Player.Instance.TryAdditional(-5);
         weapon.SetPower();
-
-        // Player.Instance.AddGold(-cost);
     }
 }
 
@@ -103,17 +100,17 @@ public class NormalReinforce : Reinforce
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.NormalStat), weapon.data.NormalStat);
-        Debug.Log("reinforce normal"+weapon.data.inDate);
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        // Player.Instance.AddGold(-500);
-        // Player.Instance.TryNormalReinforce(-10);
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
+
         weapon.SetPower();
     }
 }
@@ -145,16 +142,16 @@ public class MagicEngrave : Reinforce
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.magic), weapon.data.magic);
 
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
 
-        // Player.Instance.AddGold(-10);
-        // Player.Instance.TryMagicCarve(-50);
         weapon.SetPower();
     }
 }
@@ -195,20 +192,17 @@ public class SoulCrafting : Reinforce
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.SoulStat), weapon.data.SoulStat);
 
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
 
-        // Player.Instance.AddGold(-100);
-        // Player.Instance.TrySoulCraft(-100, 0);
         weapon.SetPower();
-        // 트랜잭션 처리 고려
-        // Player.Instance.AddGold(goldCost);
-        // Player.Instance.AddSoul(soulCost);
     }
 }
 
@@ -282,16 +276,16 @@ public class Refinement : Reinforce
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.RefineStat), weapon.data.RefineStat);
 
-        var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
 
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError(bro);
-            // 메시지 출력
-        }
+        // if (!bro.IsSuccess())
+        // {
+        //     Debug.LogError(bro);
+        //     // 메시지 출력
+        // }
 
-        // Player.Instance.AddGold(-1000);
-        // Player.Instance.TryRefine(-500, 0);
         weapon.SetPower();
     }
 }
