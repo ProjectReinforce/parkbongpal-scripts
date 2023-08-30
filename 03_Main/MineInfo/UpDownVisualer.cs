@@ -8,8 +8,7 @@ public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
     [SerializeField] private Sprite[] Arrows; //down,stay, up 순서
     [SerializeField] private UnityEngine.UI.Image[] arrowPositions;
     [SerializeField] private UnityEngine.UI.Text[] quantity;
-
-
+    private static Color green = new Color(0, 0.9f, 0.3f), red = new Color(0.9f, 0.3f, 0f);
 
     public void ViewUpdate(Weapon sellectWeapon)
     {
@@ -52,12 +51,14 @@ public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
             {
                 case <0:
                     arrowPositions[i].sprite = Arrows[0];
+                    arrowPositions[i].color = red;
                     break;
                 default:
                     arrowPositions[i].sprite = Arrows[1];
                     break;
                 case >0:
                     arrowPositions[i].sprite = Arrows[2];
+                    arrowPositions[i].color = green;
                     break;
             }
 

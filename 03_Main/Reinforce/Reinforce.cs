@@ -3,14 +3,14 @@ using BackEnd;
 using Manager;
 using System.Collections.Generic;
 
-public abstract class Reinforce
+public interface  Reinforce
 {
-    public abstract void Execute(Weapon weapon);
+    public void Execute(Weapon weapon);
 }
 
 public class Promote : Reinforce
 {
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         weapon.Promote();
 
@@ -35,7 +35,7 @@ public class Promote : Reinforce
 
 public class Additional : Reinforce
 {
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         AdditionalData data = Manager.BackEndDataManager.Instance.additionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
@@ -71,7 +71,7 @@ public class Additional : Reinforce
 
 public class NormalReinforce : Reinforce
 {
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         BackEndDataManager resourceManager = BackEndDataManager.Instance;
         NormalReinforceData data = resourceManager.normalReinforceData;
@@ -120,7 +120,7 @@ public class NormalReinforce : Reinforce
 
 public class MagicEngrave : Reinforce
 {
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         int drawCount = 0;
         
@@ -161,7 +161,7 @@ public class MagicEngrave : Reinforce
 
 public class SoulCrafting : Reinforce
 {
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         BackEndDataManager resourceManager = BackEndDataManager.Instance;
         SoulCraftingData data = resourceManager.soulCraftingData;
@@ -216,7 +216,7 @@ public class Refinement : Reinforce
 {
     const int REFINE_DRAW_COUNT = 3;
 
-    public override void Execute(Weapon weapon)
+    public void Execute(Weapon weapon)
     {
         RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
         RefinementData data = BackEndDataManager.Instance.refinementData;

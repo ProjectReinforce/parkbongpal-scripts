@@ -35,11 +35,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         slots[Count].SetNew();
         slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
-
-
-
-
-
     public void SortSlots()
     {
         slots.Sort();
@@ -49,23 +44,19 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         }
     }
 
-
     protected override void Awake()
     {
         base.Awake();
         
-
         slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
       
         HighPowerFinder.SetSlots(slots);
         size = slots.Count;
         
-
         foreach (var weaponData in BackEndDataManager.Instance.weaponDatas)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
-        
     }
 
     public void TravelInventory(Action<Weapon> slotAction)
