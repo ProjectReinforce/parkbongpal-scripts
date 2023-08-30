@@ -8,7 +8,6 @@ public class Decomposition : Singleton<Decomposition>
 {
    
     static LinkedList<Slot> slots=new ();
-    // ���޹��� ���⸦ �����ϰ� , ������ ������ ��޿� ���� ���� ��ȭ ���� 
 
     static bool _isDecompositing;
     static public bool isDecompositing => _isDecompositing;
@@ -80,7 +79,7 @@ public class Decomposition : Singleton<Decomposition>
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
-            UIManager.Instance.ShowWarning("�˸�", "���꿡 �뿩���� �����Դϴ�.");
+            UIManager.Instance.ShowWarning($"알림", $"광산에 대여해준 무기입니다.");
             return ;
         }
         if (!isDecompositing) return ;

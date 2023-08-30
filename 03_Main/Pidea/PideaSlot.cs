@@ -5,7 +5,7 @@ using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PideaSlot : NewThing,ISlotable
+public class PideaSlot : NewThing
 {
     [SerializeField] Image weaponImage;
     int _baseWeaponIndex;

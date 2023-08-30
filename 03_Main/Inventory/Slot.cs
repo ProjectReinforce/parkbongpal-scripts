@@ -3,13 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using Manager;
 
-public interface ISlotable
-{
-    public void SetCurrent();
-}
+
 
 [Serializable]
-public class Slot : NewThing,  IComparable<Slot>,ISlotable
+public class Slot : NewThing,  IComparable<Slot>
 {
     // Start is called before the first frame update
     [SerializeField] SlotViewer slotViwer;
@@ -19,12 +16,12 @@ public class Slot : NewThing,  IComparable<Slot>,ISlotable
     public static int  weaponCount=0;
     public void UpdateLend()
     {
-        slotViwer.ViewUpdate(myWeapon);
+        slotViwer.ViewUpdate(myWeapon);//slot.UpdateSlot(Weapon) 하고 용도가 겹침 
     }
 
     public void UpdateSlot(Weapon weapon)
     {
-        slotViwer.ViewUpdate(weapon);
+        slotViwer.ViewUpdate(weapon);//weapon.myslot.UpdateLend() 하고 용도가 겹침 
     }
     
     public void SetWeapon(Weapon weapon)

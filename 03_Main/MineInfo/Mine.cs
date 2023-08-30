@@ -13,7 +13,7 @@ public interface Rental
     public float GetHpPerDMG();
 }
 
-public class Mine :MonoBehaviour,Rental,ISlotable
+public class Mine :MonoBehaviour,Rental
 {
     // Start is called before the first frame update
     private MineData _mineData;
