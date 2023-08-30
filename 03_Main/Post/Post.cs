@@ -18,7 +18,7 @@ public class Post : Singleton<Post>
     [SerializeField] List<PostSlot> slots;
     [SerializeField] PostDetail detail;
 
-    protected  void Awake()
+    protected override void Awake()
     {
         notifyer = Instantiate(BackEndDataManager.Instance.notifyer,mySelf.transform);
     }

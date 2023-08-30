@@ -133,7 +133,7 @@ public class Mine :MonoBehaviour,Rental,ISlotable
         
         goldText.text = gold.ToString();
     }
-    public void SetInfo()
+    private void SetInfo()
     {
         
         //웨폰템프

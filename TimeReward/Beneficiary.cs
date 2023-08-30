@@ -24,12 +24,14 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
     private bool AttendanceCheck() //누적 날짜 갱신하기
     {
         int day = BackEndDataManager.Instance.userData.attendance;
-       
+        DateTime lastLogin = Player.Instance.Data.lastLogin;
         days = day;
-        if (BackEndDataManager.Instance.LastLogin.Month == BackEndDataManager.Instance.ServerTime.Month &&
-            BackEndDataManager.Instance.LastLogin.Day == BackEndDataManager.Instance.ServerTime.Day) return false;
-        if (BackEndDataManager.Instance.LastLogin.Month != BackEndDataManager.Instance.ServerTime.Month)
+   
+        if (lastLogin.Month == BackEndDataManager.Instance.ServerTime.Month &&
+            lastLogin.Day == BackEndDataManager.Instance.ServerTime.Day) return false;
+        if (lastLogin.Month != BackEndDataManager.Instance.ServerTime.Month)
             day = 0;
+      
         Player.Instance.SetAttendance(++day);
         days = day;
         return true;

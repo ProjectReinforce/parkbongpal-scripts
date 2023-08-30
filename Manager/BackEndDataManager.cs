@@ -74,7 +74,7 @@ namespace Manager
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
                 baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
-            SetLastLogin();
+            //SetLastLogin();
             GetUserData();
             GetOwnedWeaponData();
             SetOwnedWeaponId();
@@ -455,11 +455,23 @@ namespace Manager
             GetMyBackEndData<UserData>(nameof(UserData),  (data) =>
             {
                 userData = data[0];
-                Param param = new Param
+                // Param param = new Param
+                // {
+                //     { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
+                // };
+                // Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
+                serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+                Param param = new() { { "lastLogin", serverTime }};
+        
+                SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
                 {
-                    { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
-                };
-                Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
+                    if (!callback.IsSuccess())
+                    {
+                        Debug.Log($"GetUserData : lastLogin 데이터 저장 실패 {callback.GetMessage()}");
+                        return;
+                    }
+                    Debug.Log($"GetUserData : lastLogin 데이터 저장 성공 {callback}");
+                });
             });
         }
 
@@ -485,22 +497,10 @@ namespace Manager
             });
         }
 
-        private DateTime lastLogin;
-        public DateTime LastLogin => lastLogin;
+        
         private DateTime serverTime;
         public DateTime ServerTime => serverTime;
-        void  SetLastLogin()
-        {
-            SendQueue.Enqueue(Backend.Social.GetUserInfoByInDate, Backend.UserInDate, (bro) => 
-            {
-                if(!bro.IsSuccess()) {
-                    Debug.LogError("최근 접속시간 받아오기 실패.");
-                    return;
-                }
-                lastLogin = DateTime.Parse( bro.GetReturnValuetoJSON()["row"]["lastLogin"].ToString());
-            });
-            serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
-        }
+       
         
         public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
         public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";

@@ -168,7 +168,7 @@ public struct UserData
     public int gold, diamond, weaponSoul, stone, attendance;
     public int exp, level, favoriteWeaponId,goldPerMin, mineGameScore, combatScore;
     public string inDate;
-    public DateTime owner_inDate;
+    public DateTime owner_inDate,lastLogin;
 }
 public struct PideaData//광산차트
 {

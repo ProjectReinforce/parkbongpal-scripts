@@ -29,8 +29,8 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
 
         }
     }
-   
-    public void AddWeapon(WeaponData weaponData)
+
+    private void AddWeapon(WeaponData weaponData)
     {
         slots[Count].SetNew();
         slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
@@ -85,7 +85,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         }
         inventoryViewer.gameObject.SetActive(false);
     }
-    
+
     public void AddWeapon(BaseWeaponData baseWeaponData )
     {
         if (Count >= size) throw new Exception("인벤토리 공간이 부족합니다.");
@@ -101,7 +101,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
             { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
             { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
-            { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
+            { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.ServerTime },
         };
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
@@ -156,7 +156,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                 { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
                 { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
                 { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
-                { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.LastLogin },
+                { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.ServerTime },
             };
             
             transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));

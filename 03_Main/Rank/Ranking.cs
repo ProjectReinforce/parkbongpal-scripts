@@ -14,9 +14,9 @@ public class Ranking : Singleton<Ranking>
     
     [SerializeField] private RectTransform[] viewPorts;
     private RankSlot[][] slotLists = new RankSlot[2][];
-    
 
-    private void Awake()
+
+    protected override void Awake()
     {
         ranks[0] = BackEndDataManager.Instance.topRanks;
         ranks[1] = BackEndDataManager.Instance.myRanks;
