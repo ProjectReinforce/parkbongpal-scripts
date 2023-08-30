@@ -56,71 +56,73 @@ public class Player : DontDestroy<Player>
         });
     }
 
-    public void test(int _gold)
-    {
-        AddGold(_gold);
-    }
     // ReSharper disable Unity.PerformanceAnalysis
-    public bool AddGold(int _gold)
+    public bool AddGold(int _gold, bool _directUpdate = true)
     {
         if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
 
         recordData.ModifyGoldRecord(_gold);
-        UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
         topUIDatatViewer.UpdateGold();
         return true;
     }
 
-    public bool AddDiamond(int _diamond)
+    public bool AddDiamond(int _diamond, bool _directUpdate = true)
     {
         if (userData.diamond + _diamond < 0) return false;
         userData.diamond += _diamond;
 
         recordData.ModifyDiamondRecord(_diamond);
-        UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
         topUIDatatViewer.UpdateDiamond();
 
         return true;
     }
     
-    public bool AddSoul(int _weaponSoul)
+    public bool AddSoul(int _weaponSoul, bool _directUpdate = true)
     {
         if (userData.weaponSoul + _weaponSoul < 0) return false;
         userData.weaponSoul += _weaponSoul;
 
-        UpdateBackEndData(nameof(UserData.colum.weaponSoul), userData.weaponSoul);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.weaponSoul), userData.weaponSoul);
         inventoryUIViwer.SetSoul(userData.weaponSoul);
         return true;
     }
 
-    public bool AddStone(int _stone)
+    public bool AddStone(int _stone, bool _directUpdate = true)
     {
         if (userData.stone + _stone < 0) return false;
         userData.stone += _stone;
 
-        UpdateBackEndData(nameof(UserData.colum.stone), userData.stone);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.stone), userData.stone);
         inventoryUIViwer.SetStone(userData.stone);
         return true;
     }
     
-    public void AddExp(int _exp)
+    public void AddExp(int _exp, bool _directUpdate = true)
     {
         userData.exp += _exp;
         if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
             LevelUp();
 
-        UpdateBackEndData(nameof(UserData.colum.exp), userData.exp);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.exp), userData.exp);
         topUIDatatViewer.UpdateExp();
     }
 
-    void LevelUp()
+    void LevelUp(bool _directUpdate = true)
     {
         userData.exp -= BackEndDataManager.Instance.expDatas[userData.level-1];
         userData.level ++;
         recordData.levelUpEvent?.Invoke();
 
-        UpdateBackEndData(nameof(UserData.colum.level), userData.level);
+        if (_directUpdate)
+            UpdateBackEndData(nameof(UserData.colum.level), userData.level);
         topUIDatatViewer.UpdateLevel();
         Quarry.Instance.UnlockMines(userData.level);
 
@@ -178,46 +180,96 @@ public class Player : DontDestroy<Player>
 
     public void TryPromote(int _goldCost)
     {
-        AddGold(_goldCost);
+        AddGold(_goldCost, false);
         recordData.ModifyTryPromoteRecord();
-        AddExp(50);
+        AddExp(50, false);
+        
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 200},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     public void TryAdditional(int _goldCost)
     {
-        AddGold(_goldCost);
+        AddGold(_goldCost, false);
         recordData.ModifyTryAdditionalRecord();
-        AddExp(65);
+        AddExp(65, false);
+        
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 65},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     public void TryNormalReinforce(int _goldCost)
     {
-        AddGold(_goldCost);
+        AddGold(_goldCost, false);
         recordData.ModifyTryReinforceRecord();
-        AddExp(50);
+        AddExp(50, false);
+        
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 50},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     public void TryMagicCarve(int _goldCost)
     {
-        AddGold(_goldCost);
+        AddGold(_goldCost, false);
         recordData.ModifyTryMagicRecord();
-        AddExp(65);
+        AddExp(65, false);
+        
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 65},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     public void TrySoulCraft(int _goldCost, int _soulCost)
     {
-        AddGold(_goldCost);
-        AddSoul(_soulCost);
+        AddGold(_goldCost, false);
+        AddSoul(_soulCost, false);
         recordData.ModifyTrySoulRecord();
-        AddExp(130);
+        AddExp(130, false);
+
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 130},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.weaponSoul), Data.weaponSoul + _soulCost}
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     public void TryRefine(int _goldCost, int _oreCost)
     {
-        AddGold(_goldCost);
-        AddStone(_oreCost);
+        AddGold(_goldCost, false);
+        AddStone(_oreCost, false);
         recordData.ModifyTryRefineRecord();
-        AddExp(200);
+        AddExp(200, false);
+
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Data.exp + 200},
+            {nameof(UserData.colum.gold), Data.gold + _goldCost},
+            {nameof(UserData.colum.stone), Data.stone + _oreCost}
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
     // todo: 개선 필요
