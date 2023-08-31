@@ -4,7 +4,7 @@ using BackEnd;
 using Manager;
 using UnityEngine;
 
-public class Player : DontDestroy<Player>
+public class Player : Singleton<Player>
 {
     [SerializeField] TopUIDatatViewer topUIDatatViewer;
     [SerializeField] InventorySourceViewer inventoryUIViwer;
