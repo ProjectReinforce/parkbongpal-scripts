@@ -12,8 +12,6 @@ public class GoogleAds : MonoBehaviour
         MobileAds.Initialize(intitStatus => {});
 
         LoadRewardedInterstitialAd();
-        RegisterEventHandlers(rewardedInterstitialAd);
-        RegisterReloadHandler(rewardedInterstitialAd);
     }
     
     // These ad units are configured to always serve test ads.
@@ -62,6 +60,8 @@ public class GoogleAds : MonoBehaviour
                         + ad.GetResponseInfo());
 
             rewardedInterstitialAd = ad;
+            RegisterEventHandlers(rewardedInterstitialAd);
+            RegisterReloadHandler(rewardedInterstitialAd);
         });
     }
 
