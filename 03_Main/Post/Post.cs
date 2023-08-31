@@ -23,7 +23,7 @@ public class Post : Singleton<Post>
         notifyer = Instantiate(BackEndDataManager.Instance.notifyer,mySelf.transform);
     }
 
-    public void ReciveFromServer()
+    private void ReciveFromServer()
     {
         SendQueue.Enqueue(Backend.UPost.GetPostList, PostType.Admin, MAX_COUNT, callback =>
         {

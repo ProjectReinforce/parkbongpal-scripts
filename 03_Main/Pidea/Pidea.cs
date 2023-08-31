@@ -22,7 +22,6 @@ public class Pidea : Singleton<Pidea>
     Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
 
-    [SerializeField] private PideaViwer viwer;
     public int RegisteredWeaponCount
     {
         get

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,13 @@ public class PostDetail : MonoBehaviour
         date.text = data.sentDate;
         content.text = data.content;
     }
-    public void CloseThis()
+
+    // private void OnDisable()
+    // {
+    //     CloseThis();
+    // }
+
+    public void CloseThis()//게임오브젝트 직접 끄고 onDisable사용하도록하고 closeThis는 private화 해야함
     {
         Post.Instance.Remove(currentSlot);
         gameObject.SetActive(false);

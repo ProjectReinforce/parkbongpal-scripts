@@ -12,7 +12,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
     {
         if (AttendanceCheck())//갱신했으면
         {
-            receive();
+            Receive();
             viwer.transform.parent.gameObject.SetActive(true);
         }
         viwer.Initialize();
@@ -37,7 +37,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
         return true;
     }
 
-    private void receive()
+    private void Receive()
     {
         AttendanceData todayReward = BackEndDataManager.Instance.attendanceDatas[days];
         switch (todayReward.type)

@@ -16,7 +16,7 @@ public class PideaSlot : NewThing
         weaponImage.material = BackEndDataManager.Instance.ownedWeaponIds[index];
         _baseWeaponIndex = index;
     }
-    public void SetCurrent()//dip 위배 , 리팩토링 대상.
+    public void SetCurrent()
     {
         if(weaponImage.material.color == Color.black) return;
         Pidea.Instance.SetCurrentWeapon(this);
