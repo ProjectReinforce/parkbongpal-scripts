@@ -86,7 +86,7 @@ namespace Manager
             // 테스트용
         }
 
-        const string VERSION_CHART_ID = "90470";
+        const string VERSION_CHART_ID = "91114";
         const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
         Dictionary<string, VersionInfo> localChartLists;
         Dictionary<string, VersionInfo> backEndChartLists;
