@@ -71,6 +71,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     public void SetOption()//기본 인벤 버튼이 호출할거 // 다른클래스는쓰면안됨.
     {
         SetInventoryOption(this);
+        smithyText.text = $"강화하기";
     }
     public void SetInventoryOption(IInventoryOption option)//기본,광산,강화,미니게임이 사용
     {
@@ -110,27 +111,22 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
             return;
         }
-
-        WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);
-
         
+
+        WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);//indate얻는 작업땜에 transaction에 넣기가 애매
         AddWeapon(weaponData);
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
-            var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
-            {
+            
+            Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                 { nameof(PideaData.colum.ownedWeaponId), baseWeaponData.index },
                 { nameof(PideaData.colum.rarity), baseWeaponData.rarity }
-            });
-            if (!pidea.IsSuccess())
-            {
-                Debug.LogError("게임 정보 삽입 실패 : " + pidea);
-                return;
-            }
-
+            }));
+            
             Pidea.Instance.GetNewWeapon(baseWeaponData.index);
         }
+        Transactions.SendCurrent();
     }
 
     public bool CheckSize(int i)
@@ -158,14 +154,12 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                 { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
                 { nameof(WeaponData.colum.borrowedDate), BackEndDataManager.Instance.ServerTime },
             };
-            
             transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
         }
         var bro =  Backend.GameData.TransactionWriteV2 ( transactionList ); 
         if (!bro.IsSuccess())
         {
             Debug.LogError("게임 정보 삽입 실패 : " + bro);
-            
             return;
         }
         LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
@@ -175,19 +169,14 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             AddWeapon(weaponData);
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {
-                var pidea = Backend.GameData.Insert(nameof(PideaData), new Param
-                {
+                Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                     { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
                     { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
-                });
-                if (!pidea.IsSuccess())
-                {
-                    Debug.LogError("게임 정보 삽입 실패 : " + pidea);
-                    return;
-                }
+                }));
                 Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
             }
         }
+        Transactions.SendCurrent();
     }
 
      
@@ -199,7 +188,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
      {
          decompositButton.SetActive(true);
          //smithyButton.gameObject.SetActive(true);
-         smithyText.text = $"강화하기";
          smithyButton.onClick.RemoveAllListeners();
          smithyButton.onClick.AddListener(() =>
          {

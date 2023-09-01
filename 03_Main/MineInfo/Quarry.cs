@@ -105,56 +105,29 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         receiptButton.interactable = false;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
 
-        int limit = 0;
         
-        List<TransactionValue> transactionList = new List<TransactionValue>();
         for (int i = 0; i < mines.Length; i++)
         {
             if(mines[i].rentalWeapon is null)continue;
             mines[i].rentalWeapon.SetBorrowedDate(date);
             totalGold += mines[i].Gold;
-            limit++;
-            if (limit>10)
-            {
-                SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
-                {
-                    if (!callback.IsSuccess())
-                    {
-                        Debug.LogError("Quarry: 일괄수령 실패"+callback);
-                        return;
-                    }
-                });
-                if (CallChecker.Instance != null)
-                    CallChecker.Instance.CountCall();
-                transactionList = new List<TransactionValue>();
-                limit = 0;
-            }
+            
             Param param = new Param
             {
                 { nameof(WeaponData.colum.borrowedDate), date }
             };
             
-            transactionList.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+            Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
             
         }
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
+        totalGold = 0;
+        for (int i = 0; i < mines.Length; i++)
         {
-            if (!callback.IsSuccess())
-            {
-                Debug.LogError("Quarry: 일괄수령 실패"+callback);
-                return;
-            }
-            
-            Player.Instance.AddGold(totalGold);
-            totalGold = 0;
-            for (int i = 0; i < mines.Length; i++)
-            {
-                mines[i].Gold = 0;
-            }
-            receiptButton.interactable = true;
-        });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+            mines[i].Gold = 0;
+        }
+        receiptButton.interactable = true;
+        Player.Instance.LateAddGold(totalGold);
+        Transactions.SendCurrent();
     }
 
 

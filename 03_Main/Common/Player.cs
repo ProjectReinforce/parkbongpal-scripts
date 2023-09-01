@@ -42,6 +42,11 @@ public class Player : Singleton<Player>
         if (CallChecker.Instance != null)
             CallChecker.Instance.CountCall();
     }
+    void LateUpdateBackEndData(string columnName, int _data)
+    {
+        Param param = new() { { columnName, _data }};
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData),Data.inDate,Backend.UserInDate ,param));
+    }
     void UpdateBackEndScore(string uuid, string columnName, int _data)
     {
         Param param = new() { { columnName, _data }};
@@ -70,6 +75,17 @@ public class Player : Singleton<Player>
         topUIDatatViewer.UpdateGold();
         return true;
     }
+    public bool LateAddGold(int _gold, bool _directUpdate = true)
+    {
+        if (userData.gold + _gold < 0) return false;
+        userData.gold += _gold;
+
+        recordData.ModifyGoldRecord(_gold);
+        if (_directUpdate)
+            LateUpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
+        topUIDatatViewer.UpdateGold();
+        return true;
+    }
 
     public bool AddDiamond(int _diamond, bool _directUpdate = true)
     {
@@ -79,6 +95,18 @@ public class Player : Singleton<Player>
         recordData.ModifyDiamondRecord(_diamond);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
+        topUIDatatViewer.UpdateDiamond();
+
+        return true;
+    }
+    public bool LateAddDiamond(int _diamond, bool _directUpdate = true)
+    {
+        if (userData.diamond + _diamond < 0) return false;
+        userData.diamond += _diamond;
+
+        recordData.ModifyDiamondRecord(_diamond);
+        if (_directUpdate)
+            LateUpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
         topUIDatatViewer.UpdateDiamond();
 
         return true;

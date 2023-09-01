@@ -35,7 +35,7 @@ public class Store : Singleton<Store>
 
         if (type == 0)
         {
-            if (!Player.Instance.AddGold(-COST_GOLD))
+            if (!Player.Instance.LateAddGold(-COST_GOLD))
             {
                 UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
@@ -43,7 +43,7 @@ public class Store : Singleton<Store>
         }
         else
         {
-            if (!Player.Instance.AddDiamond(-COST_DIAMOND))
+            if (!Player.Instance.LateAddDiamond(-COST_DIAMOND))
             {
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
@@ -74,7 +74,7 @@ public class Store : Singleton<Store>
 
         if (type == 0)
         {
-            if (!Player.Instance.AddGold(-COST_GOLD * TEN))
+            if (!Player.Instance.LateAddGold(-COST_GOLD * TEN))
             {
                 UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
@@ -82,7 +82,7 @@ public class Store : Singleton<Store>
         }
         else
         {
-            if (!Player.Instance.AddDiamond(-COST_DIAMOND * TEN))
+            if (!Player.Instance.LateAddDiamond(-COST_DIAMOND * TEN))
             {
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
@@ -103,8 +103,6 @@ public class Store : Singleton<Store>
         }
 
         inventory.AddWeapons(baseWeaponDatas);
-
-
 
     }
 }
