@@ -12,18 +12,21 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     [SerializeField] Image currentRarityNameImage;
     [SerializeField] Text currentRarityNameText;
     [SerializeField] Image[] weaponIcons;
+    [SerializeField] Image[] materialIcons;
     [SerializeField] Image[] weaponSlots;
     [SerializeField] MagicCarveButtonUI magicCarveButtonUI;
 
     // todo: 리소스매니저에서 받아오도록 수정
     [SerializeField] Sprite[] slotSprites;
     Sprite basicSprite;
+    Sprite basicSlot;
 
     protected override void Awake()
     {
         base.Awake();
 
-        basicSprite = weaponSlots[0].sprite;
+        basicSprite = weaponIcons[0].sprite;
+        basicSlot = weaponSlots[0].sprite;
     }
 
     protected override void OnDisable()
@@ -33,28 +36,37 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         foreach (var item in weaponSlots)
             item.sprite = basicSprite;
         
-        for (int i = 0; i < ReinforceManager.Instance.SelectedMaterials.Length; i++)
-        {
-            ReinforceManager.Instance.SelectedMaterials[i] = null;
-        }
+        ReinforceManager.Instance.ResetMaterials();
     }
 
     void UpdateWeaponImage()
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
-        for (int i =0; i<2; i++){
-            weaponIcons[i].sprite = weapon.sprite;
+        weaponIcons[0].sprite = weapon.sprite;
+        weaponIcons[1].sprite = weapon.sprite;
+
+        for (int i = 0; i < materialIcons.Length; i++)
+        {
+            if (ReinforceManager.Instance.SelectedMaterials[i] != null)
+                materialIcons[i].sprite = ReinforceManager.Instance.SelectedMaterials[i].sprite;
+            else
+                materialIcons[i].sprite = basicSprite;
         }
-            
 
         weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
         if (weapon.data.rarity != (int)Rarity.legendary)
             weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
         else
             weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
-        
-        
+        if (ReinforceManager.Instance.SelectedMaterials[0] != null)
+            weaponSlots[2].sprite = slotSprites[ReinforceManager.Instance.SelectedMaterials[0].data.rarity];
+        else
+            weaponSlots[2].sprite = basicSlot;
+        if (ReinforceManager.Instance.SelectedMaterials[1] != null)
+            weaponSlots[3].sprite = slotSprites[ReinforceManager.Instance.SelectedMaterials[1].data.rarity];
+        else
+            weaponSlots[3].sprite = basicSlot;
 
         weaponNameText.text = weapon.name;
     }
@@ -80,16 +92,17 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
 
     protected override void RegisterPreviousButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() => ReinforceManager.Instance.ResetMaterials());
+        reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
         //ReinforceManager.Instance.SelectedMaterials
         reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => magicCarveButtonUI.CheckQualification());
     }
 
-    protected bool CheckGold()
+    bool CheckGold()
     {
         UserData userData = Player.Instance.Data;
 
@@ -102,7 +115,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         return true;
     }
 
-    protected bool CheckRarity()
+    bool CheckRarity()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
@@ -149,9 +162,16 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         return false;
     }
 
+    bool CheckMaterials()
+    {
+        if (ReinforceManager.Instance.SelectedMaterials[0] != null && ReinforceManager.Instance.SelectedMaterials[1] != null)
+            return true;
+        return false;
+    }
+
     protected override bool Checks()
     {
-        if (CheckGold() && CheckRarity()) return true;
+        if (CheckGold() && CheckRarity() && CheckMaterials()) return true;
         return false;
     }
 
@@ -172,14 +192,20 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         confirm.onClick.AddListener(() =>
         {
             Weapon weapon =  InventoryPresentor.Instance.currentWeapon;
-            if (weapon.data.rarity != reinforceManager.SelectedWeapon.data.rarity)
+            if (weapon.data.rarity != ReinforceManager.Instance.SelectedWeapon.data.rarity)
             {
                 UIManager.Instance.ShowWarning($"알림",$"선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
                 return;
             }
-            weaponSlots[selectedMaterialIndex+2].sprite = slotSprites[weapon.data.rarity];
-            weaponIcons[selectedMaterialIndex+2].sprite = weapon.sprite;
+            if (weapon == ReinforceManager.Instance.SelectedMaterials[1 - selectedMaterialIndex] || weapon == ReinforceManager.Instance.SelectedWeapon)
+            {
+                UIManager.Instance.ShowWarning($"알림",$"이미 선택된 무기입니다.");
+                return;
+            }
+            // weaponSlots[selectedMaterialIndex+2].sprite = slotSprites[weapon.data.rarity];
+            // weaponIcons[selectedMaterialIndex+2].sprite = weapon.sprite;
             ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
+            SelectWeapon();
             
             InventoryPresentor.Instance.CloseInventory();
             

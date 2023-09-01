@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class PopupRegister : MonoBehaviour
 {
     [SerializeField] GameObject popup;
+    [SerializeField] GameObject panel;
     Button button;
 
     void Awake()
     {
         TryGetComponent(out button);
-        //if (GameManager.Instance != null)
-            button.onClick.AddListener(() => GameManager.Instance.OpenPopup(popup));
+        if (panel != null)
+            button.onClick.AddListener(() => GameManager.Instance.OpenPopup(panel));
+        button.onClick.AddListener(() => GameManager.Instance.OpenPopup(popup));
     }
 }

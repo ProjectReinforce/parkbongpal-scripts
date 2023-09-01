@@ -63,9 +63,16 @@ public class Decomposition : Singleton<Decomposition>
         }
 
         
-        Player.Instance.AddGold(totalGold);
-        Player.Instance.AddSoul(totalSoul);
+        Player.Instance.AddGold(totalGold, false);
+        Player.Instance.AddSoul(totalSoul, false);
         
+        Param param = new()
+        {
+            {nameof(UserData.colum.exp), Player.Instance.Data.gold},
+            {nameof(UserData.colum.gold), Player.Instance.Data.weaponSoul},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Player.Instance.Data.inDate, Backend.UserInDate, param));
        
         Reset();
         okUI.SetText(totalGold,totalSoul);

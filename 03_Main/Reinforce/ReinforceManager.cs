@@ -31,7 +31,11 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
         set => refineResults = value;
     }
 
-  
+    public void ResetMaterials()
+    {
+        selectedMaterials[0] = null;
+        selectedMaterials[1] = null;
+    }
 
     void OnDisable()
     {
