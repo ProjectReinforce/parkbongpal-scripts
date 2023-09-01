@@ -12,7 +12,6 @@ public class Promote : Reinforce
 {
     public void Execute(Weapon weapon)
     {
-        //Decomposition.Instance.DestroyWeapon(ReinforceManager.Instance.SelectedMaterials);
         weapon.Promote();
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.rarity), weapon.data.rarity);

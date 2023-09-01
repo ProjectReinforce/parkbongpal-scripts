@@ -18,7 +18,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
             WeaponChangeEvent?.Invoke();
         }
     }
-    Weapon[] selectedMaterials= new Weapon[2];
+    Weapon[] selectedMaterials = new Weapon[2];
     public Weapon[] SelectedMaterials
     {
         get => selectedMaterials;
@@ -40,7 +40,7 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
     void OnDisable()
     {
         selectedWeapon = null;
-        selectedMaterials = null;
+        ResetMaterials();
         refineResults?.Initialize();
     }
 }

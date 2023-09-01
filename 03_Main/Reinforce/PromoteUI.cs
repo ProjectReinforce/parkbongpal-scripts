@@ -92,9 +92,9 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
 
     protected override void RegisterPreviousButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(ReinforceManager.Instance.SelectedMaterials));
         reinforceButton.onClick.AddListener(() => ReinforceManager.Instance.ResetMaterials());
         reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
-        //ReinforceManager.Instance.SelectedMaterials
         reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
     }
 
@@ -202,8 +202,6 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
                 UIManager.Instance.ShowWarning($"알림",$"이미 선택된 무기입니다.");
                 return;
             }
-            // weaponSlots[selectedMaterialIndex+2].sprite = slotSprites[weapon.data.rarity];
-            // weaponIcons[selectedMaterialIndex+2].sprite = weapon.sprite;
             ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
             
             

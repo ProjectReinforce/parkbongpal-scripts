@@ -73,6 +73,7 @@ public class Decomposition : Singleton<Decomposition>
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Player.Instance.Data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
        
         Reset();
         okUI.SetText(totalGold,totalSoul);
@@ -136,26 +137,11 @@ public class Decomposition : Singleton<Decomposition>
 
     public void DestroyWeapon(Weapon[] weapons)
     {
-        List<TransactionValue> transactionList = new List<TransactionValue>();
         foreach (var weapon in weapons)
         {
-            Debug.Log(weapon);
-            Debug.Log(weapon.data);
-            Debug.Log(weapon.data.inDate);
             string indate = weapon.data.inDate;
             weapon.myslot.SetWeapon(null);
-            transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
+            Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));        // foreach (var weapon in weapons)
         }
-        
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
-        {
-            if (!callback.IsSuccess())
-            {
-                Debug.LogError("Deconposition:DestroyWeapon: Ʈ������ ����"+callback);
-                return;
-            }
-            InventoryPresentor.Instance.SortSlots();
-        });
     }
-
 }
