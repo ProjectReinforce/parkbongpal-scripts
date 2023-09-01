@@ -138,7 +138,7 @@ public class Player : Singleton<Player>
     {
         userData.exp += _exp;
         if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
-            LevelUp();
+            LevelUp(_directUpdate);
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.exp), userData.exp);
@@ -304,8 +304,13 @@ public class Player : Singleton<Player>
 
     // todo: 개선 필요
     // public List<TransactionValue> GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond)
-    public void GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond, Action _callback = null)
+    // public void GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond, Action _callback = null)
+    public void GetQuestRewards(int _exp, int _gold, int _diamond)
     {
+        AddExp(_exp, false);
+        AddGold(_gold, false);
+        AddDiamond(_diamond, false);
+
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp + _exp},
@@ -313,25 +318,28 @@ public class Player : Singleton<Player>
             {nameof(UserData.colum.diamond), Data.diamond + _diamond}
         };
 
-        _transactionValues.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent();
+        
+        // _transactionValues.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
 
-        // return _transactionValues;
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, _transactionValues, ( callback ) => 
-        {
-            if (!callback.IsSuccess())
-            {
-                Debug.LogError("게임 정보 삽입 실패 : " + callback);
-                return;
-            }
-            userData.exp += _exp;
-            topUIDatatViewer.UpdateExp();
-            userData.gold += _gold;
-            topUIDatatViewer.UpdateGold();
-            userData.diamond += _diamond;
-            topUIDatatViewer.UpdateDiamond();
-            _callback.Invoke();
-        });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        // // return _transactionValues;
+        // SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, _transactionValues, ( callback ) => 
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.LogError("게임 정보 삽입 실패 : " + callback);
+        //         return;
+        //     }
+        //     userData.exp += _exp;
+        //     topUIDatatViewer.UpdateExp();
+        //     userData.gold += _gold;
+        //     topUIDatatViewer.UpdateGold();
+        //     userData.diamond += _diamond;
+        //     topUIDatatViewer.UpdateDiamond();
+        //     _callback.Invoke();
+        // });
+        // if (CallChecker.Instance != null)
+        //     CallChecker.Instance.CountCall();
     }
 }

@@ -83,8 +83,9 @@ public class RecordData
     public void LoadOrInitRecord(string _userInDate)
     {
         userID = PlayerPrefs.GetString("UserID");
+        Debug.Log($"loaded userID : {userID} / indate : {_userInDate}");
         
-        if (_userInDate == UserID)
+        if (_userInDate == userID)
         {
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
             // Debug.Log($"UsedGold : {useGold}");
@@ -109,7 +110,24 @@ public class RecordData
 
             return;
         }
-        userID = BackEnd.Backend.UserInDate;
+        PlayerPrefs.SetString("UserID", _userInDate);
+        PlayerPrefs.DeleteKey("UseGold");
+        PlayerPrefs.DeleteKey("GetGold");
+        PlayerPrefs.DeleteKey("UseDiamond");
+        PlayerPrefs.DeleteKey("GetDiamond");
+        PlayerPrefs.DeleteKey("RegisterItem");
+        PlayerPrefs.DeleteKey("DisassembleItem");
+        PlayerPrefs.DeleteKey("ProduceWeapon");
+        PlayerPrefs.DeleteKey("AdvanceProduceWeapon");
+        PlayerPrefs.DeleteKey("TryPromote");
+        PlayerPrefs.DeleteKey("TryAdditional");
+        PlayerPrefs.DeleteKey("TryReinforce");
+        PlayerPrefs.DeleteKey("TryMagic");
+        PlayerPrefs.DeleteKey("TrySoul");
+        PlayerPrefs.DeleteKey("TryRefine");
+        PlayerPrefs.DeleteKey("Attendance");
+        PlayerPrefs.DeleteKey("GetBonus");
+        PlayerPrefs.DeleteKey("SeeAds");
         useGold = 0;
         getGold = 0;
         useDiamond = 0;
