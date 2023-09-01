@@ -31,9 +31,9 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
             lastLogin.Day == BackEndDataManager.Instance.ServerTime.Day) return false;
         if (lastLogin.Month != BackEndDataManager.Instance.ServerTime.Month)
             day = 0;
-      
-        Player.Instance.SetAttendance(++day);
         days = day;
+        Player.Instance.SetAttendance(++day);
+        
         return true;
     }
 

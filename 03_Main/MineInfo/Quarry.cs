@@ -120,13 +120,14 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
             Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
             
         }
-        totalGold = 0;
+       
         for (int i = 0; i < mines.Length; i++)
         {
             mines[i].Gold = 0;
         }
         receiptButton.interactable = true;
         Player.Instance.LateAddGold(totalGold);
+        totalGold = 0;
         Transactions.SendCurrent();
     }
 
