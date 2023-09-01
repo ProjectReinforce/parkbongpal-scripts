@@ -44,8 +44,14 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
         confirm.onClick.RemoveAllListeners();
         confirm.onClick.AddListener(() =>
         {
+            Weapon weapon = InventoryPresentor.Instance.currentWeapon;
+            if (weapon.data.mineId != -1)
+            {
+                Manager.UIManager.Instance.ShowWarning($"알림",$"광산에 대여중인 무기입니다.");
+                return;
+            }
             
-            ReinforceManager.Instance.SelectedWeapon = InventoryPresentor.Instance.currentWeapon;
+            ReinforceManager.Instance.SelectedWeapon = weapon;
             InventoryPresentor.Instance.CloseInventory();
         });
     }

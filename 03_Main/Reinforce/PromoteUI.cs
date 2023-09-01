@@ -192,6 +192,11 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         confirm.onClick.AddListener(() =>
         {
             Weapon weapon =  InventoryPresentor.Instance.currentWeapon;
+            if (weapon.data.mineId != -1)
+            {
+                UIManager.Instance.ShowWarning($"알림",$"광산에 대여중인 무기입니다.");
+                return;
+            }
             if (weapon.data.rarity != ReinforceManager.Instance.SelectedWeapon.data.rarity)
             {
                 UIManager.Instance.ShowWarning($"알림",$"선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
