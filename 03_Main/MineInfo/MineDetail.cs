@@ -21,6 +21,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
     [SerializeField] private Text weaponName;
     [SerializeField] private Text mineWithWeaponStats;
     [SerializeField] private Text skillDescription;
+    [SerializeField] private GameObject[] stageStars;
    // [SerializeField] private Text gold;
 
    [SerializeField] UpDownVisualer upDownVisualer;
@@ -38,6 +39,12 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
         stat2.text = $"{mine.GetMineData().hp}";
         stat3.text = $"{mine.GetMineData().size}";
         stat4.text = $"{mine.GetMineData().lubricity}";
+        for (int i = 0; i < stageStars.Length; i++)
+        {
+            stageStars[i].SetActive(true);
+            if(i+1>mine.GetMineData().stage) stageStars[i].SetActive(false);
+        }
+        
 
         if (mine.rentalWeapon is null)
         {

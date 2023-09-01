@@ -533,7 +533,7 @@ namespace Manager
             };
             deligate[1] = (count) =>
             {
-                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 4, callback =>
+                SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 1, callback =>
                 {
                     if (!callback.IsSuccess())
                     {

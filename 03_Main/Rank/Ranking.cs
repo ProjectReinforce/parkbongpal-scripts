@@ -8,14 +8,15 @@ using Manager;
 public class Ranking : Singleton<Ranking>
 {
     const int  PORT_COUNT =2;
-    private Rank[][][] ranks = new Rank[PORT_COUNT][][];
+     Rank[][][] ranks = new Rank[PORT_COUNT][][];
     /* 탑랭 마이랭, 랭킹종류, 각 차트 */
      
     
-    [SerializeField] private RectTransform[] viewPorts;
-    private RankSlot[][] slotLists = new RankSlot[2][];
+    [SerializeField]  RectTransform[] viewPorts;
+     RankSlot[][] slotLists = new RankSlot[2][];
 
-
+     [SerializeField] GameObject nullMyRanknullMyRank;
+     //[SerializeField] Sprite[] oneTwoThree;
     protected override void Awake()
     {
         ranks[0] = BackEndDataManager.Instance.topRanks;
@@ -40,11 +41,24 @@ public class Ranking : Singleton<Ranking>
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            if (ranks is null|| i >= ranks.Length)
+            if (ranks is null)
+            {
+                viewPorts[1].gameObject.SetActive(false);
+                nullMyRanknullMyRank.SetActive(true);
+                break;
+            }
+            else
+            {
+                viewPorts[1].gameObject.SetActive(true);
+                nullMyRanknullMyRank.SetActive(false);
+            }
+
+            if (i >= ranks.Length)
             {
                 slots[i].SetNull();
                 continue;
             }
+            
             slots[i].SetData(ranks[i]);
         }
     }
