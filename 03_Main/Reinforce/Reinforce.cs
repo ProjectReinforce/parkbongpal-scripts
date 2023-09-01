@@ -12,8 +12,8 @@ public class Promote : Reinforce
 {
     public void Execute(Weapon weapon)
     {
+        //Decomposition.Instance.DestroyWeapon(ReinforceManager.Instance.SelectedMaterials);
         weapon.Promote();
-
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.rarity), weapon.data.rarity);
         param.Add(nameof(WeaponData.colum.PromoteStat), weapon.data.PromoteStat);
@@ -27,9 +27,9 @@ public class Promote : Reinforce
         //     Debug.LogError(bro);
         //     // 메시지 출력
         // }
-
         weapon.myslot.UpdateSlot(weapon);
         weapon.SetPower();
+        
     }
 }
 

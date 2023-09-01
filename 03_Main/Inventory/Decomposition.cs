@@ -134,5 +134,28 @@ public class Decomposition : Singleton<Decomposition>
 
     }
 
+    public void DestroyWeapon(Weapon[] weapons)
+    {
+        List<TransactionValue> transactionList = new List<TransactionValue>();
+        foreach (var weapon in weapons)
+        {
+            Debug.Log(weapon);
+            Debug.Log(weapon.data);
+            Debug.Log(weapon.data.inDate);
+            string indate = weapon.data.inDate;
+            weapon.myslot.SetWeapon(null);
+            transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
+        }
+        
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.LogError("Deconposition:DestroyWeapon: Ʈ������ ����"+callback);
+                return;
+            }
+            InventoryPresentor.Instance.SortSlots();
+        });
+    }
 
 }

@@ -205,6 +205,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
             // weaponSlots[selectedMaterialIndex+2].sprite = slotSprites[weapon.data.rarity];
             // weaponIcons[selectedMaterialIndex+2].sprite = weapon.sprite;
             ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
+            
+            
             SelectWeapon();
             
             InventoryPresentor.Instance.CloseInventory();

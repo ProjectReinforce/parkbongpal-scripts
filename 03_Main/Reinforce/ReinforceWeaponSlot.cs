@@ -34,6 +34,7 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
     public void SetOpen()
     {
         InventoryPresentor.Instance.SetInventoryOption(this);
+        smithyText.text = "강화하기";
     }
 
     [SerializeField] private UnityEngine.UI.Button confirm;
@@ -43,8 +44,8 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
         confirm.onClick.RemoveAllListeners();
         confirm.onClick.AddListener(() =>
         {
-            ReinforceManager.Instance.SelectedWeapon = InventoryPresentor.Instance.currentWeapon;
             
+            ReinforceManager.Instance.SelectedWeapon = InventoryPresentor.Instance.currentWeapon;
             InventoryPresentor.Instance.CloseInventory();
         });
     }
