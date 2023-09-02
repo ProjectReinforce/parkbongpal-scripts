@@ -40,6 +40,7 @@ public class Store : Singleton<Store>
                 UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
             }
+            Player.Instance.TryProduceWeapon(1);
         }
         else
         {
@@ -48,6 +49,7 @@ public class Store : Singleton<Store>
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
             }
+            Player.Instance.TryAdvanceProduceWeapon(1);
         }
 
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
@@ -79,6 +81,7 @@ public class Store : Singleton<Store>
                 UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
             }
+            Player.Instance.TryProduceWeapon(TEN);
         }
         else
         {
@@ -87,6 +90,7 @@ public class Store : Singleton<Store>
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
             }
+            Player.Instance.TryAdvanceProduceWeapon(TEN);
         }
  
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];

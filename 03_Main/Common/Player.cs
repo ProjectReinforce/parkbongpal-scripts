@@ -192,20 +192,14 @@ public class Player : Singleton<Player>
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
-    public bool TryProduceWeapon(int _goldCost, int _count)
+    public void TryProduceWeapon(int _count)
     {
-       if(!AddGold(_goldCost))
-            return false ;
         recordData.ModifyProduceRecord(_count);
-        return true ;
     }
 
-    public bool TryAdvanceProduceWeapon(int _diamondCost, int _count)
+    public void TryAdvanceProduceWeapon(int _count)
     {
-        if (AddDiamond(_diamondCost))
-            return false;
         recordData.ModifyAdvanceProduceRecord(_count);
-        return true;
     }
 
     public void TryPromote(int _goldCost)
@@ -320,26 +314,5 @@ public class Player : Singleton<Player>
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent();
-        
-        // _transactionValues.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
-
-        // // return _transactionValues;
-        // SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, _transactionValues, ( callback ) => 
-        // {
-        //     if (!callback.IsSuccess())
-        //     {
-        //         Debug.LogError("게임 정보 삽입 실패 : " + callback);
-        //         return;
-        //     }
-        //     userData.exp += _exp;
-        //     topUIDatatViewer.UpdateExp();
-        //     userData.gold += _gold;
-        //     topUIDatatViewer.UpdateGold();
-        //     userData.diamond += _diamond;
-        //     topUIDatatViewer.UpdateDiamond();
-        //     _callback.Invoke();
-        // });
-        // if (CallChecker.Instance != null)
-        //     CallChecker.Instance.CountCall();
     }
 }
