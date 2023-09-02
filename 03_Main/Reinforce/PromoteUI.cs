@@ -29,6 +29,14 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         basicSlot = weaponSlots[0].sprite;
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        reinforceManager.MaterialChangeEvent -= UpdateMaterialsImage;
+        reinforceManager.MaterialChangeEvent += UpdateMaterialsImage;
+    }
+
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -37,6 +45,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
             item.sprite = basicSprite;
         
         ReinforceManager.Instance.ResetMaterials();
+        reinforceManager.MaterialChangeEvent -= UpdateMaterialsImage;
     }
 
     void UpdateWeaponImage()
@@ -46,6 +55,17 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         weaponIcons[0].sprite = weapon.sprite;
         weaponIcons[1].sprite = weapon.sprite;
 
+        weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
+        if (weapon.data.rarity != (int)Rarity.legendary)
+            weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
+        else
+            weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
+
+        weaponNameText.text = weapon.name;
+    }
+
+    void UpdateMaterialsImage()
+    {
         for (int i = 0; i < materialIcons.Length; i++)
         {
             if (ReinforceManager.Instance.SelectedMaterials[i] != null)
@@ -53,12 +73,6 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
             else
                 materialIcons[i].sprite = basicSprite;
         }
-
-        weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
-        if (weapon.data.rarity != (int)Rarity.legendary)
-            weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
-        else
-            weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
         if (ReinforceManager.Instance.SelectedMaterials[0] != null)
             weaponSlots[2].sprite = slotSprites[ReinforceManager.Instance.SelectedMaterials[0].data.rarity];
         else
@@ -68,7 +82,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         else
             weaponSlots[3].sprite = basicSlot;
 
-        weaponNameText.text = weapon.name;
+        CheckQualification();
     }
 
     protected override void UpdateCosts()
@@ -88,6 +102,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     protected override void UpdateInformations()
     {
         UpdateWeaponImage();
+        reinforceManager.ResetMaterials();
+        UpdateMaterialsImage();
     }
 
     protected override void RegisterPreviousButtonClickEvent()
@@ -95,6 +111,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(ReinforceManager.Instance.SelectedMaterials));
         reinforceButton.onClick.AddListener(() => ReinforceManager.Instance.ResetMaterials());
         reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
+        reinforceButton.onClick.AddListener(() => UpdateMaterialsImage());
         reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
     }
 
@@ -208,9 +225,9 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
                 return;
             }
             ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
+            reinforceManager.MaterialChangeEvent?.Invoke();
             
-            
-            SelectWeapon();
+            // SelectWeapon();
             
             InventoryPresentor.Instance.CloseInventory();
             

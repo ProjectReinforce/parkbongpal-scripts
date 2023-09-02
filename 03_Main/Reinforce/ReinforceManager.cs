@@ -5,6 +5,7 @@ using UnityEngine;
 public class ReinforceManager : Manager.Singleton<ReinforceManager>
 {
     public System.Action WeaponChangeEvent;
+    public System.Action MaterialChangeEvent;
 
     Weapon selectedWeapon;
     public Weapon SelectedWeapon
