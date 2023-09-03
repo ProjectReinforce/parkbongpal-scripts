@@ -35,10 +35,10 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
     {
         mineName.text = mine.GetMineData().name;
         description.text = mine.GetMineData().description;
-        stat.text = $"{mine.GetMineData().defence}";
-        stat2.text = $"{mine.GetMineData().hp}";
-        stat3.text = $"{mine.GetMineData().size}";
-        stat4.text = $"{mine.GetMineData().lubricity}";
+        stat.text = $"경도 {mine.GetMineData().defence}";
+        stat2.text = $"강도 {mine.GetMineData().hp}";
+        stat3.text = $"크기 {mine.GetMineData().size}";
+        stat4.text = $"평활 {mine.GetMineData().lubricity}";
         for (int i = 0; i < stageStars.Length; i++)
         {
             stageStars[i].SetActive(true);
