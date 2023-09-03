@@ -168,6 +168,11 @@ public class Mine :MonoBehaviour,Rental
     {
         if(rentalWeapon is null) return;
         if(isReceipting) return;
+        if (gold < 100)
+        {
+            UIManager.Instance.ShowWarning("알림", "모은 골드가 100 골드를 넘어야 합니다.");
+            return;
+        }
         isReceipting = true;
         Player.Instance.AddGold(gold);
         gold = 0;
