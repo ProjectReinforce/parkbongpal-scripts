@@ -10,6 +10,14 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
     
     [SerializeField] Text weaponName;
     [SerializeField] Text combatPower;
+
+    static Color[] rarityColors = 
+    {new Color(0, 0, 0.9f),
+    new Color(0, 0.9f, 0.9f),
+    new Color(0, 0.9f, 0),
+    new Color(0.9f, 0.9f, 0),
+    new Color(0.9f, 0, 0)};
+    [SerializeField] Image rarityColorImage;
     [SerializeField] Text rarity;
     [SerializeField] Text stats;
     [SerializeField] Text stats2;
@@ -19,6 +27,7 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
     [SerializeField] Image WeaponImage;
     [SerializeField] Image MagicImage1;
     [SerializeField] Image MagicImage2;
+
 
     public void ViewUpdate(Weapon weapon)
     {
@@ -30,6 +39,7 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
         weaponName.text = weapon.name;
         combatPower.text = weapon.power.ToString();
         WeaponData weaponData = weapon.data;
+        rarityColorImage.color=rarityColors[weaponData.rarity];   
         rarity.text = ((Rarity)weaponData.rarity).ToString();
         stats.text = $"{weaponData.atk}\n{weaponData.atkSpeed}\n{weaponData.atkRange}\n{weaponData.accuracy}\n{weaponData.criticalRate}\n{weaponData.criticalDamage}";
         stats2.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";

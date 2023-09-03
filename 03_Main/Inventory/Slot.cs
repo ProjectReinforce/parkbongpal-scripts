@@ -39,9 +39,9 @@ public class Slot : NewThing,  IComparable<Slot>
     [SerializeField] GameObject SelletChecker;
     public void SetCurrent()//dip 위배 , 리팩토링 대상.
     {
-       
-        if(myWeapon is  null) return;
         NewClear();
+        if(myWeapon is  null) return;
+       
         InventoryPresentor.Instance.currentWeapon = myWeapon;
         Decomposition.Instance?.ChooseWeaponSlot(this, SelletChecker);
         

@@ -25,44 +25,27 @@ public class Decomposition : Singleton<Decomposition>
         
         //InventoryPresentor.Instance.
         //InventoryPresentor.Instance.currentWeapon = null;
-        int limit = 0,totalGold = 0,totalSoul = 0;
+        int totalGold = 0,totalSoul = 0;
      
+        
         while (slots.Count > 0)
         {
-            List<TransactionValue> transactionList = new List<TransactionValue>();
-            while (limit<10&&slots.Count > 0)
-            {
-                Slot slot = slots.First.Value;
-                if (slot == null) continue;
-                totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[0];
-                totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
-                    
-                totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
-                totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
-                string indate = slot.myWeapon.data.inDate;
-                slot.SetCurrent();
-                slot.NewClear();
-                slot.SetWeapon(null);
-                slots.RemoveFirst();
-                transactionList.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));
-                limit++;
-            }
-            Debug.Log($"limit={limit}");
-            SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, transactionList, ( callback ) => 
-            {
-                if (!callback.IsSuccess())
-                {
-                    Debug.LogError("Deconposition:SetDecomposit: Ʈ������ ����"+callback);
-                    return;
-                }
-                InventoryPresentor.Instance.SortSlots();
-            });
-            limit = 0;
-            if (CallChecker.Instance != null)
-                CallChecker.Instance.CountCall();
+            Slot slot = slots.First.Value;
+            if (slot == null) continue;
+            totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[0];
+            totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
+                
+            totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
+            totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
+            string indate = slot.myWeapon.data.inDate;
+            //slot.SetCurrent();
+            slot.NewClear();
+            slot.SetWeapon(null);
+            slots.RemoveFirst();
+            Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));            
         }
-
-        
+        Transactions.SendCurrent();
+        InventoryPresentor.Instance.SortSlots();
         Player.Instance.AddGold(totalGold, false);
         Player.Instance.AddSoul(totalSoul, false);
         
@@ -85,6 +68,7 @@ public class Decomposition : Singleton<Decomposition>
     private List<breakSlot> breakSlots = new List<breakSlot>();
     public void ChooseWeaponSlot(Slot slot, GameObject sellected)
     {
+        Debug.Log("@@@@@@@@@@@@@@@@@@");
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
             UIManager.Instance.ShowWarning($"알림", $"광산에 대여해준 무기입니다.");
@@ -129,7 +113,6 @@ public class Decomposition : Singleton<Decomposition>
         
         breakSlots.Clear();
         slots.Clear();
-        breakSlots.Clear();
         ui.ViewUpdate(isDecompositing);
         InventoryPresentor.Instance.currentWeapon = null;
 
