@@ -99,6 +99,11 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     {
         currentMine.Receipt(_callback);
     }
+
+    public void Receipt()
+    {
+        currentMine.Receipt();
+    }
     
 
     private int totalGold;
