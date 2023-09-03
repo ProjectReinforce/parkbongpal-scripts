@@ -23,8 +23,11 @@ public class MineGame : Singleton<MineGame>
     public void Pause()
     {
         isAttackAble = false;
-        StopCoroutine(startCountdown);
         timerControl.StopOperating();
+        if (startCountdown != null)
+        {
+            StopCoroutine(startCountdown);
+        }
     }
 
     public Weapon currentWeapon { get; set; }
