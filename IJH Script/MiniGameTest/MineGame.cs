@@ -11,18 +11,19 @@ public class MineGame : Singleton<MineGame>
     [SerializeField] Text text;     // 터치 스타트 텍스트
     [SerializeField] Button mainButton;
     [SerializeField] GameObject resultPanel;
-    
+    Coroutine startCountdown;
     bool isAttackAble = false;
 
     public void Resume()
     {
         mainButton.gameObject.SetActive(true);
-        StartCoroutine(Countdown());
+        startCountdown = StartCoroutine(Countdown());
     }
 
     public void Pause()
     {
         isAttackAble = false;
+        StopCoroutine(startCountdown);
         timerControl.StopOperating();
     }
 
@@ -40,7 +41,7 @@ public class MineGame : Singleton<MineGame>
     public void StartBlinkingAndCountdown()
     {
         mainButton.interactable = false;
-        StartCoroutine(Countdown());
+        startCountdown = StartCoroutine(Countdown());
     }
     WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
     IEnumerator Countdown()
