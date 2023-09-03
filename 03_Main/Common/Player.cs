@@ -66,6 +66,7 @@ public class Player : Singleton<Player>
     // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold, bool _directUpdate = true)
     {
+        Debug.Log("$$$$$$$$$$"+(userData.gold + _gold < 0));
         if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
 

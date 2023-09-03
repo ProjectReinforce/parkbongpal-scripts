@@ -11,16 +11,18 @@ public class Pidea : Singleton<Pidea>
     [SerializeField] PideaCollection collection;
     [SerializeField] PideaDetail pideaDetail;
     [SerializeField] RectTransform currentTap;
-    
+    [SerializeField] UnityEngine.UI.ScrollRect scrollView;
     [SerializeField] RectTransform[] rarityTables;
     public void ClickTap(int index)
     {
         currentTap.gameObject.SetActive(false);
         currentTap = rarityTables[index];
+        scrollView.content = currentTap;
         currentTap.gameObject.SetActive(true);
     }
     Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
+
 
     public int RegisteredWeaponCount
     {

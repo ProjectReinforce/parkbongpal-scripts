@@ -87,16 +87,17 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
     public void ClearWeapon()
     {
         int beforeGoldPerMin = currentMine.goldPerMin;
-        Receipt();
-        currentMine.SetWeapon(null);
-        Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin-beforeGoldPerMin);
-        currentMine = currentMine;
-    }
+        Receipt(() =>
+        {
+            currentMine.SetWeapon(null);
+            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin - beforeGoldPerMin);
+            currentMine = currentMine;
+        });
+    }    
     
-    
-    public void Receipt()
+    public void Receipt(Action _callback = null)
     {
-        currentMine.Receipt();
+        currentMine.Receipt(_callback);
     }
     
 

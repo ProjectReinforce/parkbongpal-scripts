@@ -41,8 +41,8 @@ public class Decomposition : Singleton<Decomposition>
             totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
             totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
-            //slot.SetCurrent();
-            slot.NewClear();
+            slot.SetCurrent();
+            
             slot.SetWeapon(null);
             slots.RemoveFirst();
             Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));            

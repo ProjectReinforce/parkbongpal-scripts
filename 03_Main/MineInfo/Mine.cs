@@ -164,13 +164,14 @@ public class Mine :MonoBehaviour,Rental
     }
 
     private bool isReceipting;
-    public void Receipt()
+    public void Receipt(Action _callback = null)
     {
         if(rentalWeapon is null) return;
         if(isReceipting) return;
         isReceipting = true;
-        Player.Instance.AddGold(Gold);
+        Player.Instance.AddGold(gold);
         gold = 0;
+        Debug.Log("@#@#@#@" + gold);
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate),date);
@@ -181,8 +182,12 @@ public class Mine :MonoBehaviour,Rental
             {
                 Debug.Log("Mine:수령실패"+callback);
             }
+            Debug.Log("SDSDS"+date);
+
             rentalWeapon.SetBorrowedDate(date);
             goldText.text = gold.ToString();
+            
+            _callback?.Invoke();
             isReceipting = false;
         });
         if (CallChecker.Instance != null)
