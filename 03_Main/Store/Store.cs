@@ -76,7 +76,7 @@ public class Store : Singleton<Store>
 
         if (type == 0)
         {
-            if (!Player.Instance.LateAddGold(-COST_GOLD * TEN))
+            if (!Player.Instance.LateAddGold(-COST_GOLD * 9))
             {
                 UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
                 return;
@@ -85,7 +85,7 @@ public class Store : Singleton<Store>
         }
         else
         {
-            if (!Player.Instance.LateAddDiamond(-COST_DIAMOND * TEN))
+            if (!Player.Instance.LateAddDiamond(-COST_DIAMOND * 9))
             {
                 UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
                 return;
