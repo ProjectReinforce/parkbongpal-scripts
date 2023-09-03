@@ -105,7 +105,8 @@ public class Sulsu:Magic //술수
     /*  0	술수	100	무기에 무언가 술수를 부림.	광석 내구도를 초과한 대미지가 다른 광석에 전달됩니다.*/
     public override float GetHpPerDMG()
     {
-         return  GetMineData().hp  *coefficient*(1/100)/ GetOneHitDMG();
+        //Debug.Log($"{GetMineData().hp} / {coefficient} / {(1 / 100)} / {GetOneHitDMG()}");
+        return  GetMineData().hp  *coefficient*(1f/100)/ GetOneHitDMG();
     }
 }
 
@@ -116,7 +117,7 @@ public class Myobub:Magic//묘법
     /* 1	묘법	3	매우 약삭빠르며 뛰어난 꾀	광석 최대 내구도의 3퍼센트에 달하는 추가 데미지를 줍니다.*/
    public override float GetOneHitDMG()
    {
-        return  GetWeaponData().atk+GetMineData().hp*coefficient*(1/100) - GetMineData().defence;
+        return  GetWeaponData().atk+GetMineData().hp*coefficient*(1f/100) - GetMineData().defence;
    }
 }
 
@@ -145,7 +146,7 @@ public class Sinyum:Magic//신념
         float miss = GetMiss();
         if (miss < 0)
         {
-            weaponData.defaultStat[(int)StatType.atkSpeed] -= (int)miss*coefficient*(1/100);
+            weaponData.defaultStat[(int)StatType.atkSpeed] -= (int)(miss*coefficient*(1f/100));
         }
         return weaponData;
     }
@@ -189,7 +190,7 @@ public class Ohpock : Magic //유일
    {
        WeaponData weaponData = base.GetWeaponData();
 
-       weaponData.defaultStat[(int)StatType.atkRange] += weaponData.atk * coefficient * (1 / 100);  
+       weaponData.defaultStat[(int)StatType.atkRange] += (int)(weaponData.atk * coefficient * (1f / 100));  
            
        return weaponData;
    }
@@ -202,7 +203,7 @@ public class Zagyuck : Magic //유일
    public override MineData GetMineData()
    {
        MineData mineData= base.GetMineData();
-       mineData.defence -= base.GetWeaponData().accuracy * coefficient * (1 / 100);
+       mineData.defence -= (int)(base.GetWeaponData().accuracy * coefficient * (1f / 100));
        return mineData;
    }
 }
@@ -214,8 +215,8 @@ public class Jinsum : Magic //유일
    public override WeaponData GetWeaponData()
    {
        WeaponData weaponData = base.GetWeaponData();
-       weaponData.defaultStat[(int)StatType.atk] -= weaponData.defaultStat[(int)StatType.atk] * coefficient * (1 / 100);
-       weaponData.defaultStat[(int)StatType.atkSpeed] -= weaponData.defaultStat[(int)StatType.atkSpeed] * coefficient * (1 / 100);  
+       weaponData.defaultStat[(int)StatType.atk] -= (int)(weaponData.defaultStat[(int)StatType.atk] * coefficient * (1f / 100));
+       weaponData.defaultStat[(int)StatType.atkSpeed] -= (int)(weaponData.defaultStat[(int)StatType.atkSpeed] * coefficient * (1f / 100));  
        weaponData.defaultStat[(int)StatType.atkRange] = 500;  
            
        return weaponData;
@@ -227,7 +228,7 @@ public class Choockbock : Magic //유일
     public override WeaponData GetWeaponData()
     {
         WeaponData weaponData = base.GetWeaponData();
-        int successCount = weaponData.NormalStat[(int)StatType.atk]/5;
+        int successCount = (int)(weaponData.NormalStat[(int)StatType.atk]/5f);
         for (int i = 0; i < Enum.GetValues(typeof(StatType)).Length; i++)
         {
             weaponData.defaultStat[i] += successCount;
@@ -258,7 +259,7 @@ public class Mise : Magic //유일
     public override MineData GetMineData()
     {
         MineData mineData= base.GetMineData();
-        mineData.hp -=  mineData.hp* base.GetWeaponData().atkSpeed * coefficient * (1 / 10000);
+        mineData.hp -=  (int)(mineData.hp* base.GetWeaponData().atkSpeed * coefficient * (1f / 10000));
         return mineData;
     }
     

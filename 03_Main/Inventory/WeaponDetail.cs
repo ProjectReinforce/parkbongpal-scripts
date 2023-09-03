@@ -12,11 +12,7 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
     [SerializeField] Text combatPower;
 
     static Color[] rarityColors = 
-    {new Color(0, 0, 0.9f),
-    new Color(0, 0.9f, 0.9f),
-    new Color(0, 0.9f, 0),
-    new Color(0.9f, 0.9f, 0),
-    new Color(0.9f, 0, 0)};
+    { Color.blue, Color.cyan, Color.green, Color.yellow, Color.magenta, Color.red};
     [SerializeField] Image rarityColorImage;
     [SerializeField] Text rarity;
     [SerializeField] Text stats;

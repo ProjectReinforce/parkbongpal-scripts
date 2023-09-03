@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BackEnd;
 using Manager;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Decomposition : Singleton<Decomposition>
 {
@@ -15,6 +16,8 @@ public class Decomposition : Singleton<Decomposition>
     [SerializeField] private DecompositionUI ui;
     
     [SerializeField] DecompositonReward okUI;
+    [SerializeField] RectTransform scrollView;
+    [SerializeField] RectTransform content;
     public void SetDecomposit()
     {
         if(isDecompositing&&slots.Count < 1) return;
@@ -77,8 +80,6 @@ public class Decomposition : Singleton<Decomposition>
         if (!isDecompositing) return ;
         
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
-        
-        
         if (findingSlot is null)
         {
             breakSlot a = Instantiate(prefab, contentBox.transform);
@@ -86,6 +87,8 @@ public class Decomposition : Singleton<Decomposition>
             breakSlots.Add(a);
             
             slots.AddLast(slot);
+
+            Invoke(nameof(SetScroll), 0.1f);
         }
         else
         {
@@ -95,6 +98,12 @@ public class Decomposition : Singleton<Decomposition>
             Destroy(a.gameObject);
         }
         sellected.SetActive(findingSlot is null);
+    }
+
+    void SetScroll()
+    {
+        float deltaY = (content.sizeDelta.y - scrollView.sizeDelta.y) > 0 ? content.sizeDelta.y - scrollView.sizeDelta.y : 0;
+        content.anchoredPosition = Vector2.up * deltaY;
     }
 
     public void Reset()
