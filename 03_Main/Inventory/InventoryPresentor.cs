@@ -187,15 +187,20 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
      public void OptionOpen()
      {
          decompositButton.SetActive(true);
-         //smithyButton.gameObject.SetActive(true);
-         smithyButton.onClick.RemoveAllListeners();
-         smithyButton.onClick.AddListener(() =>
-         {
-             Weapon weapon = currentWeapon;
-             GameManager.Instance.MoveTap(smithy);
-             ReinforceManager.Instance.SelectedWeapon = weapon;
-         });
-     }
+        //smithyButton.gameObject.SetActive(true);
+        smithyButton.onClick.RemoveAllListeners();
+        smithyButton.onClick.AddListener(() =>
+        {
+            if (currentWeapon.data.mineId < 0)
+            {
+                UIManager.Instance.ShowWarning($"알림", $"대여중인 무기는 강화할수 없습니다.");
+                return;
+            }
+            Weapon weapon = currentWeapon;
+            GameManager.Instance.MoveTap(smithy);
+            ReinforceManager.Instance.SelectedWeapon = weapon;
+        });
+    }
 
      public void OptionClose()
      {

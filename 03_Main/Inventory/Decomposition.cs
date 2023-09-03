@@ -41,8 +41,9 @@ public class Decomposition : Singleton<Decomposition>
             totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
             totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
-            slot.SetCurrent();
             
+            slot.NewClear();
+            slot.updateX(false);
             slot.SetWeapon(null);
             slots.RemoveFirst();
             Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));            
@@ -71,7 +72,6 @@ public class Decomposition : Singleton<Decomposition>
     private List<breakSlot> breakSlots = new List<breakSlot>();
     public void ChooseWeaponSlot(Slot slot, GameObject sellected)
     {
-        Debug.Log("@@@@@@@@@@@@@@@@@@");
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
             UIManager.Instance.ShowWarning($"알림", $"광산에 대여해준 무기입니다.");
