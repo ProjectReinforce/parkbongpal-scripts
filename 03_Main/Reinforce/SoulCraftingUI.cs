@@ -8,7 +8,6 @@ public class SoulCraftingUI : ReinforceUIBase
     [SerializeField] Text upgradeCountText;
     [SerializeField] Text atkText;
     [SerializeField] Text soulCostText;
-    int goldCost;
     int soulCost;
 
     void UpdateAtk()
