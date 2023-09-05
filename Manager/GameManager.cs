@@ -1,29 +1,27 @@
 ﻿using System;
 using UnityEngine;
-
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 namespace Manager
 {
     public class GameManager: DontDestroy<GameManager>
     {
-        public bool SoundOn
+        bool isMuted;
+        public bool IsMuted
         {
             get
             {
-                int sound = PlayerPrefs.GetInt("SoundOption");
-                Debug.Log($"사운드 : {sound} 불러옴");
-                if (sound != 0)
-                    return true;
-                else
-                    return false;
+                int muted = PlayerPrefs.GetInt("SoundOption");
+                Debug.Log($"사운드 : {muted} 불러옴");
+                isMuted = muted != 0;
+                return isMuted;
             }
             set
             {
-                int sound = value == true ? 1 : 0; 
-                PlayerPrefs.SetInt("SoundOption", sound);
-                Debug.Log($"사운드 : {sound} 저장됨");
+                isMuted = value;
+                int muted = value == true ? 1 : 0;
+                PlayerPrefs.SetInt("SoundOption", muted);
+                Debug.Log($"사운드 : {muted} 저장됨");
             }
         }
 
@@ -38,9 +36,6 @@ namespace Manager
             base.Awake();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             mainTap = currentTap;
-
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         void Update()
@@ -49,11 +44,6 @@ namespace Manager
             {
                 InMainThreadQueue.Dequeue().Invoke();
             }
-        }
-
-        void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)
-        {
-            Debug.Log(_scene.name);
         }
 
         public void MainEnqueue(Action _action)
