@@ -235,7 +235,7 @@ public class Mine :MonoBehaviour,Rental
          
         if (isUnlock || _mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
         myButton.enabled = true;
-        selfImage.sprite = BackEndDataManager.Instance.EmptySprite;
+        selfImage.sprite = ResourceManager.Instance.DefaultMine;
         isUnlock = true;
         return _mineData.name;
     }

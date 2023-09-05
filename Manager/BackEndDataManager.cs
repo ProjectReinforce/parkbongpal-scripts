@@ -38,37 +38,10 @@ namespace Manager
             int countOfRarity = baseWeaponDatasFromRarity[(int)rairity].Count;
             return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, countOfRarity)];
         }
-
-        public Sprite[] weaponRaritySlot;
-       
-        public Sprite EmptySprite;
         
-        Sprite[] baseWeaponSprites;
-        
-
-        public Sprite GetBaseWeaponSprite(int index)
-        {
-            if (index >= baseWeaponSprites.Length || index < 0)
-            {
-                return null;
-            }
-            return baseWeaponSprites[index];
-        }
-
-        
-        [SerializeField]Sprite[] skills;
-
-        public Sprite GetSkill(int index)
-        {
-            return skills[index];
-        }
-        public Notifyer notifyer;
-
         protected override void Awake()
         {
             base.Awake();
-            baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
-            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
             //gameObject.TryGetComponent(out BillPughSingleTon.instance);
             searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
             for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)

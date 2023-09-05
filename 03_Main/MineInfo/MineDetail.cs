@@ -48,7 +48,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
 
         if (mine.rentalWeapon is null)
         {
-            weaponImage.sprite = BackEndDataManager.Instance.EmptySprite;
+            weaponImage.sprite = ResourceManager.Instance.DefaultMine;
             weaponName.text = "";
             mineWithWeaponStats.text = $"0\n0\n0";
             skillDescription.text = "";

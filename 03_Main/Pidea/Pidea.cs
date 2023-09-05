@@ -64,7 +64,7 @@ public class Pidea : Singleton<Pidea>
     {
         base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
-        notifyer = Instantiate(BackEndDataManager.Instance.notifyer,transform);
+        notifyer = Instantiate(ResourceManager.Instance.notifyer,transform);
       
         materials = BackEndDataManager.Instance.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)

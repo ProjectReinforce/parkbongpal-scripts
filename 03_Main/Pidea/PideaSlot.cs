@@ -12,7 +12,7 @@ public class PideaSlot : NewThing
     public int baseWeaponIndex => _baseWeaponIndex;
     public void Initialized(int index )
     {
-        weaponImage.sprite = BackEndDataManager.Instance.GetBaseWeaponSprite(index);
+        weaponImage.sprite = ResourceManager.Instance.GetBaseWeaponSprite(index);
         weaponImage.material = BackEndDataManager.Instance.ownedWeaponIds[index];
         _baseWeaponIndex = index;
     }

@@ -6,6 +6,14 @@ namespace Manager
 {
     public class ResourceManager : DontDestroy<ResourceManager>
     {
+        protected override void Awake()
+        {
+            base.Awake();
+
+            baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
+            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
+        }
+
         [SerializeField] Sprite[] baseWeaponSprites;
         public Sprite GetBaseWeaponSprite(int index)
         {
@@ -26,13 +34,9 @@ namespace Manager
         {
             base.Awake();
         }
-        protected override void Awake()
-        {
-            base.Awake();
 
-            baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
-            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
-        }
-
+        public Sprite[] weaponRaritySlot;
+        public Sprite DefaultMine;
+        public Notifyer notifyer;
     }
 }
