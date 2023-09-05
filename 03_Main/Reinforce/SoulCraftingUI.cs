@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SoulCraftingUI : ReinforceUIBase
 {
+    [SerializeField] Text successUpgradeCountText;
     [SerializeField] Text upgradeCountText;
     [SerializeField] Text atkText;
     [SerializeField] Text soulCostText;
@@ -90,7 +89,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     protected override bool Checks()
     {
-        if (CheckGold() && CheckSoul() && CheckUpgradeCount() ) return true;
+        if (CheckGold() && CheckSoul() && CheckUpgradeCount()) return true;
         return false;
     }
 }
