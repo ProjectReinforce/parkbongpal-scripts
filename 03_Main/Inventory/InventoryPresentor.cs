@@ -191,7 +191,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         smithyButton.onClick.RemoveAllListeners();
         smithyButton.onClick.AddListener(() =>
         {
-            if (currentWeapon.data.mineId < 0)
+            if (currentWeapon.data.mineId > -1)
             {
                 UIManager.Instance.ShowWarning($"알림", $"대여중인 무기는 강화할수 없습니다.");
                 return;
