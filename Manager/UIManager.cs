@@ -7,8 +7,7 @@ namespace Manager
 
         public void ShowWarning(string _title, string _description)
         {
-            warning.gameObject.SetActive(true);
-            warning.ShowMessage(_title, _description);
+            warning.Set(_title, _description);
         }
     }
 }

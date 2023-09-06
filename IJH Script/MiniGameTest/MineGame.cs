@@ -37,7 +37,7 @@ public class MineGame : Singleton<MineGame>
     void OnEnable() // 게임을 다시 켰을때도 초기화
     {
         InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
-        GameManager.Instance.OpenPopup(inventory);
+        // GameManager.Instance.OpenPopup(inventory);
         ResetGame();
     }
     

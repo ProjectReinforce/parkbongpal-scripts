@@ -26,7 +26,7 @@ public class TapMoveRegister : MonoBehaviour
     void Awake()
     {
         TryGetComponent(out button);
-        if (GameManager.Instance != null)
-            button.onClick.AddListener(() => GameManager.Instance.MoveTap(tap));
+        // if (GameManager.Instance != null)
+        //     button.onClick.AddListener(() => GameManager.Instance.MoveTap(tap));
     }
 }

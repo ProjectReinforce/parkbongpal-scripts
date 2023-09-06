@@ -22,7 +22,6 @@ public class SceneLoader : MonoBehaviour
     void Start()
     {
         StartCoroutine(SceneLoading());
-        BackendManager.Instance.BaseLoad();
     }
 
     IEnumerator SceneLoading()

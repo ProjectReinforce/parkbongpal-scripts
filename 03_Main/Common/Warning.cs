@@ -1,21 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Warning : MonoBehaviour
+public class Warning : MonoBehaviour, ISetMessage
 {
-    [SerializeField] UnityEngine.UI.Text title;
-    [SerializeField] UnityEngine.UI.Text description;
+    Text title;
+    Text message;
 
-    public void ShowMessage(string _title, string _description)
+    void Awake()
     {
-        title.text = _title;
-        description.text = _description;
+        title = Utills.Bind<Text>(transform, "Text_Title");
+        message = Utills.Bind<Text>(transform, "Text_Message");
     }
 
     public void Set(string _title, string _message)
     {
         title.text = _title;
-        description.text = _message;
+        message.text = _message;
+        gameObject.SetActive(true);
     }
 }

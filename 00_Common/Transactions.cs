@@ -24,7 +24,7 @@ public static class Transactions
             if (!callback.IsSuccess())
             {
                 Debug.LogError("게임 정보 삽입 실패 : " + callback);
-                // Alarm.Instance.Danger("통신 에러 : " + callback);
+                Managers.Alarm.Danger("통신 에러 : " + callback);
                 return;
             }
 

@@ -24,7 +24,7 @@ public static class Utills
     public static void LoadScene(string _sceneName)
     {
         targetScene = _sceneName;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("LoadingScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("R_LoadingScene");
     }
     
     public static int GetResultFromWeightedRandom(float[] _targetPercentArray)

@@ -14,6 +14,6 @@ public class DecompositonReward:MonoBehaviour
     {
         gold.text = totalGold.ToString();
         soul.text = totalSoul.ToString();
-        GameManager.Instance.OpenPopup(gameObject);
+        Managers.Game.OpenPopup(gameObject);
     }
 }

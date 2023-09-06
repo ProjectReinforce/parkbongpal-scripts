@@ -9,11 +9,11 @@ public class TapRegister : MonoBehaviour
 
     void Awake()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RegisterTap(gameObject, tapType);
-            if (tapType != TapType.Mine)
-                gameObject.SetActive(false);
-        }
+        // if (GameManager.Instance != null)
+        // {
+        //     GameManager.Instance.RegisterTap(gameObject, tapType);
+        //     if (tapType != TapType.Mine)
+        //         gameObject.SetActive(false);
+        // }
     }
 }

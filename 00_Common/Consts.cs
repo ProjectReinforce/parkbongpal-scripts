@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Consts : MonoBehaviour
 {
-    public const string SCENE_NAME = "Main_V6";
+    public const string SCENE_NAME = "R_Main_V6";
     public const int BLINK_COUNT = 3;
 }

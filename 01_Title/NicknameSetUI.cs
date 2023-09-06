@@ -80,7 +80,7 @@ public class NicknameSetUI : MonoBehaviour
             else
             {
                 // Debug.LogError($"신규 유저 데이터 삽입 실패 : {bro}");
-                Alarm.Instance.Danger($"신규 유저 데이터 삽입 실패 : {callback}");
+                Managers.Alarm.Danger($"신규 유저 데이터 삽입 실패 : {callback}");
             }
             confirmButton.interactable = true;
         });

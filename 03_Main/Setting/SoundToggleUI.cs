@@ -13,23 +13,23 @@ public class SoundToggleUI : MonoBehaviour
     {
         soundButton.onClick.AddListener(() => ToggleSound());
 
-        if (GameManager.Instance.IsMuted == true)
-            soundSlider.value = 0;
-        else
-            soundSlider.value = 1;
+        // if (GameManager.Instance.IsMuted == true)
+        //     soundSlider.value = 0;
+        // else
+        //     soundSlider.value = 1;
     }
 
     public void ToggleSound()
     {
-        if (GameManager.Instance.IsMuted == true)
-        {
-            soundSlider.value = 1;
-            GameManager.Instance.IsMuted = false;
-        }
-        else
-        {
-            soundSlider.value = 0;
-            GameManager.Instance.IsMuted = true;
-        }
+        // if (GameManager.Instance.IsMuted == true)
+        // {
+        //     soundSlider.value = 1;
+        //     GameManager.Instance.IsMuted = false;
+        // }
+        // else
+        // {
+        //     soundSlider.value = 0;
+        //     GameManager.Instance.IsMuted = true;
+        // }
     }
 }

@@ -10,8 +10,6 @@ using Manager;
 
 public class Login : MonoBehaviour
 {
-    const string SCENE_NAME = "Main_V6";
-
     [SerializeField] GameObject LoginPopup;
     [SerializeField] Button tokenLoginButton;
     Coroutine processCoroutine;
@@ -51,10 +49,10 @@ public class Login : MonoBehaviour
         {
             if (!callback.IsSuccess())
             {
-                GameManager.Instance.MainEnqueue(() =>
+                Managers.Game.MainEnqueue(() =>
                 {
                     // Debug.LogError($"자동 로그인 실패 : {callback}");
-                    Alarm.Instance.Warning($"자동 로그인 실패 : {callback}");
+                    Managers.Alarm.Warning($"자동 로그인 실패 : {callback}");
                     LoginPopup.SetActive(true);
                     tokenLoginButton.interactable = true;
                     StopCoroutine(processCoroutine);
@@ -63,7 +61,7 @@ public class Login : MonoBehaviour
                 return;
             }
             // Debug.Log("자동 로그인에 성공했습니다");
-            GameManager.Instance.MainEnqueue(() => Utills.LoadScene(SCENE_NAME));
+            Managers.Game.MainEnqueue(() => Utills.LoadScene(Consts.SCENE_NAME));
         });
     }
 
@@ -84,7 +82,7 @@ public class Login : MonoBehaviour
                 else
                 {
                     // Debug.LogError($"로그인 실패");
-                    Alarm.Instance.Warning($"구글 로그인에 실패했습니다.");
+                    Managers.Alarm.Warning($"구글 로그인에 실패했습니다.");
                 }
                 _googleLoginButton.interactable = true;
             });
@@ -104,7 +102,7 @@ public class Login : MonoBehaviour
         }
         else
         {
-            Alarm.Instance.Warning("구글 플레이에 접속되어 있지 않습니다.");
+            Managers.Alarm.Warning("구글 플레이에 접속되어 있지 않습니다.");
             
             return null;
         }
@@ -123,7 +121,7 @@ public class Login : MonoBehaviour
                         if(Backend.UserNickName == "")
                             NicknamePopup.SetActive(true);
                         else
-                            Utills.LoadScene(SCENE_NAME);
+                            Utills.LoadScene(Consts.SCENE_NAME);
                         break;
                     case 201:
                         // Debug.Log("구글 회원가입 성공!");
@@ -134,7 +132,7 @@ public class Login : MonoBehaviour
             else
             {
                 // Debug.LogError($"구글 로그인 실패 : {callback}");
-                Alarm.Instance.Warning($"구글 로그인 실패 : {callback}");
+                Managers.Alarm.Warning($"구글 로그인 실패 : {callback}");
             }
         });
 
@@ -181,7 +179,7 @@ public class Login : MonoBehaviour
                         if(Backend.UserNickName == "")
                             NicknamePopup.SetActive(true);
                         else
-                            Utills.LoadScene(SCENE_NAME);
+                            Utills.LoadScene(Consts.SCENE_NAME);
                         break;
                     case 201:
                         // Debug.Log("게스트 회원가입 성공!");
@@ -191,7 +189,7 @@ public class Login : MonoBehaviour
             }
             else
             {
-                Alarm.Instance.Warning($"게스트 로그인 실패 : {callback}");
+                Managers.Alarm.Warning($"게스트 로그인 실패 : {callback}");
                 // Debug.LogError($"게스트 로그인 실패 : {callback}");
             }
             _confirmButton.interactable = true;
