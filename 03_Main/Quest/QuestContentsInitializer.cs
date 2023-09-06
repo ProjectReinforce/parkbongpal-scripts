@@ -43,7 +43,7 @@ public class QuestContentsInitializer : MonoBehaviour
             // questDatasGroupByType.Add(recordType, new());
         }
 
-        foreach (var item in BackEndDataManager.Instance.questDatas)
+        foreach (var item in Managers.Data.questDatas)
         {
             QuestContent questContent = pool.GetOne();
             questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);
@@ -148,7 +148,7 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void ClearCheck()
     {
-        foreach (var one in BackEndDataManager.Instance.questRecordDatas)
+        foreach (var one in Managers.Data.questRecordDatas)
             quests[one.questId].Cleared();
     }
 }

@@ -36,7 +36,7 @@ public class SettingUI : MonoBehaviour
     {
         Player player = Player.Instance;
         levelText.text = $"LV : {player.Data.level}";
-        expSlider.value = (float)player.Data.exp / Manager.BackEndDataManager.Instance.expDatas[player.Data.level-1];
-        expText.text = $"{player.Data.exp} / {Manager.BackEndDataManager.Instance.expDatas[player.Data.level-1]}";
+        expSlider.value = (float)player.Data.exp / Managers.Data.expDatas[player.Data.level-1];
+        expText.text = $"{player.Data.exp} / {Managers.Data.expDatas[player.Data.level-1]}";
     }
 }

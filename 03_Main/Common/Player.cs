@@ -16,7 +16,7 @@ public class Player : Singleton<Player>
     protected override void Awake()
     {
         base.Awake();
-        userData = BackEndDataManager.Instance.userData;
+        userData = Managers.Data.userData;
 
         recordData = new RecordData();
         recordData.LoadOrInitRecord(userData.inDate);
@@ -138,7 +138,7 @@ public class Player : Singleton<Player>
     public void AddExp(int _exp, bool _directUpdate = true)
     {
         userData.exp += _exp;
-        if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
+        if (userData.exp >= Managers.Data.expDatas[userData.level-1])
             LevelUp(_directUpdate);
 
         if (_directUpdate)
@@ -148,7 +148,7 @@ public class Player : Singleton<Player>
 
     void LevelUp(bool _directUpdate = true)
     {
-        userData.exp -= BackEndDataManager.Instance.expDatas[userData.level-1];
+        userData.exp -= Managers.Data.expDatas[userData.level-1];
         userData.level ++;
         recordData.levelUpEvent?.Invoke();
 
@@ -157,7 +157,7 @@ public class Player : Singleton<Player>
         topUIDatatViewer.UpdateLevel();
         Quarry.Instance.UnlockMines(userData.level);
 
-        if (userData.exp >= BackEndDataManager.Instance.expDatas[userData.level-1])
+        if (userData.exp >= Managers.Data.expDatas[userData.level-1])
             LevelUp();
     }
     

@@ -11,7 +11,7 @@ public class Store : Singleton<Store>
     protected override void Awake()
     {
         inventory = InventoryPresentor.Instance;
-        gacharsPercents = BackEndDataManager.Instance.gachar;
+        gacharsPercents = Managers.Data.gachar;
         percents = new int[gacharsPercents.Length][];
         for (int i = 0; i < gacharsPercents.Length; i++)
         {
@@ -29,7 +29,7 @@ public class Store : Singleton<Store>
     {
         if (!InventoryPresentor.Instance.CheckSize(1))
         {
-            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+                Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
             return;
         }
 
@@ -37,7 +37,7 @@ public class Store : Singleton<Store>
         {
             if (!Player.Instance.LateAddGold(-COST_GOLD))
             {
-                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+                Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
             }
             Player.Instance.TryProduceWeapon(1);
@@ -46,14 +46,14 @@ public class Store : Singleton<Store>
         {
             if (!Player.Instance.LateAddDiamond(-COST_DIAMOND))
             {
-                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
             }
             Player.Instance.TryAdvanceProduceWeapon(1);
         }
 
         Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
-        BaseWeaponData baseWeaponData = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
+        BaseWeaponData baseWeaponData = Managers.Data.GetBaseWeaponData(rarity);
         if (rarity >= Rarity.legendary)
         {
             // 레전드리 획득 채팅 메시지 전송되도록
@@ -70,7 +70,7 @@ public class Store : Singleton<Store>
     {
         if (!InventoryPresentor.Instance.CheckSize(10))
         {
-            UIManager.Instance.ShowWarning("알림", "인벤토리 공간이 부족합니다.");
+                Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
                 return;
         }
 
@@ -78,7 +78,7 @@ public class Store : Singleton<Store>
         {
             if (!Player.Instance.LateAddGold(-COST_GOLD * 9))
             {
-                UIManager.Instance.ShowWarning("알림", "골드가 부족합니다.");
+                Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
             }
             Player.Instance.TryProduceWeapon(TEN);
@@ -87,7 +87,7 @@ public class Store : Singleton<Store>
         {
             if (!Player.Instance.LateAddDiamond(-COST_DIAMOND * 9))
             {
-                UIManager.Instance.ShowWarning("알림", "다이아몬드가 부족합니다.");
+                Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
             }
             Player.Instance.TryAdvanceProduceWeapon(TEN);
@@ -97,7 +97,7 @@ public class Store : Singleton<Store>
         for (int i = 0; i < TEN; i++)
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
-            baseWeaponDatas[i] = BackEndDataManager.Instance.GetBaseWeaponData(rarity);
+            baseWeaponDatas[i] = Managers.Data.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
             {
                 // 레전드리 획득 채팅 메시지 전송되도록

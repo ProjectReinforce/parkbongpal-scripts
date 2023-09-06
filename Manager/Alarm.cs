@@ -9,13 +9,16 @@ public interface ISetMessage
 [Serializable]
 public class Alarm
 {
-    ISetMessage warningMessage;
-    ISetMessage dangerMessage;
+    Warning warningMessage;
+    Danger dangerMessage;
 
     public Alarm(Transform _rootTransform)
     {
         warningMessage = Utills.Bind<Warning>(_rootTransform, "CommonWarning");
         dangerMessage = Utills.Bind<Danger>(_rootTransform, "BigWarning");
+
+        warningMessage.Initialize();
+        dangerMessage.Initialize();
     }
 
     public void Warning(string _message, string _title = "알림")

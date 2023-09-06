@@ -14,7 +14,7 @@
         {
             if (element is null)
             {
-                backgroundImage.sprite =Manager. ResourceManager.Instance.weaponRaritySlot[6];
+                backgroundImage.sprite = Managers.Resource.weaponRaritySlot[6];
                 ImageObject.SetActive(false);
                 button.enabled = false;
                 return;
@@ -26,7 +26,7 @@
                 button.enabled=false;
             }
             
-            backgroundImage.sprite =Manager.ResourceManager.Instance.weaponRaritySlot[element.data.rarity];
+            backgroundImage.sprite = Managers.Resource.weaponRaritySlot[element.data.rarity];
             ImageObject.SetActive(true);
             button.enabled = true;
             lendImageObject.SetActive(element.data.mineId>-1);

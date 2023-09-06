@@ -37,12 +37,12 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
-        mineCount = BackEndDataManager.Instance.mineDatas.Length;
+        mineCount = Managers.Data.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
         {
-            mines[i].Initialized(BackEndDataManager.Instance.mineDatas[i]);
-            mines[i].Unlock(BackEndDataManager.Instance.userData.level);
+            mines[i].Initialized(Managers.Data.mineDatas[i]);
+            mines[i].Unlock(Managers.Data.userData.level);
         }
     }
 
@@ -81,7 +81,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         }
         if(mineNames.Count<1)return;
 
-        UIManager.Instance.ShowWarning("알림", $"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
+        Managers.Alarm.Warning($"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
     }
 
     public void ClearWeapon()

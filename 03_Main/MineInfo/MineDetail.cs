@@ -48,7 +48,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
 
         if (mine.rentalWeapon is null)
         {
-            weaponImage.sprite = ResourceManager.Instance.DefaultMine;
+            weaponImage.sprite = Managers.Resource.DefaultMine;
             weaponName.text = "";
             mineWithWeaponStats.text = $"0\n0\n0";
             skillDescription.text = "";
@@ -66,7 +66,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
             {
                 int magicIndex = mine.rentalWeapon.data.magic[i];
                 if(magicIndex<0) break;
-                skillNames[i] = BackEndDataManager.Instance.skillDatas[magicIndex].skillName;
+                skillNames[i] = Managers.Data.skillDatas[magicIndex].skillName;
  
             }
             skillDescription.text = String.Join(", ", skillNames);
@@ -107,7 +107,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
        }
        catch (Exception e)
        {
-           UIManager.Instance.ShowWarning("안내", e.Message);
+            Managers.Alarm.Warning(e.Message);
            return;
        }
        if (currentMineWeapon is not null)

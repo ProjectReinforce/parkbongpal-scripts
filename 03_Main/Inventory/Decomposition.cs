@@ -35,11 +35,11 @@ public class Decomposition : Singleton<Decomposition>
         {
             Slot slot = slots.First.Value;
             if (slot == null) continue;
-            totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[0];
-            totalGold += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
+            totalGold += Managers.Data.DecompositData[slot.myWeapon.data.rarity].rarity[0];
+            totalGold += Managers.Data.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
                 
-            totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
-            totalSoul += BackEndDataManager.Instance.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
+            totalSoul += Managers.Data.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
+            totalSoul += Managers.Data.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
             
             slot.NewClear();
@@ -74,7 +74,7 @@ public class Decomposition : Singleton<Decomposition>
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
         {
-            UIManager.Instance.ShowWarning($"알림", $"광산에 대여해준 무기입니다.");
+            Managers.Alarm.Warning("광산에 대여해준 무기입니다.");
             return ;
         }
         if (!isDecompositing) return ;

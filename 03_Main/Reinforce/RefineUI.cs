@@ -18,7 +18,7 @@ public class RefineUI : ReinforceUIBase
     void UpdateStat()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-        BaseWeaponData baseWeaponData = BackEndDataManager.Instance.baseWeaponDatas[weaponData.baseWeaponIndex];
+        BaseWeaponData baseWeaponData = Managers.Data.baseWeaponDatas[weaponData.baseWeaponIndex];
         int[] compareds = new int[Enum.GetNames(typeof(StatType)).Length];
 
         compareds[(int)StatType.upgradeCount] = 0;
@@ -75,7 +75,7 @@ public class RefineUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        RefinementData refinementData = Manager.BackEndDataManager.Instance.refinementData;
+        RefinementData refinementData = Managers.Data.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;

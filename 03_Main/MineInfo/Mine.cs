@@ -170,7 +170,7 @@ public class Mine :MonoBehaviour,Rental
         if(isReceipting) return;
         if (gold < 100)
         {
-            UIManager.Instance.ShowWarning("알림", "모은 골드가 100 골드를 넘어야 합니다.");
+            Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
             return;
         }
         isReceipting = true;
@@ -235,7 +235,7 @@ public class Mine :MonoBehaviour,Rental
          
         if (isUnlock || _mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
         myButton.enabled = true;
-        selfImage.sprite = ResourceManager.Instance.DefaultMine;
+        selfImage.sprite = Managers.Resource.DefaultMine;
         isUnlock = true;
         return _mineData.name;
     }

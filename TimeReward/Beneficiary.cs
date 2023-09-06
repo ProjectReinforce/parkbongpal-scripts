@@ -23,13 +23,13 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
 
     private bool AttendanceCheck() //누적 날짜 갱신하기
     {
-        int day = BackEndDataManager.Instance.userData.attendance;
+        int day = Managers.Data.userData.attendance;
         DateTime lastLogin = Player.Instance.Data.lastLogin;
         days = day;
    
-        if (lastLogin.Month == BackEndDataManager.Instance.ServerTime.Month &&
-            lastLogin.Day == BackEndDataManager.Instance.ServerTime.Day) return false;
-        if (lastLogin.Month != BackEndDataManager.Instance.ServerTime.Month)
+        if (lastLogin.Month == Managers.Data.ServerTime.Month &&
+            lastLogin.Day == Managers.Data.ServerTime.Day) return false;
+        if (lastLogin.Month != Managers.Data.ServerTime.Month)
             day = 0;
         days = day;
         Player.Instance.SetAttendance(++day);
@@ -39,7 +39,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
 
     private void Receive()
     {
-        AttendanceData todayReward = BackEndDataManager.Instance.attendanceDatas[days];
+        AttendanceData todayReward = Managers.Data.attendanceDatas[days];
         switch (todayReward.type)
         {
             case (int)RewardType.Exp:

@@ -88,7 +88,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        goldCost = Manager.BackEndDataManager.Instance.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        goldCost = Managers.Data.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()
@@ -211,17 +211,17 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
             Weapon weapon =  InventoryPresentor.Instance.currentWeapon;
             if (weapon.data.mineId != -1)
             {
-                UIManager.Instance.ShowWarning($"알림",$"광산에 대여중인 무기입니다.");
+                Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
                 return;
             }
             if (weapon.data.rarity != ReinforceManager.Instance.SelectedWeapon.data.rarity)
             {
-                UIManager.Instance.ShowWarning($"알림",$"선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
+                Managers.Alarm.Warning("선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
                 return;
             }
             if (weapon == ReinforceManager.Instance.SelectedMaterials[1 - selectedMaterialIndex] || weapon == ReinforceManager.Instance.SelectedWeapon)
             {
-                UIManager.Instance.ShowWarning($"알림",$"이미 선택된 무기입니다.");
+                Managers.Alarm.Warning("이미 선택된 무기입니다.");
                 return;
             }
             ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;

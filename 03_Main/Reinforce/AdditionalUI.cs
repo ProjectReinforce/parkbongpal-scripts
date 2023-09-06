@@ -18,7 +18,7 @@ public class AdditionalUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        goldCost = Manager.BackEndDataManager.Instance.additionalData.goldCost;
+        goldCost = Managers.Data.additionalData.goldCost;
     }
 
     protected override void DeactiveElements()

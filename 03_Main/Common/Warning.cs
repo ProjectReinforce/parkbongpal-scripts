@@ -8,7 +8,7 @@ public class Warning : MonoBehaviour, ISetMessage
     Text title;
     Text message;
 
-    void Awake()
+    public void Initialize()
     {
         title = Utills.Bind<Text>(transform, "Text_Title");
         message = Utills.Bind<Text>(transform, "Text_Message");

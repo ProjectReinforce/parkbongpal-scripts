@@ -3,7 +3,7 @@ using BackEnd;
 using Manager;
 using System.Collections.Generic;
 
-public interface  Reinforce
+public interface Reinforce
 {
     public void Execute(Weapon weapon);
 }
@@ -36,7 +36,7 @@ public class Additional : Reinforce
 {
     public void Execute(Weapon weapon)
     {
-        AdditionalData data = Manager.BackEndDataManager.Instance.additionalData;
+        AdditionalData data = Managers.Data.additionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
         int[] additionalDescription = {2, 4, 6, 8, 10};
         
@@ -69,7 +69,7 @@ public class NormalReinforce : Reinforce
 {
     public void Execute(Weapon weapon)
     {
-        BackEndDataManager resourceManager = BackEndDataManager.Instance;
+        BackEndDataManager resourceManager = Managers.Data;
         NormalReinforceData data = resourceManager.normalReinforceData;
         int goldCost = data.GetGoldCost((Rarity)weapon.data.rarity);
 
@@ -159,7 +159,7 @@ public class SoulCrafting : Reinforce
 {
     public void Execute(Weapon weapon)
     {
-        BackEndDataManager resourceManager = BackEndDataManager.Instance;
+        BackEndDataManager resourceManager = Managers.Data;
         SoulCraftingData data = resourceManager.soulCraftingData;
         int goldCost = data.goldCost;
         int soulCost = data.soulCost;
@@ -212,7 +212,7 @@ public class Refinement : Reinforce
     public void Execute(Weapon weapon)
     {
         RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
-        RefinementData data = BackEndDataManager.Instance.refinementData;
+        RefinementData data = Managers.Data.refinementData;
         // 스탯 결정
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
         string[] statDescription = {"atk", "critical", "stat3", "stat6"};

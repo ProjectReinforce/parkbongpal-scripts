@@ -20,7 +20,7 @@ public class Post : Singleton<Post>
 
     protected override void Awake()
     {
-        notifyer = Instantiate(ResourceManager.Instance.notifyer,mySelf.transform);
+        notifyer = Instantiate(Managers.Resource.notifyer,mySelf.transform);
     }
 
     private void ReciveFromServer()

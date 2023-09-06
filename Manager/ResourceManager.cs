@@ -1,42 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Manager
+[Serializable]
+public class ResourceManager
 {
-    public class ResourceManager : DontDestroy<ResourceManager>
+    [SerializeField] Sprite[] baseWeaponSprites;
+    [SerializeField] Sprite[] skills;
+    public Sprite[] weaponRaritySlot;
+    public Sprite DefaultMine;
+    public Notifyer notifyer;
+
+    public void Initialize()
     {
-        protected override void Awake()
+        baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
+        skills = Resources.LoadAll<Sprite>("Sprites/Skills");
+        weaponRaritySlot = Resources.LoadAll<Sprite>("Sprites/Slots");
+        DefaultMine = Resources.Load<Sprite>("Sprites/Enviroment/Mine_Door_1");
+        notifyer = Resources.Load<Notifyer>("Notifyer");
+    }
+
+    public Sprite GetBaseWeaponSprite(int index)
+    {
+        if (index >= baseWeaponSprites.Length || index < 0)
         {
-            base.Awake();
-
-            baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
-            skills = Resources.LoadAll<Sprite>("Sprites/Skills");
+            return null;
         }
+        return baseWeaponSprites[index];
+    }
 
-        [SerializeField] Sprite[] baseWeaponSprites;
-        public Sprite GetBaseWeaponSprite(int index)
-        {
-            if (index >= baseWeaponSprites.Length || index < 0)
-            {
-                return null;
-            }
-            return baseWeaponSprites[index];
-        }
-
-        [SerializeField] Sprite[] skills;
-        public Sprite GetSkill(int index)
-        {
-            return skills[index];
-        }
-
-        public void initilized()
-        {
-            base.Awake();
-        }
-
-        public Sprite[] weaponRaritySlot;
-        public Sprite DefaultMine;
-        public Notifyer notifyer;
+    public Sprite GetSkill(int index)
+    {
+        return skills[index];
     }
 }
