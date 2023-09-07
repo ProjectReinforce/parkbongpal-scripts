@@ -10,8 +10,8 @@ public class QuestTapToggleUI : MonoBehaviour
     Text text;
     Color normalColor = new(28f/255, 163f/255, 110f/255);
     Color selectedColor = new(252f/255, 223f/255, 200f/255);
-    float normalY = 45f;
-    float selectedY = 30f;
+    float normalY = -32.5f;
+    float selectedY = -43f;
 
     void Awake()
     {

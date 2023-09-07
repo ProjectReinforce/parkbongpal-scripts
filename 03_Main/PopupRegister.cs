@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PopupRegister : MonoBehaviour
 {
     [SerializeField] GameObject popup;
-    [SerializeField] GameObject panel;
+    // [SerializeField] GameObject panel;
     Button button;
 
     void Awake()
