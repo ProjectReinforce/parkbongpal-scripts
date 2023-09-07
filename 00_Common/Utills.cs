@@ -117,4 +117,15 @@ public static class Utills
 
         return null;
     }
+
+    public static T BindFromAll<T>(string _targetObjectName) where T : Component
+    {
+        T[] results = GameObject.FindObjectsOfType<T>(true);
+
+        foreach (var item in results)
+            if (item.gameObject.name.Equals(_targetObjectName))
+                return item;
+
+        return null;
+    }
 }
