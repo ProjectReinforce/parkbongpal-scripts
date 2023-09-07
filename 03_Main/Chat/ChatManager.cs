@@ -8,10 +8,19 @@ using LitJson;
 public class ChatManager : Manager.Singleton<ChatManager>
 {
     public bool ChatConnected { get; private set; }
+    [SerializeField] Transform chatContent;
+    [SerializeField] UnityEngine.UI.Scrollbar chatScroll;
+    Pooler<ChatMessage> pool;
+    ChatMessage origin;
 
     protected override void Awake()
     {
         base.Awake();
+
+        chatContent = Utills.Bind<Transform>(transform, "Content_Chat");
+        chatScroll = Utills.Bind<UnityEngine.UI.Scrollbar>(transform, "Scrollbar Vertical_Chat");
+        origin = Utills.Bind<ChatMessage>(transform, "MessageSlot_S");
+        pool = new(origin, chatContent);
 
         CheckChatStatus();
     }
@@ -30,18 +39,9 @@ public class ChatManager : Manager.Singleton<ChatManager>
         Backend.Chat.SetRepeatedChatBlockMessage("도배 차단.");
     }
 
-    Queue<System.Action> InMainThreadQueue = new Queue<System.Action>();
-    void Update()
-    {
-        if(InMainThreadQueue.Count > 0)
-        {
-            InMainThreadQueue.Dequeue().Invoke();
-        }
-    }
-
     const string TITLE_GUIDE = "안내";
     const string JOIN_MESSAGE = "채팅 채널 접속 성공";
-    const string JOIN_FAIL_MESSAGE = "채팅 채널 접속 실패";
+    const string JOIN_FAIL_MESSAGE = "채팅 채널 접속 실패. 잠시 후 다시 시도해 주세요.";
     void SomeoneJoinChannel(JoinChannelEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
@@ -53,7 +53,7 @@ public class ChatManager : Manager.Singleton<ChatManager>
                 Debug.Log("채팅 채널 접속 성공");
                 ChatConnected = true;
                 
-                InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOIN_MESSAGE, MessageType.Guide));
+                Managers.Game.MainEnqueue(() => SetChatObject(TITLE_GUIDE, JOIN_MESSAGE, MessageType.Guide));
             }
             else
                 Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
@@ -63,7 +63,7 @@ public class ChatManager : Manager.Singleton<ChatManager>
             Debug.LogError($"채널 접속 실패 : {errorInfo}");
             ChatConnected = false;
 
-            InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_GUIDE, JOIN_FAIL_MESSAGE, MessageType.Guide));
+            Managers.Game.MainEnqueue(() => SetChatObject(TITLE_GUIDE, JOIN_FAIL_MESSAGE, MessageType.Guide));
         }
     }
 
@@ -78,26 +78,24 @@ public class ChatManager : Manager.Singleton<ChatManager>
             else
                 Debug.Log($"{_args.From.NickName}님 : {_args.Message}");
             
-            InMainThreadQueue.Enqueue(() => SetChatObject(_args.From.NickName, _args.Message));
+            Managers.Game.MainEnqueue(() => SetChatObject(_args.From.NickName, _args.Message));
         }
         else
             Debug.LogError($"메시지 송신 실패 : {errorInfo}");
     }
 
     [SerializeField] GameObject messageSlot;
-    [SerializeField] Transform chatContent;
-    [SerializeField] UnityEngine.UI.Scrollbar chatScroll;
     void SetChatObject(string _nickname, string _message, MessageType _messageType = MessageType.Normal)
     {
-        // Debug.Log("오브젝트 생성 함수 호출");
-        GameObject newMessageSlot = Instantiate(messageSlot, chatContent);
-        newMessageSlot.SetActive(true);
-        if(newMessageSlot.TryGetComponent<ChatMessage>(out ChatMessage chatMessage))
-            chatMessage.Set(_nickname, _message, _messageType);
+        ChatMessage newObj = pool.GetOne();
+        newObj.transform.SetParent(chatContent);
+        newObj.transform.localScale = Vector3.one;
+        newObj.gameObject.SetActive(true);
+        newObj.Set(_nickname, _message, _messageType);
         StartCoroutine(SetScrollRecently());
     }
 
-    WaitForSeconds scrolDelayTime = new WaitForSeconds(0.01f);
+    WaitForSeconds scrolDelayTime = new(0.05f);
     IEnumerator SetScrollRecently()
     {
         yield return scrolDelayTime;
@@ -127,7 +125,7 @@ public class ChatManager : Manager.Singleton<ChatManager>
         {
             Debug.Log($"[공지] {_args.From} : {_args.Message}");
 
-            InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
+            Managers.Game.MainEnqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
         }
         else
             Debug.LogError($"공지 수신 실패 : {errorInfo}");
@@ -137,7 +135,7 @@ public class ChatManager : Manager.Singleton<ChatManager>
     {
         Debug.Log($"[공지] {_args.Subject} : {_args.Message}");
         
-        InMainThreadQueue.Enqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
+        Managers.Game.MainEnqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
     }
 
     public void CheckChatStatus()

@@ -1,4 +1,12 @@
-﻿public enum Rarity
+﻿public enum SceneName
+{
+    
+    R_Start,
+    R_LoadingScene,
+    R_Main_V6
+}
+
+public enum Rarity
 {
     trash,old,normal,rare,unique,legendary
 }

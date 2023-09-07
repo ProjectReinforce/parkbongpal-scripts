@@ -65,20 +65,30 @@ public class Managers : MonoBehaviour
 
     void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)
     {
-        Debug.Log(_scene.name);
-        switch (_scene.name)
+        SceneName sceneName = Utills.StringToEnum<SceneName>(_scene.name);
+        // Debug.Log(_scene.name);
+        switch (sceneName)
         {
-            case "R_Start":
-                game = new();
-                alarm = new(transform);
-                resource = null;
-                data = null;
+            case SceneName.R_Start:
+                game ??= new();
+                alarm ??= new(transform);
+                eventM ??= new();
+                ui ??= new();
+                sound ??= new();
                 break;
-            case "R_LoadingScene":
-                resource = new();
-                resource.Initialize();
-                data = new();
-                data.Initialize();
+            case SceneName.R_LoadingScene:
+                if (resource is null)
+                {
+                    resource = new();
+                    resource.Initialize();
+                }
+                if (data is null)
+                {
+                    data = new();
+                    data.Initialize();
+                }
+                break;
+            case SceneName.R_Main_V6:
                 break;
         }
     }

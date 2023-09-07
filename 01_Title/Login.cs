@@ -61,7 +61,7 @@ public class Login : MonoBehaviour
                 return;
             }
             // Debug.Log("자동 로그인에 성공했습니다");
-            Managers.Game.MainEnqueue(() => Utills.LoadScene(Consts.SCENE_NAME));
+            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6.ToString()));
         });
     }
 
@@ -121,7 +121,7 @@ public class Login : MonoBehaviour
                         if(Backend.UserNickName == "")
                             NicknamePopup.SetActive(true);
                         else
-                            Utills.LoadScene(Consts.SCENE_NAME);
+                            Utills.LoadScene(SceneName.R_Main_V6.ToString());
                         break;
                     case 201:
                         // Debug.Log("구글 회원가입 성공!");
@@ -179,7 +179,7 @@ public class Login : MonoBehaviour
                         if(Backend.UserNickName == "")
                             NicknamePopup.SetActive(true);
                         else
-                            Utills.LoadScene(Consts.SCENE_NAME);
+                            Utills.LoadScene(SceneName.R_Main_V6.ToString());
                         break;
                     case 201:
                         // Debug.Log("게스트 회원가입 성공!");

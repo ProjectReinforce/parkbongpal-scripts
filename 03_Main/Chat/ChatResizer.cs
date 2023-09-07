@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class ChatResizer : MonoBehaviour
 {
-    [SerializeField] RectTransform chat;
-    [SerializeField] float expandPosY; // 330
+    RectTransform chat;
     [SerializeField] float expandHeight; // 425
-    [SerializeField] float shrinkPosY; // 190
     [SerializeField] float shrinkHeight; // 145
     bool isExpanded;
+
+    void Awake()
+    {
+        chat = Utills.Bind<RectTransform>(transform, "Chat_Expand_S");
+    }
 
     public void ChatResize()
     {
@@ -20,15 +23,9 @@ public class ChatResizer : MonoBehaviour
         }
 
         if(isExpanded)
-        {
             chat.sizeDelta = Vector2.right * chat.sizeDelta.x + Vector2.up * shrinkHeight;
-            //chat.position = Vector2.right * chat.position.x + Vector2.up * shrinkPosY;
-        }
         else
-        {
             chat.sizeDelta = Vector2.right * chat.sizeDelta.x + Vector2.up * expandHeight;
-           // chat.position = Vector2.right * chat.position.x + Vector2.up * expandPosY;
-        }
 
         isExpanded = !isExpanded;
     }
