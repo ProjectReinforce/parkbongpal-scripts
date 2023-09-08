@@ -66,7 +66,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
             {
                 int magicIndex = mine.rentalWeapon.data.magic[i];
                 if(magicIndex<0) break;
-                skillNames[i] = Managers.Data.skillDatas[magicIndex].skillName;
+                skillNames[i] = Managers.ServerData.skillDatas[magicIndex].skillName;
  
             }
             skillDescription.text = String.Join(", ", skillNames);
@@ -103,7 +103,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
            currentWeapon.SetBorrowedDate();
            
            tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
-           Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+           Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
        }
        catch (Exception e)
        {

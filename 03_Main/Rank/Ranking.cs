@@ -19,8 +19,8 @@ public class Ranking : Singleton<Ranking>
      //[SerializeField] Sprite[] oneTwoThree;
     protected override void Awake()
     {
-        ranks[0] = Managers.Data.topRanks;
-        ranks[1] = Managers.Data.myRanks;
+        ranks[0] = Managers.ServerData.topRanks;
+        ranks[1] = Managers.ServerData.myRanks;
         for (int i = 0; i < PORT_COUNT; i++)
         {
             slotLists[i] = viewPorts[i].GetComponentsInChildren<RankSlot>();

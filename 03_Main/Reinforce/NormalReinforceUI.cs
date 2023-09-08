@@ -24,8 +24,8 @@ public class NormalReinforceUI : ReinforceUIBase
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        BaseWeaponData baseWeaponData = Managers.Data.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
-        goldCost = Managers.Data.normalReinforceData.GetGoldCost((Rarity)baseWeaponData.rarity);
+        BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
+        goldCost = Managers.ServerData.normalReinforceData.GetGoldCost((Rarity)baseWeaponData.rarity);
     }
 
     protected override void ActiveElements()
@@ -45,7 +45,7 @@ public class NormalReinforceUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryNormalReinforce(-goldCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryNormalReinforce(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -54,7 +54,7 @@ public class NormalReinforceUI : ReinforceUIBase
 
     protected bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold < goldCost)
         {

@@ -11,7 +11,7 @@ public class ChatResizer : MonoBehaviour
 
     void Awake()
     {
-        chat = Utills.Bind<RectTransform>(transform, "Chat_Expand_S");
+        chat = Utills.Bind<RectTransform>("Chat_Expand_S", transform);
     }
 
     public void ChatResize()

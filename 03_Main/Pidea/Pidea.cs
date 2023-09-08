@@ -66,17 +66,17 @@ public class Pidea : Singleton<Pidea>
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
         notifyer = Instantiate(Managers.Resource.notifyer,transform);
       
-        materials = Managers.Data.ownedWeaponIds;
+        materials = Managers.ServerData.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
-        for (int i = 0; i < Managers.Data.baseWeaponDatas.Length; i++)
+        for (int i = 0; i < Managers.ServerData.baseWeaponDatas.Length; i++)
         {
-            PideaSlot slot = Instantiate(prefab, rarityTables[Managers.Data.baseWeaponDatas[i].rarity]);
+            PideaSlot slot = Instantiate(prefab, rarityTables[Managers.ServerData.baseWeaponDatas[i].rarity]);
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);
             
-            if(Managers.Data.baseWeaponDatas[i].collection is null) continue;
-            foreach (int collectionType in Managers.Data.baseWeaponDatas[i].collection)
+            if(Managers.ServerData.baseWeaponDatas[i].collection is null) continue;
+            foreach (int collectionType in Managers.ServerData.baseWeaponDatas[i].collection)
             {
                 collection.AddSlot(pideaSlots[i],collectionType);
             }

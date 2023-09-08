@@ -18,7 +18,7 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
     {
         start.SetActive(false);
         detail.SetActive(true);
-        BaseWeaponData baseWeaponData = Managers.Data.GetBaseWeaponData(index);
+        BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(index);
         weaponName.text = baseWeaponData.name;
         rarity.text = ((Rarity)baseWeaponData.rarity).ToString();
         description.text = baseWeaponData.description;

@@ -30,7 +30,7 @@ public class Weapon
     {
         this._data = _data;
 
-        BaseWeaponData baseWeaponData = Managers.Data.GetBaseWeaponData(_data.baseWeaponIndex);
+        BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(_data.baseWeaponIndex);
         sprite = Managers.Resource.GetBaseWeaponSprite(_data.baseWeaponIndex);
         description = baseWeaponData.description;
         name = baseWeaponData.name;

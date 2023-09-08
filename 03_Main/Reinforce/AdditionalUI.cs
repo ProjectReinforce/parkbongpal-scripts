@@ -18,7 +18,7 @@ public class AdditionalUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        goldCost = Managers.Data.additionalData.goldCost;
+        goldCost = Managers.ServerData.additionalData.goldCost;
     }
 
     protected override void DeactiveElements()
@@ -36,7 +36,7 @@ public class AdditionalUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryAdditional(-goldCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryAdditional(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -46,7 +46,7 @@ public class AdditionalUI : ReinforceUIBase
 
     bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold < goldCost)
         {

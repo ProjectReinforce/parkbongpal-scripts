@@ -17,9 +17,9 @@ public class ChatManager : Manager.Singleton<ChatManager>
     {
         base.Awake();
 
-        chatContent = Utills.Bind<Transform>(transform, "Content_Chat");
-        chatScroll = Utills.Bind<UnityEngine.UI.Scrollbar>(transform, "Scrollbar Vertical_Chat");
-        origin = Utills.Bind<ChatMessage>(transform, "MessageSlot_S");
+        chatContent = Utills.Bind<Transform>("Content_Chat", transform);
+        chatScroll = Utills.Bind<UnityEngine.UI.Scrollbar>("Scrollbar Vertical_Chat", transform);
+        origin = Utills.Bind<ChatMessage>("MessageSlot_S", transform);
         pool = new(origin, chatContent);
 
         CheckChatStatus();

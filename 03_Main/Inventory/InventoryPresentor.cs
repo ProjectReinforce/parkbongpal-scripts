@@ -53,7 +53,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         HighPowerFinder.SetSlots(slots);
         size = slots.Count;
         
-        foreach (var weaponData in Managers.Data.weaponDatas)
+        foreach (var weaponData in Managers.ServerData.weaponDatas)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
@@ -102,7 +102,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             { nameof(WeaponData.colum.NormalStat), baseWeaponData.NormalStat },
             { nameof(WeaponData.colum.SoulStat), baseWeaponData.SoulStat },
             { nameof(WeaponData.colum.RefineStat), baseWeaponData.RefineStat },
-            { nameof(WeaponData.colum.borrowedDate), Managers.Data.ServerTime },
+            { nameof(WeaponData.colum.borrowedDate), Managers.ServerData.ServerTime },
         };
 
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
@@ -152,7 +152,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                 { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
                 { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
                 { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
-                { nameof(WeaponData.colum.borrowedDate), Managers.Data.ServerTime },
+                { nameof(WeaponData.colum.borrowedDate), Managers.ServerData.ServerTime },
             };
             transactionList.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
         }

@@ -88,7 +88,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        goldCost = Managers.Data.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        goldCost = Managers.ServerData.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()
@@ -112,7 +112,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         reinforceButton.onClick.AddListener(() => ReinforceManager.Instance.ResetMaterials());
         reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
         reinforceButton.onClick.AddListener(() => UpdateMaterialsImage());
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryPromote(-goldCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryPromote(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -121,7 +121,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
 
     bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold < goldCost)
         {

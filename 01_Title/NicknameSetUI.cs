@@ -13,10 +13,10 @@ public class NicknameSetUI : MonoBehaviour
     Button confirmButton;
     void Awake()
     {
-        nicknameInput = Utills.Bind<InputField>(transform, "Nickname_InputField");
-        nicknameInputImage = Utills.Bind<Image>(transform, "Nickname_InputField");
-        messageText = Utills.Bind<Text>(transform, "Text_Message");
-        confirmButton = Utills.Bind<Button>(transform, "Button_Confirm");
+        nicknameInput = Utills.Bind<InputField>("Nickname_InputField", transform);
+        nicknameInputImage = Utills.Bind<Image>("Nickname_InputField", transform);
+        messageText = Utills.Bind<Text>("Text_Message", transform);
+        confirmButton = Utills.Bind<Button>("Button_Confirm", transform);
     }
 
     const int MINLENGTH = 2;

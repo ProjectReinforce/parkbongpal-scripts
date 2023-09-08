@@ -71,10 +71,10 @@ public class MineGame : Singleton<MineGame>
     public void GameOver()
     {
         isAttackAble = false;
-        Player.Instance.AddGold(rock.Score);
+        Managers.Game.Player.AddGold(rock.Score);
         Debug.Log(rock.Score);
-        Player.Instance.ComparisonMineGameScore(rock.Score);
-        Debug.Log(Player.Instance.Data.gold);
+        Managers.Game.Player.ComparisonMineGameScore(rock.Score);
+        Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
     }
 

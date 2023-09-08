@@ -18,7 +18,7 @@ public class RefineUI : ReinforceUIBase
     void UpdateStat()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-        BaseWeaponData baseWeaponData = Managers.Data.baseWeaponDatas[weaponData.baseWeaponIndex];
+        BaseWeaponData baseWeaponData = Managers.ServerData.baseWeaponDatas[weaponData.baseWeaponIndex];
         int[] compareds = new int[Enum.GetNames(typeof(StatType)).Length];
 
         compareds[(int)StatType.upgradeCount] = 0;
@@ -75,7 +75,7 @@ public class RefineUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        RefinementData refinementData = Managers.Data.refinementData;
+        RefinementData refinementData = Managers.ServerData.refinementData;
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
@@ -98,7 +98,7 @@ public class RefineUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryRefine(-goldCost, -oreCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryRefine(-goldCost, -oreCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -108,7 +108,7 @@ public class RefineUI : ReinforceUIBase
 
     protected bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold >= goldCost)
         {
@@ -121,7 +121,7 @@ public class RefineUI : ReinforceUIBase
 
     protected bool CheckOre()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.stone >= oreCost)
         {

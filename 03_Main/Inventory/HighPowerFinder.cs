@@ -25,7 +25,7 @@
                 highPowerWeapon = currentWeapon;
             }
 
-            if(highPowerWeapon is null|| highPowerWeapon.power== Player.Instance.Data.combatScore) return;
-            Player.Instance.SetCombatScore(highPowerWeapon.power);
+            if(highPowerWeapon is null|| highPowerWeapon.power== Managers.Game.Player.Data.combatScore) return;
+            Managers.Game.Player.SetCombatScore(highPowerWeapon.power);
         }
     }

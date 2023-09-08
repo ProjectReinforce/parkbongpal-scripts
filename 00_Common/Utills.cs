@@ -107,8 +107,10 @@ public static class Utills
         return (T)Enum.Parse(typeof(T), _targetString);
     }
 
-    public static T Bind<T>(Transform _rootTransfrom, string _targetObjectName) where T : Component
+    public static T Bind<T>(string _targetObjectName, Transform _rootTransfrom = null) where T : Component
     {
+        if (_rootTransfrom == null)
+            _rootTransfrom = GameObject.Find("Canvas_Game").transform;
         T[] results = _rootTransfrom.GetComponentsInChildren<T>(true);
 
         foreach (var item in results)
@@ -118,14 +120,9 @@ public static class Utills
         return null;
     }
 
-    public static T BindFromAll<T>(string _targetObjectName) where T : Component
+    public static T[] BindFromCanvas<T>() where T : Component
     {
-        T[] results = GameObject.FindObjectsOfType<T>(true);
-
-        foreach (var item in results)
-            if (item.gameObject.name.Equals(_targetObjectName))
-                return item;
-
-        return null;
+        Transform root = GameObject.Find("Canvas_Game").transform;
+        return root.GetComponentsInChildren<T>(true);
     }
 }

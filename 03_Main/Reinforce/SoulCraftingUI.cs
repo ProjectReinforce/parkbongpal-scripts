@@ -20,7 +20,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        goldCost = Managers.Data.soulCraftingData.goldCost;
+        goldCost = Managers.ServerData.soulCraftingData.goldCost;
         // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
         soulCost = 0;
     }
@@ -42,7 +42,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TrySoulCraft(-goldCost, -soulCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TrySoulCraft(-goldCost, -soulCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -52,7 +52,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold >= goldCost)
         {
@@ -65,7 +65,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     bool CheckSoul()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
 
         if (userData.weaponSoul >= soulCost)
         {

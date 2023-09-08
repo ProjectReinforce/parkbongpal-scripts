@@ -22,8 +22,8 @@ public class Managers : MonoBehaviour
     public static Alarm Alarm { get => Instance.alarm; }
     ResourceManager resource;
     public static ResourceManager Resource { get => Instance.resource; }
-    BackEndDataManager data;
-    public static BackEndDataManager Data { get => Instance.data; }
+    BackEndDataManager serverData;
+    public static BackEndDataManager ServerData { get => Instance.serverData; }
     EventManager eventM;
     public static EventManager Event { get => Instance.eventM; }
     UIManager ui;
@@ -83,10 +83,10 @@ public class Managers : MonoBehaviour
                     resource = new();
                     resource.Initialize();
                 }
-                if (data is null)
+                if (serverData is null)
                 {
-                    data = new();
-                    data.Initialize();
+                    serverData = new();
+                    serverData.Initialize();
                 }
                 break;
             case SceneName.R_Main_V6:

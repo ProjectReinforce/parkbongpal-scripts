@@ -10,7 +10,7 @@ public class LoadSceneEventRegister : MonoBehaviour
 
     void Awake()
     {
-        button = Utills.Bind<Button>(transform, "Button_Confirm");
+        button = Utills.Bind<Button>("Button_Confirm", transform);
     }
 
     void OnEnable()

@@ -10,8 +10,8 @@ public class Warning : MonoBehaviour, ISetMessage
 
     public void Initialize()
     {
-        title = Utills.Bind<Text>(transform, "Text_Title");
-        message = Utills.Bind<Text>(transform, "Text_Message");
+        title = Utills.Bind<Text>("Text_Title", transform);
+        message = Utills.Bind<Text>("Text_Message", transform);
     }
 
     public void Set(string _title, string _message)

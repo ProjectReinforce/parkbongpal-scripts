@@ -8,13 +8,13 @@ public class SoulCraftingButtonUI : ReinforceButtonUIBase
     {
         base.Awake();
 
-        Player.Instance.Record.levelUpEvent -= CheckQualification;
-        Player.Instance.Record.levelUpEvent += CheckQualification;
+        Managers.Game.Player.Record.levelUpEvent -= CheckQualification;
+        Managers.Game.Player.Record.levelUpEvent += CheckQualification;
     }
     
     protected override bool Checks()
     {
-        if (Player.Instance.Data.level < 25)
+        if (Managers.Game.Player.Data.level < 25)
             return false;
         return true;
     }

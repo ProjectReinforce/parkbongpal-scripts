@@ -8,13 +8,13 @@ public class RefineButtonUI : ReinforceButtonUIBase
     {
         base.Awake();
 
-        Player.Instance.Record.levelUpEvent -= CheckQualification;
-        Player.Instance.Record.levelUpEvent += CheckQualification;
+        Managers.Game.Player.Record.levelUpEvent -= CheckQualification;
+        Managers.Game.Player.Record.levelUpEvent += CheckQualification;
     }
 
     protected override bool Checks()
     {
-        if (Player.Instance.Data.level < 50)
+        if (Managers.Game.Player.Data.level < 50)
             return false;
         return true;
     }

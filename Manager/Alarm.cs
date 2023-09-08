@@ -14,8 +14,8 @@ public class Alarm
 
     public Alarm(Transform _rootTransform)
     {
-        warningMessage = Utills.Bind<Warning>(_rootTransform, "CommonWarning");
-        dangerMessage = Utills.Bind<Danger>(_rootTransform, "BigWarning");
+        warningMessage = Utills.Bind<Warning>("CommonWarning", _rootTransform);
+        dangerMessage = Utills.Bind<Danger>("BigWarning", _rootTransform);
 
         warningMessage.Initialize();
         dangerMessage.Initialize();

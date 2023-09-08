@@ -35,11 +35,11 @@ public class Decomposition : Singleton<Decomposition>
         {
             Slot slot = slots.First.Value;
             if (slot == null) continue;
-            totalGold += Managers.Data.DecompositData[slot.myWeapon.data.rarity].rarity[0];
-            totalGold += Managers.Data.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
+            totalGold += Managers.ServerData.DecompositData[slot.myWeapon.data.rarity].rarity[0];
+            totalGold += Managers.ServerData.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
                 
-            totalSoul += Managers.Data.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
-            totalSoul += Managers.Data.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
+            totalSoul += Managers.ServerData.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
+            totalSoul += Managers.ServerData.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
             
             slot.NewClear();
@@ -50,16 +50,16 @@ public class Decomposition : Singleton<Decomposition>
         }
         Transactions.SendCurrent();
         InventoryPresentor.Instance.SortSlots();
-        Player.Instance.AddGold(totalGold, false);
-        Player.Instance.AddSoul(totalSoul, false);
+        Managers.Game.Player.AddGold(totalGold, false);
+        Managers.Game.Player.AddSoul(totalSoul, false);
         
         Param param = new()
         {
-            {nameof(UserData.colum.exp), Player.Instance.Data.gold},
-            {nameof(UserData.colum.gold), Player.Instance.Data.weaponSoul},
+            {nameof(UserData.colum.exp), Managers.Game.Player.Data.gold},
+            {nameof(UserData.colum.gold), Managers.Game.Player.Data.weaponSoul},
         };
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Player.Instance.Data.inDate, Backend.UserInDate, param));
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent();
        
         Reset();

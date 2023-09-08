@@ -30,7 +30,7 @@ public class MagicCarveUI : ReinforceUIBase
         {
             if (weapon.data.magic[i] != -1)
             {
-                SkillData skillData = Managers.Data.skillDatas[weapon.data.magic[i]];
+                SkillData skillData = Managers.ServerData.skillDatas[weapon.data.magic[i]];
                 skillIcons[i].sprite = Managers.Resource.GetSkill(weapon.data.magic[i]);
                 skillNameTexts[i].text = $"{skillData.skillName}";
                 skillDescriptionTexts[i].text = $"{skillData.description}";
@@ -50,7 +50,7 @@ public class MagicCarveUI : ReinforceUIBase
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        goldCost = Managers.Data.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        goldCost = Managers.ServerData.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()
@@ -68,7 +68,7 @@ public class MagicCarveUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Player.Instance.TryMagicCarve(-goldCost));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryMagicCarve(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
@@ -78,7 +78,7 @@ public class MagicCarveUI : ReinforceUIBase
 
     bool CheckGold()
     {
-        UserData userData = Player.Instance.Data;
+        UserData userData = Managers.Game.Player.Data;
         if (userData.gold < goldCost)
         {
             goldCostText.text = $"<color=red>{goldCost}</color>";

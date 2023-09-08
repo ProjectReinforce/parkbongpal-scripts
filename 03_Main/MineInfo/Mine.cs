@@ -174,7 +174,7 @@ public class Mine :MonoBehaviour,Rental
             return;
         }
         isReceipting = true;
-        Player.Instance.AddGold(gold);
+        Managers.Game.Player.AddGold(gold);
         gold = 0;
         Debug.Log("@#@#@#@" + gold);
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());

@@ -81,7 +81,7 @@ public class QuestContent : MonoBehaviour
         
         Transactions.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
 
-        Player.Instance.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
+        Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
 
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;
@@ -97,13 +97,13 @@ public class QuestContent : MonoBehaviour
         //     getRewardButton.interactable = false;
         //     Cleared();
         // }
-        // Player.Instance.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
-        // transactionValues = Player.Instance.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
+        // Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
+        // transactionValues = Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
     }
 
     public void UpdateContent()
     {
-        Player player = Player.Instance;
+        Player player = Managers.Game.Player;
         // UpdateText(descriptionText, ResourceManager.Instance.questDatas[targetIndex].questContent);
         descriptionText.text = targetData.questContent;
 

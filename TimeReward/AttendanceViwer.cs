@@ -11,12 +11,12 @@ public class AttendanceViwer:MonoBehaviour //출석부 상태 보여주는 역�
     private int dataLength;
     public void Initialize()
     {
-        dataLength = Managers.Data.attendanceDatas.Length;
+        dataLength = Managers.ServerData.attendanceDatas.Length;
         slots = new AttenanceSlot[dataLength];
         for (int i = 0; i < dataLength; i++)
         {
             AttenanceSlot currentSlot =  Instantiate(slot, transform);
-            AttendanceData data = Managers.Data.attendanceDatas[i];
+            AttendanceData data = Managers.ServerData.attendanceDatas[i];
             currentSlot . Initialize(icons[data.type],$"x {data.value}",
                 (i+1)%5==0?days[1]:days[0], $"{i+1}일차");
             currentSlot.gameObject.SetActive(true);

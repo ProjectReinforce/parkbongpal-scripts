@@ -4,7 +4,7 @@ using BackEnd;
 using Manager;
 using UnityEngine;
 
-public class Player : Singleton<Player>
+public class Player
 {
     [SerializeField] TopUIDatatViewer topUIDatatViewer;
     [SerializeField] InventorySourceViewer inventoryUIViwer;
@@ -13,17 +13,20 @@ public class Player : Singleton<Player>
     RecordData recordData;
     public RecordData Record => recordData;
 
-    protected override void Awake()
+    public Player()
     {
-        base.Awake();
-        userData = Managers.Data.userData;
+        topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
+        userData = Managers.ServerData.userData;
 
         recordData = new RecordData();
+        // inventoryUIViwer.SetStone(userData.stone);
+        // inventoryUIViwer.SetSoul(userData.weaponSoul);
+    }
+
+    public void Initialize()
+    {
         recordData.LoadOrInitRecord(userData.inDate);
         topUIDatatViewer.Initialize();
-        inventoryUIViwer.SetStone(userData.stone);
-        inventoryUIViwer.SetSoul(userData.weaponSoul);
-        
     }
 
     void UpdateBackEndData(string columnName, int _data)
@@ -120,7 +123,7 @@ public class Player : Singleton<Player>
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.weaponSoul), userData.weaponSoul);
-        inventoryUIViwer.SetSoul(userData.weaponSoul);
+        // inventoryUIViwer.SetSoul(userData.weaponSoul);
         return true;
     }
 
@@ -131,14 +134,14 @@ public class Player : Singleton<Player>
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.stone), userData.stone);
-        inventoryUIViwer.SetStone(userData.stone);
+        // inventoryUIViwer.SetStone(userData.stone);
         return true;
     }
     
     public void AddExp(int _exp, bool _directUpdate = true)
     {
         userData.exp += _exp;
-        if (userData.exp >= Managers.Data.expDatas[userData.level-1])
+        if (userData.exp >= Managers.ServerData.expDatas[userData.level-1])
             LevelUp(_directUpdate);
 
         if (_directUpdate)
@@ -148,7 +151,7 @@ public class Player : Singleton<Player>
 
     void LevelUp(bool _directUpdate = true)
     {
-        userData.exp -= Managers.Data.expDatas[userData.level-1];
+        userData.exp -= Managers.ServerData.expDatas[userData.level-1];
         userData.level ++;
         recordData.levelUpEvent?.Invoke();
 
@@ -157,7 +160,7 @@ public class Player : Singleton<Player>
         topUIDatatViewer.UpdateLevel();
         Quarry.Instance.UnlockMines(userData.level);
 
-        if (userData.exp >= Managers.Data.expDatas[userData.level-1])
+        if (userData.exp >= Managers.ServerData.expDatas[userData.level-1])
             LevelUp();
     }
     

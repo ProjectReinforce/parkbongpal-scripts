@@ -37,12 +37,12 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         plusImage = selectedWeaponImage.sprite;
         mines = quarry.GetComponentsInChildren<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
-        mineCount = Managers.Data.mineDatas.Length;
+        mineCount = Managers.ServerData.mineDatas.Length;
         
         for (int i = 0; i < mineCount; i++)
         {
-            mines[i].Initialized(Managers.Data.mineDatas[i]);
-            mines[i].Unlock(Managers.Data.userData.level);
+            mines[i].Initialized(Managers.ServerData.mineDatas[i]);
+            mines[i].Unlock(Managers.ServerData.userData.level);
         }
     }
 
@@ -90,7 +90,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         Receipt(() =>
         {
             currentMine.SetWeapon(null);
-            Player.Instance.SetGoldPerMin(Player.Instance.Data.goldPerMin - beforeGoldPerMin);
+            Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin - beforeGoldPerMin);
             currentMine = currentMine;
         });
     }    
@@ -139,7 +139,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         {
             mines[i].Gold = 0;
         }
-        Player.Instance.LateAddGold(totalGold);
+        Managers.Game.Player.LateAddGold(totalGold);
         totalGold = 0;
         Transactions.SendCurrent();
     }
