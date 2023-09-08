@@ -5,8 +5,8 @@ using BackEnd;
 using Manager;
 using UnityEngine;
 
-[System.Serializable]
-public class Weapon 
+[Serializable]
+public class Weapon
 {
     public readonly Sprite sprite;
     //private NSubject.ISubject subjects;

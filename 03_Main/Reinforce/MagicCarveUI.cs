@@ -30,7 +30,7 @@ public class MagicCarveUI : ReinforceUIBase
         {
             if (weapon.data.magic[i] != -1)
             {
-                SkillData skillData = Managers.ServerData.skillDatas[weapon.data.magic[i]];
+                SkillData skillData = Managers.ServerData.SkillDatas[weapon.data.magic[i]];
                 skillIcons[i].sprite = Managers.Resource.GetSkill(weapon.data.magic[i]);
                 skillNameTexts[i].text = $"{skillData.skillName}";
                 skillDescriptionTexts[i].text = $"{skillData.description}";
@@ -50,7 +50,7 @@ public class MagicCarveUI : ReinforceUIBase
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        goldCost = Managers.ServerData.normalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
+        goldCost = Managers.ServerData.NormalReinforceData.GetGoldCost((Rarity)selectedWeapon.rarity);
     }
 
     protected override void DeactiveElements()

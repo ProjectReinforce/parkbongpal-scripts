@@ -9,7 +9,7 @@ public class RentalFactory
     {
         Rental returnType = rental;
         if (type < 0) return returnType;
-        SkillData data = Managers.ServerData.skillDatas[(int)type];
+        SkillData data = Managers.ServerData.SkillDatas[(int)type];
 
         switch (type){
             

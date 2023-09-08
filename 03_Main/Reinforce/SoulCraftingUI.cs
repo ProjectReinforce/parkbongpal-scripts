@@ -20,7 +20,7 @@ public class SoulCraftingUI : ReinforceUIBase
 
     protected override void UpdateCosts()
     {
-        goldCost = Managers.ServerData.soulCraftingData.goldCost;
+        goldCost = Managers.ServerData.SoulCraftingData.goldCost;
         // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
         soulCost = 0;
     }

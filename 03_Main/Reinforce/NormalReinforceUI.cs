@@ -25,7 +25,7 @@ public class NormalReinforceUI : ReinforceUIBase
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(selectedWeapon.baseWeaponIndex);
-        goldCost = Managers.ServerData.normalReinforceData.GetGoldCost((Rarity)baseWeaponData.rarity);
+        goldCost = Managers.ServerData.NormalReinforceData.GetGoldCost((Rarity)baseWeaponData.rarity);
     }
 
     protected override void ActiveElements()

@@ -11,7 +11,7 @@ public class Store : Singleton<Store>
     protected override void Awake()
     {
         inventory = InventoryPresentor.Instance;
-        gacharsPercents = Managers.ServerData.gachar;
+        gacharsPercents = Managers.ServerData.GachaDatas;
         percents = new int[gacharsPercents.Length][];
         for (int i = 0; i < gacharsPercents.Length; i++)
         {

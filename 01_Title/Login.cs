@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using BackEnd;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using Manager;
 
 public class Login : MonoBehaviour
 {
@@ -46,7 +45,9 @@ public class Login : MonoBehaviour
         processCoroutine = StartCoroutine(PrintProcessText("로그인"));
         SendQueue.Enqueue(Backend.BMember.LoginWithTheBackendToken, callback =>
         {
-            if (!callback.IsSuccess())
+            if (callback.IsSuccess())
+                CheckBlankNickname(callback.GetStatusCode());
+            else
             {
                 Managers.Game.MainEnqueue(() =>
                 {
@@ -57,10 +58,8 @@ public class Login : MonoBehaviour
                     StopCoroutine(processCoroutine);
                     processText.text = "Touch to start.";
                 });
-                return;
             }
             // Debug.Log("자동 로그인에 성공했습니다");
-            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6.ToString()));
         });
     }
 
@@ -112,22 +111,7 @@ public class Login : MonoBehaviour
         SendQueue.Enqueue(Backend.BMember.AuthorizeFederation, GetTokens(), FederationType.Google, "gpgs", callback =>
         {
             if(callback.IsSuccess())
-            {
-                switch(int.Parse(callback.GetStatusCode()))
-                {
-                    case 200:
-                        // Debug.Log($"{Backend.UserNickName} 구글 로그인 성공!");
-                        if(Backend.UserNickName == "")
-                            Managers.UI.OpenPopup(NicknamePopup);
-                        else
-                            Utills.LoadScene(SceneName.R_Main_V6.ToString());
-                        break;
-                    case 201:
-                        // Debug.Log("구글 회원가입 성공!");
-                        Managers.UI.OpenPopup(NicknamePopup);
-                        break;
-                }
-            }
+                CheckBlankNickname(callback.GetStatusCode());
             else
             {
                 // Debug.LogError($"구글 로그인 실패 : {callback}");
@@ -170,22 +154,7 @@ public class Login : MonoBehaviour
         SendQueue.Enqueue(Backend.BMember.GuestLogin, callback =>
         {
             if(callback.IsSuccess())
-            {
-                switch(int.Parse(callback.GetStatusCode()))
-                {
-                    case 200:
-                        // Debug.Log($"{Backend.UserNickName} 게스트 로그인 성공!");
-                        if(Backend.UserNickName == "")
-                            Managers.UI.OpenPopup(NicknamePopup);
-                        else
-                            Utills.LoadScene(SceneName.R_Main_V6.ToString());
-                        break;
-                    case 201:
-                        // Debug.Log("게스트 회원가입 성공!");
-                        Managers.UI.OpenPopup(NicknamePopup);
-                        break;
-                }
-            }
+                CheckBlankNickname(callback.GetStatusCode());
             else
             {
                 Managers.Alarm.Warning($"게스트 로그인 실패 : {callback}");
@@ -193,6 +162,22 @@ public class Login : MonoBehaviour
             }
             _confirmButton.interactable = true;
         });
+    }
+
+    void CheckBlankNickname(string _statusCode)
+    {
+        switch(int.Parse(_statusCode))
+        {
+            case 200:
+                if(Backend.UserNickName == "")
+                    Managers.UI.OpenPopup(NicknamePopup);
+                else
+                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                break;
+            case 201:
+                Managers.UI.OpenPopup(NicknamePopup);
+                break;
+        }
     }
 
     public void OnClickLogout()

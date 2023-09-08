@@ -35,11 +35,11 @@ public class Decomposition : Singleton<Decomposition>
         {
             Slot slot = slots.First.Value;
             if (slot == null) continue;
-            totalGold += Managers.ServerData.DecompositData[slot.myWeapon.data.rarity].rarity[0];
-            totalGold += Managers.ServerData.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
+            totalGold += Managers.ServerData.DecompositDatas[slot.myWeapon.data.rarity].rarity[0];
+            totalGold += Managers.ServerData.DecompositDatas[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
                 
-            totalSoul += Managers.ServerData.DecompositData[slot.myWeapon.data.rarity].rarity[1]; 
-            totalSoul += Managers.ServerData.DecompositData[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
+            totalSoul += Managers.ServerData.DecompositDatas[slot.myWeapon.data.rarity].rarity[1]; 
+            totalSoul += Managers.ServerData.DecompositDatas[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
             
             slot.NewClear();

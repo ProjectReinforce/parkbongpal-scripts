@@ -43,7 +43,7 @@ public class QuestContentsInitializer : MonoBehaviour
             // questDatasGroupByType.Add(recordType, new());
         }
 
-        foreach (var item in Managers.ServerData.questDatas)
+        foreach (var item in Managers.ServerData.QuestDatas)
         {
             QuestContent questContent = pool.GetOne();
             questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);

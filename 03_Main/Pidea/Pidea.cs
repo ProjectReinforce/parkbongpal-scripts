@@ -68,15 +68,15 @@ public class Pidea : Singleton<Pidea>
       
         materials = Managers.ServerData.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
-        for (int i = 0; i < Managers.ServerData.baseWeaponDatas.Length; i++)
+        for (int i = 0; i < Managers.ServerData.BaseWeaponDatas.Length; i++)
         {
-            PideaSlot slot = Instantiate(prefab, rarityTables[Managers.ServerData.baseWeaponDatas[i].rarity]);
+            PideaSlot slot = Instantiate(prefab, rarityTables[Managers.ServerData.BaseWeaponDatas[i].rarity]);
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);
             
-            if(Managers.ServerData.baseWeaponDatas[i].collection is null) continue;
-            foreach (int collectionType in Managers.ServerData.baseWeaponDatas[i].collection)
+            if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
+            foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
                 collection.AddSlot(pideaSlots[i],collectionType);
             }

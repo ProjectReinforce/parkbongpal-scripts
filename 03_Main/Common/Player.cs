@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Player
 {
-    [SerializeField] TopUIDatatViewer topUIDatatViewer;
+    TopUIDatatViewer topUIDatatViewer;
     [SerializeField] InventorySourceViewer inventoryUIViwer;
     [SerializeField] UserData userData;
     public UserData Data => userData;
@@ -16,7 +16,7 @@ public class Player
     public Player()
     {
         topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
-        userData = Managers.ServerData.userData;
+        userData = Managers.ServerData.UserData;
 
         recordData = new RecordData();
         // inventoryUIViwer.SetStone(userData.stone);
@@ -141,7 +141,7 @@ public class Player
     public void AddExp(int _exp, bool _directUpdate = true)
     {
         userData.exp += _exp;
-        if (userData.exp >= Managers.ServerData.expDatas[userData.level-1])
+        if (userData.exp >= Managers.ServerData.ExpDatas[userData.level-1])
             LevelUp(_directUpdate);
 
         if (_directUpdate)
@@ -151,7 +151,7 @@ public class Player
 
     void LevelUp(bool _directUpdate = true)
     {
-        userData.exp -= Managers.ServerData.expDatas[userData.level-1];
+        userData.exp -= Managers.ServerData.ExpDatas[userData.level-1];
         userData.level ++;
         recordData.levelUpEvent?.Invoke();
 
@@ -160,7 +160,7 @@ public class Player
         topUIDatatViewer.UpdateLevel();
         Quarry.Instance.UnlockMines(userData.level);
 
-        if (userData.exp >= Managers.ServerData.expDatas[userData.level-1])
+        if (userData.exp >= Managers.ServerData.ExpDatas[userData.level-1])
             LevelUp();
     }
     

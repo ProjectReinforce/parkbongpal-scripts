@@ -41,28 +41,28 @@ public class JsonMapperRegisterImporter
 
 public class BackEndDataManager
 {
-    public Where searchFromMyIndate = new();
-    public WeaponData[] weaponDatas;
-    public BaseWeaponData[] baseWeaponDatas;
-    public MineData[] mineDatas;
-    public int[] expDatas;
-    public UserData userData;
-    public GachaData[] gachar;
-    public AttendanceData[] attendanceDatas;
-    public QuestData[] questDatas;
-    public SkillData[] skillDatas;
-    public AdditionalData additionalData;
-    public NormalReinforceData normalReinforceData;
-    public MagicCarveData magicCarveData;
-    public SoulCraftingData soulCraftingData;
-    public RefinementData refinementData;
-    public Decomposit[] DecompositData;
+    public WeaponData[] UserWeapons;
+    public BaseWeaponData[] BaseWeaponDatas;
+    public MineData[] MineDatas;
+    public int[] ExpDatas;
+    public UserData UserData;
+    public GachaData[] GachaDatas;
+    public AttendanceData[] AttendanceDatas;
+    public QuestData[] QuestDatas;
+    public SkillData[] SkillDatas;
+    public AdditionalData AdditionalData;
+    public NormalReinforceData NormalReinforceData;
+    public MagicCarveData MagicCarveData;
+    public SoulCraftingData SoulCraftingData;
+    public RefinementData RefinementData;
+    public Decomposit[] DecompositDatas;
+    Where SearchFromMyIndate = new();
 
     readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
         new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
     public BaseWeaponData GetBaseWeaponData(int index)
     {
-        return baseWeaponDatas[index];
+        return BaseWeaponDatas[index];
     }
 
     public BaseWeaponData GetBaseWeaponData(Rarity rairity)
@@ -74,7 +74,7 @@ public class BackEndDataManager
     
     public void Initialize()
     {
-        searchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
+        SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
         for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
             baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
 
@@ -201,7 +201,7 @@ public class BackEndDataManager
         {
             // 무기 제작 확률 정보
             case ChartName.gachaPercentage:
-                void GachaDataProcess(GachaData[] data) { gachar = data; }
+                void GachaDataProcess(GachaData[] data) { GachaDatas = data; }
                 if (_fromBackEnd)
                     GetBackEndChartData<GachaData>(chartId, GachaDataProcess);
                 else
@@ -209,7 +209,7 @@ public class BackEndDataManager
                 break;
             // 광산 정보
             case ChartName.mineData:
-                void MineDataProcess(MineData[] data) { mineDatas = data; }
+                void MineDataProcess(MineData[] data) { MineDatas = data; }
                 if (_fromBackEnd)
                     GetBackEndChartData<MineData>(chartId, MineDataProcess);
                 else
@@ -219,10 +219,10 @@ public class BackEndDataManager
             case ChartName.weapon:
                 void BaseWeaponDataProcess(BaseWeaponData[] data)
                 {
-                    baseWeaponDatas = data;
+                    BaseWeaponDatas = data;
                     
-                    for (int i = 0; i < baseWeaponDatas.Length; ++i)
-                        baseWeaponDatasFromRarity[baseWeaponDatas[i].rarity].Add(baseWeaponDatas[i]);
+                    for (int i = 0; i < BaseWeaponDatas.Length; ++i)
+                        baseWeaponDatasFromRarity[BaseWeaponDatas[i].rarity].Add(BaseWeaponDatas[i]);
                 }
                 if (_fromBackEnd)
                     GetBackEndChartData<BaseWeaponData>(chartId, BaseWeaponDataProcess);
@@ -231,7 +231,7 @@ public class BackEndDataManager
                 break;
             // 추가 옵션 정보
             case ChartName.additional:
-                void AdditionalDataProcess(AdditionalData[] data) { additionalData = data[0]; }
+                void AdditionalDataProcess(AdditionalData[] data) { AdditionalData = data[0]; }
                 if (_fromBackEnd)
                     GetBackEndChartData<AdditionalData>(chartId, AdditionalDataProcess);
                 else
@@ -239,7 +239,7 @@ public class BackEndDataManager
                 break;
             // 일반 강화 정보
             case ChartName.normalReinforce:
-                void NormalDataProcess(NormalReinforceData[] data) { normalReinforceData = data[0]; }
+                void NormalDataProcess(NormalReinforceData[] data) { NormalReinforceData = data[0]; }
                 if (_fromBackEnd)
                     GetBackEndChartData<NormalReinforceData>(chartId, NormalDataProcess);
                 else
@@ -247,7 +247,7 @@ public class BackEndDataManager
                 break;
             // 마법 부여 정보
             case ChartName.magicCarve:
-                void MagicDataProcess(MagicCarveData[] data) { magicCarveData = data[0]; }
+                void MagicDataProcess(MagicCarveData[] data) { MagicCarveData = data[0]; }
                 if (_fromBackEnd)
                     GetBackEndChartData<MagicCarveData>(chartId, MagicDataProcess);
                 else
@@ -255,7 +255,7 @@ public class BackEndDataManager
                 break;
             // 영혼 세공 정보
             case ChartName.soulCrafting:
-                void SoulDataProcess(SoulCraftingData[] data) { soulCraftingData = data[0]; }
+                void SoulDataProcess(SoulCraftingData[] data) { SoulCraftingData = data[0]; }
                 if (_fromBackEnd)
                     GetBackEndChartData<SoulCraftingData>(chartId, SoulDataProcess);
                 else
@@ -263,7 +263,7 @@ public class BackEndDataManager
                 break;
             // 재련 정보
             case ChartName.refinement:
-                void RefineDataProcess(RefinementData[] data) { refinementData = data[0]; }
+                void RefineDataProcess(RefinementData[] data) { RefinementData = data[0]; }
                 if (_fromBackEnd)
                     GetBackEndChartData<RefinementData>(chartId, RefineDataProcess);
                 else
@@ -271,7 +271,7 @@ public class BackEndDataManager
                 break;
             // 출석 보상 정보
             case ChartName.attendance:
-                void AttendanceDataProcess(AttendanceData[] data) { attendanceDatas = data; }
+                void AttendanceDataProcess(AttendanceData[] data) { AttendanceDatas = data; }
                 if (_fromBackEnd)
                     GetBackEndChartData<AttendanceData>(chartId, AttendanceDataProcess);
                 else
@@ -282,7 +282,7 @@ public class BackEndDataManager
                 GetExpData(_fromBackEnd);
                 break;
             case ChartName.quest:
-                void QuestDataProcess(QuestData[] data) { questDatas = data; }
+                void QuestDataProcess(QuestData[] data) { QuestDatas = data; }
                 // void QuestDataProcess(QuestData[] data)
                 // {
                 //     questDatas = data;
@@ -298,7 +298,7 @@ public class BackEndDataManager
                     SetChartData<QuestData>(chartId, QuestDataProcess);
                 break;
             case ChartName.skillData:
-                void SkillDataProcess(SkillData[] data) { skillDatas = data; }
+                void SkillDataProcess(SkillData[] data) { SkillDatas = data; }
                 
                 if (_fromBackEnd)
                     GetBackEndChartData<SkillData>(chartId, SkillDataProcess);
@@ -309,7 +309,7 @@ public class BackEndDataManager
 
                 void DecompositDataProcess(Decomposit[] data)
                 {
-                    DecompositData = data;
+                    DecompositDatas = data;
                 }
 
                 if (_fromBackEnd)
@@ -335,9 +335,9 @@ public class BackEndDataManager
             JsonData loadedChartJson = StringToJson(loadedChart);
             // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
 
-            expDatas = new int[loadedChartJson.Count];
+            ExpDatas = new int[loadedChartJson.Count];
             for (int i = 0; i < loadedChartJson.Count; i++)
-                expDatas[i] = int.Parse(loadedChartJson[i]["requireExp"].ToString());
+                ExpDatas[i] = int.Parse(loadedChartJson[i]["requireExp"].ToString());
             SceneLoader.ResourceLoadComplete();
         }
         else
@@ -352,10 +352,10 @@ public class BackEndDataManager
                 }
 
                 JsonData json = BackendReturnObject.Flatten(bro.Rows());
-                expDatas = new int[json.Count];
+                ExpDatas = new int[json.Count];
                 // Debug.Log($"[ResourceM] {chartId} 수신 완료 : {json.Count}개");
                 for (int i = 0; i < json.Count; ++i)
-                    expDatas[i] = int.Parse(json[i]["requireExp"].ToString());
+                    ExpDatas[i] = int.Parse(json[i]["requireExp"].ToString());
                 SceneLoader.ResourceLoadComplete();
             });
         }
@@ -400,7 +400,7 @@ public class BackEndDataManager
 
     void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
     {
-        SendQueue.Enqueue(Backend.GameData.Get, tableName, searchFromMyIndate, 150, bro =>
+        SendQueue.Enqueue(Backend.GameData.Get, tableName, SearchFromMyIndate, 150, bro =>
         {
             if (!bro.IsSuccess())
             {
@@ -453,7 +453,7 @@ public class BackEndDataManager
 
         GetMyBackEndData<WeaponData>(nameof(WeaponData),  (data) =>
         {
-            weaponDatas=data ;
+            UserWeapons=data ;
         });
     }
 
@@ -461,7 +461,7 @@ public class BackEndDataManager
     {
         GetMyBackEndData<UserData>(nameof(UserData),  (data) =>
         {
-            userData = data[0];
+            UserData = data[0];
             // Param param = new Param
             // {
             //     { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
@@ -470,7 +470,7 @@ public class BackEndDataManager
             serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
             Param param = new() { { "lastLogin", serverTime }};
     
-            SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), userData.inDate, Backend.UserInDate, param, ( callback ) => 
+            SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), UserData.inDate, Backend.UserInDate, param, ( callback ) => 
             {
                 if (!callback.IsSuccess())
                 {

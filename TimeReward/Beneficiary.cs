@@ -23,7 +23,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
 
     private bool AttendanceCheck() //누적 날짜 갱신하기
     {
-        int day = Managers.ServerData.userData.attendance;
+        int day = Managers.ServerData.UserData.attendance;
         DateTime lastLogin = Managers.Game.Player.Data.lastLogin;
         days = day;
    
@@ -39,7 +39,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
 
     private void Receive()
     {
-        AttendanceData todayReward = Managers.ServerData.attendanceDatas[days];
+        AttendanceData todayReward = Managers.ServerData.AttendanceDatas[days];
         switch (todayReward.type)
         {
             case (int)RewardType.Exp:

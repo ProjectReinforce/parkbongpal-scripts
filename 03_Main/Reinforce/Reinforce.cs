@@ -36,7 +36,7 @@ public class Additional : Reinforce
 {
     public void Execute(Weapon weapon)
     {
-        AdditionalData data = Managers.ServerData.additionalData;
+        AdditionalData data = Managers.ServerData.AdditionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
         int[] additionalDescription = {2, 4, 6, 8, 10};
         
@@ -70,15 +70,15 @@ public class NormalReinforce : Reinforce
     public void Execute(Weapon weapon)
     {
         BackEndDataManager resourceManager = Managers.ServerData;
-        NormalReinforceData data = resourceManager.normalReinforceData;
+        NormalReinforceData data = resourceManager.NormalReinforceData;
         int goldCost = data.GetGoldCost((Rarity)weapon.data.rarity);
 
         if (weapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
         {
             goldCost = data.GetGoldCost((Rarity)weapon.data.rarity) * 10;
 
-            weapon.data.NormalStat[(int)StatType.upgradeCount] = resourceManager.baseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.upgradeCount];
-            weapon.data.NormalStat[(int)StatType.atk] = resourceManager.baseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.atk];
+            weapon.data.NormalStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.upgradeCount];
+            weapon.data.NormalStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.atk];
             Debug.Log($"일반 강화 초기화 실행 : {weapon.data.NormalStat[(int)StatType.upgradeCount]}, {weapon.data.NormalStat[(int)StatType.atk]}");
         }
         else
@@ -160,7 +160,7 @@ public class SoulCrafting : Reinforce
     public void Execute(Weapon weapon)
     {
         BackEndDataManager resourceManager = Managers.ServerData;
-        SoulCraftingData data = resourceManager.soulCraftingData;
+        SoulCraftingData data = resourceManager.SoulCraftingData;
         int goldCost = data.goldCost;
         int soulCost = data.soulCost;
 
@@ -169,8 +169,8 @@ public class SoulCrafting : Reinforce
             goldCost = data.goldCost * 10;
             soulCost = data.soulCost * 10;
 
-            weapon.data.SoulStat[(int)StatType.upgradeCount] = resourceManager.baseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.upgradeCount];
-            weapon.data.SoulStat[(int)StatType.atk] = resourceManager.baseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.atk];
+            weapon.data.SoulStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.upgradeCount];
+            weapon.data.SoulStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.atk];
             Debug.Log($"영혼 세공 초기화 실행 : {weapon.data.SoulStat[(int)StatType.upgradeCount]}, {weapon.data.SoulStat[(int)StatType.atk]}");
         }
         else
@@ -212,7 +212,7 @@ public class Refinement : Reinforce
     public void Execute(Weapon weapon)
     {
         RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
-        RefinementData data = Managers.ServerData.refinementData;
+        RefinementData data = Managers.ServerData.RefinementData;
         // 스탯 결정
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
         string[] statDescription = {"atk", "critical", "stat3", "stat6"};

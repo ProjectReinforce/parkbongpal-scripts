@@ -53,7 +53,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         HighPowerFinder.SetSlots(slots);
         size = slots.Count;
         
-        foreach (var weaponData in Managers.ServerData.weaponDatas)
+        foreach (var weaponData in Managers.ServerData.UserWeapons)
         {
             slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }

@@ -66,7 +66,7 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
             {
                 int magicIndex = mine.rentalWeapon.data.magic[i];
                 if(magicIndex<0) break;
-                skillNames[i] = Managers.ServerData.skillDatas[magicIndex].skillName;
+                skillNames[i] = Managers.ServerData.SkillDatas[magicIndex].skillName;
  
             }
             skillDescription.text = String.Join(", ", skillNames);
