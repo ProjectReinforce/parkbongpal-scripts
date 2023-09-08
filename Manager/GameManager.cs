@@ -20,4 +20,16 @@ public class GameManager
     {
         InMainThreadQueue.Enqueue(_action);
     }
+
+    public void Set()
+    {
+        Transform root = GameObject.Find("Canvas_Game").transform;
+        HasIGameInitializer[] results = root.GetComponentsInChildren<HasIGameInitializer>(true);
+
+        foreach (var item in results)
+        {
+            item.TryGetComponent(out IGameInitializer component);
+            component.GameInitialize();
+        }
+    }
 }

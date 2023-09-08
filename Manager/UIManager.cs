@@ -3,55 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class UIManager
 {
     Stack<GameObject> uiStack = new();
-    GameObject currentTap;
-    GameObject mainTap;
+    TapType currentTapType;
     GameObject[] taps = new GameObject[Enum.GetNames(typeof(TapType)).Length];
+    List<GameObject>[] withTaps = new List<GameObject>[Enum.GetNames(typeof(TapType)).Length];
 
-    // public void Initialize(Transform _transform)
-    // {
-    //     mainTap = Utills.Bind<GameObject>(_transform, );
-    // }
-
-    public void MoveTap(TapType _tapType)//싱글톤 수정하거나, 게임매니저의 taps를 인스펙터로 채워두면 사용해봄직함
+    public void MoveTap(TapType _tapType)
     {
         // 현재 열린 탭과 같으면 리턴
-        if (currentTap == taps[(int)_tapType]) return;
+        if (currentTapType == _tapType) return;
         
         // 현재 열려있는 팝업 모두 Off
         while (uiStack.Count > 0)
             uiStack.Pop().SetActive(false);
 
         // 탭 이동 처리
-        if (currentTap != taps[(int)TapType.Mine])
-            currentTap.SetActive(false);
-        currentTap = taps[(int)_tapType];
-        currentTap.SetActive(true);
+        if (currentTapType != TapType.Main_Mine)
+            taps[(int)currentTapType].SetActive(false);
+        foreach (var item in withTaps[(int)currentTapType])
+            item.SetActive(false);
+        currentTapType = _tapType;
+        taps[(int)currentTapType].SetActive(true);
+        foreach (var item in withTaps[(int)currentTapType])
+            item.SetActive(true);
     }
 
-    public void MoveTap(GameObject _tap)
+    public void RegisterTaps(TapType _tapType, GameObject _tap)
     {
-        // 현재 열린 탭과 같으면 리턴
-        if (currentTap == _tap) return;
-        
-        // 현재 열려있는 팝업 모두 Off
-        while (uiStack.Count > 0)
-            uiStack.Pop().SetActive(false);
-
-        // 탭 이동 처리
-        if (currentTap != mainTap)
-            currentTap.SetActive(false);
-        currentTap = _tap;
-        currentTap.SetActive(true);
-    }
-
-    public void RegisterTap(GameObject _tap, TapType _tapType)
-    {
-        if (_tapType == TapType.Mine)
-            currentTap = _tap;
+        if (_tapType == TapType.Main_Mine)
+            currentTapType = _tapType;
         taps[(int)_tapType] = _tap;
+    }
+
+    public void RegisterWithTaps(TapType _tapType, GameObject _withTap)
+    {
+        if (withTaps[(int)_tapType] == null) withTaps[(int)_tapType] = new();
+        withTaps[(int)_tapType].Add(_withTap);
     }
 
     public void OpenPopup(GameObject _popup)

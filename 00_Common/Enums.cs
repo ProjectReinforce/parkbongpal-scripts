@@ -128,7 +128,7 @@ public enum QuestType
 
 public enum TapType
 {
-    Mine,
+    Main_Mine,
     Reinforce,
     MiniGame,
     Pidea,

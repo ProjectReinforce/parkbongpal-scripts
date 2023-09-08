@@ -1,15 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Manager;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(HasIGameInitializer))]
-public class TapRegister : MonoBehaviour, IGameInitializer
+public class TapButton : MonoBehaviour
 {
     TapType tapType;
+    GameObject backUI;
+    Button tapButton;
 
-    public void GameInitialize()
+    void Awake()
     {
+        backUI = transform.Find("Back").gameObject;
+        transform.Find("Button_S").TryGetComponent(out tapButton);
+
         string[] tapTypeNames = Enum.GetNames(typeof(TapType));
 
         for (int i = 0; i < tapTypeNames.Length; i++)
@@ -21,6 +27,8 @@ public class TapRegister : MonoBehaviour, IGameInitializer
             }
         }
 
-        Managers.UI.RegisterTaps(tapType, gameObject);
+        Managers.UI.RegisterWithTaps(tapType, backUI);
+
+        tapButton.onClick.AddListener(() => Managers.UI.MoveTap(tapType));
     }
 }
