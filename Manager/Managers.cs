@@ -61,6 +61,7 @@ public class Managers : MonoBehaviour
     void Update()
     {
         game?.MainThreadPoll();
+        ui?.InputCheck();
     }
 
     void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)

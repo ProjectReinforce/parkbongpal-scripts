@@ -52,8 +52,8 @@ public class Login : MonoBehaviour
                 Managers.Game.MainEnqueue(() =>
                 {
                     // Debug.LogError($"자동 로그인 실패 : {callback}");
+                    Managers.UI.OpenPopup(LoginPopup);
                     Managers.Alarm.Warning($"자동 로그인 실패 : {callback}");
-                    LoginPopup.SetActive(true);
                     tokenLoginButton.interactable = true;
                     StopCoroutine(processCoroutine);
                     processText.text = "Touch to start.";
@@ -119,13 +119,13 @@ public class Login : MonoBehaviour
                     case 200:
                         // Debug.Log($"{Backend.UserNickName} 구글 로그인 성공!");
                         if(Backend.UserNickName == "")
-                            NicknamePopup.SetActive(true);
+                            Managers.UI.OpenPopup(NicknamePopup);
                         else
                             Utills.LoadScene(SceneName.R_Main_V6.ToString());
                         break;
                     case 201:
                         // Debug.Log("구글 회원가입 성공!");
-                        NicknamePopup.SetActive(true);
+                        Managers.UI.OpenPopup(NicknamePopup);
                         break;
                 }
             }
@@ -177,13 +177,13 @@ public class Login : MonoBehaviour
                     case 200:
                         // Debug.Log($"{Backend.UserNickName} 게스트 로그인 성공!");
                         if(Backend.UserNickName == "")
-                            NicknamePopup.SetActive(true);
+                            Managers.UI.OpenPopup(NicknamePopup);
                         else
                             Utills.LoadScene(SceneName.R_Main_V6.ToString());
                         break;
                     case 201:
                         // Debug.Log("게스트 회원가입 성공!");
-                        NicknamePopup.SetActive(true);
+                        Managers.UI.OpenPopup(NicknamePopup);
                         break;
                 }
             }

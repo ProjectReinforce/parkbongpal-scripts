@@ -6,10 +6,23 @@ using UnityEngine;
 [Serializable]
 public class UIManager
 {
+    public bool InputLock { get; set; }
     Stack<GameObject> uiStack = new();
     TapType currentTapType;
     GameObject[] taps = new GameObject[Enum.GetNames(typeof(TapType)).Length];
     List<GameObject>[] withTaps = new List<GameObject>[Enum.GetNames(typeof(TapType)).Length];
+
+    public void InputCheck()
+    {
+        if (InputLock == true) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (uiStack.Count > 0)
+                ClosePopup();
+            else
+                Application.Quit();
+        }
+    }
 
     public void MoveTap(TapType _tapType)
     {
@@ -48,5 +61,11 @@ public class UIManager
     {
         uiStack.Push(_popup);
         _popup.SetActive(true);
+    }
+
+    public void ClosePopup()
+    {
+        GameObject popup = uiStack.Pop();
+        popup.SetActive(false);
     }
 }
