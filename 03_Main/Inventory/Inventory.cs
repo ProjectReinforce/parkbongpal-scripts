@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Inventory
 {
-    // weap
-    // public Inventory()
-    // {
+    Weapon weapon;
+    public Inventory()
+    {
 
-    // }
+    }
 
     // void AddWeapon(WeaponData weaponData)
     // {

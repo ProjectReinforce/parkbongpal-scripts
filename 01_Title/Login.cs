@@ -46,7 +46,12 @@ public class Login : MonoBehaviour
         SendQueue.Enqueue(Backend.BMember.LoginWithTheBackendToken, callback =>
         {
             if (callback.IsSuccess())
-                CheckBlankNickname(callback.GetStatusCode());
+            {
+                if(Backend.UserNickName == "")
+                    Managers.UI.OpenPopup(NicknamePopup);
+                else
+                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+            }
             else
             {
                 Managers.Game.MainEnqueue(() =>

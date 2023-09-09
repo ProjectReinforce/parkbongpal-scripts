@@ -1,6 +1,5 @@
 ﻿public enum SceneName
 {
-    
     R_Start,
     R_LoadingScene,
     R_Main_V6
@@ -8,7 +7,12 @@
 
 public enum Rarity
 {
-    trash,old,normal,rare,unique,legendary
+    trash,
+    old,
+    normal,
+    rare,
+    unique,
+    legendary
 }
 
 public enum ReinforceType
@@ -20,7 +24,6 @@ public enum SortedMethod
 {
     Rarity,  Power, Damage, Speed, Range, Accuracy
 }
-
 
 public enum MessageType
 {
@@ -82,7 +85,8 @@ public enum InventoryOpenType
     Default,
     Mine,
     Reinforce,
-    ReinforceMaterial
+    ReinforceMaterial,
+    MiniGame
 }
 
 public enum RewardType

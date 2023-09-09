@@ -7,10 +7,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class OpenPopupRegister : MonoBehaviour
 {
-    [SerializeField] GameObject popup;
-    Button button;
+    [SerializeField] protected GameObject popup;
+    protected Button button;
 
-    void Awake()
+    protected virtual void Awake()
     {
         TryGetComponent(out button);
         button.onClick.AddListener(() => Managers.UI.OpenPopup(popup));
