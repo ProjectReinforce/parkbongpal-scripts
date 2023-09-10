@@ -7,6 +7,8 @@ public class GameManager
     Queue<Action> InMainThreadQueue = new();
     Player player;
     public Player Player => player;
+    Inventory inventory;
+    public Inventory Inventory => inventory;
 
     public void MainThreadPoll()
     {
@@ -25,8 +27,9 @@ public class GameManager
     {
         player = new();
         player.Initialize();
+        inventory = new();
 
-        HasIGameInitializer[] results = Utills.BindFromCanvas<HasIGameInitializer>();
+        HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>();
 
         foreach (var item in results)
         {

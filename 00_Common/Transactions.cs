@@ -10,16 +10,16 @@ public static class Transactions
     // static List<TransactionValue> tvs =  new();
     static int currentIndex = 0;
 
-    public static void SendCurrent()
+    public static void SendCurrent(Action<BackendReturnObject> _callback = null)
     {
-        Send(currentIndex);
+        Send(currentIndex, _callback);
     }
 
-    public static void Send(int _targetIndex)
+    public static void Send(int _targetIndex, Action<BackendReturnObject> _callback = null)
     {
         if (tvs[_targetIndex].Count <= 0) return;
 
-        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, tvs[_targetIndex], ( callback ) => 
+        SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, tvs[_targetIndex], (callback) => 
         {
             if (!callback.IsSuccess())
             {
@@ -33,6 +33,7 @@ public static class Transactions
             Debug.Log($"전송 후 {_targetIndex} 트랜잭션 갯수 : {tvs[_targetIndex].Count}");
             // foreach (var item in tvs)
             //     Debug.Log(item.table);
+            _callback?.Invoke(callback);
         });
         if (CallChecker.Instance != null)
             CallChecker.Instance.CountCall();

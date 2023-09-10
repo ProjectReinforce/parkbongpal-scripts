@@ -42,7 +42,7 @@ public class Decomposition : Singleton<Decomposition>
             totalSoul += Managers.ServerData.DecompositDatas[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
             string indate = slot.myWeapon.data.inDate;
             
-            slot.NewClear();
+            // slot.NewClear();
             slot.updateX(false);
             slot.SetWeapon(null);
             slots.RemoveFirst();

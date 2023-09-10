@@ -58,8 +58,8 @@ public class MineDetail : MonoBehaviour,IDetailViewer<Mine> , IInventoryOption
         {
             upDownVisualer.gameObject.SetActive(true);
             
-            weaponImage.sprite = mine.rentalWeapon.sprite;
-            weaponName.text = mine.rentalWeapon.name;
+            weaponImage.sprite = mine.rentalWeapon.Icon;
+            weaponName.text = mine.rentalWeapon.Name;
             mineWithWeaponStats.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
             string[] skillNames= new string[2];
             for (int i = 0; i < 2; i++)

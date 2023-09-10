@@ -8,35 +8,34 @@ using UnityEngine;
 [Serializable]
 public class Weapon
 {
-    public readonly Sprite sprite;
-    //private NSubject.ISubject subjects;
-    [SerializeField] WeaponData _data;
-    public WeaponData data => _data;
-
-    public readonly string description;
-    public readonly string name;
-    int _power;
-    public int power =>_power;
-    private static Reinforce[] reinforces =
+    static Reinforce[] reinforces =
     {
         new Promote(), new Additional(), new NormalReinforce(),
         new MagicEngrave(), new SoulCrafting(), new Refinement()
     };
-    public Refinement refinement => reinforces[(int)ReinforceType.refineMent-1] as Refinement;
+
+    [SerializeField] WeaponData _data;
+    public WeaponData data => _data;
+    public readonly Sprite Icon;
+    public readonly string Name;
+    public readonly string Description;
+    int _power;
+    public int power =>_power;
 
     public Slot myslot;
 
-    public Weapon(WeaponData _data , Slot slot)//기본데이터
+    public Weapon(WeaponData _data)
     {
         this._data = _data;
 
         BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(_data.baseWeaponIndex);
-        sprite = Managers.Resource.GetBaseWeaponSprite(_data.baseWeaponIndex);
-        description = baseWeaponData.description;
-        name = baseWeaponData.name;
+        Icon = Managers.Resource.GetBaseWeaponSprite(_data.baseWeaponIndex);
+        Name = baseWeaponData.name;
+        Description = baseWeaponData.description;
+
         SetPower();
-        myslot = slot;
     }
+
     public void SetBorrowedDate(DateTime time)
     {
         _data.borrowedDate = time;
@@ -71,7 +70,6 @@ public class Weapon
     const float STAT_CORRECTION_FACTOR = 0.2f;
     public void SetPower()
     {
-        
         float statSumWithFactor = (data.strength + data.intelligence + data.wisdom
                                     + data.technique + data.charm + data.constitution)
                                     * STAT_CORRECTION_FACTOR;
@@ -90,9 +88,9 @@ public class Weapon
 
     public void ExecuteReinforce(ReinforceType _type)
     {
-        
         reinforces[(int)_type-1].Execute(this);
-        HighPowerFinder.UpdateHighPowerWeaponData();
+        SetPower();
+        // HighPowerFinder.UpdateHighPowerWeaponData();
     }
 
     public void Promote()

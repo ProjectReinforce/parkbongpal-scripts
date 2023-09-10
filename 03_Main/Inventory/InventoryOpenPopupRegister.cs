@@ -8,15 +8,16 @@ using UnityEngine.UI;
 public class InventoryOpenPopupRegister : OpenPopupRegister
 {
     [SerializeField] InventoryOpenType inventoryOpenType;
-    [SerializeField] new InventoryController popup;
+    [SerializeField] InventoryController inventory;
 
     protected override void Awake()
     {
+        inventory = Utills.Bind<InventoryController>("Inventory_S");
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
         {
-            popup.Set(inventoryOpenType);
-            Managers.UI.OpenPopup(popup.gameObject);
+            inventory.Set(inventoryOpenType);
+            Managers.UI.OpenPopup(inventory.gameObject);
         });
     }
 }

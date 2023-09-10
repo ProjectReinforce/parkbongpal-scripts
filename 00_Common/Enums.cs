@@ -17,12 +17,28 @@ public enum Rarity
 
 public enum ReinforceType
 {
-    Default, promote,additional,normalReinforce, magicEngrave,soulCrafting,refineMent
+    Default,
+    promote,
+    additional,
+    normalReinforce,
+    magicEngrave,
+    soulCrafting,
+    refineMent
 }
 
 public enum SortedMethod
 {
     Rarity,  Power, Damage, Speed, Range, Accuracy
+}
+
+public enum SortType
+{
+    Rarity,
+    Power,
+    Atk,
+    Speed,
+    Range,
+    Accuracy
 }
 
 public enum MessageType

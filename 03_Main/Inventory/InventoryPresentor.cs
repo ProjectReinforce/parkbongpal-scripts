@@ -32,8 +32,8 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
 
     private void AddWeapon(WeaponData weaponData)
     {
-        slots[Count].SetNew();
-        slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
+        // slots[Count].SetNew();
+        // slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
     }
     public void SortSlots()
     {
@@ -55,7 +55,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         
         foreach (var weaponData in Managers.ServerData.UserWeapons)
         {
-            slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
+            // slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
         }
     }
 
@@ -82,7 +82,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     {
         foreach (var slot in slots)
         {
-            slot.NewClear();
+            // slot.NewClear();
         }
         inventoryViewer.gameObject.SetActive(false);
     }

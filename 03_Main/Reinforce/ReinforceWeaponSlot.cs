@@ -28,7 +28,7 @@ public class ReinforceWeaponSlot : MonoBehaviour,IInventoryOption
 
     void UpdateWeaponIcon()
     {
-        weaponIcon.sprite = reinforceManager.SelectedWeapon.sprite;
+        weaponIcon.sprite = reinforceManager.SelectedWeapon.Icon;
     }
 
     public void SetOpen()

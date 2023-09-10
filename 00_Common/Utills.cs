@@ -120,7 +120,7 @@ public static class Utills
         return null;
     }
 
-    public static T[] BindFromCanvas<T>() where T : Component
+    public static T[] FindAllFromCanvas<T>() where T : Component
     {
         Transform root = GameObject.Find("Canvas_Game").transform;
         return root.GetComponentsInChildren<T>(true);

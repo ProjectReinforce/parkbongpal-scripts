@@ -17,8 +17,8 @@ public class NormalReinforceUI : ReinforceUIBase
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
-        weaponIcon.sprite = weapon.sprite;
-        weaponNameText.text = weapon.name;
+        weaponIcon.sprite = weapon.Icon;
+        weaponNameText.text = weapon.Name;
     }
 
     protected override void UpdateCosts()

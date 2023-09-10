@@ -30,6 +30,6 @@
             ImageObject.SetActive(true);
             button.enabled = true;
             lendImageObject.SetActive(element.data.mineId>-1);
-            weaponImage.sprite = element.sprite;
+            weaponImage.sprite = element.Icon;
         }
     }

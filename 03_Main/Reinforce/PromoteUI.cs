@@ -52,8 +52,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
-        weaponIcons[0].sprite = weapon.sprite;
-        weaponIcons[1].sprite = weapon.sprite;
+        weaponIcons[0].sprite = weapon.Icon;
+        weaponIcons[1].sprite = weapon.Icon;
 
         weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
         if (weapon.data.rarity != (int)Rarity.legendary)
@@ -61,7 +61,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         else
             weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
 
-        weaponNameText.text = weapon.name;
+        weaponNameText.text = weapon.Name;
     }
 
     void UpdateMaterialsImage()
@@ -69,7 +69,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         for (int i = 0; i < materialIcons.Length; i++)
         {
             if (ReinforceManager.Instance.SelectedMaterials[i] != null)
-                materialIcons[i].sprite = ReinforceManager.Instance.SelectedMaterials[i].sprite;
+                materialIcons[i].sprite = ReinforceManager.Instance.SelectedMaterials[i].Icon;
             else
                 materialIcons[i].sprite = basicSprite;
         }

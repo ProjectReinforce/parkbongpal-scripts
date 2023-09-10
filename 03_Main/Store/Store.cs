@@ -5,12 +5,12 @@ using UnityEngine;
 [Serializable]
 public class Store : Singleton<Store>
 {
-    private IAddable inventory;
+    // private IAddable inventory;
     private GachaData[] gacharsPercents;
     private int[][] percents;
     protected override void Awake()
     {
-        inventory = InventoryPresentor.Instance;
+        // inventory = InventoryPresentor.Instance;
         gacharsPercents = Managers.ServerData.GachaDatas;
         percents = new int[gacharsPercents.Length][];
         for (int i = 0; i < gacharsPercents.Length; i++)
@@ -27,15 +27,15 @@ public class Store : Singleton<Store>
 
     public void Drawing(int type)
     {
-        if (!InventoryPresentor.Instance.CheckSize(1))
-        {
-                Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
-            return;
-        }
+        // if (!InventoryPresentor.Instance.CheckSize(1))
+        // {
+        //         Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
+        //     return;
+        // }
 
         if (type == 0)
         {
-            if (!Managers.Game.Player.LateAddGold(-COST_GOLD))
+            if (!Managers.Game.Player.AddGold(-COST_GOLD))
             {
                 Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
@@ -44,7 +44,7 @@ public class Store : Singleton<Store>
         }
         else
         {
-            if (!Managers.Game.Player.LateAddDiamond(-COST_DIAMOND))
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND))
             {
                 Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
@@ -61,22 +61,22 @@ public class Store : Singleton<Store>
             SendChat.SendMessage($"레전드리 <color=red>{baseWeaponData.name}</color> 획득!");
         }
 
-        inventory.AddWeapon(baseWeaponData);
+        // inventory.AddWeapon(baseWeaponData);
     }
 
     private const int TEN = 10;
 
     public void BatchDrawing(int type)
     {
-        if (!InventoryPresentor.Instance.CheckSize(10))
-        {
-                Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
-                return;
-        }
+        // if (!InventoryPresentor.Instance.CheckSize(10))
+        // {
+        //         Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
+        //         return;
+        // }
 
         if (type == 0)
         {
-            if (!Managers.Game.Player.LateAddGold(-COST_GOLD * 9))
+            if (!Managers.Game.Player.AddGold(-COST_GOLD * 9))
             {
                 Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
@@ -85,7 +85,7 @@ public class Store : Singleton<Store>
         }
         else
         {
-            if (!Managers.Game.Player.LateAddDiamond(-COST_DIAMOND * 9))
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * 9))
             {
                 Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
@@ -100,13 +100,12 @@ public class Store : Singleton<Store>
             baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
             {
-                // 레전드리 획득 채팅 메시지 전송되도록
-                Debug.Log("<color=red>레전드리 획득!!</color>");
+                // Debug.Log("<color=red>레전드리 획득!!</color>");
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
             }
         }
 
-        inventory.AddWeapons(baseWeaponDatas);
-
+        // inventory.AddWeapons(baseWeaponDatas);
+        Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
     }
 }

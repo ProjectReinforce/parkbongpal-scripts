@@ -32,7 +32,7 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
             gameObject.SetActive(false);
             return;
         }
-        weaponName.text = weapon.name;
+        weaponName.text = weapon.Name;
         combatPower.text = weapon.power.ToString();
         WeaponData weaponData = weapon.data;
         rarityColorImage.color=rarityColors[weaponData.rarity];   
@@ -40,7 +40,7 @@ public class WeaponDetail : MonoBehaviour,IDetailViewer<Weapon>
         stats.text = $"{weaponData.atk}\n{weaponData.atkSpeed}\n{weaponData.atkRange}\n{weaponData.accuracy}\n{weaponData.criticalRate}\n{weaponData.criticalDamage}";
         stats2.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";
         stats3.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
-        WeaponImage.sprite = weapon.sprite;
+        WeaponImage.sprite = weapon.Icon;
         MagicImage1.sprite = weapon.data.magic[0] < 0 ? LockSkill : Managers.Resource.GetSkill(weapon.data.magic[0]);
         MagicImage2.sprite = weapon.data.magic[1] < 0 ? LockSkill : Managers.Resource.GetSkill(weapon.data.magic[1]);
 

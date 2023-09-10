@@ -26,9 +26,8 @@ public class Promote : Reinforce
         //     Debug.LogError(bro);
         //     // 메시지 출력
         // }
-        weapon.myslot.UpdateSlot(weapon);
-        weapon.SetPower();
-        
+        // weapon.myslot.UpdateSlot(weapon);
+        // weapon.SetPower();
     }
 }
 
@@ -61,7 +60,7 @@ public class Additional : Reinforce
         //     // 메시지 출력
         // }
 
-        weapon.SetPower();
+        // weapon.SetPower();
     }
 }
 
@@ -110,7 +109,7 @@ public class NormalReinforce : Reinforce
         //     // 메시지 출력
         // }
 
-        weapon.SetPower();
+        // weapon.SetPower();
     }
 }
 
@@ -151,7 +150,7 @@ public class MagicEngrave : Reinforce
         //     // 메시지 출력
         // }
 
-        weapon.SetPower();
+        // weapon.SetPower();
     }
 }
 
@@ -201,7 +200,7 @@ public class SoulCrafting : Reinforce
         //     // 메시지 출력
         // }
 
-        weapon.SetPower();
+        // weapon.SetPower();
     }
 }
 
@@ -285,6 +284,6 @@ public class Refinement : Reinforce
         //     // 메시지 출력
         // }
 
-        weapon.SetPower();
+        // weapon.SetPower();
     }
 }

@@ -12,7 +12,7 @@
             get => _weapon;
             set
             {
-                weaponImage.sprite = value.sprite;
+                weaponImage.sprite = value.Icon;
                 //rarityImage.sprite = Manager.BackEndDataManager.Instance.weaponRaritySlot[value.data.rarity];
                 _weapon = value;
             }
