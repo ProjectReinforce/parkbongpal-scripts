@@ -7,8 +7,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class InventoryOpenPopupRegister : OpenPopupRegister
 {
-    [SerializeField] InventoryOpenType inventoryOpenType;
-    [SerializeField] InventoryController inventory;
+    [SerializeField] InventoryType inventoryOpenType;
+    InventoryController inventory;
 
     protected override void Awake()
     {

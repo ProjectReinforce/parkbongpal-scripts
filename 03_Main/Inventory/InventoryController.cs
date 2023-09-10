@@ -6,32 +6,33 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour, IGameInitializer
 {
-    IInventoryOpenOption[] inventoryOpenOptions;
-    Button selectButton;
-    Button decompositionButton;
+    public InventoryType CurrentInventoryType { get; private set; }
+    public IInventoryOpenOption[] InventoryOpenOptions { get; private set;}
+    public DetailInfoUI DetailInfo { get; private set; }
+    public Button SelectButton { get; private set; }
+    public Button DecompositionButton { get; private set; }
 
     public void GameInitialize()
     {
-        selectButton = Utills.Bind<Button>("Button_Select", transform);
-        decompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
+        DetailInfo = Utills.Bind<DetailInfoUI>("DetailInfo_S", transform);
+        SelectButton = Utills.Bind<Button>("Button_Select", transform);
+        DecompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
 
-        inventoryOpenOptions = new IInventoryOpenOption[]
+        InventoryOpenOptions = new IInventoryOpenOption[]
         {
-            new InventoryOpenOptionDefault(selectButton, decompositionButton),
-            new InventoryOpenOptionMine(selectButton, decompositionButton),
-            new InventoryOpenOptionReinforce(selectButton, decompositionButton),
-            new InventoryOpenOptionReinforceMaterial(selectButton, decompositionButton),
-            new InventoryOpenOptionMiniGame(selectButton, decompositionButton)
+            new InventoryOpenOptionDefault(this),
+            new InventoryOpenOptionMine(this),
+            new InventoryOpenOptionReinforce(this),
+            new InventoryOpenOptionReinforceMaterial(this),
+            new InventoryOpenOptionMiniGame(this),
+            new InventoryOpenOptionDecomposition(this),
         };
     }
 
-    public void Set(InventoryOpenType _inventoryOpenType)
+    public void Set(InventoryType _inventoryType)
     {
-        inventoryOpenOptions[(int)_inventoryOpenType]?.Set();
-    }
-
-    void OnDisable()
-    {
-        decompositionButton.gameObject.SetActive(false);
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        CurrentInventoryType = _inventoryType;
+        InventoryOpenOptions[(int)_inventoryType]?.Set();
     }
 }

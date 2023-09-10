@@ -59,6 +59,7 @@ public class UIManager
 
     public void OpenPopup(GameObject _popup)
     {
+        if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
         uiStack.Push(_popup);
         _popup.SetActive(true);
     }

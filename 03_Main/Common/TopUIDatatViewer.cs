@@ -38,6 +38,7 @@ public class TopUIDatatViewer : MonoBehaviour
         UpdateWeaponIcon();
     }
 
+    // todo : 전부 옵저버 방식으로 변경
     public void UpdateGold()
     {
         goldText.text = player.Data.gold.ToString();           // 유저 보유 돈

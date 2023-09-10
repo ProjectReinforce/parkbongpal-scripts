@@ -4,31 +4,63 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
+    InventoryController inventoryController;
     Button slotButton;
+    Image slotImage;
     Image weaponIcon;
+    Image selectedImage;
+    Sprite defaultSlot;
 
     void Awake()
     {
+        inventoryController = Utills.Bind<InventoryController>("Inventory_S");
         TryGetComponent(out slotButton);
         slotButton.onClick.AddListener(() =>
         {
-            Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
+            // Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
+            Managers.Event.SlotSelectEvent -= Selected;
+            Managers.Event.SlotSelectEvent += Selected;
+            Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
         });
+        TryGetComponent(out slotImage);
+        defaultSlot = slotImage.sprite;
         weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
+        selectedImage = Utills.Bind<Image>("Image_selected", transform);
     }
 
     void OnEnable()
     {
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
-        if (weapon == null) return;
-        weaponIcon.sprite = weapon.Icon;
-        weaponIcon.gameObject.SetActive(true);
-        slotButton.enabled = true;
+        Refresh();
     }
 
     void OnDisable()
     {
+        slotImage.sprite = defaultSlot;
         weaponIcon.gameObject.SetActive(false);
+        selectedImage.gameObject.SetActive(false);
+    }
+
+    void Selected(Weapon _weapon)
+    {
+        // switch (inventoryController.)
+        // {
+            
+        //     default:
+        // }
+        if (Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()) == _weapon)
+            selectedImage.gameObject.SetActive(true);
+        else
+            selectedImage.gameObject.SetActive(false);
+    }
+
+    void Refresh()
+    {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
+        if (weapon == null) return;
+        slotImage.sprite = Managers.Resource.weaponRaritySlot[weapon.data.rarity];
+        weaponIcon.sprite = weapon.Icon;
+        weaponIcon.gameObject.SetActive(true);
+        slotButton.enabled = true;
     }
 
     // ====================================================================

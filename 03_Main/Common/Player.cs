@@ -66,10 +66,8 @@ public class Player
         });
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     public bool AddGold(int _gold, bool _directUpdate = true)
     {
-        Debug.Log("$$$$$$$$$$"+(userData.gold + _gold < 0));
         if (userData.gold + _gold < 0) return false;
         userData.gold += _gold;
 
@@ -99,18 +97,6 @@ public class Player
         recordData.ModifyDiamondRecord(_diamond);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
-        topUIDatatViewer.UpdateDiamond();
-
-        return true;
-    }
-    public bool LateAddDiamond(int _diamond, bool _directUpdate = true)
-    {
-        if (userData.diamond + _diamond < 0) return false;
-        userData.diamond += _diamond;
-
-        recordData.ModifyDiamondRecord(_diamond);
-        if (_directUpdate)
-            LateUpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
         topUIDatatViewer.UpdateDiamond();
 
         return true;
@@ -300,9 +286,6 @@ public class Player
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
-    // todo: 개선 필요
-    // public List<TransactionValue> GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond)
-    // public void GetQuestRewards(List<TransactionValue> _transactionValues, int _exp, int _gold, int _diamond, Action _callback = null)
     public void GetQuestRewards(int _exp, int _gold, int _diamond)
     {
         AddExp(_exp, false);

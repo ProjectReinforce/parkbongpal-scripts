@@ -96,13 +96,14 @@ public enum StatTypeKor
     체질
 }
 
-public enum InventoryOpenType
+public enum InventoryType
 {
     Default,
     Mine,
     Reinforce,
     ReinforceMaterial,
-    MiniGame
+    MiniGame,
+    Decomposition
 }
 
 public enum RewardType

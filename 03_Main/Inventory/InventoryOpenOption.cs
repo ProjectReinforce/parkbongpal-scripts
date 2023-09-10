@@ -3,135 +3,233 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryOpenOptionDefault : IInventoryOpenOption
+public class InventoryOpenOptionBase
 {
-    Button selectButton;
-    Text selectText;
-    Button decompositionButton;
+    protected InventoryController inventoryController;
+    protected DetailInfoUI detailInfoUI;
+    protected Button selectButton;
+    protected Text selectText;
+    protected Button decompositionButton;
+    protected Image decompositionButtonImage;
+    protected Text decompositionText;
 
-    public InventoryOpenOptionDefault(Button _selectButton, Button _decompositionButton)
+    public InventoryOpenOptionBase(InventoryController _inventoryController)
     {
-        Initialize(_selectButton, _decompositionButton);
-    }
-
-    public void Initialize(Button _selectButton, Button _decompositionButton)
-    {
-        selectButton = _selectButton;
+        inventoryController = _inventoryController;
+        detailInfoUI = _inventoryController.DetailInfo;
+        selectButton = _inventoryController.SelectButton;
         selectText = selectButton.transform.GetComponentInChildren<Text>();
-        decompositionButton = _decompositionButton;
+        decompositionButton = _inventoryController.DecompositionButton;
+        decompositionButton.TryGetComponent(out decompositionButtonImage);
+        decompositionText = decompositionButton.transform.GetComponentInChildren<Text>();
+    }
+}
+
+public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpenOption
+{
+    Weapon currentWeapon;
+
+    public InventoryOpenOptionDefault(InventoryController _inventoryController) : base(_inventoryController)
+    {
     }
 
     public void Set()
     {
-        // selectButton.onClick.AddListener();
+        Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent += SetDetailInfo;
+
+        selectButton.onClick.AddListener(() => 
+        {
+            if (currentWeapon.data.mineId != -1)
+            {
+                Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+                return;
+            }
+            
+            Managers.UI.MoveTap(TapType.Reinforce);
+            ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+        });
         selectText.text = "강화하기";
-        // decompositionButton.onClick.AddListener();
         decompositionButton.gameObject.SetActive(true);
     }
-}
 
-public class InventoryOpenOptionMine : IInventoryOpenOption
-{
-    Button selectButton;
-    Text selectText;
-    Button decompositionButton;
-
-    public InventoryOpenOptionMine(Button _selectButton, Button _decompositionButton)
+    public void Reset()
     {
-        Initialize(_selectButton, _decompositionButton);
+        Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent -= SetDetailInfo;
+
+        selectButton.onClick.RemoveAllListeners();
     }
 
-    public void Initialize(Button _selectButton, Button _decompositionButton)
+    void SetCurrentWeapon(Weapon _weapon)
     {
-        selectButton = _selectButton;
-        selectText = selectButton.transform.GetComponentInChildren<Text>();
-        decompositionButton = _decompositionButton;
+        currentWeapon = _weapon;
+    }
+
+    void SetDetailInfo(Weapon _weapon)
+    {
+        detailInfoUI.Refresh(_weapon);
+        if (detailInfoUI.gameObject.activeSelf == false)
+            detailInfoUI.gameObject.SetActive(true);
+    }
+}
+
+public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOption
+{
+    Weapon currentWeapon;
+
+    public InventoryOpenOptionMine(InventoryController _inventoryController) : base(_inventoryController)
+    {
     }
 
     public void Set()
     {
-        // selectButton.onClick.AddListener();
+        Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent += SetDetailInfo;
+        
+        // selectButton.onClick.AddListener(() => 
+        // {
+        //     if (currentWeapon.data.mineId != -1)
+        //     {
+        //         Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+        //         return;
+        //     }
+            
+        //     ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+        //     Managers.UI.ClosePopup();
+        // });
         selectText.text = "빌려주기";
-        // decompositionButton.onClick.AddListener();
         decompositionButton.gameObject.SetActive(false);
+    }
+
+    public void Reset()
+    {
+        Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent -= SetDetailInfo;
+
+        selectButton.onClick.RemoveAllListeners();
+    }
+
+    void SetCurrentWeapon(Weapon _weapon)
+    {
+        currentWeapon = _weapon;
+    }
+
+    void SetDetailInfo(Weapon _weapon)
+    {
+        detailInfoUI.Refresh(_weapon);
+        if (detailInfoUI.gameObject.activeSelf == false)
+            detailInfoUI.gameObject.SetActive(true);
     }
 }
 
-public class InventoryOpenOptionReinforce : IInventoryOpenOption
+public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    Button selectButton;
-    Text selectText;
-    Button decompositionButton;
+    Weapon currentWeapon;
 
-    public InventoryOpenOptionReinforce(Button _selectButton, Button _decompositionButton)
+    public InventoryOpenOptionReinforce(InventoryController _inventoryController) : base(_inventoryController)
     {
-        Initialize(_selectButton, _decompositionButton);
-    }
-
-    public void Initialize(Button _selectButton, Button _decompositionButton)
-    {
-        selectButton = _selectButton;
-        selectText = selectButton.transform.GetComponentInChildren<Text>();
-        decompositionButton = _decompositionButton;
     }
 
     public void Set()
     {
-        // selectButton.onClick.AddListener();
+        Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent += SetDetailInfo;
+
+        selectButton.onClick.AddListener(() => 
+        {
+            if (currentWeapon.data.mineId != -1)
+            {
+                Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+                return;
+            }
+            
+            ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+            Managers.UI.ClosePopup();
+        });
         selectText.text = "강화하기";
-        // decompositionButton.onClick.AddListener();
         decompositionButton.gameObject.SetActive(false);
+    }
+
+    public void Reset()
+    {
+        Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+        Managers.Event.SlotSelectEvent -= SetDetailInfo;
+
+        selectButton.onClick.RemoveAllListeners();
+    }
+
+    void SetCurrentWeapon(Weapon _weapon)
+    {
+        currentWeapon = _weapon;
+    }
+
+    void SetDetailInfo(Weapon _weapon)
+    {
+        detailInfoUI.Refresh(_weapon);
+        if (detailInfoUI.gameObject.activeSelf == false)
+            detailInfoUI.gameObject.SetActive(true);
     }
 }
 
-public class InventoryOpenOptionReinforceMaterial : IInventoryOpenOption
+public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    Button selectButton;
-    Text selectText;
-    Button decompositionButton;
-
-    public InventoryOpenOptionReinforceMaterial(Button _selectButton, Button _decompositionButton)
+    public InventoryOpenOptionReinforceMaterial(InventoryController _inventoryController) : base(_inventoryController)
     {
-        Initialize(_selectButton, _decompositionButton);
-    }
-
-    public void Initialize(Button _selectButton, Button _decompositionButton)
-    {
-        selectButton = _selectButton;
-        selectText = selectButton.transform.GetComponentInChildren<Text>();
-        decompositionButton = _decompositionButton;
     }
 
     public void Set()
     {
-        // decompositionButton.onClick.AddListener();
         decompositionButton.gameObject.SetActive(false);
+    }
+
+    public void Reset()
+    {
     }
 }
 
-public class InventoryOpenOptionMiniGame : IInventoryOpenOption
+public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    Button selectButton;
-    Text selectText;
-    Button decompositionButton;
-
-    public InventoryOpenOptionMiniGame(Button _selectButton, Button _decompositionButton)
+    public InventoryOpenOptionMiniGame(InventoryController _inventoryController) : base(_inventoryController)
     {
-        Initialize(_selectButton, _decompositionButton);
-    }
-
-    public void Initialize(Button _selectButton, Button _decompositionButton)
-    {
-        selectButton = _selectButton;
-        selectText = selectButton.transform.GetComponentInChildren<Text>();
-        decompositionButton = _decompositionButton;
     }
 
     public void Set()
     {
-        // selectButton.onClick.AddListener();
         selectText.text = "선택하기";
-        // decompositionButton.onClick.AddListener();
         decompositionButton.gameObject.SetActive(false);
+    }
+
+    public void Reset()
+    {
+    }
+}
+
+public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInventoryOpenOption
+{
+    string originButtonText;
+    Color originButtonColor;
+
+    public InventoryOpenOptionDecomposition(InventoryController _inventoryController) : base(_inventoryController)
+    {
+    }
+
+    public void Set()
+    {
+        detailInfoUI.gameObject.SetActive(false);
+        originButtonText = decompositionText.text;
+        decompositionText.text = "분해 중..";
+        decompositionButton.enabled = false;
+        originButtonColor = decompositionButtonImage.color;
+        decompositionButtonImage.color = Color.red;
+    
+        // breakUI.SetActive(isDecompositing);
+    }
+
+    public void Reset()
+    {
+        decompositionText.text = originButtonText;
+        decompositionButton.enabled = true;
+        decompositionButtonImage.color = originButtonColor;
     }
 }
