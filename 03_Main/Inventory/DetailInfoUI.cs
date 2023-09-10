@@ -19,6 +19,20 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     Text stats6;
     Text stats3_1;
     Text stats3_2;
+    Text atkText;
+    Text atkSpeedText;
+    Text atkRangeText;
+    Text accuracyText;
+    Text criticalRateText;
+    Text criticalDamageText;
+    Text strengthText;
+    Text intelligenceText;
+    Text wisdomext;
+    Text techniqueText;
+    Text charmText;
+    Text constitutionText;
+
+
 
     Image[] lockImages = new Image[Consts.MAX_SKILL_COUNT];
     Image[] skillIcons = new Image[Consts.MAX_SKILL_COUNT];
