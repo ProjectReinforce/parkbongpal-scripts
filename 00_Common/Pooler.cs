@@ -21,8 +21,8 @@ public class Pooler<T> where T : Component
     {
         foreach (var item in pool)
         {
-            pool.Remove(item);
-            return item;
+            if (item.gameObject.activeSelf == false)
+                return item;
         }
         GameObject newObject = GameObject.Instantiate(origin.gameObject);
         if (!newObject.TryGetComponent(out T component))

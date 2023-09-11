@@ -26,22 +26,22 @@ public class Inventory
     {
     }
 
-    public void AddWeapons(BaseWeaponData[] baseWeaponData)
+    public void AddWeapons(BaseWeaponData[] _baseWeaponData)
     {
-        for (int i = 0; i < baseWeaponData.Length; i++)
+        for (int i = 0; i < _baseWeaponData.Length; i++)
         {
             Param param = new()
             {
                 { nameof(WeaponData.colum.mineId), -1 },
                 { nameof(WeaponData.colum.magic), new int[] { -1, -1 } },
-                { nameof(WeaponData.colum.rarity), baseWeaponData[i].rarity },
-                { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData[i].index },
-                { nameof(WeaponData.colum.defaultStat), baseWeaponData[i].defaultStat },
-                { nameof(WeaponData.colum.PromoteStat), baseWeaponData[i].PromoteStat },
-                { nameof(WeaponData.colum.AdditionalStat), baseWeaponData[i].AdditionalStat },
-                { nameof(WeaponData.colum.NormalStat), baseWeaponData[i].NormalStat },
-                { nameof(WeaponData.colum.SoulStat), baseWeaponData[i].SoulStat },
-                { nameof(WeaponData.colum.RefineStat), baseWeaponData[i].RefineStat },
+                { nameof(WeaponData.colum.rarity), _baseWeaponData[i].rarity },
+                { nameof(WeaponData.colum.baseWeaponIndex), _baseWeaponData[i].index },
+                { nameof(WeaponData.colum.defaultStat), _baseWeaponData[i].defaultStat },
+                { nameof(WeaponData.colum.PromoteStat), _baseWeaponData[i].PromoteStat },
+                { nameof(WeaponData.colum.AdditionalStat), _baseWeaponData[i].AdditionalStat },
+                { nameof(WeaponData.colum.NormalStat), _baseWeaponData[i].NormalStat },
+                { nameof(WeaponData.colum.SoulStat), _baseWeaponData[i].SoulStat },
+                { nameof(WeaponData.colum.RefineStat), _baseWeaponData[i].RefineStat },
                 { nameof(WeaponData.colum.borrowedDate), Managers.ServerData.ServerTime },
             };
             Transactions.Add(TransactionValue.SetInsert(nameof(WeaponData), param));
@@ -52,18 +52,24 @@ public class Inventory
             LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
             for (int i = 0; i < json.Count; i++)
             {
-                WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
+                WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), _baseWeaponData[i]);
                 Weapon weapon = new(weaponData);
                 weapons.Add(weapon);
-                if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
-                {
-                    Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
-                        { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
-                        { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
-                    }));
-                    Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
-                }
+                // if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
+                // {
+                //     Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
+                //         { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
+                //         { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
+                //     }));
+                //     Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
+                // }
             }
         });
+    }
+
+    public void RemoveWeapons(Weapon _weapon)
+    {
+        if (weapons.Contains(_weapon))
+            weapons.Remove(_weapon);
     }
 }

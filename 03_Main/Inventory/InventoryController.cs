@@ -9,12 +9,14 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public InventoryType CurrentInventoryType { get; private set; }
     public IInventoryOpenOption[] InventoryOpenOptions { get; private set;}
     public DetailInfoUI DetailInfo { get; private set; }
+    public DecompositionUI DecompositionUI { get; private set; }
     public Button SelectButton { get; private set; }
     public Button DecompositionButton { get; private set; }
 
     public void GameInitialize()
     {
         DetailInfo = Utills.Bind<DetailInfoUI>("DetailInfo_S", transform);
+        DecompositionUI = Utills.Bind<DecompositionUI>("Decomposition_S", transform);
         SelectButton = Utills.Bind<Button>("Button_Select", transform);
         DecompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
 

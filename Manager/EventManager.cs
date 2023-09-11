@@ -6,4 +6,5 @@ using UnityEngine;
 public class EventManager
 {
     public Action<Weapon> SlotSelectEvent;
+    public Action UIRefreshEvent;
 }

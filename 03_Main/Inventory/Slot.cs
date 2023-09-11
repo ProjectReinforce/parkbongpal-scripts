@@ -26,6 +26,9 @@ public class Slot : MonoBehaviour
         defaultSlot = slotImage.sprite;
         weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
         selectedImage = Utills.Bind<Image>("Image_selected", transform);
+
+        Managers.Event.UIRefreshEvent -= Refresh;
+        Managers.Event.UIRefreshEvent += Refresh;
     }
 
     void OnEnable()
@@ -55,8 +58,14 @@ public class Slot : MonoBehaviour
 
     void Refresh()
     {
+        selectedImage.gameObject.SetActive(false);
         Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
-        if (weapon == null) return;
+        if (weapon == null)
+        {
+            slotImage.sprite = defaultSlot;
+            weaponIcon.gameObject.SetActive(false);
+            return;
+        }
         slotImage.sprite = Managers.Resource.weaponRaritySlot[weapon.data.rarity];
         weaponIcon.sprite = weapon.Icon;
         weaponIcon.gameObject.SetActive(true);

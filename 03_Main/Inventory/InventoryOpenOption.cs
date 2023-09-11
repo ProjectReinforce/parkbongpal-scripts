@@ -7,6 +7,7 @@ public class InventoryOpenOptionBase
 {
     protected InventoryController inventoryController;
     protected DetailInfoUI detailInfoUI;
+    protected DecompositionUI decompositionUI;
     protected Button selectButton;
     protected Text selectText;
     protected Button decompositionButton;
@@ -17,6 +18,7 @@ public class InventoryOpenOptionBase
     {
         inventoryController = _inventoryController;
         detailInfoUI = _inventoryController.DetailInfo;
+        decompositionUI = _inventoryController.DecompositionUI;
         selectButton = _inventoryController.SelectButton;
         selectText = selectButton.transform.GetComponentInChildren<Text>();
         decompositionButton = _inventoryController.DecompositionButton;
@@ -217,6 +219,7 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
     public void Set()
     {
         detailInfoUI.gameObject.SetActive(false);
+        decompositionUI.gameObject.SetActive(true);
         originButtonText = decompositionText.text;
         decompositionText.text = "분해 중..";
         decompositionButton.enabled = false;
@@ -228,6 +231,7 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
 
     public void Reset()
     {
+        decompositionUI.gameObject.SetActive(false);
         decompositionText.text = originButtonText;
         decompositionButton.enabled = true;
         decompositionButtonImage.color = originButtonColor;

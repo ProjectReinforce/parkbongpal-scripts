@@ -22,7 +22,7 @@ public class Decomposition : Singleton<Decomposition>
     {
         if(isDecompositing&&slots.Count < 1) return;
         _isDecompositing = !_isDecompositing;
-        ui.ViewUpdate(isDecompositing);
+        // ui.ViewUpdate(isDecompositing);
         if (isDecompositing) return;
   
         
@@ -68,8 +68,8 @@ public class Decomposition : Singleton<Decomposition>
     }
     
     [SerializeField] GameObject contentBox;
-    [SerializeField] private breakSlot prefab;
-    private List<breakSlot> breakSlots = new List<breakSlot>();
+    // [SerializeField] private breakSlot prefab;
+    // private List<breakSlot> breakSlots = new List<breakSlot>();
     public void ChooseWeaponSlot(Slot slot, GameObject sellected)
     {
         if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
@@ -82,9 +82,9 @@ public class Decomposition : Singleton<Decomposition>
         LinkedListNode<Slot> findingSlot = slots.Find(slot);
         if (findingSlot is null)
         {
-            breakSlot a = Instantiate(prefab, contentBox.transform);
-            a.weapon = slot.myWeapon;
-            breakSlots.Add(a);
+            // breakSlot a = Instantiate(prefab, contentBox.transform);
+            // a.weapon = slot.myWeapon;
+            // breakSlots.Add(a);
             
             slots.AddLast(slot);
 
@@ -93,9 +93,9 @@ public class Decomposition : Singleton<Decomposition>
         else
         {
             slots.Remove(findingSlot); 
-            breakSlot a = breakSlots.Find(el => el.weapon == findingSlot.Value.myWeapon);
-            breakSlots.Remove(a);
-            Destroy(a.gameObject);
+            // breakSlot a = breakSlots.Find(el => el.weapon == findingSlot.Value.myWeapon);
+            // breakSlots.Remove(a);
+            // Destroy(a.gameObject);
         }
         sellected.SetActive(findingSlot is null);
     }
@@ -115,14 +115,14 @@ public class Decomposition : Singleton<Decomposition>
         _isDecompositing = false;
         okUI.gameObject.SetActive(false);
         
-        foreach (var breakSlot in breakSlots)
-        {
-            Destroy(breakSlot.gameObject);    
-        }
+        // foreach (var breakSlot in breakSlots)
+        // {
+        //     Destroy(breakSlot.gameObject);    
+        // }
         
-        breakSlots.Clear();
+        // breakSlots.Clear();
         slots.Clear();
-        ui.ViewUpdate(isDecompositing);
+        // ui.ViewUpdate(isDecompositing);
         InventoryPresentor.Instance.currentWeapon = null;
 
     }

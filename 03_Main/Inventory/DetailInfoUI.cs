@@ -16,9 +16,6 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     };
 
     Text powerText;
-    Text stats6;
-    Text stats3_1;
-    Text stats3_2;
     Text atkText;
     Text atkSpeedText;
     Text atkRangeText;
@@ -27,7 +24,7 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     Text criticalDamageText;
     Text strengthText;
     Text intelligenceText;
-    Text wisdomext;
+    Text wisdomText;
     Text techniqueText;
     Text charmText;
     Text constitutionText;
@@ -50,9 +47,21 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         powerText = Utills.Bind<Text>("Text_PowerValue", transform);
-        stats6 = Utills.Bind<Text>("Text_6Value", transform);
-        stats3_1 = Utills.Bind<Text>("Text_3Value1", transform);
-        stats3_2 = Utills.Bind<Text>("Text_3Value2", transform);
+
+        atkText = Utills.Bind<Text>("Text_Atk", transform);
+        atkSpeedText = Utills.Bind<Text>("Text_AtkSpeed", transform);
+        atkRangeText = Utills.Bind<Text>("Text_AtkRange", transform);
+        accuracyText = Utills.Bind<Text>("Text_Accuracy", transform);
+        criticalRateText = Utills.Bind<Text>("Text_CriticalRate", transform);
+        criticalDamageText = Utills.Bind<Text>("Text_CriticalDamage", transform);
+
+        strengthText = Utills.Bind<Text>("Text_Strength", transform);
+        intelligenceText = Utills.Bind<Text>("Text_Intelligence", transform);
+        wisdomText = Utills.Bind<Text>("Text_Wisdom", transform);
+
+        techniqueText = Utills.Bind<Text>("Text_Technique", transform);
+        charmText = Utills.Bind<Text>("Text_Charm", transform);
+        constitutionText = Utills.Bind<Text>("Text_Constitution", transform);
 
         lockImages[0] = Utills.Bind<Image>("Image_Lock1", transform);
         lockImages[1] = Utills.Bind<Image>("Image_Lock2", transform);
@@ -67,12 +76,25 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
 
     public void Refresh(Weapon weapon)
     {
+        if (weapon == null) return;
         WeaponData weaponData = weapon.data;
 
         powerText.text = weapon.power.ToString();
-        stats6.text = $"{weaponData.atk}\n{weaponData.atkSpeed}\n{weaponData.atkRange}\n{weaponData.accuracy}\n{weaponData.criticalRate}\n{weaponData.criticalDamage}";
-        stats3_1.text = $"{weaponData.strength}\n{weaponData.intelligence}\n{weaponData.wisdom}";
-        stats3_2.text = $"{weaponData.technique}\n{weaponData.charm}\n{weaponData.constitution}";
+        
+        atkText.text = $"{weaponData.atk}";
+        atkSpeedText.text = $"{weaponData.atkSpeed}";
+        atkRangeText.text = $"{weaponData.atkRange}";
+        accuracyText.text = $"{weaponData.accuracy}";
+        criticalRateText.text = $"{weaponData.criticalRate}";
+        criticalDamageText.text = $"{weaponData.criticalDamage}";
+        
+        strengthText.text = $"{weaponData.strength}";
+        intelligenceText.text = $"{weaponData.intelligence}";
+        wisdomText.text = $"{weaponData.wisdom}";
+        
+        techniqueText.text = $"{weaponData.technique}";
+        charmText.text = $"{weaponData.charm}";
+        constitutionText.text = $"{weaponData.constitution}";
 
         for (int i = 0; i < Consts.MAX_SKILL_COUNT; i++)
         {
