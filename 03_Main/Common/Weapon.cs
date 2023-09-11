@@ -62,7 +62,7 @@ public class Weapon
             }
             Debug.Log("성공"+callback);
         });
-        myslot.UpdateLend();
+        // myslot.UpdateLend();
         if (CallChecker.Instance != null)
             CallChecker.Instance.CountCall();
     }

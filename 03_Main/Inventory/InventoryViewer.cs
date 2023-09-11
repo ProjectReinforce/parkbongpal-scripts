@@ -44,9 +44,9 @@ public class InventoryViewer : MonoBehaviour
             currentSlotImage.transform.SetParent(currentWeapon.myslot.transform, false);
         currentSlotImage.transform.SetSiblingIndex(0);
 
-        foreach (var viwer in viewers)
-        {
-            viwer.ViewUpdate(currentWeapon);
-        }
+        // foreach (var viwer in viewers)
+        // {
+        //     viwer.ViewUpdate(currentWeapon);
+        // }
     }
 }

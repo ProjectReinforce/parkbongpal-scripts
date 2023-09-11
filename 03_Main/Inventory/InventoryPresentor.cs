@@ -14,7 +14,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     [SerializeField] InventoryViewer inventoryViewer;// View
     
     private int size;
-    private int Count => Slot.weaponCount;
+    private int Count;// => Slot.weaponCount;
     
     private List<Slot> slots;//model
     [SerializeField] GameObject box;

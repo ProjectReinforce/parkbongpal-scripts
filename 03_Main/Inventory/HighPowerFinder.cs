@@ -14,16 +14,16 @@
             Weapon highPowerWeapon = default;
             Weapon currentWeapon ;
         
-            for (int i = 0; i < Slot.weaponCount; i++)
-            {
-                Slot slot =  slots[i];
-                currentWeapon = slot.myWeapon;
+            // for (int i = 0; i < Slot.weaponCount; i++)
+            // {
+            //     Slot slot =  slots[i];
+            //     currentWeapon = slot.myWeapon;
                 
-                if(currentWeapon is null||highPower>=currentWeapon.power)continue;
+            //     if(currentWeapon is null||highPower>=currentWeapon.power)continue;
             
-                highPower = currentWeapon.power;
-                highPowerWeapon = currentWeapon;
-            }
+            //     highPower = currentWeapon.power;
+            //     highPowerWeapon = currentWeapon;
+            // }
 
             if(highPowerWeapon is null|| highPowerWeapon.power== Managers.Game.Player.Data.combatScore) return;
             Managers.Game.Player.SetCombatScore(highPowerWeapon.power);

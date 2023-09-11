@@ -43,8 +43,8 @@ public class Decomposition : Singleton<Decomposition>
             string indate = slot.myWeapon.data.inDate;
             
             // slot.NewClear();
-            slot.updateX(false);
-            slot.SetWeapon(null);
+            // slot.updateX(false);
+            // slot.SetWeapon(null);
             slots.RemoveFirst();
             Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));            
         }
@@ -110,7 +110,7 @@ public class Decomposition : Singleton<Decomposition>
     {
         while (slots.Count>0)
         {
-            slots.First.Value.SetCurrent();
+            // slots.First.Value.SetCurrent();
         }
         _isDecompositing = false;
         okUI.gameObject.SetActive(false);
@@ -132,7 +132,7 @@ public class Decomposition : Singleton<Decomposition>
         foreach (var weapon in weapons)
         {
             string indate = weapon.data.inDate;
-            weapon.myslot.SetWeapon(null);
+            // weapon.myslot.SetWeapon(null);
             Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));        // foreach (var weapon in weapons)
         }
     }

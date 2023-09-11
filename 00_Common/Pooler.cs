@@ -9,11 +9,13 @@ public class Pooler<T> where T : Component
 {
     List<T> pool;
     T origin;
+    Transform poolTransform;
 
     public Pooler(T _origin, Transform _poolTransform)
     {
         origin = _origin;
-        T[] values = _poolTransform.GetComponentsInChildren<T>(true);
+        poolTransform = _poolTransform;
+        T[] values = poolTransform.GetComponentsInChildren<T>(true);
         pool = values.ToList();
     }
 
@@ -28,5 +30,11 @@ public class Pooler<T> where T : Component
         if (!newObject.TryGetComponent(out T component))
             component = newObject.AddComponent<T>();
         return component;
+    }
+
+    public void ReturnOne(T _target)
+    {
+        _target.transform.SetParent(poolTransform);
+        _target.gameObject.SetActive(false);
     }
 }

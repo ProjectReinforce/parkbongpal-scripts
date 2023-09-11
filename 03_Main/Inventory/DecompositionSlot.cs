@@ -18,7 +18,8 @@ public class DecompositionSlot : MonoBehaviour
     {
         Managers.Event.SlotSelectEvent -= Selected;
 
-        gameObject.SetActive(false);
+        // decompositionUI.ReturnPool(this);
+        // gameObject.SetActive(false);
     }
 
     public void Initialize(DecompositionUI _decompositionUI)

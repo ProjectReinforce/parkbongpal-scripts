@@ -4,31 +4,50 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
-    InventoryController inventoryController;
+    public InventoryController inventoryController { get; private set; }
     Button slotButton;
-    Image slotImage;
-    Image weaponIcon;
-    Image selectedImage;
+    public Button SlotButton => slotButton;
+    public Image rarityImage;
+    public Image RarityImage => rarityImage;
+    public Image WeaponIcon { get; private set; }
+    public Image LendingImage { get; private set; }
+    public Image CheckImage { get; private set; }
+    public Image SelectedImage { get; private set; }
+    public Image NewImage { get; private set; }
     Sprite defaultSlot;
+
+    SlotModeUI[] slotModeUIs;
 
     void Awake()
     {
-        inventoryController = Utills.Bind<InventoryController>("Inventory_S");
         TryGetComponent(out slotButton);
-        slotButton.onClick.AddListener(() =>
+        SlotButton.onClick.AddListener(() =>
         {
             // Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
             Managers.Event.SlotSelectEvent -= Selected;
             Managers.Event.SlotSelectEvent += Selected;
             Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
         });
-        TryGetComponent(out slotImage);
-        defaultSlot = slotImage.sprite;
-        weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
-        selectedImage = Utills.Bind<Image>("Image_selected", transform);
+        TryGetComponent(out rarityImage);
+        defaultSlot = RarityImage.sprite;
+        WeaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
+        LendingImage = Utills.Bind<Image>("Image_Lending", transform);
+        CheckImage = Utills.Bind<Image>("Image_Check", transform);
+        SelectedImage = Utills.Bind<Image>("Image_selected", transform);
+        NewImage = Utills.Bind<Image>("Image_New", transform);
 
         Managers.Event.UIRefreshEvent -= Refresh;
         Managers.Event.UIRefreshEvent += Refresh;
+
+        slotModeUIs = new SlotModeUI[]
+        {
+            new SlotModeUIDefault(this, transform.GetSiblingIndex()),
+            new SlotModeUIMine(this, transform.GetSiblingIndex()),
+            new SlotModeUIReinforce(this, transform.GetSiblingIndex()),
+            new SlotModeUIReinforceMaterial(this, transform.GetSiblingIndex()),
+            new SlotModeUIDefault(this, transform.GetSiblingIndex()),
+            new SlotModeUIDecomposition(this, transform.GetSiblingIndex()),
+        };
     }
 
     void OnEnable()
@@ -38,84 +57,85 @@ public class Slot : MonoBehaviour
 
     void OnDisable()
     {
-        slotImage.sprite = defaultSlot;
-        weaponIcon.gameObject.SetActive(false);
-        selectedImage.gameObject.SetActive(false);
+        RarityImage.sprite = defaultSlot;
+        WeaponIcon.gameObject.SetActive(false);
+        SelectedImage.gameObject.SetActive(false);
+
+        slotModeUIs[(int)inventoryController.CurrentInventoryType]?.ResetSpecificView();
     }
 
     void Selected(Weapon _weapon)
     {
-        Debug.Log($"현재 인벤토리 타입 : {inventoryController.CurrentInventoryType}");
-        // switch (inventoryController.)
-        // {
-            
-        //     default:
-        // }
-        if (Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()) == _weapon)
-            selectedImage.gameObject.SetActive(true);
-        else
-            selectedImage.gameObject.SetActive(false);
+        // Debug.Log($"현재 인벤토리 타입 : {inventoryController.CurrentInventoryType}");
+        slotModeUIs[(int)inventoryController.CurrentInventoryType]?.Selected(_weapon);
     }
 
     void Refresh()
     {
-        selectedImage.gameObject.SetActive(false);
+        slotModeUIs[(int)inventoryController.CurrentInventoryType]?.SpecificView();
+        
+        SelectedImage.gameObject.SetActive(false);
         Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
         if (weapon == null)
         {
-            slotImage.sprite = defaultSlot;
-            weaponIcon.gameObject.SetActive(false);
+            RarityImage.sprite = defaultSlot;
+            WeaponIcon.gameObject.SetActive(false);
             return;
         }
-        slotImage.sprite = Managers.Resource.weaponRaritySlot[weapon.data.rarity];
-        weaponIcon.sprite = weapon.Icon;
-        weaponIcon.gameObject.SetActive(true);
-        slotButton.enabled = true;
+        RarityImage.sprite = Managers.Resource.weaponRaritySlot[weapon.data.rarity];
+        WeaponIcon.sprite = weapon.Icon;
+        WeaponIcon.gameObject.SetActive(true);
+        SlotButton.enabled = true;
+    }
+
+    public void Initialize(InventoryController _inventoryController)
+    {
+        inventoryController = _inventoryController;
     }
 
     // ====================================================================
     // ====================================================================
     // Start is called before the first frame update
-    [SerializeField] SlotViewer slotViwer;
+    // [SerializeField] SlotViewer slotViwer;
     
     public Weapon myWeapon { get; set; }
     
-    public static int  weaponCount=0;
-    public void UpdateLend()
-    {
-        slotViwer.ViewUpdate(myWeapon);//slot.UpdateSlot(Weapon) 하고 용도가 겹침 
-    }
+    // public static int  weaponCount=0;
+    // public void UpdateLend()
+    // {
+    //     slotViwer.ViewUpdate(myWeapon);//slot.UpdateSlot(Weapon) 하고 용도가 겹침 
+    // }
 
     // public void UpdateSlot(Weapon weapon)
     // {
     //     slotViwer.ViewUpdate(weapon);//weapon.myslot.UpdateLend() 하고 용도가 겹침 
     // }
     
-    public void SetWeapon(Weapon weapon)
-    {
-        slotViwer.ViewUpdate(weapon);
-        myWeapon = weapon;
-        if (weapon is null)
-        {
-            weaponCount--;
-            return;
-        }
+    // public void SetWeapon(Weapon weapon)
+    // {
+    //     // slotViwer.ViewUpdate(weapon);
+    //     myWeapon = weapon;
+    //     if (weapon is null)
+    //     {
+    //         weaponCount--;
+    //         return;
+    //     }
 
-        weaponCount++;
-    }
-    [SerializeField] GameObject SelletChecker;
-    public void SetCurrent()//dip 위배 , 리팩토링 대상.
-    {
-        if(myWeapon is  null) return;
-        // NewClear();
+    //     weaponCount++;
+    // }
+    // [SerializeField] GameObject SelletChecker;
+    // public void SetCurrent()//dip 위배 , 리팩토링 대상.
+    // {
+    //     if(myWeapon is  null) return;
+    //     // NewClear();
        
-        InventoryPresentor.Instance.currentWeapon = myWeapon;
-        Decomposition.Instance?.ChooseWeaponSlot(this, SelletChecker);
+    //     InventoryPresentor.Instance.currentWeapon = myWeapon;
+    //     Decomposition.Instance?.ChooseWeaponSlot(this, SelletChecker);
         
-    }
-    public void updateX(bool xCondition){
-        SelletChecker.SetActive(xCondition);
-    }
+    // }
+    // public void updateX(bool xCondition){
+    //     SelletChecker.SetActive(xCondition);
+    // }
     
     // public int CompareTo(Slot obj)
     // {

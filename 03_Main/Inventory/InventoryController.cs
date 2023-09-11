@@ -13,12 +13,19 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public Button SelectButton { get; private set; }
     public Button DecompositionButton { get; private set; }
 
+    Text soulText;
+    Text oreText;
+    
+    Slot[] slots = new Slot[Consts.MAX_WEAPON_SLOT_COUNT];
+
     public void GameInitialize()
     {
         DetailInfo = Utills.Bind<DetailInfoUI>("DetailInfo_S", transform);
         DecompositionUI = Utills.Bind<DecompositionUI>("Decomposition_S", transform);
         SelectButton = Utills.Bind<Button>("Button_Select", transform);
         DecompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
+        soulText = Utills.Bind<Text>("Text_Soul", transform);
+        oreText = Utills.Bind<Text>("Text_Ore", transform);
 
         InventoryOpenOptions = new IInventoryOpenOption[]
         {
@@ -29,6 +36,20 @@ public class InventoryController : MonoBehaviour, IGameInitializer
             new InventoryOpenOptionMiniGame(this),
             new InventoryOpenOptionDecomposition(this),
         };
+
+        Transform contenetTransform = Utills.Bind<Transform>("Content_Slot", transform);
+        Slot[] existsSlots = contenetTransform.GetComponentsInChildren<Slot>(true);
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (i < existsSlots.Length)
+                slots[i] = existsSlots[i];
+            else
+            {
+                Slot newSlot = Instantiate(existsSlots[0], contenetTransform);
+                slots[i] = newSlot;
+            }
+            slots[i].Initialize(this);
+        }
     }
 
     public void Set(InventoryType _inventoryType)
@@ -36,5 +57,12 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
         CurrentInventoryType = _inventoryType;
         InventoryOpenOptions[(int)_inventoryType]?.Set();
+        Managers.Event.UIRefreshEvent?.Invoke();
+    }
+
+    void OnEnable()
+    {
+        soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
+        oreText.text = Managers.Game.Player.Data.stone.ToString();
     }
 }

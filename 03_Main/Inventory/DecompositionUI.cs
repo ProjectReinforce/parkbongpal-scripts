@@ -35,6 +35,12 @@ public class DecompositionUI : MonoBehaviour
     void OnEnable()
     {
         Managers.Event.SlotSelectEvent += Selected;
+
+        selectedWeapons.Clear();
+
+        DecompositionSlot[] decompositionSlots = contentTransform.GetComponentsInChildren<DecompositionSlot>();
+        foreach (var item in decompositionSlots)
+            pooler.ReturnOne(item);
     }
 
     void OnDisable()
@@ -106,7 +112,6 @@ public class DecompositionUI : MonoBehaviour
 
     public void ReturnPool(DecompositionSlot _decompositionSlot)
     {
-        _decompositionSlot.gameObject.SetActive(false);
-        _decompositionSlot.transform.SetParent(poolTransform);
+        pooler.ReturnOne(_decompositionSlot);
     }
 }
