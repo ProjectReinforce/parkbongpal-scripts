@@ -264,7 +264,7 @@ public class Refinement : Reinforce
             refineResults[i] = refineResult;
         }
 
-        ReinforceManager.Instance.RefineResults = refineResults;
+        Managers.Game.Reinforce.RefineResults = refineResults;
 
         // foreach (var item in refineResults)
         // {

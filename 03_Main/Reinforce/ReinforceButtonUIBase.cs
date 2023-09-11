@@ -6,21 +6,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public abstract class ReinforceButtonUIBase : MonoBehaviour
 {
-    [SerializeField] protected ReinforceManager reinforceManager;
+    protected ReinforceManager reinforceManager;
     protected Button reinforceButton;
     protected GameObject qualificationUI;
     protected Text qualificationText;
 
     protected virtual void Awake()
     {
+        reinforceManager = Managers.Game.Reinforce;
         TryGetComponent(out reinforceButton);
         qualificationUI = transform.GetChild(2).gameObject;
         qualificationUI.transform.GetChild(2).TryGetComponent(out qualificationText);
 
         SetQualificationMessage();
 
-        reinforceManager.WeaponChangeEvent -= CheckQualification;
-        reinforceManager.WeaponChangeEvent += CheckQualification;
+        Managers.Event.ReinforceWeaponChangeEvent -= CheckQualification;
+        Managers.Event.ReinforceWeaponChangeEvent += CheckQualification;
     }
 
     protected void OnEnable()

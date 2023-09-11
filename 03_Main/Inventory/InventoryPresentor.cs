@@ -198,7 +198,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
             }
             Weapon weapon = currentWeapon;
             // GameManager.Instance.MoveTap(smithy);
-            ReinforceManager.Instance.SelectedWeapon = weapon;
+            Managers.Game.Reinforce.SelectedWeapon = weapon;
         });
     }
 

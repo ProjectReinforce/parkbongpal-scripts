@@ -33,8 +33,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     {
         base.OnEnable();
 
-        reinforceManager.MaterialChangeEvent -= UpdateMaterialsImage;
-        reinforceManager.MaterialChangeEvent += UpdateMaterialsImage;
+        Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
+        Managers.Event.ReinforceMaterialChangeEvent += UpdateMaterialsImage;
     }
 
     protected override void OnDisable()
@@ -44,8 +44,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
         foreach (var item in weaponSlots)
             item.sprite = basicSprite;
         
-        ReinforceManager.Instance.ResetMaterials();
-        reinforceManager.MaterialChangeEvent -= UpdateMaterialsImage;
+        Managers.Game.Reinforce.ResetMaterials();
+        Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
     }
 
     void UpdateWeaponImage()
@@ -68,17 +68,17 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
     {
         for (int i = 0; i < materialIcons.Length; i++)
         {
-            if (ReinforceManager.Instance.SelectedMaterials[i] != null)
-                materialIcons[i].sprite = ReinforceManager.Instance.SelectedMaterials[i].Icon;
+            if (Managers.Game.Reinforce.SelectedMaterials[i] != null)
+                materialIcons[i].sprite = Managers.Game.Reinforce.SelectedMaterials[i].Icon;
             else
                 materialIcons[i].sprite = basicSprite;
         }
-        if (ReinforceManager.Instance.SelectedMaterials[0] != null)
-            weaponSlots[2].sprite = slotSprites[ReinforceManager.Instance.SelectedMaterials[0].data.rarity];
+        if (Managers.Game.Reinforce.SelectedMaterials[0] != null)
+            weaponSlots[2].sprite = slotSprites[Managers.Game.Reinforce.SelectedMaterials[0].data.rarity];
         else
             weaponSlots[2].sprite = basicSlot;
-        if (ReinforceManager.Instance.SelectedMaterials[1] != null)
-            weaponSlots[3].sprite = slotSprites[ReinforceManager.Instance.SelectedMaterials[1].data.rarity];
+        if (Managers.Game.Reinforce.SelectedMaterials[1] != null)
+            weaponSlots[3].sprite = slotSprites[Managers.Game.Reinforce.SelectedMaterials[1].data.rarity];
         else
             weaponSlots[3].sprite = basicSlot;
 
@@ -108,8 +108,8 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(ReinforceManager.Instance.SelectedMaterials));
-        reinforceButton.onClick.AddListener(() => ReinforceManager.Instance.ResetMaterials());
+        reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(Managers.Game.Reinforce.SelectedMaterials));
+        reinforceButton.onClick.AddListener(() => Managers.Game.Reinforce.ResetMaterials());
         reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
         reinforceButton.onClick.AddListener(() => UpdateMaterialsImage());
         reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryPromote(-goldCost));
@@ -181,7 +181,7 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
 
     bool CheckMaterials()
     {
-        if (ReinforceManager.Instance.SelectedMaterials[0] != null && ReinforceManager.Instance.SelectedMaterials[1] != null)
+        if (Managers.Game.Reinforce.SelectedMaterials[0] != null && Managers.Game.Reinforce.SelectedMaterials[1] != null)
             return true;
         return false;
     }
@@ -214,18 +214,18 @@ public class PromoteUI : ReinforceUIBase,IInventoryOption
                 Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
                 return;
             }
-            if (weapon.data.rarity != ReinforceManager.Instance.SelectedWeapon.data.rarity)
+            if (weapon.data.rarity != Managers.Game.Reinforce.SelectedWeapon.data.rarity)
             {
                 Managers.Alarm.Warning("선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
                 return;
             }
-            if (weapon == ReinforceManager.Instance.SelectedMaterials[1 - selectedMaterialIndex] || weapon == ReinforceManager.Instance.SelectedWeapon)
+            if (weapon == Managers.Game.Reinforce.SelectedMaterials[1 - selectedMaterialIndex] || weapon == Managers.Game.Reinforce.SelectedWeapon)
             {
                 Managers.Alarm.Warning("이미 선택된 무기입니다.");
                 return;
             }
-            ReinforceManager.Instance.SelectedMaterials[selectedMaterialIndex] = weapon;
-            reinforceManager.MaterialChangeEvent?.Invoke();
+            Managers.Game.Reinforce.SelectedMaterials[selectedMaterialIndex] = weapon;
+            Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
             
             // SelectWeapon();
             

@@ -9,6 +9,9 @@ public class GameManager
     public Player Player => player;
     Inventory inventory;
     public Inventory Inventory => inventory;
+    ReinforceManager reinforce;
+    public ReinforceManager Reinforce => reinforce;
+
 
     public void MainThreadPoll()
     {
@@ -28,6 +31,7 @@ public class GameManager
         player = new();
         player.Initialize();
         inventory = new();
+        reinforce = new();
 
         HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>();
 

@@ -14,13 +14,13 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        reinforceManager = ReinforceManager.Instance;
+        reinforceManager = Managers.Game.Reinforce;
     }
 
     protected virtual void OnEnable()
     {
         if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent += SelectWeapon;
+            Managers.Event.ReinforceWeaponChangeEvent += SelectWeapon;
 
         SelectWeapon();
     }
@@ -28,7 +28,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
     protected virtual void OnDisable()
     {
         if (reinforceManager != null)
-            reinforceManager.WeaponChangeEvent -= SelectWeapon;
+            Managers.Event.ReinforceWeaponChangeEvent -= SelectWeapon;
     }
 
     protected virtual void SelectWeapon()

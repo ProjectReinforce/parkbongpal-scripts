@@ -4,23 +4,21 @@ using UnityEngine;
 
 public class ReinforceWeaponSlot : MonoBehaviour
 {
-    [SerializeField] ReinforceManager reinforceManager;
+    ReinforceManager reinforceManager;
     UnityEngine.UI.Image weaponIcon;
     Sprite nullIcon;
 
     void Awake()
     {
+        reinforceManager = Managers.Game.Reinforce;
         gameObject.transform.GetChild(1).TryGetComponent(out weaponIcon);
         nullIcon = weaponIcon.sprite;
     }
 
     void OnEnable()
     {
-        if (reinforceManager != null)
-        {
-            reinforceManager.WeaponChangeEvent -= UpdateWeaponIcon;
-            reinforceManager.WeaponChangeEvent += UpdateWeaponIcon;
-        }
+        Managers.Event.ReinforceWeaponChangeEvent -= UpdateWeaponIcon;
+        Managers.Event.ReinforceWeaponChangeEvent += UpdateWeaponIcon;
         weaponIcon.sprite = nullIcon;
     }
 

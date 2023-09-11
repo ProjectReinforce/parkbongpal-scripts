@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class SelectWeaponMessageUI : MonoBehaviour
 {
-    [SerializeField] ReinforceManager reinforceManager;
+    ReinforceManager reinforceManager;
     [SerializeField] GameObject selectWeaponMessage;
 
     void Awake()
     {
-        reinforceManager.WeaponChangeEvent -= CheckWeaponIsNull;
-        reinforceManager.WeaponChangeEvent += CheckWeaponIsNull;
+        reinforceManager = Managers.Game.Reinforce;
+        Managers.Event.ReinforceWeaponChangeEvent -= CheckWeaponIsNull;
+        Managers.Event.ReinforceWeaponChangeEvent += CheckWeaponIsNull;
     }
 
     void CheckWeaponIsNull()

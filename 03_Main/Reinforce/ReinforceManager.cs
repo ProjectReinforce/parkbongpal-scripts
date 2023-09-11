@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReinforceManager : Manager.Singleton<ReinforceManager>
+public class ReinforceManager
 {
-    public System.Action WeaponChangeEvent;
-    public System.Action MaterialChangeEvent;
-
     Weapon selectedWeapon;
     public Weapon SelectedWeapon
     {
@@ -16,15 +13,10 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
             if (value is null) return;
             selectedWeapon = value;
 
-            WeaponChangeEvent?.Invoke();
+            Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
         }
     }
-    Weapon[] selectedMaterials = new Weapon[2];
-    public Weapon[] SelectedMaterials
-    {
-        get => selectedMaterials;
-        set => selectedMaterials = value;
-    }
+    public Weapon[] SelectedMaterials { get; set; } = new Weapon[2];
     RefineResult[] refineResults;
     public RefineResult[] RefineResults
     {
@@ -34,8 +26,8 @@ public class ReinforceManager : Manager.Singleton<ReinforceManager>
 
     public void ResetMaterials()
     {
-        selectedMaterials[0] = null;
-        selectedMaterials[1] = null;
+        SelectedMaterials[0] = null;
+        SelectedMaterials[1] = null;
     }
 
     void OnDisable()

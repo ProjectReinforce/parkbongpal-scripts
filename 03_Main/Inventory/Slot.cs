@@ -45,6 +45,7 @@ public class Slot : MonoBehaviour
 
     void Selected(Weapon _weapon)
     {
+        Debug.Log($"현재 인벤토리 타입 : {inventoryController.CurrentInventoryType}");
         // switch (inventoryController.)
         // {
             

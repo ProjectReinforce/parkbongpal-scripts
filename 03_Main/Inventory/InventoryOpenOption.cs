@@ -49,7 +49,7 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
             }
             
             Managers.UI.MoveTap(TapType.Reinforce);
-            ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+            Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
         });
         selectText.text = "강화하기";
         decompositionButton.gameObject.SetActive(true);
@@ -97,7 +97,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
         //         return;
         //     }
             
-        //     ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+        //     Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
         //     Managers.UI.ClosePopup();
         // });
         selectText.text = "빌려주기";
@@ -146,7 +146,7 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
                 return;
             }
             
-            ReinforceManager.Instance.SelectedWeapon = currentWeapon;
+            Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
             Managers.UI.ClosePopup();
         });
         selectText.text = "강화하기";
