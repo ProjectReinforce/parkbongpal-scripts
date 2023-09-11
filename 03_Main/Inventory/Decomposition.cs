@@ -11,94 +11,10 @@ public class Decomposition : Singleton<Decomposition>
     static LinkedList<Slot> slots=new ();
 
     static bool _isDecompositing;
-    static public bool isDecompositing => _isDecompositing;
-
-    [SerializeField] private DecompositionUI ui;
     
     [SerializeField] DecompositonReward okUI;
     [SerializeField] RectTransform scrollView;
     [SerializeField] RectTransform content;
-    public void SetDecomposit()
-    {
-        if(isDecompositing&&slots.Count < 1) return;
-        _isDecompositing = !_isDecompositing;
-        // ui.ViewUpdate(isDecompositing);
-        if (isDecompositing) return;
-  
-        
-        //InventoryPresentor.Instance.
-        //InventoryPresentor.Instance.currentWeapon = null;
-        int totalGold = 0,totalSoul = 0;
-     
-        
-        while (slots.Count > 0)
-        {
-            Slot slot = slots.First.Value;
-            if (slot == null) continue;
-            totalGold += Managers.ServerData.DecompositDatas[slot.myWeapon.data.rarity].rarity[0];
-            totalGold += Managers.ServerData.DecompositDatas[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[0];
-                
-            totalSoul += Managers.ServerData.DecompositDatas[slot.myWeapon.data.rarity].rarity[1]; 
-            totalSoul += Managers.ServerData.DecompositDatas[slot.myWeapon.data.NormalStat[(int)StatType.atk]/5].normalReinforce[1];
-            string indate = slot.myWeapon.data.inDate;
-            
-            // slot.NewClear();
-            // slot.updateX(false);
-            // slot.SetWeapon(null);
-            slots.RemoveFirst();
-            Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate,Backend.UserInDate));            
-        }
-        Transactions.SendCurrent();
-        InventoryPresentor.Instance.SortSlots();
-        Managers.Game.Player.AddGold(totalGold, false);
-        Managers.Game.Player.AddSoul(totalSoul, false);
-        
-        Param param = new()
-        {
-            {nameof(UserData.colum.exp), Managers.Game.Player.Data.gold},
-            {nameof(UserData.colum.gold), Managers.Game.Player.Data.weaponSoul},
-        };
-
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-       
-        Reset();
-        okUI.SetText(totalGold,totalSoul);
-        HighPowerFinder.UpdateHighPowerWeaponData();
-    }
-    
-    [SerializeField] GameObject contentBox;
-    // [SerializeField] private breakSlot prefab;
-    // private List<breakSlot> breakSlots = new List<breakSlot>();
-    public void ChooseWeaponSlot(Slot slot, GameObject sellected)
-    {
-        if (slot.myWeapon.data.mineId >= 0&& _isDecompositing)
-        {
-            Managers.Alarm.Warning("광산에 대여해준 무기입니다.");
-            return ;
-        }
-        if (!isDecompositing) return ;
-        
-        LinkedListNode<Slot> findingSlot = slots.Find(slot);
-        if (findingSlot is null)
-        {
-            // breakSlot a = Instantiate(prefab, contentBox.transform);
-            // a.weapon = slot.myWeapon;
-            // breakSlots.Add(a);
-            
-            slots.AddLast(slot);
-
-            Invoke(nameof(SetScroll), 0.1f);
-        }
-        else
-        {
-            slots.Remove(findingSlot); 
-            // breakSlot a = breakSlots.Find(el => el.weapon == findingSlot.Value.myWeapon);
-            // breakSlots.Remove(a);
-            // Destroy(a.gameObject);
-        }
-        sellected.SetActive(findingSlot is null);
-    }
 
     void SetScroll()
     {

@@ -7,13 +7,34 @@ using UnityEngine.UI;
 
 public class RefineUI : ReinforceUIBase
 {
-    [SerializeField] Image[] statIndicators;
-    [SerializeField] Text[] resultStatTexts;
-    [SerializeField] Text[] previousValueTexts;
-    [SerializeField] Image[] arrowImages;
-    [SerializeField] Text[] resultValueTexts;
-    [SerializeField] Text stoneCostText;
+    Image[] statIndicators = new Image[12];
+    Text[] resultStatTexts = new Text[3];
+    Text[] previousValueTexts = new Text[3];
+    Image[] arrowImages = new Image[3];
+    Text[] resultValueTexts = new Text[3];
+    Text stoneCostText;
     int oreCost;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        for (int i = 0; i < statIndicators.Length; i++)
+            statIndicators[i] = Utills.Bind<Image>($"stats{i:D2}", transform);
+        resultStatTexts[0] = Utills.Bind<Text>("Stat1", transform);
+        resultStatTexts[1] = Utills.Bind<Text>("Stat2", transform);
+        resultStatTexts[2] = Utills.Bind<Text>("Stat3", transform);
+        previousValueTexts[0] = Utills.Bind<Text>("Before1", transform);
+        previousValueTexts[1] = Utills.Bind<Text>("Before2", transform);
+        previousValueTexts[2] = Utills.Bind<Text>("Before3", transform);
+        arrowImages[0] = Utills.Bind<Image>("Arrow1", transform);
+        arrowImages[1] = Utills.Bind<Image>("Arrow2", transform);
+        arrowImages[2] = Utills.Bind<Image>("Arrow3", transform);
+        resultValueTexts[0] = Utills.Bind<Text>("After1", transform);
+        resultValueTexts[1] = Utills.Bind<Text>("After2", transform);
+        resultValueTexts[2] = Utills.Bind<Text>("After3", transform);
+        stoneCostText = Utills.Bind<Text>("Gemstone_T", transform);
+    }
 
     void UpdateStat()
     {

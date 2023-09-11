@@ -6,12 +6,25 @@ using UnityEngine.UI;
 
 public class NormalReinforceUI : ReinforceUIBase
 {
-    [SerializeField] Text[] currentSuccessCountText;
-    [SerializeField] Image weaponIcon;
-    [SerializeField] Text weaponNameText;
-    [SerializeField] Image arrowImage;
-    [SerializeField] Text nextSuccessCountText;
-    [SerializeField] Text upgradeCountText;
+    Text[] currentSuccessCountText = new Text[2];
+    Image weaponIcon;
+    Text weaponNameText;
+    Image arrowImage;
+    Text nextSuccessCountText;
+    Text upgradeCountText;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        currentSuccessCountText[0] = Utills.Bind<Text>("Text_SuccessCount1", transform);
+        currentSuccessCountText[1] = Utills.Bind<Text>("Text_SuccessCount2", transform);
+        weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
+        weaponNameText = Utills.Bind<Text>("WeaponName", transform);
+        arrowImage = Utills.Bind<Image>("Image_Arrow", transform);
+        nextSuccessCountText = Utills.Bind<Text>("Text_NextSuccessCount", transform);
+        upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
+    }
 
     public void UpdateWeaponIcon()
     {

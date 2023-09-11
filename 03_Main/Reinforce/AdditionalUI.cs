@@ -5,7 +5,14 @@ using UnityEngine.UI;
 
 public class AdditionalUI : ReinforceUIBase
 {
-    [SerializeField] Text atkText;
+    Text atkText;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        atkText = Utills.Bind<Text>("AttackPower", transform);
+    }
 
     void UpdateAtk()
     {

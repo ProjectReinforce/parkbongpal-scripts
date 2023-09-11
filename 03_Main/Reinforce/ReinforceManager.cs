@@ -16,7 +16,18 @@ public class ReinforceManager
             Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
         }
     }
-    public Weapon[] SelectedMaterials { get; set; } = new Weapon[2];
+    Weapon[] selectedMaterials = new Weapon[2];
+    public Weapon[] SelectedMaterials
+    {
+        get => selectedMaterials;
+        set
+        {
+            if (value is null) return;
+            selectedMaterials = value;
+
+            Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
+        }
+    } 
     RefineResult[] refineResults;
     public RefineResult[] RefineResults
     {

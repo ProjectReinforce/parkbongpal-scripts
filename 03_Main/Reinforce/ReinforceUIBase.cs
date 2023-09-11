@@ -7,14 +7,17 @@ using UnityEngine.UI;
 public abstract class ReinforceUIBase : MonoBehaviour
 {
     [SerializeField] protected ReinforceType reinforceType;
-    [SerializeField] protected Text goldCostText;
-    [SerializeField] protected Button reinforceButton;
+    protected Text goldCostText;
+    protected Button reinforceButton;
     protected ReinforceManager reinforceManager;
     protected int goldCost;
 
     protected virtual void Awake()
     {
         reinforceManager = Managers.Game.Reinforce;
+
+        goldCostText = Utills.Bind<Text>("Coin_T", transform);
+        reinforceButton = Utills.Bind<Button>("Button_Reinforce", transform);
     }
 
     protected virtual void OnEnable()

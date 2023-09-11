@@ -3,11 +3,21 @@ using UnityEngine.UI;
 
 public class SoulCraftingUI : ReinforceUIBase
 {
-    [SerializeField] Text successUpgradeCountText;
-    [SerializeField] Text upgradeCountText;
-    [SerializeField] Text atkText;
-    [SerializeField] Text soulCostText;
+    Text successUpgradeCountText;
+    Text upgradeCountText;
+    Text atkText;
+    Text soulCostText;
     int soulCost;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        successUpgradeCountText = Utills.Bind<Text>("Text_SuccessCount", transform);
+        upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
+        atkText = Utills.Bind<Text>("AttackPower", transform);
+        soulCostText = Utills.Bind<Text>("Soul_T", transform);
+    }
 
     void UpdateAtk()
     {
