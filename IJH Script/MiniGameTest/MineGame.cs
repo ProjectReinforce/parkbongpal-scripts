@@ -10,9 +10,11 @@ public class MineGame : Singleton<MineGame>
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
     [SerializeField] Button mainButton;
+    [SerializeField] GameObject pausePanel;
     [SerializeField] GameObject resultPanel;
     Coroutine startCountdown;
     bool isAttackAble = false;
+    bool isPause;
 
     public void Resume()
     {
@@ -104,6 +106,19 @@ public class MineGame : Singleton<MineGame>
             }
         }
     }
-
- 
+    public void ClickForPause()
+    {
+        if(!isPause)
+        {
+            isPause = true;
+            pausePanel.SetActive(true);
+            Time.timeScale = 0;
+        }
+    }
+    public void PauseStart()
+    {
+        isPause = false;
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+    }
 }
