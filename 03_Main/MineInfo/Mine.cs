@@ -15,7 +15,9 @@ public interface Rental
 
 public class Mine :MonoBehaviour,Rental
 {
-    // Start is called before the first frame update
+
+    // =====================================================================
+    // =====================================================================
     private MineData _mineData;
     public MineData GetMineData()
     {
