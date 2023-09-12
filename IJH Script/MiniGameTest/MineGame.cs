@@ -108,17 +108,18 @@ public class MineGame : Singleton<MineGame>
     }
     public void ClickForPause()
     {
+        // SH 추가.. 적용 실패...
         if(!isPause)
         {
             isPause = true;
             pausePanel.SetActive(true);
             Time.timeScale = 0;
         }
-    }
-    public void PauseStart()
-    {
-        isPause = false;
-        pausePanel.SetActive(false);
-        Time.timeScale = 1;
+        else
+        {
+            isPause = false;
+            pausePanel.SetActive(false);
+            Time.timeScale = 1;
+        }
     }
 }
