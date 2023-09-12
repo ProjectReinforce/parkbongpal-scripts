@@ -65,4 +65,9 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
     }
+
+    public void SortWeapons(Dropdown _test)
+    {
+        Managers.Game.Inventory.Sort((SortType)_test.value);
+    }
 }

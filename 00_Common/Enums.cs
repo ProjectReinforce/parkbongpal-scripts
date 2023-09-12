@@ -26,19 +26,15 @@ public enum ReinforceType
     refineMent
 }
 
-public enum SortedMethod
-{
-    Rarity,  Power, Damage, Speed, Range, Accuracy
-}
-
 public enum SortType
 {
-    Rarity,
-    Power,
-    Atk,
-    Speed,
-    Range,
-    Accuracy
+    기본,
+    등급순,
+    전투력순,
+    공격력순,
+    공격속도순,
+    공격범위순,
+    정확도순
 }
 
 public enum MessageType
