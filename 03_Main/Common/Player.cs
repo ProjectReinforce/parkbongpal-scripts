@@ -19,8 +19,6 @@ public class Player
         userData = Managers.ServerData.UserData;
 
         recordData = new RecordData();
-        // inventoryUIViwer.SetStone(userData.stone);
-        // inventoryUIViwer.SetSoul(userData.weaponSoul);
     }
 
     public void Initialize()

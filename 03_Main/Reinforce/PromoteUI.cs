@@ -16,13 +16,15 @@ public class PromoteUI : ReinforceUIBase
     Image[] weaponSlots = new Image[4];
 
     // todo: 리소스매니저에서 받아오도록 수정
-    Sprite[] slotSprites = Managers.Resource.weaponRaritySlot;
+    Sprite[] slotSprites;
     Sprite basicSprite;
     Sprite basicSlot;
 
     protected override void Awake()
     {
         base.Awake();
+
+        slotSprites = Managers.Resource.weaponRaritySlot;
 
         nextRarityNameImage = Utills.Bind<Image>("Image_NextRarity", transform);
         nextRarityNameText = Utills.Bind<Text>("Text_NextRarity", transform);
