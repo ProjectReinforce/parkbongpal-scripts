@@ -13,6 +13,7 @@ public class InventoryOpenOptionBase
     protected Button decompositionButton;
     protected Image decompositionButtonImage;
     protected Text decompositionText;
+    protected Button confirmMaterialsButton;
 
     public InventoryOpenOptionBase(InventoryController _inventoryController)
     {
@@ -24,6 +25,7 @@ public class InventoryOpenOptionBase
         decompositionButton = _inventoryController.DecompositionButton;
         decompositionButton.TryGetComponent(out decompositionButtonImage);
         decompositionText = decompositionButton.transform.GetComponentInChildren<Text>();
+        confirmMaterialsButton = _inventoryController.ConfirmMaterialsButton;
     }
 }
 
@@ -60,6 +62,7 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
 
+        decompositionButton.gameObject.SetActive(false);
         selectButton.onClick.RemoveAllListeners();
     }
 
@@ -101,7 +104,6 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
         //     Managers.UI.ClosePopup();
         // });
         selectText.text = "빌려주기";
-        decompositionButton.gameObject.SetActive(false);
     }
 
     public void Reset()
@@ -155,7 +157,6 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
             Managers.UI.ClosePopup();
         });
         selectText.text = "강화하기";
-        decompositionButton.gameObject.SetActive(false);
     }
 
     public void Reset()
@@ -207,25 +208,19 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
                 return;
             }
             
-            // SetMaterials(currentWeapon);
-            Managers.Game.Reinforce.SelectedMaterials[0] = currentWeapon;
-            Managers.UI.ClosePopup();
-
-            foreach (var item in Managers.Game.Reinforce.SelectedMaterials)
-                Debug.Log(item.Name);
+            SetMaterials(currentWeapon);
+            // Managers.Game.Reinforce.SelectedMaterials[0] = currentWeapon;
+            // Managers.UI.ClosePopup();
         });
         selectText.text = "선택하기";
 
         // 임시
-        decompositionButton.gameObject.SetActive(false);
-        // originButtonText = decompositionText.text;
-        // decompositionText.text = "선택 완료";
-        // decompositionButton.onClick.RemoveAllListeners();
-        // decompositionButton.onClick.AddListener(() =>
-        // {
-        //     Managers.Game.Reinforce.selectedMaterials = weapons.ToArray();
-        //     Managers.UI.ClosePopup();
-        // });
+        confirmMaterialsButton.gameObject.SetActive(true);
+        confirmMaterialsButton.onClick.AddListener(() =>
+        {
+            Managers.Game.Reinforce.SelectedMaterials = weapons.ToArray();
+            Managers.UI.ClosePopup();
+        });
     }
 
     public void Reset()
@@ -234,14 +229,8 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
 
         decompositionText.text = originButtonText;
-
-        // 임시
-        decompositionButton.onClick.RemoveAllListeners();
-        decompositionButton.onClick.AddListener(() =>
-        {
-            inventoryController.Set(InventoryType.Decomposition);
-            Managers.UI.OpenPopup(inventoryController.gameObject);
-        });
+        confirmMaterialsButton.gameObject.SetActive(false);
+        confirmMaterialsButton.onClick.RemoveAllListeners();
     }
 
     void SetDetailInfo(Weapon _weapon)
@@ -261,8 +250,16 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
         if (weapons.Contains(_weapon))
             weapons.Remove(_weapon);
         else
+        {
+            if (weapons.Count >= 2)
+            {
+                Managers.Alarm.Warning("이미 재료 2개를 선택했습니다.");
+                return;
+            }
             weapons.Add(_weapon);
-
+        }
+        foreach (var item in weapons)
+            Debug.Log($"{item.Name} / {weapons.Count}");
     }
     
     // [SerializeField] Button confirm;

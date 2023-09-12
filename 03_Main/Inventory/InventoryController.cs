@@ -12,6 +12,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public DecompositionUI DecompositionUI { get; private set; }
     public Button SelectButton { get; private set; }
     public Button DecompositionButton { get; private set; }
+    public Button ConfirmMaterialsButton { get; private set; }
 
     Text soulText;
     Text oreText;
@@ -24,6 +25,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         DecompositionUI = Utills.Bind<DecompositionUI>("Decomposition_S", transform);
         SelectButton = Utills.Bind<Button>("Button_Select", transform);
         DecompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
+        ConfirmMaterialsButton = Utills.Bind<Button>("Button_MaterialConfirm", transform);
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
 

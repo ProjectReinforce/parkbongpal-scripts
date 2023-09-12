@@ -9,4 +9,5 @@ public class EventManager
     public Action UIRefreshEvent;
     public Action ReinforceWeaponChangeEvent;
     public Action ReinforceMaterialChangeEvent;
+    public Action ReinforceMaterialRegistEvent;
 }

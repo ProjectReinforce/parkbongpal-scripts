@@ -123,7 +123,7 @@ public class PromoteUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(Managers.Game.Reinforce.SelectedMaterials));
+        // reinforceButton.onClick.AddListener(() => Decomposition.Instance.DestroyWeapon(Managers.Game.Reinforce.SelectedMaterials));
         reinforceButton.onClick.AddListener(() => Managers.Game.Reinforce.ResetMaterials());
         reinforceButton.onClick.AddListener(() => UpdateWeaponImage());
         reinforceButton.onClick.AddListener(() => UpdateMaterialsImage());

@@ -41,7 +41,7 @@ public class ReinforceManager
         SelectedMaterials[1] = null;
     }
 
-    void OnDisable()
+    public void Reset()
     {
         selectedWeapon = null;
         ResetMaterials();
