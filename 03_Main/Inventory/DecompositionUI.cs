@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class DecompositionUI : MonoBehaviour 
 {
+    DecompositonResultUI decompositonResultUI;
     Pooler<DecompositionSlot> pooler;
     DecompositionSlot originSlot;
     Transform contentTransform;
@@ -23,6 +24,8 @@ public class DecompositionUI : MonoBehaviour
 
     void Awake()
     {
+        decompositonResultUI = Utills.Bind<DecompositonResultUI>("Decomposition_Result_S", transform);
+        decompositonResultUI.Initialize();
         originSlot = Utills.Bind<DecompositionSlot>("DecompositionSlot", transform);
         poolTransform = Utills.Bind<Transform>("Pool_Decomposition", transform);
         pooler = new(originSlot, poolTransform);
@@ -34,6 +37,8 @@ public class DecompositionUI : MonoBehaviour
 
     void OnEnable()
     {
+        decompositionButton.interactable = false;
+
         Managers.Event.SlotSelectEvent += Selected;
 
         selectedWeapons.Clear();
@@ -57,6 +62,11 @@ public class DecompositionUI : MonoBehaviour
         }
         selectedWeapons.Add(_weapon);
 
+        if (selectedWeapons.Count > 0)
+            decompositionButton.interactable = true;
+        else
+            decompositionButton.interactable = false;
+
         DecompositionSlot decompositionSlot = pooler.GetOne();
         decompositionSlot.Initialize(this);
         decompositionSlot.transform.SetParent(contentTransform);
@@ -75,6 +85,7 @@ public class DecompositionUI : MonoBehaviour
 
     void ExcuteDecomposition()
     {
+        decompositionButton.interactable = false;
         int totalGold = 0, totalSoul = 0;
 
         foreach (var item in selectedWeapons)
@@ -90,6 +101,7 @@ public class DecompositionUI : MonoBehaviour
 
         Managers.Game.Player.AddGold(totalGold, false);
         Managers.Game.Player.AddSoul(totalSoul, false);
+        decompositonResultUI.SetText(totalGold, totalSoul);
         
         Param param = new()
         {
@@ -102,9 +114,7 @@ public class DecompositionUI : MonoBehaviour
 
         selectedWeapons.Clear();
         Managers.Event.UIRefreshEvent?.Invoke();
-        Debug.Log($"분해 결과 : 골드 - {totalGold} / 넋 - {totalSoul}");
        
-        // okUI.SetText(totalGold,totalSoul);
         // HighPowerFinder.UpdateHighPowerWeaponData();
     }
 

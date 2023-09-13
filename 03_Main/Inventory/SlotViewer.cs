@@ -168,6 +168,11 @@ public class SlotModeUIDecomposition : SlotModeUI
     {
     }
 
+    public override void SpecificView()
+    {
+        checkImage.gameObject.SetActive(false);
+    }
+
     public override void Selected(Weapon _weaponFromEvent)
     {
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
@@ -179,10 +184,5 @@ public class SlotModeUIDecomposition : SlotModeUI
             else
                 checkImage.gameObject.SetActive(false);
         }
-    }
-
-    public override void ResetSpecificView()
-    {
-        checkImage.gameObject.SetActive(false);
     }
 }

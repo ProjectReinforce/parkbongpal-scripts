@@ -12,7 +12,6 @@ public class Decomposition : Singleton<Decomposition>
 
     static bool _isDecompositing;
     
-    [SerializeField] DecompositonReward okUI;
     [SerializeField] RectTransform scrollView;
     [SerializeField] RectTransform content;
 
@@ -29,7 +28,6 @@ public class Decomposition : Singleton<Decomposition>
             // slots.First.Value.SetCurrent();
         }
         _isDecompositing = false;
-        okUI.gameObject.SetActive(false);
         
         // foreach (var breakSlot in breakSlots)
         // {

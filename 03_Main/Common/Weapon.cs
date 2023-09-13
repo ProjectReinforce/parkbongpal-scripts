@@ -86,7 +86,7 @@ public class Weapon
         // Inventory.Instance.UpdateHighPowerWeaponData();
     }
 
-    public void ExecuteReinforce(ReinforceType _type)
+    public void ExecuteReinforce(ReinforceType _type, Action<BackendReturnObject> _callback = null)
     {
         reinforces[(int)_type-1].Execute(this);
         SetPower();

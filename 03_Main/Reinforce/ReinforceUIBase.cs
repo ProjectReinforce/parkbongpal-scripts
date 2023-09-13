@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BackEnd;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,9 +70,16 @@ public abstract class ReinforceUIBase : MonoBehaviour
     protected void RegisterButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() =>
-            reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType)
-        );
-        reinforceButton.onClick.AddListener(() => CheckQualification());
+        {
+            reinforceButton.interactable = false;
+            void callback(BackendReturnObject bro)
+            {
+                // todo : 연출 재생 후 결과 출력되도록
+                // reinforceButton.interactable = true;
+                CheckQualification();
+            }
+            reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);
+        });
     }
 
     public void CheckQualification()

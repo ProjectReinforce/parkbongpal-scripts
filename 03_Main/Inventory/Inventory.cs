@@ -23,6 +23,13 @@ public class Inventory
         return weapons[_index];
     }
 
+    public bool CheckRemainSlots(int _slotCount)
+    {
+        if (weapons.Count + _slotCount > Consts.MAX_WEAPON_SLOT_COUNT)
+            return false;
+        return true;
+    }
+
     public void Sort(SortType _sortType)
     {
         switch (_sortType)

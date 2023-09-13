@@ -2,38 +2,32 @@
 using BackEnd;
 using Manager;
 using System.Collections.Generic;
+using System;
 
 public interface Reinforce
 {
-    public void Execute(Weapon weapon);
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null);
 }
 
 public class Promote : Reinforce
 {
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
-        weapon.Promote();
+        _weapon.Promote();
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.rarity), weapon.data.rarity);
-        param.Add(nameof(WeaponData.colum.PromoteStat), weapon.data.PromoteStat);
+        param.Add(nameof(WeaponData.colum.rarity), _weapon.data.rarity);
+        param.Add(nameof(WeaponData.colum.PromoteStat), _weapon.data.PromoteStat);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-        // weapon.myslot.UpdateSlot(weapon);
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
 
 public class Additional : Reinforce
 {
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         AdditionalData data = Managers.ServerData.AdditionalData;
         int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
@@ -43,52 +37,45 @@ public class Additional : Reinforce
         if (resultIndex != -1)
         {
             Debug.Log($"result : {resultIndex} - {additionalDescription[resultIndex]} / {additionalPercent[resultIndex]}");
-            weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
-            weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
+            _weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
+            _weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
         }
 
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.AdditionalStat), weapon.data.AdditionalStat);
+        param.Add(nameof(WeaponData.colum.AdditionalStat), _weapon.data.AdditionalStat);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
 
 public class NormalReinforce : Reinforce
 {
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         BackEndDataManager resourceManager = Managers.ServerData;
         NormalReinforceData data = resourceManager.NormalReinforceData;
-        int goldCost = data.GetGoldCost((Rarity)weapon.data.rarity);
+        int goldCost = data.GetGoldCost((Rarity)_weapon.data.rarity);
 
-        if (weapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
+        if (_weapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
         {
-            goldCost = data.GetGoldCost((Rarity)weapon.data.rarity) * 10;
+            goldCost = data.GetGoldCost((Rarity)_weapon.data.rarity) * 10;
 
-            weapon.data.NormalStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.upgradeCount];
-            weapon.data.NormalStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].NormalStat[(int)StatType.atk];
-            Debug.Log($"일반 강화 초기화 실행 : {weapon.data.NormalStat[(int)StatType.upgradeCount]}, {weapon.data.NormalStat[(int)StatType.atk]}");
+            _weapon.data.NormalStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].NormalStat[(int)StatType.upgradeCount];
+            _weapon.data.NormalStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].NormalStat[(int)StatType.atk];
+            Debug.Log($"일반 강화 초기화 실행 : {_weapon.data.NormalStat[(int)StatType.upgradeCount]}, {_weapon.data.NormalStat[(int)StatType.atk]}");
         }
         else
         {
-            weapon.data.NormalStat[(int)StatType.upgradeCount]--;
+            _weapon.data.NormalStat[(int)StatType.upgradeCount]--;
 
-            int randomValue = Random.Range(0, 101);
+            int randomValue = Utills.random.Next(0, 101);
             if (randomValue < data.percent)
             {
                 Debug.Log($"result : {randomValue} / 강화 성공!");
-                weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
+                _weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
             }
             else
             {
@@ -97,31 +84,24 @@ public class NormalReinforce : Reinforce
         }
 
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.NormalStat), weapon.data.NormalStat);
+        param.Add(nameof(WeaponData.colum.NormalStat), _weapon.data.NormalStat);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
 
 public class MagicEngrave : Reinforce
 {
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         int drawCount = 0;
         
-        if (weapon.data.rarity >= (int)Rarity.legendary)
+        if (_weapon.data.rarity >= (int)Rarity.legendary)
             drawCount = 2;
-        else if (weapon.data.rarity >= (int)Rarity.rare)
+        else if (_weapon.data.rarity >= (int)Rarity.rare)
             drawCount = 1;
         else
         {
@@ -134,47 +114,40 @@ public class MagicEngrave : Reinforce
         for (int i = 0; i < results.Length; i++)
         {
             Debug.Log((MagicType)results[i]);
-            weapon.data.magic[i] = results[i];
+            _weapon.data.magic[i] = results[i];
         }
 
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.magic), weapon.data.magic);
+        param.Add(nameof(WeaponData.colum.magic), _weapon.data.magic);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
 
 public class SoulCrafting : Reinforce
 {
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         BackEndDataManager resourceManager = Managers.ServerData;
         SoulCraftingData data = resourceManager.SoulCraftingData;
         int goldCost = data.goldCost;
         int soulCost = data.soulCost;
 
-        if (weapon.data.SoulStat[(int)StatType.upgradeCount] <= 0)
+        if (_weapon.data.SoulStat[(int)StatType.upgradeCount] <= 0)
         {
             goldCost = data.goldCost * 10;
             soulCost = data.soulCost * 10;
 
-            weapon.data.SoulStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.upgradeCount];
-            weapon.data.SoulStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[weapon.data.baseWeaponIndex].SoulStat[(int)StatType.atk];
-            Debug.Log($"영혼 세공 초기화 실행 : {weapon.data.SoulStat[(int)StatType.upgradeCount]}, {weapon.data.SoulStat[(int)StatType.atk]}");
+            _weapon.data.SoulStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].SoulStat[(int)StatType.upgradeCount];
+            _weapon.data.SoulStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].SoulStat[(int)StatType.atk];
+            Debug.Log($"영혼 세공 초기화 실행 : {_weapon.data.SoulStat[(int)StatType.upgradeCount]}, {_weapon.data.SoulStat[(int)StatType.atk]}");
         }
         else
         {
-            weapon.data.SoulStat[(int)StatType.upgradeCount]--;
+            _weapon.data.SoulStat[(int)StatType.upgradeCount]--;
 
             int[] soulPercent = {data.option1, data.option2, data.option3, data.option4, data.option5};
             int[] soulDescription = {1, 2, 3, 4, 5};
@@ -183,24 +156,17 @@ public class SoulCrafting : Reinforce
             if (resultIndex != -1)
             {
                 Debug.Log($"result : {resultIndex} - {soulDescription[resultIndex]} / {soulPercent[resultIndex]}");
-                weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
+                _weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
             }
         }
 
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.SoulStat), weapon.data.SoulStat);
+        param.Add(nameof(WeaponData.colum.SoulStat), _weapon.data.SoulStat);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
 
@@ -208,7 +174,7 @@ public class Refinement : Reinforce
 {
     const int REFINE_DRAW_COUNT = 3;
 
-    public void Execute(Weapon weapon)
+    public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         RefineResult[] refineResults = new RefineResult[REFINE_DRAW_COUNT];
         RefinementData data = Managers.ServerData.RefinementData;
@@ -216,7 +182,7 @@ public class Refinement : Reinforce
         int[] statPercent = {data.atk, data.critical, data.stat3, data.stat6};
         string[] statDescription = {"atk", "critical", "stat3", "stat6"};
         
-        weapon.data.RefineStat[(int)StatType.upgradeCount] ++;
+        _weapon.data.RefineStat[(int)StatType.upgradeCount] ++;
         for (int i = 0; i < REFINE_DRAW_COUNT; i++)
         {
             int resultIndex = Utills.GetResultFromWeightedRandom(statPercent);
@@ -256,8 +222,8 @@ public class Refinement : Reinforce
             if (resultIndex != -1)
             {
                 // Debug.Log($"result {i} : {resultIndex} - {resultStat} - {percentDescription[resultIndex]} / {percentPercent[resultIndex]}");
-                previousValue = weapon.data.RefineStat[(int)resultStat];
-                weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
+                previousValue = _weapon.data.RefineStat[(int)resultStat];
+                _weapon.data.RefineStat[(int)resultStat] += percentDescription[resultIndex];
             }
 
             RefineResult refineResult = new(resultStat, percentDescription[resultIndex], previousValue);
@@ -272,18 +238,11 @@ public class Refinement : Reinforce
         // }
 
         Param param = new Param();
-        param.Add(nameof(WeaponData.colum.RefineStat), weapon.data.RefineStat);
+        param.Add(nameof(WeaponData.colum.RefineStat), _weapon.data.RefineStat);
 
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
-        // var bro = Backend.GameData.UpdateV2(nameof(WeaponData), weapon.data.inDate, Backend.UserInDate, param);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), _weapon.data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent(_callback);
 
-        // if (!bro.IsSuccess())
-        // {
-        //     Debug.LogError(bro);
-        //     // 메시지 출력
-        // }
-
-        // weapon.SetPower();
+        _weapon.SetPower();
     }
 }
