@@ -88,7 +88,7 @@ public class Weapon
 
     public void ExecuteReinforce(ReinforceType _type, Action<BackendReturnObject> _callback = null)
     {
-        reinforces[(int)_type-1].Execute(this);
+        reinforces[(int)_type-1].Execute(this, _callback);
         SetPower();
         // HighPowerFinder.UpdateHighPowerWeaponData();
     }

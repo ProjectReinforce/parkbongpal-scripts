@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -201,13 +200,10 @@ public class PromoteUI : ReinforceUIBase
 
     bool CheckMaterials()
     {
-        Debug.Log($"재료 2개 선택? : {Managers.Game.Reinforce.SelectedMaterials.Count == 2}");
+        // Debug.Log($"재료 2개 선택? : {Managers.Game.Reinforce.SelectedMaterials.Count == 2}");
         if (Managers.Game.Reinforce.SelectedMaterials.Count == 2)
             return true;
         return false;
-        // if (Managers.Game.Reinforce.SelectedMaterials[0] != null && Managers.Game.Reinforce.SelectedMaterials[1] != null)
-        //     return true;
-        // return false;
     }
 
     protected override bool Checks()
