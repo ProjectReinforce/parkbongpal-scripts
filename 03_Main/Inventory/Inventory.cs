@@ -95,8 +95,24 @@ public class Inventory
 
     public void RemoveWeapons(Weapon _weapon)
     {
+        RemoveWeapon(_weapon);
+    }
+
+    public void RemoveWeapons(List<Weapon> _weapons)
+    {
+        foreach (var item in _weapons)
+            RemoveWeapon(item);
+    }
+
+    void RemoveWeapon(Weapon _weapon)
+    {
         if (weapons.Contains(_weapon))
+        {
             weapons.Remove(_weapon);
+
+            string indate = _weapon.data.inDate;
+            Transactions.Add(TransactionValue.SetDeleteV2(nameof(WeaponData), indate, Backend.UserInDate));
+        }
         else
             Managers.Alarm.Danger("인벤토리에 없는 아이템을 삭제하려고 시도했습니다.");
     }

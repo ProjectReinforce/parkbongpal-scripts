@@ -1,9 +1,9 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class SlotModeUI
 {
+    protected Slot slot;
     protected Button slotButton;
     protected Image rarityImage;
     protected Image weaponIcon;
@@ -15,6 +15,7 @@ public class SlotModeUI
 
     public SlotModeUI(Slot _slot, int _siblingIndex)
     {
+        slot = _slot;
         slotButton = _slot.SlotButton;
         rarityImage = _slot.RarityImage;
         weaponIcon = _slot.WeaponIcon;
@@ -117,12 +118,20 @@ public class SlotModeUIReinforceMaterial : SlotModeUI
 
     public override void SpecificView()
     {
-        // Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+        Managers.Event.ReinforceMaterialChangeEvent += CheckMaterials;
 
-        // if (weapon == Managers.Game.Reinforce.SelectedWeapon)
-        //     checkImage.gameObject.SetActive(true);
-        // else
-        //     checkImage.gameObject.SetActive(false);
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (weapon is not null && weapon.data.rarity != Managers.Game.Reinforce.SelectedWeapon.data.rarity)
+        {
+            slot.gameObject.SetActive(false);
+            return;
+        }
+
+        if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
+            checkImage.gameObject.SetActive(true);
+        else
+            checkImage.gameObject.SetActive(false);
     }
 
     public override void Selected(Weapon _weaponFromEvent)
@@ -133,6 +142,23 @@ public class SlotModeUIReinforceMaterial : SlotModeUI
             selectedImage.gameObject.SetActive(true);
         else
             selectedImage.gameObject.SetActive(false);
+    }
+
+    public override void ResetSpecificView()
+    {
+        Managers.Event.ReinforceMaterialChangeEvent -= CheckMaterials;
+
+        checkImage.gameObject.SetActive(false);
+    }
+
+    void CheckMaterials()
+    {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
+            checkImage.gameObject.SetActive(true);
+        else
+            checkImage.gameObject.SetActive(false);
     }
 }
 

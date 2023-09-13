@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -182,7 +183,6 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
 
 public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    List<Weapon> weapons = new();
     Weapon currentWeapon;
     string originButtonText;
 
@@ -208,19 +208,12 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
                 return;
             }
             
-            SetMaterials(currentWeapon);
-            // Managers.Game.Reinforce.SelectedMaterials[0] = currentWeapon;
-            // Managers.UI.ClosePopup();
+            Managers.Game.Reinforce.TryAddMaterials(currentWeapon);
         });
         selectText.text = "선택하기";
 
         // 임시
         confirmMaterialsButton.gameObject.SetActive(true);
-        confirmMaterialsButton.onClick.AddListener(() =>
-        {
-            Managers.Game.Reinforce.SelectedMaterials = weapons.ToArray();
-            Managers.UI.ClosePopup();
-        });
     }
 
     public void Reset()
@@ -228,9 +221,10 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
 
+        selectButton.onClick.RemoveAllListeners();
+
         decompositionText.text = originButtonText;
         confirmMaterialsButton.gameObject.SetActive(false);
-        confirmMaterialsButton.onClick.RemoveAllListeners();
     }
 
     void SetDetailInfo(Weapon _weapon)
@@ -244,64 +238,6 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
     {
         currentWeapon = _weapon;
     }
-
-    void SetMaterials(Weapon _weapon)
-    {
-        if (weapons.Contains(_weapon))
-            weapons.Remove(_weapon);
-        else
-        {
-            if (weapons.Count >= 2)
-            {
-                Managers.Alarm.Warning("이미 재료 2개를 선택했습니다.");
-                return;
-            }
-            weapons.Add(_weapon);
-        }
-        foreach (var item in weapons)
-            Debug.Log($"{item.Name} / {weapons.Count}");
-    }
-    
-    // [SerializeField] Button confirm;
-    // [SerializeField] Text confirmText;
-    // private int selectedMaterialIndex;
-    // public void SetConfirm(int index)
-    // {
-    //     selectedMaterialIndex = index;
-    //     InventoryPresentor.Instance.SetInventoryOption(this);
-    // }
-
-    // public void OptionOpen()
-    // {
-    //     confirmText.text = $"재료 확정";
-    //     confirm.onClick.RemoveAllListeners();
-    //     confirm.onClick.AddListener(() =>
-    //     {
-    //         Weapon weapon =  InventoryPresentor.Instance.currentWeapon;
-    //         if (weapon.data.mineId != -1)
-    //         {
-    //             Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
-    //             return;
-    //         }
-    //         if (weapon.data.rarity != Managers.Game.Reinforce.SelectedWeapon.data.rarity)
-    //         {
-    //             Managers.Alarm.Warning("선택한 무기가 강화시킬 무기의 등급과 다릅니다.");
-    //             return;
-    //         }
-    //         if (weapon == Managers.Game.Reinforce.SelectedMaterials[1 - selectedMaterialIndex] || weapon == Managers.Game.Reinforce.SelectedWeapon)
-    //         {
-    //             Managers.Alarm.Warning("이미 선택된 무기입니다.");
-    //             return;
-    //         }
-    //         Managers.Game.Reinforce.SelectedMaterials[selectedMaterialIndex] = weapon;
-    //         Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
-            
-    //         // SelectWeapon();
-            
-    //         InventoryPresentor.Instance.CloseInventory();
-            
-    //     });
-    // }
 }
 
 public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOpenOption

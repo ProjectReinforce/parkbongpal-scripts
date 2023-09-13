@@ -22,16 +22,14 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        if (reinforceManager != null)
-            Managers.Event.ReinforceWeaponChangeEvent += SelectWeapon;
+        Managers.Event.ReinforceWeaponChangeEvent += SelectWeapon;
 
         SelectWeapon();
     }
 
     protected virtual void OnDisable()
     {
-        if (reinforceManager != null)
-            Managers.Event.ReinforceWeaponChangeEvent -= SelectWeapon;
+        Managers.Event.ReinforceWeaponChangeEvent -= SelectWeapon;
     }
 
     protected virtual void SelectWeapon()

@@ -16,8 +16,8 @@ public class ReinforceManager
             Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
         }
     }
-    Weapon[] selectedMaterials = new Weapon[2];
-    public Weapon[] SelectedMaterials
+    List<Weapon> selectedMaterials = new();
+    public List<Weapon> SelectedMaterials
     {
         get => selectedMaterials;
         set
@@ -37,8 +37,7 @@ public class ReinforceManager
 
     public void ResetMaterials()
     {
-        SelectedMaterials[0] = null;
-        SelectedMaterials[1] = null;
+        selectedMaterials.Clear();
     }
 
     public void Reset()
@@ -46,5 +45,21 @@ public class ReinforceManager
         selectedWeapon = null;
         ResetMaterials();
         refineResults?.Initialize();
+    }
+
+    public void TryAddMaterials(Weapon _weapon)
+    {
+        if (selectedMaterials.Contains(_weapon))
+            selectedMaterials.Remove(_weapon);
+        else
+        {
+            if (selectedMaterials.Count >= 2)
+            {
+                Managers.Alarm.Warning("이미 재료 2개를 선택했습니다.");
+                return;
+            }
+            selectedMaterials.Add(_weapon);
+        }
+        Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
     }
 }

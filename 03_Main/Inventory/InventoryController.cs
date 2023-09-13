@@ -66,6 +66,13 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     {
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
+
+        foreach (var item in slots)
+        {
+            if (item.gameObject.activeSelf == true) continue;
+            item.gameObject.SetActive(true);
+
+        }
     }
 
     public void SortWeapons(Dropdown _test)
