@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelectWeaponMessageUI : MonoBehaviour
 {
-    ReinforceManager reinforceManager;
+    ReinforceInfos reinforceManager;
     [SerializeField] GameObject selectWeaponMessage;
 
     void Awake()

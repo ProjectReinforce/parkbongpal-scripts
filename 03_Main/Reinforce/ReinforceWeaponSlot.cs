@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ReinforceWeaponSlot : MonoBehaviour
 {
-    ReinforceManager reinforceManager;
+    ReinforceInfos reinforceManager;
     UnityEngine.UI.Image weaponIcon;
     Sprite nullIcon;
 

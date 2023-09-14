@@ -1,7 +1,7 @@
 using System;
 using BackEnd;
-using Manager;
 using UnityEngine;
+using UnityEngine.UI;
 
 public interface Rental
 {
@@ -15,20 +15,46 @@ public interface Rental
 
 public class Mine :MonoBehaviour,Rental
 {
+    int mineIndex;
+    MineData mineData;
+    Image icon;
+    Button mineButton;
+    Image lockIcon;
+    Text nameText;
+    Text goldPerMinText;
+    Text currentGoldText;
+
+    void Awake()
+    {
+        if (!int.TryParse(gameObject.name[..2], out mineIndex))
+        {
+            Managers.Alarm.Danger("광산 정보를 받아오는 데 실패했습니다.");
+            return;
+        }
+        mineData = Managers.ServerData.MineDatas[mineIndex];
+
+        TryGetComponent(out icon);
+        TryGetComponent(out mineButton);
+        mineButton.onClick.RemoveAllListeners();
+        mineButton.onClick.AddListener(() => 
+        {
+            Managers.Event.MineClickEvent?.Invoke(this);
+        });
+        lockIcon = Utills.Bind<Image>("Image_Lock", transform);
+        nameText = Utills.Bind<Text>("Text_Name", transform);
+        nameText.text = mineData.name;
+        goldPerMinText = Utills.Bind<Text>("Text_GoldPerMin", transform);
+        currentGoldText = Utills.Bind<Text>("Text_CurrentGold", transform);
+        // rentalFactory = new RentalFactory();
+    }
 
     // =====================================================================
     // =====================================================================
-    private MineData _mineData;
     public MineData GetMineData()
     {
-        return _mineData;
+        return mineData;
     }
     const int BASE_GOLD = 1;
-    [SerializeField] UnityEngine.UI.Text mineName;
-    [SerializeField] UnityEngine.UI.Text goldPerMinText;
-    [SerializeField] UnityEngine.UI.Text goldText;
-    [SerializeField] UnityEngine.UI.Image selfImage;
-    [SerializeField] UnityEngine.UI.Button myButton;
     float _hpPerDMG;
     public float hpPerDMG => _hpPerDMG;
 
@@ -54,20 +80,9 @@ public class Mine :MonoBehaviour,Rental
     {
         return _weaponData.Clone();
     }
-    
-    public void Initialized(MineData _data)
-    {
-        _mineData = _data;
-        mineName.text = _data.name;
-    }
 
     static RentalFactory rentalFactory;
     Rental rental;
-
-    private void Awake()
-    {
-        rentalFactory = new RentalFactory();
-    }
 
     public void SetCurrent()// *dip 위배중, 리팩토링 대상.
     {
@@ -133,7 +148,7 @@ public class Mine :MonoBehaviour,Rental
             
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
         
-        goldText.text = gold.ToString();
+        currentGoldText.text = gold.ToString();
     }
     private void SetInfo()
     {
@@ -192,7 +207,7 @@ public class Mine :MonoBehaviour,Rental
             Debug.Log("SDSDS"+date);
 
             rentalWeapon.SetBorrowedDate(date);
-            goldText.text = gold.ToString();
+            currentGoldText.text = gold.ToString();
             
             _callback?.Invoke();
             isReceipting = false;
@@ -227,7 +242,7 @@ public class Mine :MonoBehaviour,Rental
         if (elapse > 0) return;
         elapse += INTERVAL;
         gold += (int)(_goldPerMin*INTERVAL / 60);
-        goldText.text = gold.ToString();
+        currentGoldText.text = gold.ToString();
         
     }
 
@@ -235,10 +250,10 @@ public class Mine :MonoBehaviour,Rental
     public string Unlock(int playerLevel)
     {
          
-        if (isUnlock || _mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
-        myButton.enabled = true;
-        selfImage.sprite = Managers.Resource.DefaultMine;
+        if (isUnlock || mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
+        mineButton.enabled = true;
+        icon.sprite = Managers.Resource.DefaultMine;
         isUnlock = true;
-        return _mineData.name;
+        return mineData.name;
     }
 }

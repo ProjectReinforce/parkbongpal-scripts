@@ -10,7 +10,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
     [SerializeField] protected ReinforceType reinforceType;
     protected Text goldCostText;
     protected Button reinforceButton;
-    protected ReinforceManager reinforceManager;
+    protected ReinforceInfos reinforceManager;
     protected int goldCost;
 
     protected virtual void Awake()

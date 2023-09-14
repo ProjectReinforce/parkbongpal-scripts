@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public abstract class ReinforceButtonUIBase : MonoBehaviour
 {
-    protected ReinforceManager reinforceManager;
+    protected ReinforceInfos reinforceManager;
     protected Button reinforceButton;
     protected GameObject qualificationUI;
     protected Text qualificationText;

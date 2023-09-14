@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReinforceManager
+public class ReinforceInfos
 {
     Weapon selectedWeapon;
     public Weapon SelectedWeapon

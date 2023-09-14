@@ -9,8 +9,8 @@ public class GameManager
     public Player Player => player;
     Inventory inventory;
     public Inventory Inventory => inventory;
-    ReinforceManager reinforce;
-    public ReinforceManager Reinforce => reinforce;
+    ReinforceInfos reinforce;
+    public ReinforceInfos Reinforce => reinforce;
 
 
     public void MainThreadPoll()

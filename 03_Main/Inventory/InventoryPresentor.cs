@@ -5,19 +5,15 @@ using Manager;
 
 using BackEnd;
 
-
-
 public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOption //ViewModel
 ,IAddable
 {
-    
     [SerializeField] InventoryViewer inventoryViewer;// View
     
     private int size;
     private int Count;// => Slot.weaponCount;
     
     private List<Slot> slots;//model
-    [SerializeField] GameObject box;
     private Weapon _currentWeapon;
     public Weapon currentWeapon
     {
@@ -30,11 +26,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         }
     }
 
-    private void AddWeapon(WeaponData weaponData)
-    {
-        // slots[Count].SetNew();
-        // slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
-    }
     public void SortSlots()
     {
         slots.Sort();
@@ -44,34 +35,12 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         }
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        slots = new List<Slot>(box.GetComponentsInChildren<Slot>());
-      
-        HighPowerFinder.SetSlots(slots);
-        size = slots.Count;
-        
-        foreach (var weaponData in Managers.ServerData.UserWeapons)
-        {
-            // slots[Count].SetWeapon(new Weapon(weaponData,slots[Count]));
-        }
-    }
-
     public void TravelInventory(Action<Weapon> slotAction)
     {
         foreach (var slot in slots)
         {
             slotAction(slot.myWeapon);
         }
-    }
-   
-
-    public void SetOption()//기본 인벤 버튼이 호출할거 // 다른클래스는쓰면안됨.
-    {
-        SetInventoryOption(this);
-        smithyText.text = $"강화하기";
     }
     public void SetInventoryOption(IInventoryOption option)//기본,광산,강화,미니게임이 사용
     {
@@ -114,7 +83,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         
 
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);//indate얻는 작업땜에 transaction에 넣기가 애매
-        AddWeapon(weaponData);
         
         if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
         {
@@ -166,7 +134,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            AddWeapon(weaponData);
             if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
             {
                 Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
@@ -179,31 +146,11 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         Transactions.SendCurrent();
     }
 
-     
-     [SerializeField] GameObject decompositButton;
-     [SerializeField] UnityEngine.UI.Button smithyButton;
-     [SerializeField] UnityEngine.UI.Text smithyText;
-     [SerializeField] GameObject smithy;
      public void OptionOpen()
      {
-         decompositButton.SetActive(true);
-        //smithyButton.gameObject.SetActive(true);
-        smithyButton.onClick.RemoveAllListeners();
-        smithyButton.onClick.AddListener(() =>
-        {
-            if (currentWeapon.data.mineId > -1)
-            {
-                Managers.Alarm.Warning("대여중인 무기는 강화할수 없습니다.");
-                return;
-            }
-            Weapon weapon = currentWeapon;
-            // GameManager.Instance.MoveTap(smithy);
-            Managers.Game.Reinforce.SelectedWeapon = weapon;
-        });
     }
 
      public void OptionClose()
      {
-         decompositButton.SetActive(false);
      }
 }

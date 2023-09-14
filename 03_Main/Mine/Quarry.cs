@@ -41,7 +41,7 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         
         for (int i = 0; i < mineCount; i++)
         {
-            mines[i].Initialized(Managers.ServerData.MineDatas[i]);
+            // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
             mines[i].Unlock(Managers.ServerData.UserData.level);
         }
     }
