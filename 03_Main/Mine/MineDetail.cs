@@ -196,34 +196,34 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
 
    private void InventoryConfirm()
    {
-       Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
-       if (currentWeapon is null) return;
-    //    Mine tempMine = Quarry.Instance.currentMine;
-       Weapon currentMineWeapon = tempMine.rentalWeapon;
+    //    Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
+    //    if (currentWeapon is null) return;
+    // //    Mine tempMine = Quarry.Instance.currentMine;
+    //    Weapon currentMineWeapon = tempMine.rentalWeapon;
         
-       try
-       {
-           if (currentWeapon.data.mineId >= 0)
-               throw  new Exception("광산에 대여해준 무기입니다.");
-           int beforeGoldPerMin = tempMine.goldPerMin;
-           currentWeapon.SetBorrowedDate();
+    //    try
+    //    {
+    //        if (currentWeapon.data.mineId >= 0)
+    //            throw  new Exception("광산에 대여해준 무기입니다.");
+    //        int beforeGoldPerMin = tempMine.goldPerMin;
+    //        currentWeapon.SetBorrowedDate();
            
-           tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
-           Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
-       }
-       catch (Exception e)
-       {
-            Managers.Alarm.Warning(e.Message);
-           return;
-       }
-       if (currentMineWeapon is not null)
-       {
-           tempMine.Receipt();
-           currentMineWeapon.Lend(-1);
-       }
-       currentWeapon.Lend(tempMine.GetMineData().index);
+    //        tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
+    //        Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+    //    }
+    //    catch (Exception e)
+    //    {
+    //         Managers.Alarm.Warning(e.Message);
+    //        return;
+    //    }
+    //    if (currentMineWeapon is not null)
+    //    {
+    //        tempMine.Receipt();
+    //        currentMineWeapon.Lend(-1);
+    //    }
+    //    currentWeapon.Lend(tempMine.GetMineData().index);
         
-    //    Quarry.Instance.currentMine= tempMine ;
-       InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
+    // //    Quarry.Instance.currentMine= tempMine ;
+    //    InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
    }
 }

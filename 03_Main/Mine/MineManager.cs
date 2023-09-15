@@ -104,7 +104,7 @@ public class MineManager
         
         receiptButton.interactable = false;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        StartCoroutine(Wait3min());
+        // StartCoroutine(Wait3min());
 
         for (int i = 0; i < mines.Length; i++)
         {
