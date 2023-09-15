@@ -12,7 +12,7 @@ public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
 
     public void ViewUpdate(Weapon sellectWeapon)
     {
-        Weapon currentWeapon = Quarry.Instance.currentMine?.rentalWeapon;
+        // Weapon currentWeapon = Quarry.Instance.currentMine?.rentalWeapon;
         if (currentWeapon is null || sellectWeapon is null)
         {
             for (int i = 0; i < arrowPositions.Length; i++)
@@ -26,7 +26,7 @@ public class UpDownVisualer : MonoBehaviour,IDetailViewer<Weapon>
         
         int[] stats =
         {
-            sellectWeapon.power - Quarry.Instance.currentMine.rentalWeapon.power,
+            // sellectWeapon.power - Quarry.Instance.currentMine.rentalWeapon.power,
             
             sellectWeapon.data.atk - currentWeapon.data.atk,
             sellectWeapon.data.atkSpeed- currentWeapon.data.atkSpeed,

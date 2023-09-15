@@ -93,17 +93,17 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
         Managers.Event.SlotSelectEvent += SetDetailInfo;
         
-        // selectButton.onClick.AddListener(() => 
-        // {
-        //     if (currentWeapon.data.mineId != -1)
-        //     {
-        //         Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
-        //         return;
-        //     }
+        selectButton.onClick.AddListener(() => 
+        {
+            if (currentWeapon.data.mineId != -1)
+            {
+                Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+                return;
+            }
             
-        //     Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
-        //     Managers.UI.ClosePopup();
-        // });
+            Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
+            Managers.UI.ClosePopup();
+        });
         selectText.text = "빌려주기";
     }
 

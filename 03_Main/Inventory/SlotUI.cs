@@ -28,6 +28,12 @@ public class SlotModeUI
 
     public virtual void SpecificView()
     {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (weapon != null && weapon.data.mineId != -1)
+            lendingImage.gameObject.SetActive(true);
+        else
+            lendingImage.gameObject.SetActive(false);
     }
 
     public virtual void ResetSpecificView()
@@ -47,6 +53,8 @@ public class SlotModeUIDefault : SlotModeUI
 
     public override void SpecificView()
     {
+        base.SpecificView();
+
         checkImage.gameObject.SetActive(false);
     }
 
@@ -86,6 +94,8 @@ public class SlotModeUIReinforce : SlotModeUI
 
     public override void SpecificView()
     {
+        base.SpecificView();
+        
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
         if (weapon != null && weapon == Managers.Game.Reinforce.SelectedWeapon)
@@ -118,6 +128,8 @@ public class SlotModeUIReinforceMaterial : SlotModeUI
 
     public override void SpecificView()
     {
+        base.SpecificView();
+        
         Managers.Event.ReinforceMaterialChangeEvent += CheckMaterials;
 
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
@@ -170,11 +182,18 @@ public class SlotModeUIDecomposition : SlotModeUI
 
     public override void SpecificView()
     {
+        base.SpecificView();
+        
         checkImage.gameObject.SetActive(false);
     }
 
     public override void Selected(Weapon _weaponFromEvent)
     {
+        if (_weaponFromEvent.data.mineId != -1)
+        {
+            Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+            return;
+        }
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
         if (weapon == _weaponFromEvent)

@@ -1,18 +1,11 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
-using Manager;
 using UnityEngine;
 
-public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
+public class MineManager
 {
-    IDetailViewer<Mine> mineDetail;
-    [SerializeField] MineDetail detailObject;
-    [SerializeField] UnityEngine.UI.Image selectedWeaponImage;
-    
-    Sprite plusImage;
     private Mine _currentMine;
     public Mine currentMine
     {
@@ -20,22 +13,15 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         set
         {
             // mineDetail.ViewUpdate(value);
-            selectedWeaponImage.sprite =value.rentalWeapon is null? 
-                plusImage : value.rentalWeapon.Icon;
-            _currentMine = value;
         }
     }
 
     Mine[] mines;
-    [SerializeField] GameObject quarry;
     int mineCount;
 
-    protected override void Awake()
+    void Initialize()
     {
-        base.Awake();
-        mineDetail = detailObject;
-        plusImage = selectedWeaponImage.sprite;
-        mines = quarry.GetComponentsInChildren<Mine>();
+        mines = Utills.FindAllFromCanvas<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
         mineCount = Managers.ServerData.MineDatas.Length;
         
@@ -143,7 +129,4 @@ public class Quarry : Singleton<Quarry>//광산들을 관리하는 채석장
         totalGold = 0;
         Transactions.SendCurrent();
     }
-
-
-
 }

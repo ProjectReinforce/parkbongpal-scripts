@@ -23,6 +23,8 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
     Text calculatedInfoText;
     Text skillDescription;
     GameObject[] stageStars = new GameObject[5];
+    Button weaponCollectButton;
+    Button goldCollectButton;
    // [SerializeField] private Text gold;
    
     public void GameInitialize()
@@ -39,7 +41,9 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
         calculatedInfoText = Utills.Bind<Text>("Text_Calculated", transform);
         skillDescription = Utills.Bind<Text>("Text_WeaponSkills", transform);
         for (int i = 0; i < stageStars.Length; i++)
-            stageStars[i] = Utills.Bind<Transform>($"Image_Star{i+1}", transform).gameObject;
+            stageStars[i] = Utills.Bind<Transform>($"Image_Star{i + 1}", transform).gameObject;
+        weaponCollectButton = Utills.Bind<Button>("Button_Remove", transform);
+        goldCollectButton = Utills.Bind<Button>("Button_Receipt", transform);
 
         Managers.Event.MineClickEvent -= ClickEvent;
         Managers.Event.MineClickEvent += ClickEvent;
@@ -47,6 +51,13 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
 
     void ClickEvent(Mine _mine)
     {
+        Managers.Event.ConfirmLendWeaponEvent = (weapon) => 
+        {
+            _mine.Lend(weapon);
+
+            UpdateUIRelatedLendedWeapon(_mine);
+        };
+
         nameText.text = _mine.GetMineData().name;
         description.text = _mine.GetMineData().description;
         stat1Text.text = $"경도 {_mine.GetMineData().defence}";
@@ -56,37 +67,69 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
         for (int i = 0; i < stageStars.Length; i++)
         {
             stageStars[i].SetActive(true);
-            if (i+1 > _mine.GetMineData().stage) stageStars[i].SetActive(false);
+            if (i + 1 > _mine.GetMineData().stage) stageStars[i].SetActive(false);
         }
-        
-        // if (_mine.rentalWeapon is null)
-        // {
-        //     weaponImage.sprite = Managers.Resource.DefaultMine;
-        //     weaponName.text = "";
-        //     mineWithWeaponStats.text = $"0\n0\n0";
-        //     skillDescription.text = "";
-        //    // gold.text = "";
-        // }
-        // else
-        // {
-        //     upDownVisualer.gameObject.SetActive(true);
-            
-        //     weaponImage.sprite = _mine.rentalWeapon.Icon;
-        //     weaponName.text = _mine.rentalWeapon.Name;
-        //     mineWithWeaponStats.text = $"{_mine.hpPerDMG}\n{_mine.rangePerSize}\n{_mine.goldPerMin}";
-        //     string[] skillNames= new string[2];
-        //     for (int i = 0; i < 2; i++)
-        //     {
-        //         int magicIndex = _mine.rentalWeapon.data.magic[i];
-        //         if(magicIndex<0) break;
-        //         skillNames[i] = Managers.ServerData.SkillDatas[magicIndex].skillName;
- 
-        //     }
-        //     skillDescription.text = String.Join(", ", skillNames);
-        //     //  gold.text = mine.Gold.ToString();
-        // }
+
+        Weapon lendedWeapon = _mine.GetWeapon();
+        if (lendedWeapon is null)
+        {
+            weaponCollectButton.interactable = false;
+            goldCollectButton.interactable = false;
+        }
+        else
+        {
+            weaponCollectButton.onClick.RemoveAllListeners();
+            weaponCollectButton.onClick.AddListener(() => 
+            {
+                lendedWeapon.Lend(-1);
+
+                weaponCollectButton.interactable = false;
+            });
+            weaponCollectButton.interactable = true;
+            goldCollectButton.onClick.RemoveAllListeners();
+            goldCollectButton.onClick.AddListener(() => 
+            {
+                Debug.Log("수령 클릭됨");
+            });
+            goldCollectButton.interactable = true;
+        }
+
+        UpdateUIRelatedLendedWeapon(_mine);
 
         Managers.UI.OpenPopup(gameObject);
+    }
+
+    void UpdateUIRelatedLendedWeapon(Mine _mine)
+    {
+        Weapon lendedWeapon = _mine.GetWeapon();
+        if (lendedWeapon is null)
+        {
+            weaponIcon.gameObject.SetActive(false);
+            weaponName.gameObject.SetActive(false);
+            addIcon.gameObject.SetActive(true);
+            calculatedInfoText.text = $"0\n0\n0";
+            skillDescription.text = "";
+           // gold.text = "";
+        }
+        else
+        {
+            weaponIcon.sprite = lendedWeapon.Icon;
+            weaponIcon.gameObject.SetActive(true);
+            weaponName.text = lendedWeapon.Name;
+            weaponName.gameObject.SetActive(true);
+            addIcon.gameObject.SetActive(false);
+            calculatedInfoText.text = $"{_mine.hpPerDMG}\n{_mine.rangePerSize}\n{_mine.goldPerMin}";
+            skillDescription.text = "";
+
+            for (int i = 0; i < lendedWeapon.data.magic.Length; i++)
+            {
+                int magicIndex = lendedWeapon.data.magic[i];
+                if (magicIndex < 0) break;
+                skillDescription.text += $"{lendedWeapon.data.magic[i]} ";
+            }
+            // upDownVisualer.gameObject.SetActive(true);
+            //  gold.text = mine.Gold.ToString();
+        }
     }
 
     // =====================================================================
@@ -94,10 +137,10 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
     
    [SerializeField] UpDownVisualer upDownVisualer;
    
-   private void OnDisable()
-   {
-       upDownVisualer.gameObject.SetActive(false);
-   }
+//    private void OnDisable()
+//    {
+//        upDownVisualer.gameObject.SetActive(false);
+//    }
   
    public void ViewUpdate(Mine mine)
     {
@@ -155,7 +198,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
    {
        Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
        if (currentWeapon is null) return;
-       Mine tempMine = Quarry.Instance.currentMine;
+    //    Mine tempMine = Quarry.Instance.currentMine;
        Weapon currentMineWeapon = tempMine.rentalWeapon;
         
        try
@@ -180,7 +223,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
        }
        currentWeapon.Lend(tempMine.GetMineData().index);
         
-       Quarry.Instance.currentMine= tempMine ;
+    //    Quarry.Instance.currentMine= tempMine ;
        InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
    }
 }

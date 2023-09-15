@@ -11,4 +11,5 @@ public class EventManager
     public Action ReinforceMaterialChangeEvent;
     public Action ReinforceMaterialRegistEvent;
     public Action<Mine> MineClickEvent;
+    public Action<Weapon> ConfirmLendWeaponEvent;
 }

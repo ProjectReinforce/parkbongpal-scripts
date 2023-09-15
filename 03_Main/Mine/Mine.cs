@@ -15,6 +15,7 @@ public interface Rental
 
 public class Mine :MonoBehaviour,Rental
 {
+    Weapon lendedWeapon;
     int mineIndex;
     MineData mineData;
     Image icon;
@@ -24,6 +25,7 @@ public class Mine :MonoBehaviour,Rental
     Text goldPerMinText;
     Text currentGoldText;
 
+    Rental rental;
     void Awake()
     {
         if (!int.TryParse(gameObject.name[..2], out mineIndex))
@@ -45,7 +47,161 @@ public class Mine :MonoBehaviour,Rental
         nameText.text = mineData.name;
         goldPerMinText = Utills.Bind<Text>("Text_GoldPerMin", transform);
         currentGoldText = Utills.Bind<Text>("Text_CurrentGold", transform);
-        // rentalFactory = new RentalFactory();
+        
+        _rangePerSize = 0;
+        _hpPerDMG = 0;
+        goldPerMin = 0;
+        rentalFactory = new RentalFactory();
+        rental = this;
+    }
+
+    const float INTERVAL = 1f;
+    int MaxGold;
+    float elapse = INTERVAL;
+    int gold;
+
+    public int Gold
+    {
+        get => gold;
+        set
+        {
+            gold = value;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (lendedWeapon is null) return;
+        if (gold >= MaxGold)
+        {
+            gold = MaxGold;
+            return;
+        }
+        elapse -= Time.fixedDeltaTime;
+        if (elapse > 0) return;
+        elapse += INTERVAL;
+        gold += (int)(_goldPerMin * INTERVAL / 60);
+        currentGoldText.text = gold.ToString();
+    }
+
+    public void Lend(Weapon _weapon)
+    {
+        _weapon.Lend(mineIndex);
+
+        lendedWeapon = _weapon;
+
+        for (int i = 0; i < Consts.MAX_SKILL_COUNT; i++)
+        {
+            rental = rentalFactory.createRental(rental, (MagicType)_weapon.data.magic[i]);
+        }
+        
+        // SetGold(currentTime);
+        
+        float miss = rental.GetMiss(); //정확도-매끄러움
+        if (miss >= 100)
+        {
+            Managers.Alarm.Warning($"정확도가 {miss - 99} 부족합니다");
+            return;
+        }
+
+        float oneHitDMG = rental.GetOneHitDMG();// 함수가있으면 ??
+        if (oneHitDMG <= 0)
+        {
+            Managers.Alarm.Warning($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
+            return;
+        }
+
+        _rangePerSize = rental.GetRangePerSize(); //한번휘두를때 몇개나 영향을 주나
+        _hpPerDMG = rental.GetHpPerDMG();//몇방때려야 하나를 캐는지
+        int oneOreGold = BASE_GOLD << GetMineData().stage; //광물하나의 값
+        
+        float time = hpPerDMG / (GetWeaponData().atkSpeed * rangePerSize); // 하나를 캐기위한 평균 시간
+        
+        if (miss > 0)
+            time *= 100 / (100 - miss);
+        goldPerMin = (int)(oneOreGold * (60 / time));
+
+        // Mine tempMine = Quarry.Instance.currentMine;
+        // Weapon currentMineWeapon = tempMine.rentalWeapon;
+            
+        // try
+        // {
+        //     int beforeGoldPerMin = tempMine.goldPerMin;
+        //     currentWeapon.SetBorrowedDate();
+            
+        //     tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
+        //     Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+        // }
+        // catch (Exception e)
+        // {
+        //         Managers.Alarm.Warning(e.Message);
+        //     return;
+        // }
+        // if (currentMineWeapon is not null)
+        // {
+        //     tempMine.Receipt();
+        //     currentMineWeapon.Lend(-1);
+        // }
+        // currentWeapon.Lend(tempMine.GetMineData().index);
+            
+        // Quarry.Instance.currentMine= tempMine ;
+    }
+
+    public Weapon GetWeapon()
+    {
+        return lendedWeapon;
+    }
+
+    public void SetWeapon(Weapon _lendedWeapon, DateTime _currentTime = default )// 해제 함수와 분리해야함
+    {
+        if (_lendedWeapon == null)
+        {
+            lendedWeapon.Lend(-1);
+            lendedWeapon = null;
+            _rangePerSize = 0;
+            _hpPerDMG = 0;
+            goldPerMin = 0;
+            return;
+        }
+        _weaponData = _lendedWeapon.data;
+        rental = this;
+        for (int i = 0; i < 2; i++)
+        {
+            rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i]);
+        }
+        // SetInfo();
+        
+        lendedWeapon = _lendedWeapon;
+        SetGold(_currentTime);
+    }
+
+    public void Receipt(Action _callback = null)
+    {
+        if (gold < 100)
+        {
+            Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
+            return;
+        }
+        Managers.Game.Player.AddGold(gold);
+        gold = 0;
+        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.borrowedDate), date);
+
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), rentalWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log("Mine:수령실패"+callback);
+            }
+
+            lendedWeapon.SetBorrowedDate(date);
+            currentGoldText.text = gold.ToString();
+            
+            _callback?.Invoke();
+        });
+        if (CallChecker.Instance != null)
+            CallChecker.Instance.CountCall();
     }
 
     // =====================================================================
@@ -78,16 +234,10 @@ public class Mine :MonoBehaviour,Rental
     private WeaponData _weaponData;
     public WeaponData GetWeaponData()
     {
-        return _weaponData.Clone();
+        return lendedWeapon.data.Clone();
     }
 
     static RentalFactory rentalFactory;
-    Rental rental;
-
-    public void SetCurrent()// *dip 위배중, 리팩토링 대상.
-    {
-        Quarry.Instance.currentMine = this;
-    }
 
     public float GetMiss()
     {
@@ -111,30 +261,6 @@ public class Mine :MonoBehaviour,Rental
 
     //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
    
-    public void SetWeapon(Weapon rentWeapon, DateTime currentTime=default )// 해제 함수와 분리해야함
-    {
-
-        if (rentalWeapon == rentWeapon) return;
-        if(rentWeapon == null)
-        {
-            rentalWeapon.Lend(-1);
-            rentalWeapon = null;
-            _rangePerSize = 0;
-            _hpPerDMG = 0;
-            goldPerMin = 0;
-            return;
-        }
-        _weaponData = rentWeapon.data;
-        rental = this;
-        for (int i = 0; i < 2; i++)
-        {
-            rental= rentalFactory.createRental(rental, (MagicType)_weaponData.magic[i]);
-        }
-        SetInfo();
-        
-        rentalWeapon = rentWeapon;
-        SetGold(currentTime);
-    }
 
     public void SetGold(DateTime currentTime)
     {
@@ -150,101 +276,7 @@ public class Mine :MonoBehaviour,Rental
         
         currentGoldText.text = gold.ToString();
     }
-    private void SetInfo()
-    {
-        
-        //웨폰템프
-        float miss = rental.GetMiss(); //정확도-매끄러움
-        
-        if (miss >= 100)
-        {
-            throw new Exception($"정확도가 {miss - 99}만큼 부족합니다") ;
-        }
 
-        float oneHitDMG = rental.GetOneHitDMG();// 함수가있으면 ??
-        if (oneHitDMG <= 0)
-        {
-            throw new Exception($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
-        }
-        // ReSharper disable once PossibleLossOfFraction
-        _rangePerSize = rental.GetRangePerSize(); //한번휘두를때 몇개나 영향을 주나
-
-        _hpPerDMG = rental.GetHpPerDMG();//몇방때려야 하나를 캐는지
-        int oneOreGold = BASE_GOLD << GetMineData().stage; //광물하나의 값
-        
-        // ReSharper disable once PossibleLossOfFraction
-        float time = hpPerDMG / (float)(GetWeaponData().atkSpeed * rangePerSize); // 하나를 캐기위한 평균 시간
-        
-        if (miss > 0)
-            time *= 100 / (100 - miss);
-        goldPerMin = (int)(oneOreGold * (60 / time));
-    }
-
-    private bool isReceipting;
-    public void Receipt(Action _callback = null)
-    {
-        if(rentalWeapon is null) return;
-        if(isReceipting) return;
-        if (gold < 100)
-        {
-            Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
-            return;
-        }
-        isReceipting = true;
-        Managers.Game.Player.AddGold(gold);
-        gold = 0;
-        Debug.Log("@#@#@#@" + gold);
-        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        Param param = new Param();
-        param.Add(nameof(WeaponData.colum.borrowedDate),date);
-
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), rentalWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
-        {
-            if (!callback.IsSuccess())
-            {
-                Debug.Log("Mine:수령실패"+callback);
-            }
-            Debug.Log("SDSDS"+date);
-
-            rentalWeapon.SetBorrowedDate(date);
-            currentGoldText.text = gold.ToString();
-            
-            _callback?.Invoke();
-            isReceipting = false;
-        });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
-    }
-
-    const float INTERVAL = 2;
-    private int MaxGold;
-    private float elapse = INTERVAL;
-    private int gold;
-
-    public int Gold
-    {
-        get => gold;
-        set
-        {
-            gold = value;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if( rentalWeapon is null) return;
-        if (gold >= MaxGold)
-        {
-            gold = MaxGold;
-            return;
-        }
-        elapse -= Time.fixedDeltaTime;
-        if (elapse > 0) return;
-        elapse += INTERVAL;
-        gold += (int)(_goldPerMin*INTERVAL / 60);
-        currentGoldText.text = gold.ToString();
-        
-    }
 
     bool isUnlock;
     public string Unlock(int playerLevel)

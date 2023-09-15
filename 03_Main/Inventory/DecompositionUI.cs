@@ -55,6 +55,8 @@ public class DecompositionUI : MonoBehaviour
 
     void Selected(Weapon _weapon)
     {
+        if (_weapon.data.mineId != -1)
+            return;
         if (selectedWeapons.Contains(_weapon))
         {
             selectedWeapons.Remove(_weapon);

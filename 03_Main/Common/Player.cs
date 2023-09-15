@@ -142,7 +142,7 @@ public class Player
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.level), userData.level);
         topUIDatatViewer.UpdateLevel();
-        Quarry.Instance.UnlockMines(userData.level);
+        // Quarry.Instance.UnlockMines(userData.level);
 
         if (userData.exp >= Managers.ServerData.ExpDatas[userData.level-1])
             LevelUp();
