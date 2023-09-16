@@ -18,6 +18,7 @@ public class MineGame : Singleton<MineGame>
 
     public void Resume()
     {
+        pausePanel.gameObject.SetActive(false);
         mainButton.gameObject.SetActive(true);
         startCountdown = StartCoroutine(Countdown());
     }
