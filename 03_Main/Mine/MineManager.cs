@@ -6,6 +6,27 @@ using UnityEngine;
 
 public class MineManager
 {
+    Mine[] mines;
+
+    public MineManager()
+    {
+        mines = Utills.FindAllFromCanvas<Mine>();
+
+        foreach (var item in Managers.ServerData.MineDatas)
+        {
+            Debug.Log($"{item}");
+        }
+    }
+
+    public void CalculateGoldAllMines()
+    {
+        DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        foreach (var item in mines)
+            item.SetGold(currentTime);
+    }
+
+    // =====================================================================
+    // =====================================================================
     private Mine _currentMine;
     public Mine currentMine
     {
@@ -16,12 +37,10 @@ public class MineManager
         }
     }
 
-    Mine[] mines;
     int mineCount;
 
     void Initialize()
     {
-        mines = Utills.FindAllFromCanvas<Mine>();
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
         mineCount = Managers.ServerData.MineDatas.Length;
         
@@ -32,28 +51,18 @@ public class MineManager
         }
     }
 
-    private void Start()
-    {
-        DateTime currentTime =
-            DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        InventoryPresentor.Instance.TravelInventory((weapon) =>
-        {
-            if (weapon?.data.mineId >= 0)
-            {
-                mines[weapon.data.mineId].SetWeapon(weapon,currentTime);
-            }
-        });
-    }
-
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        DateTime currentTime =
-            DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        for (int i = 0; i < mineCount; i++)
-        {
-            mines[i].SetGold(currentTime);
-        }
-    }
+    // private void Start()
+    // {
+    //     DateTime currentTime =
+    //         DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+    //     InventoryPresentor.Instance.TravelInventory((weapon) =>
+    //     {
+    //         if (weapon?.data.mineId >= 0)
+    //         {
+    //             mines[weapon.data.mineId].SetWeapon(weapon,currentTime);
+    //         }
+    //     });
+    // }
     
 
     public void UnlockMines(int playerLevel)

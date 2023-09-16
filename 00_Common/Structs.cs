@@ -180,9 +180,28 @@ public struct PideaData//광산차트
 [Serializable]
 public struct MineData//광산차트
 {
-    public int index, stage, defence,hp,size, lubricity;
-    
-    public string name, description;
+    public int index, stage, defence, hp, size, lubricity, buildMin;
+    public ulong buildCost;
+    public float getRatio;
+    public RewardType rewardType;    
+    public string name, description, icon;
+
+    public override string ToString()
+    {
+        return "index : " + index + '\n'
+                + "name : " + name + '\n'
+                + "description : " + description + '\n'
+                + "stage : " + stage + '\n'
+                + "defence : " + defence + '\n'
+                + "hp : " + hp + '\n'
+                + "size : " + size + '\n'
+                + "lubricity : " + lubricity + '\n'
+                + "buildMin : " + buildMin + '\n'
+                + "buildCost : " + buildCost + '\n'
+                + "getRatio : " + getRatio + '\n'
+                + "rewardType : " + rewardType + '\n'
+                + "icon : " + icon;
+    }
 }
 
 [Serializable]

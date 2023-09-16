@@ -64,6 +64,13 @@ public class Managers : MonoBehaviour
         ui?.InputCheck();
     }
 
+    void OnApplicationFocus(bool _hasFocus)
+    {
+        bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;
+        if (isInMainScene)
+            game.Mine.CalculateGoldAllMines();
+    }
+
     void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)
     {
         SceneName sceneName = Utills.StringToEnum<SceneName>(_scene.name);

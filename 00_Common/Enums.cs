@@ -108,7 +108,7 @@ public enum RewardType
     Gold,
     Diamond,
     Soul,
-    Stone
+    Ore
 }
 
 public enum RecordType
