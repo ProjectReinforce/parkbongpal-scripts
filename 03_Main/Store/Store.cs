@@ -1,71 +1,111 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using LitJson;
 using Manager;
-using BackEnd;
+using UnityEngine;
 
-[System.Serializable]
-public class Store:Singleton<Store>
-{ 
-    
-   public void NormalDrawing()
-   {
-      
-      /*
-       * 등급별 나올확률.
-       * 일반 51 27 14 8
-       * 고급 48 25 14 9 3.8 0.2;
-       */
-      int pay = 0;
-      if(Player.Instance.userData.gold<pay)
-          return;
-      
-      int randomInt = Utills.random.Next(1, 101);
-      int limit = 100;
-      Rairity rarity;
-      NormalGarchar normalGarchar = ResourceManager.Instance.normalGarchar;
-    
-      if (randomInt > (limit-=normalGarchar.rare))
-          rarity =Rairity.rare;
-      else if (randomInt > (limit-=normalGarchar.normal))
-          rarity =Rairity.normal;
-      else if (randomInt > (limit-=normalGarchar.old))
-          rarity =Rairity.old;
-      else
-          rarity = Rairity.trash;
-      Debug.Log("rarity: "+rarity+" limit: "+limit);
-      BaseWeaponData baseWeaponData= ResourceManager.Instance.GetBaseWeaponData(rarity);
-        Debug.Log(baseWeaponData.index);
-
-        Param param = new Param
+[Serializable]
+public class Store : Singleton<Store>
+{
+    // private IAddable inventory;
+    private GachaData[] gacharsPercents;
+    private int[][] percents;
+    protected override void Awake()
+    {
+        // inventory = InventoryPresentor.Instance;
+        gacharsPercents = Managers.ServerData.GachaDatas;
+        percents = new int[gacharsPercents.Length][];
+        for (int i = 0; i < gacharsPercents.Length; i++)
         {
-            { nameof(WeaponData.colum.baseWeaponIndex), baseWeaponData.index },
-            { nameof(WeaponData.colum.damage), baseWeaponData.atk },
-            { nameof(WeaponData.colum.speed), baseWeaponData.atkSpeed },
-            { nameof(WeaponData.colum.range), baseWeaponData.atkRange },
-            { nameof(WeaponData.colum.accuracy), baseWeaponData.accuracy },
-            { nameof(WeaponData.colum.rarity), baseWeaponData.rarity}
-        };
-
-
-        var bro = Backend.GameData.Insert(typeof(WeaponData).ToString(), param);
-        if (!bro.IsSuccess())
-        {
-            Debug.LogError("게임 정보 삽입 실패 : " + bro);
-
+            GachaData gachaData = gacharsPercents[i];
+            percents[i] = new[] { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
         }
 
-        WeaponData weaponData = new WeaponData(baseWeaponData.atk, baseWeaponData.atkSpeed,
-            baseWeaponData.atkRange, baseWeaponData.accuracy, baseWeaponData.rarity, baseWeaponData.index
-            , bro.GetInDate());
+    }
 
+    // 서버에서 받는 부분이 없음
+    const int COST_GOLD = 10000;
+    const int COST_DIAMOND = 300;
 
-        Player.Instance.AddGold(-pay);
-        Inventory.Instance.AddWeapon(new Weapon(weaponData));
-        Debug.Log("구입완료" + bro.GetInDate());
+    public void Drawing(int type)
+    {
+        // if (!InventoryPresentor.Instance.CheckSize(1))
+        // {
+        //         Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
+        //     return;
+        // }
 
+        if (type == 0)
+        {
+            if (!Managers.Game.Player.AddGold(-COST_GOLD))
+            {
+                Managers.Alarm.Warning("골드가 부족합니다.");
+                return;
+            }
+            Managers.Game.Player.TryProduceWeapon(1);
+        }
+        else
+        {
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND))
+            {
+                Managers.Alarm.Warning("다이아몬드가 부족합니다.");
+                return;
+            }
+            Managers.Game.Player.TryAdvanceProduceWeapon(1);
+        }
 
+        Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
+        BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(rarity);
+        if (rarity >= Rarity.legendary)
+        {
+            // 레전드리 획득 채팅 메시지 전송되도록
+            Debug.Log("<color=red>레전드리 획득!!</color>");
+            SendChat.SendMessage($"레전드리 <color=red>{baseWeaponData.name}</color> 획득!");
+        }
+
+        // inventory.AddWeapon(baseWeaponData);
+    }
+
+    private const int TEN = 10;
+
+    public void BatchDrawing(int type)
+    {
+        // if (!InventoryPresentor.Instance.CheckSize(10))
+        // {
+        //         Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
+        //         return;
+        // }
+
+        if (type == 0)
+        {
+            if (!Managers.Game.Player.AddGold(-COST_GOLD * 9))
+            {
+                Managers.Alarm.Warning("골드가 부족합니다.");
+                return;
+            }
+            Managers.Game.Player.TryProduceWeapon(TEN);
+        }
+        else
+        {
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * 9))
+            {
+                Managers.Alarm.Warning("다이아몬드가 부족합니다.");
+                return;
+            }
+            Managers.Game.Player.TryAdvanceProduceWeapon(TEN);
+        }
+ 
+        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
+        for (int i = 0; i < TEN; i++)
+        {
+            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
+            baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
+            if (rarity >= Rarity.legendary)
+            {
+                // Debug.Log("<color=red>레전드리 획득!!</color>");
+                SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
+            }
+        }
+
+        // inventory.AddWeapons(baseWeaponDatas);
+        Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
     }
 }

@@ -7,7 +7,7 @@ namespace Manager
     {
         protected static class BillPughSingleTon
         {
-            public static T instance ;
+            public static T instance;
         }
 
         public static T Instance => BillPughSingleTon.instance;

@@ -1,15 +1,10 @@
 using UnityEngine;
 using BackEnd;
-using LitJson;
-using Manager;
 
-public class BackendManager : DontDestroy<BackendManager>
+public class BackendManager : MonoBehaviour
 {
-    
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         var bro = Backend.Initialize();
 
         if(bro.IsSuccess())
@@ -17,23 +12,13 @@ public class BackendManager : DontDestroy<BackendManager>
         else
         {
             Debug.LogError($"초기화 실패 : {bro}");
+            // todo : 아예 게임 꺼지도록
             return;
         }
-        
-        JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
-        //Backend.BMember.DeleteGuestInfo();
-       
     }
 
     private void Update()
     {
         Backend.Chat.Poll();
-    }
-
-    public void BaseLoad()
-    {        
-        
-
-
     }
 }
