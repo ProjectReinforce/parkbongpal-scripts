@@ -15,6 +15,7 @@ public class JsonMapperRegisterImporter
         JsonMapper.RegisterImporter<string, DateTime>(s => DateTime.Parse(s));
         JsonMapper.RegisterImporter<string, RecordType>(s => Utills.StringToEnum<RecordType>(s));
         JsonMapper.RegisterImporter<string, QuestType>(s => Utills.StringToEnum<QuestType>(s));
+        JsonMapper.RegisterImporter<string, RewardType>(s => Utills.StringToEnum<RewardType>(s));
         JsonMapper.RegisterImporter<string, int[]>(s =>
         {
             // Split the input string by ',' and parse each element into an int
