@@ -15,6 +15,7 @@ public interface Rental
 
 public class Mine :MonoBehaviour,Rental
 {
+    MineStatus mineStatus = MineStatus.Locked;
     Weapon lendedWeapon;
     int mineIndex;
     MineData mineData;
@@ -40,7 +41,20 @@ public class Mine :MonoBehaviour,Rental
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() => 
         {
-            Managers.Event.MineClickEvent?.Invoke(this);
+            if ((ulong)Managers.Game.Player.Data.gold < Managers.ServerData.MineDatas[mineIndex].buildCost)
+            {
+                // todo: 광산 여시겠습니까 확인 메시지창 출력
+                ulong diff = Managers.ServerData.MineDatas[mineIndex].buildCost - (ulong)Managers.Game.Player.Data.gold;
+                Managers.Alarm.Warning($"골드가 {diff}만큼 부족합니다.");
+                return;
+            }
+            else
+            {
+                // todo: 광산 건설 확인 메시지창 출력
+                Managers.Alarm.Warning("건설을 시작합니다.");
+                StartBuild();
+                return;
+            }
         });
         lockIcon = Utills.Bind<Image>("Image_Lock", transform);
         nameText = Utills.Bind<Text>("Text_Name", transform);
@@ -204,6 +218,53 @@ public class Mine :MonoBehaviour,Rental
             CallChecker.Instance.CountCall();
     }
 
+    public void StartBuild()
+    {
+        Building();
+
+        Param param = new()
+        {
+            { nameof(MineBuildData.mineIndex), mineIndex },
+            { nameof(MineBuildData.buildStartTime), DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()) },
+            { nameof(MineBuildData.buildCompleted), false }
+        };
+
+        SendQueue.Enqueue(Backend.GameData.Insert, nameof(MineBuildData), param, callback =>
+        {
+            if (!callback.IsSuccess())
+            {
+                Managers.Alarm.Danger($"통신 에러! : {callback}");
+                return;
+            }
+        });
+    }
+
+    public void Building()
+    {
+        mineStatus = MineStatus.Building;
+        lockIcon.gameObject.SetActive(false);
+        
+        mineButton.onClick.RemoveAllListeners();
+        mineButton.onClick.AddListener(() => 
+        {
+            // Managers.Event.MineClickEvent?.Invoke(this);
+            Managers.Alarm.Warning("아직 건설 중입니다.");
+        });
+    }
+
+    public void BuildComplete()
+    {
+        mineStatus = MineStatus.Owned;
+        icon.color = Color.white;
+        lockIcon.gameObject.SetActive(false);
+        
+        mineButton.onClick.RemoveAllListeners();
+        mineButton.onClick.AddListener(() => 
+        {
+            Managers.Event.MineClickEvent?.Invoke(this);
+        });
+    }
+
     // =====================================================================
     // =====================================================================
     public MineData GetMineData()
@@ -275,17 +336,5 @@ public class Mine :MonoBehaviour,Rental
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
         
         currentGoldText.text = gold.ToString();
-    }
-
-
-    bool isUnlock;
-    public string Unlock(int playerLevel)
-    {
-         
-        if (isUnlock || mineData.stage * 10 - 10 > playerLevel) return null;//레벨이 스테이보다 낮으면 안열림
-        mineButton.enabled = true;
-        icon.sprite = Managers.Resource.DefaultMine;
-        isUnlock = true;
-        return mineData.name;
     }
 }

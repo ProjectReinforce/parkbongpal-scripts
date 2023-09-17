@@ -6,15 +6,26 @@ using UnityEngine;
 
 public class MineManager
 {
-    Mine[] mines;
+    Dictionary<int, Mine> mines = new();
+    // Mine[] mines;
 
     public MineManager()
     {
-        mines = Utills.FindAllFromCanvas<Mine>();
+        Mine[] results = Utills.FindAllFromCanvas<Mine>();
 
-        foreach (var item in Managers.ServerData.MineDatas)
+        foreach (var item in results)
         {
-            Debug.Log($"{item}");
+            int.TryParse(item.gameObject.name[..2], out int mineIndex);
+            if (item.gameObject.activeSelf == false) continue;
+            mines.Add(mineIndex, item);
+        }
+
+        foreach (var item in Managers.ServerData.mineBuildDatas)
+        {
+            if (item.buildCompleted == true)
+                mines[item.mineIndex].BuildComplete();
+            else
+                mines[item.mineIndex].Building();
         }
     }
 
@@ -22,7 +33,7 @@ public class MineManager
     {
         DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         foreach (var item in mines)
-            item.SetGold(currentTime);
+            item.Value.SetGold(currentTime);
     }
 
     // =====================================================================
@@ -44,11 +55,11 @@ public class MineManager
         // int mineCount = ResourceManager.Instance.mineDatas.Count;
         mineCount = Managers.ServerData.MineDatas.Length;
         
-        for (int i = 0; i < mineCount; i++)
-        {
-            // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
-            mines[i].Unlock(Managers.ServerData.UserData.level);
-        }
+        // for (int i = 0; i < mineCount; i++)
+        // {
+        //     // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
+        //     mines[i].Unlock(Managers.ServerData.UserData.level);
+        // }
     }
 
     // private void Start()
@@ -67,75 +78,75 @@ public class MineManager
 
     public void UnlockMines(int playerLevel)
     {
-        List<string> mineNames = new List<string>(); 
-        for (int i = 0; i < mines.Length; i++)
-        {
-            string unlockMine= mines[i].Unlock(playerLevel);
-            if(unlockMine is null) continue;
-            mineNames.Add(unlockMine);
-        }
-        if(mineNames.Count<1)return;
+        // List<string> mineNames = new List<string>(); 
+        // for (int i = 0; i < mines.Length; i++)
+        // {
+        //     string unlockMine= mines[i].Unlock(playerLevel);
+        //     if(unlockMine is null) continue;
+        //     mineNames.Add(unlockMine);
+        // }
+        // if(mineNames.Count<1)return;
 
-        Managers.Alarm.Warning($"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
+        // Managers.Alarm.Warning($"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
     }
 
-    public void ClearWeapon()
-    {
-        int beforeGoldPerMin = currentMine.goldPerMin;
-        Receipt(() =>
-        {
-            currentMine.SetWeapon(null);
-            Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin - beforeGoldPerMin);
-            currentMine = currentMine;
-        });
-    }    
+    // public void ClearWeapon()
+    // {
+    //     int beforeGoldPerMin = currentMine.goldPerMin;
+    //     Receipt(() =>
+    //     {
+    //         currentMine.SetWeapon(null);
+    //         Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin - beforeGoldPerMin);
+    //         currentMine = currentMine;
+    //     });
+    // }    
     
-    public void Receipt(Action _callback = null)
-    {
-        currentMine.Receipt(_callback);
-    }
+    // public void Receipt(Action _callback = null)
+    // {
+    //     currentMine.Receipt(_callback);
+    // }
 
-    public void Receipt()
-    {
-        currentMine.Receipt();
-    }
+    // public void Receipt()
+    // {
+    //     currentMine.Receipt();
+    // }
     
 
-    private int totalGold;
-    [SerializeField] private UnityEngine.UI.Button receiptButton;
-    IEnumerator Wait3min()
-    {
-        yield return new WaitForSeconds(180);
-        receiptButton.interactable = true;
-    }
-    public void BatchReceipt()
-    {
+    // private int totalGold;
+    // [SerializeField] private UnityEngine.UI.Button receiptButton;
+    // IEnumerator Wait3min()
+    // {
+    //     yield return new WaitForSeconds(180);
+    //     receiptButton.interactable = true;
+    // }
+    // public void BatchReceipt()
+    // {
         
-        receiptButton.interactable = false;
-        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        // StartCoroutine(Wait3min());
+    //     receiptButton.interactable = false;
+    //     DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+    //     // StartCoroutine(Wait3min());
 
-        for (int i = 0; i < mines.Length; i++)
-        {
-            if (mines[i].rentalWeapon is null) continue;
-            mines[i].rentalWeapon.SetBorrowedDate(date);
-            totalGold += mines[i].Gold;
+    //     for (int i = 0; i < mines.Length; i++)
+    //     {
+    //         if (mines[i].rentalWeapon is null) continue;
+    //         mines[i].rentalWeapon.SetBorrowedDate(date);
+    //         totalGold += mines[i].Gold;
             
-            Param param = new Param
-            {
-                { nameof(WeaponData.colum.borrowedDate), date }
-            };
+    //         Param param = new Param
+    //         {
+    //             { nameof(WeaponData.colum.borrowedDate), date }
+    //         };
             
-            Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
+    //         Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
             
-        }
+    //     }
        
-        for (int i = 0; i < mines.Length; i++)
-        {
-            mines[i].Gold = 0;
-        }
-        Managers.Game.Player.LateAddGold(totalGold);
-        totalGold = 0;
-        Transactions.SendCurrent();
-    }
+    //     for (int i = 0; i < mines.Length; i++)
+    //     {
+    //         mines[i].Gold = 0;
+    //     }
+    //     Managers.Game.Player.LateAddGold(totalGold);
+    //     totalGold = 0;
+    //     Transactions.SendCurrent();
+    // }
 }

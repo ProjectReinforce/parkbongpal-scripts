@@ -151,3 +151,10 @@ public enum TapType
     Pidea,
     Ranking
 }
+
+public enum MineStatus
+{
+    Locked,
+    Building,
+    Owned
+}

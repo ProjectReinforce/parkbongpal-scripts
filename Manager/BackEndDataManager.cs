@@ -88,6 +88,7 @@ public class BackEndDataManager
         SetOwnedWeaponId();
         GetRankList();
         GetQuestClearData();
+        GetMineBuildData();
 
         LoadAllChart();
 
