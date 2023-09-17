@@ -85,17 +85,40 @@ public class Mine :MonoBehaviour,Rental
 
     void FixedUpdate()
     {
-        if (lendedWeapon is null) return;
-        if (gold >= MaxGold)
+        switch (mineStatus)
         {
-            gold = MaxGold;
-            return;
+            case MineStatus.Locked:
+                break;
+            case MineStatus.Building:
+                // remainTime = ;
+                // elapse -= Time.fixedDeltaTime;
+                currentGoldText.text = remainTime.ToString();
+                break;
+            case MineStatus.Owned:
+                if (lendedWeapon is null) return;
+                if (gold >= MaxGold)
+                {
+                    gold = MaxGold;
+                    return;
+                }
+                elapse -= Time.fixedDeltaTime;
+                if (elapse > 0) return;
+                elapse += INTERVAL;
+                gold += (int)(_goldPerMin * INTERVAL / 60);
+                currentGoldText.text = gold.ToString();
+                break;
         }
-        elapse -= Time.fixedDeltaTime;
-        if (elapse > 0) return;
-        elapse += INTERVAL;
-        gold += (int)(_goldPerMin * INTERVAL / 60);
-        currentGoldText.text = gold.ToString();
+        // if (lendedWeapon is null) return;
+        // if (gold >= MaxGold)
+        // {
+        //     gold = MaxGold;
+        //     return;
+        // }
+        // elapse -= Time.fixedDeltaTime;
+        // if (elapse > 0) return;
+        // elapse += INTERVAL;
+        // gold += (int)(_goldPerMin * INTERVAL / 60);
+        // currentGoldText.text = gold.ToString();
     }
 
     public void Lend(Weapon _weapon)
@@ -220,12 +243,14 @@ public class Mine :MonoBehaviour,Rental
 
     public void StartBuild()
     {
-        Building();
+        DateTime startTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        // remainTime = float.Parse(startTime);
+        Building(startTime);
 
         Param param = new()
         {
             { nameof(MineBuildData.mineIndex), mineIndex },
-            { nameof(MineBuildData.buildStartTime), DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()) },
+            { nameof(MineBuildData.buildStartTime), startTime },
             { nameof(MineBuildData.buildCompleted), false }
         };
 
@@ -239,7 +264,8 @@ public class Mine :MonoBehaviour,Rental
         });
     }
 
-    public void Building()
+    float remainTime;
+    public void Building(DateTime _buildStartTime)
     {
         mineStatus = MineStatus.Building;
         lockIcon.gameObject.SetActive(false);

@@ -25,7 +25,7 @@ public class MineManager
             if (item.buildCompleted == true)
                 mines[item.mineIndex].BuildComplete();
             else
-                mines[item.mineIndex].Building();
+                mines[item.mineIndex].Building(item.buildStartTime);
         }
     }
 
