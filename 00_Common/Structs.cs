@@ -431,3 +431,11 @@ public struct SkillData
     public int index,coefficient;
     public string skillName,		description,	Effect;
 }
+
+[Serializable]
+public struct MineBuildData
+{
+    public DateTime buildStartTime;
+    public bool buildCompleted;
+    public int mineIndex;
+}
