@@ -70,30 +70,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
             if (i + 1 > _mine.GetMineData().stage) stageStars[i].SetActive(false);
         }
 
-        Weapon lendedWeapon = _mine.GetWeapon();
-        if (lendedWeapon is null)
-        {
-            weaponCollectButton.interactable = false;
-            goldCollectButton.interactable = false;
-        }
-        else
-        {
-            weaponCollectButton.onClick.RemoveAllListeners();
-            weaponCollectButton.onClick.AddListener(() => 
-            {
-                lendedWeapon.Lend(-1);
-
-                weaponCollectButton.interactable = false;
-            });
-            weaponCollectButton.interactable = true;
-            goldCollectButton.onClick.RemoveAllListeners();
-            goldCollectButton.onClick.AddListener(() => 
-            {
-                Debug.Log("수령 클릭됨");
-            });
-            goldCollectButton.interactable = true;
-        }
-
         UpdateUIRelatedLendedWeapon(_mine);
 
         Managers.UI.OpenPopup(gameObject);
@@ -109,6 +85,8 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
             addIcon.gameObject.SetActive(true);
             calculatedInfoText.text = $"0\n0\n0";
             skillDescription.text = "";
+            weaponCollectButton.interactable = false;
+            goldCollectButton.interactable = false;
            // gold.text = "";
         }
         else
@@ -127,6 +105,21 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
                 if (magicIndex < 0) break;
                 skillDescription.text += $"{lendedWeapon.data.magic[i]} ";
             }
+            weaponCollectButton.onClick.RemoveAllListeners();
+            weaponCollectButton.onClick.AddListener(() => 
+            {
+                _mine.SetWeapon(null);
+                UpdateUIRelatedLendedWeapon(_mine);
+
+                weaponCollectButton.interactable = false;
+            });
+            weaponCollectButton.interactable = true;
+            goldCollectButton.onClick.RemoveAllListeners();
+            goldCollectButton.onClick.AddListener(() => 
+            {
+                Debug.Log("수령 클릭됨");
+            });
+            goldCollectButton.interactable = true;
             // upDownVisualer.gameObject.SetActive(true);
             //  gold.text = mine.Gold.ToString();
         }

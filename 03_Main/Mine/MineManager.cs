@@ -27,6 +27,12 @@ public class MineManager
             else
                 mines[item.mineIndex].Building(item.buildStartTime);
         }
+
+        foreach (var item in Managers.Game.Inventory.Weapons)
+        {
+            if (item.data.mineId != -1)
+                mines[item.data.mineId].SetWeapon(item);
+        }
     }
 
     public void CalculateGoldAllMines()

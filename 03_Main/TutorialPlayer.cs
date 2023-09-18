@@ -24,6 +24,7 @@ public class TutorialPlayer : MonoBehaviour
             // todo: 튜토리얼 재생 여기서
             // 아래 내용은 테스트용 코드임
             // 튜토리얼 종료 후 기본 광산 3개 열어줌
+            // 튜토리얼 퀘스트는 클리어 할 수 있도록 로컬데이터로 저장.
             Param param = new()
             {
                 { nameof(QuestRecord.questId), 0 },
