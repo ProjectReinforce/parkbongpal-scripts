@@ -579,7 +579,7 @@ public class BackEndDataManager
 
             foreach (var item in mineBuildDatas)
             {
-                Debug.Log(item);
+                Debug.Log($"{item.inDate}");
             }
         });
     }

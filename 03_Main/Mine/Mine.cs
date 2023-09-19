@@ -15,6 +15,7 @@ public interface Rental
 
 public class Mine :MonoBehaviour,Rental
 {
+    public string InDate { get; set; }
     MineStatus mineStatus = MineStatus.Locked;
     Weapon lendedWeapon;
     int mineIndex;
@@ -93,9 +94,18 @@ public class Mine :MonoBehaviour,Rental
             case MineStatus.Locked:
                 break;
             case MineStatus.Building:
-                // remainTime = ;
-                // elapse -= Time.fixedDeltaTime;
-                currentGoldText.text = remainTime.ToString();
+                elapse -= Time.fixedDeltaTime;
+                if (elapse >= 0) return;
+                elapse = INTERVAL;
+                remainTime -= INTERVAL;
+                int remainTimeInt = (int)remainTime;
+                int h = remainTimeInt / 3600;
+                remainTimeInt %= 3600;
+                int m = remainTimeInt / 60;
+                remainTimeInt %= 60;
+                goldPerMinText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
+                if (remainTime <= 0)
+                    BuildComplete();
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
@@ -242,19 +252,18 @@ public class Mine :MonoBehaviour,Rental
             CallChecker.Instance.CountCall();
     }
 
+    // todo : 서버 타임 받아오는 부분 통합해야함
     public void StartBuild()
     {
         string serverTime = Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString();
         DateTime startTime = DateTime.Parse(serverTime);
-        Debug.Log($"build start : {serverTime} / {startTime}");
-        // remainTime = float.Parse(startTime);
+        // Debug.Log($"build start : {serverTime} / {startTime}");
         Building(startTime);
 
-        // startTime = DateTime.Parse(startTime.ToString, );
         Param param = new()
         {
             { nameof(MineBuildData.mineIndex), mineIndex },
-            { nameof(MineBuildData.buildStartTime), startTime },
+            { nameof(MineBuildData.buildStartTime), startTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
             { nameof(MineBuildData.buildCompleted), false }
         };
 
@@ -273,9 +282,10 @@ public class Mine :MonoBehaviour,Rental
     {
         DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         TimeSpan timeSpan = currentTime - _buildStartTime;
-        // remainTime = timeSpan.Hours * 3600 * 1000 + timeSpan.Minutes * 60 * 1000 + timeSpan.Seconds * 1000;
-        Debug.Log($"{currentTime} - {_buildStartTime} = {timeSpan} / {remainTime}");
-        remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 * 1000;
+        double tmp = timeSpan.TotalMilliseconds;
+        remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 - (float)(tmp / 1000);
+        // Debug.Log($"build start : {currentTime} - {_buildStartTime} = {tmp} / {Managers.ServerData.MineDatas[mineIndex].buildMin * 60} - {(float)(tmp / 1000)}");
+
         mineStatus = MineStatus.Building;
         lockIcon.gameObject.SetActive(false);
         
@@ -292,12 +302,41 @@ public class Mine :MonoBehaviour,Rental
         mineStatus = MineStatus.Owned;
         icon.color = Color.white;
         lockIcon.gameObject.SetActive(false);
+        goldPerMinText.text = "";
         
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() => 
         {
             Managers.Event.MineClickEvent?.Invoke(this);
         });
+
+        Param param = new()
+        {
+            { nameof(MineBuildData.buildCompleted), true }
+        };
+
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(MineBuildData), InDate, Backend.UserInDate, param, callback =>
+        {
+            if (!callback.IsSuccess())
+            {
+                Managers.Alarm.Danger($"통신 에러! : {callback}");
+                return;
+            }
+        });
+    }
+
+    public void SetGold(DateTime currentTime)
+    {
+        if (rentalWeapon is null) return;
+        
+        TimeSpan timeInterval = currentTime - rentalWeapon.data.borrowedDate;
+  
+        if (timeInterval.TotalHours >= 2)
+            timeInterval = TimeSpan.FromHours(2);
+       
+        gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
+        
+        currentGoldText.text = gold.ToString();
     }
 
     // =====================================================================
@@ -326,8 +365,6 @@ public class Mine :MonoBehaviour,Rental
         }
     }
     public Weapon rentalWeapon { get; set; }
-
-    private WeaponData _weaponData;
     public WeaponData GetWeaponData()
     {
         return lendedWeapon.data.Clone();
@@ -354,21 +391,5 @@ public class Mine :MonoBehaviour,Rental
     {
         return  Utills.Ceil(GetMineData().hp / GetOneHitDMG());
     }
-
     //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
-   
-
-    public void SetGold(DateTime currentTime)
-    {
-        if (rentalWeapon is null) return;
-        
-        TimeSpan timeInterval = currentTime - rentalWeapon.data.borrowedDate;
-  
-        if (timeInterval.TotalHours >= 2)
-            timeInterval = TimeSpan.FromHours(2);
-       
-        gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
-        
-        currentGoldText.text = gold.ToString();
-    }
 }

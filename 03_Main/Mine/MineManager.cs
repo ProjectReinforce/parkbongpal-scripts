@@ -22,6 +22,7 @@ public class MineManager
 
         foreach (var item in Managers.ServerData.mineBuildDatas)
         {
+            mines[item.mineIndex].InDate = item.inDate;
             if (item.buildCompleted == true)
                 mines[item.mineIndex].BuildComplete();
             else

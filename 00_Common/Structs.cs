@@ -454,6 +454,7 @@ public struct SkillData
 [Serializable]
 public struct MineBuildData
 {
+    public string inDate;
     public DateTime buildStartTime;
     public bool buildCompleted;
     public int mineIndex;
