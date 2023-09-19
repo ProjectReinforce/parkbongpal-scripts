@@ -32,7 +32,7 @@ public class MineManager
         foreach (var item in Managers.Game.Inventory.Weapons)
         {
             if (item.data.mineId != -1)
-                mines[item.data.mineId].SetWeapon(item);
+                mines[item.data.mineId].SetWeapon(item, DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
         }
     }
 

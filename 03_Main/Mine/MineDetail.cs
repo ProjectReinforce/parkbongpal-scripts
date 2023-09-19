@@ -9,7 +9,7 @@ public interface IDetailViewer<T>
     void ViewUpdate(T element);
 }
 
-public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
+public class MineDetail : MonoBehaviour, IGameInitializer
 {
     Text nameText;
     Text stat1Text;
@@ -25,7 +25,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
     GameObject[] stageStars = new GameObject[5];
     Button weaponCollectButton;
     Button goldCollectButton;
-   // [SerializeField] private Text gold;
    
     public void GameInitialize()
     {
@@ -87,7 +86,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
             skillDescription.text = "";
             weaponCollectButton.interactable = false;
             goldCollectButton.interactable = false;
-           // gold.text = "";
         }
         else
         {
@@ -117,75 +115,53 @@ public class MineDetail : MonoBehaviour, IGameInitializer ,IDetailViewer<Mine>
             goldCollectButton.onClick.RemoveAllListeners();
             goldCollectButton.onClick.AddListener(() => 
             {
-                Debug.Log("수령 클릭됨");
+                goldCollectButton.interactable = false;
+                _mine.Receipt(() =>
+                {
+                    goldCollectButton.interactable = true;
+                });
             });
             goldCollectButton.interactable = true;
-            // upDownVisualer.gameObject.SetActive(true);
-            //  gold.text = mine.Gold.ToString();
         }
     }
 
-    // =====================================================================
-    // =====================================================================
-    
-   [SerializeField] UpDownVisualer upDownVisualer;
-   
-//    private void OnDisable()
-//    {
-//        upDownVisualer.gameObject.SetActive(false);
-//    }
-  
-   public void ViewUpdate(Mine mine)
-    {
-        nameText.text = mine.GetMineData().name;
-        description.text = mine.GetMineData().description;
-        stat1Text.text = $"경도 {mine.GetMineData().defence}";
-        stat2Text.text = $"강도 {mine.GetMineData().hp}";
-        stat3Text.text = $"크기 {mine.GetMineData().size}";
-        stat4Text.text = $"평활 {mine.GetMineData().lubricity}";
-        for (int i = 0; i < stageStars.Length; i++)
-        {
-            stageStars[i].SetActive(true);
-            if(i+1>mine.GetMineData().stage) stageStars[i].SetActive(false);
-        }
+        // nameText.text = mine.GetMineData().name;
+        // description.text = mine.GetMineData().description;
+        // stat1Text.text = $"경도 {mine.GetMineData().defence}";
+        // stat2Text.text = $"강도 {mine.GetMineData().hp}";
+        // stat3Text.text = $"크기 {mine.GetMineData().size}";
+        // stat4Text.text = $"평활 {mine.GetMineData().lubricity}";
+        // for (int i = 0; i < stageStars.Length; i++)
+        // {
+        //     stageStars[i].SetActive(true);
+        //     if(i+1>mine.GetMineData().stage) stageStars[i].SetActive(false);
+        // }
         
 
-        if (mine.rentalWeapon is null)
-        {
-            addIcon.sprite = Managers.Resource.DefaultMine;
-            weaponName.text = "";
-            calculatedInfoText.text = $"0\n0\n0";
-            skillDescription.text = "";
-           // gold.text = "";
-        }
-        else
-        {
-            upDownVisualer.gameObject.SetActive(true);
+        // if (mine.rentalWeapon is null)
+        // {
+        //     addIcon.sprite = Managers.Resource.DefaultMine;
+        //     weaponName.text = "";
+        //     calculatedInfoText.text = $"0\n0\n0";
+        //     skillDescription.text = "";
+        // }
+        // else
+        // {
+        //     upDownVisualer.gameObject.SetActive(true);
             
-            addIcon.sprite = mine.rentalWeapon.Icon;
-            weaponName.text = mine.rentalWeapon.Name;
-            calculatedInfoText.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
-            string[] skillNames= new string[2];
-            for (int i = 0; i < 2; i++)
-            {
-                int magicIndex = mine.rentalWeapon.data.magic[i];
-                if(magicIndex<0) break;
-                skillNames[i] = Managers.ServerData.SkillDatas[magicIndex].skillName;
+        //     addIcon.sprite = mine.rentalWeapon.Icon;
+        //     weaponName.text = mine.rentalWeapon.Name;
+        //     calculatedInfoText.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
+        //     string[] skillNames= new string[2];
+        //     for (int i = 0; i < 2; i++)
+        //     {
+        //         int magicIndex = mine.rentalWeapon.data.magic[i];
+        //         if(magicIndex<0) break;
+        //         skillNames[i] = Managers.ServerData.SkillDatas[magicIndex].skillName;
  
-            }
-            skillDescription.text = String.Join(", ", skillNames);
-            //  gold.text = mine.Gold.ToString();
-        }
-    }
-
-   [SerializeField] Button confirmButton;
-   [SerializeField] Text confirmText;
-   public void OptionOpen()
-   {
-       confirmText.text = $"빌려주기";
-       confirmButton.onClick.RemoveAllListeners();
-       confirmButton.onClick.AddListener(InventoryConfirm);
-   }
+        //     }
+        //     skillDescription.text = String.Join(", ", skillNames);
+        // }
 
    private void InventoryConfirm()
    {

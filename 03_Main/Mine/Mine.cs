@@ -13,11 +13,15 @@ public interface Rental
     public float GetHpPerDMG();
 }
 
-public class Mine :MonoBehaviour,Rental
+public class Mine : MonoBehaviour, Rental
 {
     public string InDate { get; set; }
     MineStatus mineStatus = MineStatus.Locked;
     Weapon lendedWeapon;
+    public Weapon GetWeapon()
+    {
+        return lendedWeapon;
+    }
     int mineIndex;
     MineData mineData;
     Image icon;
@@ -78,15 +82,6 @@ public class Mine :MonoBehaviour,Rental
     float elapse = INTERVAL;
     int gold;
 
-    public int Gold
-    {
-        get => gold;
-        set
-        {
-            gold = value;
-        }
-    }
-
     void FixedUpdate()
     {
         switch (mineStatus)
@@ -136,6 +131,12 @@ public class Mine :MonoBehaviour,Rental
 
     public void Lend(Weapon _weapon)
     {
+        if (lendedWeapon != null)
+        {
+            lendedWeapon.Lend(-1);
+            Receipt();
+            // 골드 수령
+        }
         lendedWeapon = _weapon;
         lendedWeapon.Lend(mineIndex);
 
@@ -143,9 +144,33 @@ public class Mine :MonoBehaviour,Rental
         {
             rental = rentalFactory.createRental(rental, (MagicType)_weapon.data.magic[i]);
         }
+
+        SetInfo();
         
         // SetGold(currentTime);
         
+
+        // Mine tempMine = Quarry.Instance.currentMine;
+        // Weapon currentMineWeapon = tempMine.rentalWeapon;
+            
+        // try
+        // {
+        //     int beforeGoldPerMin = tempMine.goldPerMin;
+        //     currentWeapon.SetBorrowedDate();
+            
+        //     tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
+        //     Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
+        // }
+        // if (currentMineWeapon is not null)
+        // {
+        //     tempMine.Receipt();
+        //     currentMineWeapon.Lend(-1);
+        // }
+        // currentWeapon.Lend(tempMine.GetMineData().index);
+    }
+
+    void SetInfo()
+    {
         float miss = rental.GetMiss(); //정확도-매끄러움
         if (miss >= 100)
         {
@@ -169,36 +194,6 @@ public class Mine :MonoBehaviour,Rental
         if (miss > 0)
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
-
-        // Mine tempMine = Quarry.Instance.currentMine;
-        // Weapon currentMineWeapon = tempMine.rentalWeapon;
-            
-        // try
-        // {
-        //     int beforeGoldPerMin = tempMine.goldPerMin;
-        //     currentWeapon.SetBorrowedDate();
-            
-        //     tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
-        //     Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
-        // }
-        // catch (Exception e)
-        // {
-        //         Managers.Alarm.Warning(e.Message);
-        //     return;
-        // }
-        // if (currentMineWeapon is not null)
-        // {
-        //     tempMine.Receipt();
-        //     currentMineWeapon.Lend(-1);
-        // }
-        // currentWeapon.Lend(tempMine.GetMineData().index);
-            
-        // Quarry.Instance.currentMine= tempMine ;
-    }
-
-    public Weapon GetWeapon()
-    {
-        return lendedWeapon;
     }
 
     public void SetWeapon(Weapon _lendedWeapon, DateTime _currentTime = default )
@@ -217,9 +212,9 @@ public class Mine :MonoBehaviour,Rental
         {
             rental= rentalFactory.createRental(rental, (MagicType)_lendedWeapon.data.magic[i]);
         }
-        // SetInfo();
         
         lendedWeapon = _lendedWeapon;
+        SetInfo();
         SetGold(_currentTime);
     }
 
@@ -236,7 +231,7 @@ public class Mine :MonoBehaviour,Rental
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate), date);
 
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), rentalWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
             if (!callback.IsSuccess())
             {
@@ -327,9 +322,9 @@ public class Mine :MonoBehaviour,Rental
 
     public void SetGold(DateTime currentTime)
     {
-        if (rentalWeapon is null) return;
+        if (lendedWeapon is null) return;
         
-        TimeSpan timeInterval = currentTime - rentalWeapon.data.borrowedDate;
+        TimeSpan timeInterval = currentTime - lendedWeapon.data.borrowedDate;
   
         if (timeInterval.TotalHours >= 2)
             timeInterval = TimeSpan.FromHours(2);
@@ -339,8 +334,6 @@ public class Mine :MonoBehaviour,Rental
         currentGoldText.text = gold.ToString();
     }
 
-    // =====================================================================
-    // =====================================================================
     public MineData GetMineData()
     {
         return mineData;
@@ -364,7 +357,6 @@ public class Mine :MonoBehaviour,Rental
             _goldPerMin = value;
         }
     }
-    public Weapon rentalWeapon { get; set; }
     public WeaponData GetWeaponData()
     {
         return lendedWeapon.data.Clone();
@@ -391,5 +383,4 @@ public class Mine :MonoBehaviour,Rental
     {
         return  Utills.Ceil(GetMineData().hp / GetOneHitDMG());
     }
-    //private IDetailViewer<SkillData>[] skillViewer= new IDetailViewer<SkillData>[2];
 }

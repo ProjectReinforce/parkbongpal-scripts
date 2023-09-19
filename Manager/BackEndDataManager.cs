@@ -577,10 +577,10 @@ public class BackEndDataManager
         {
             mineBuildDatas = data;
 
-            foreach (var item in mineBuildDatas)
-            {
-                Debug.Log($"{item.inDate}");
-            }
+            // foreach (var item in mineBuildDatas)
+            // {
+            //     Debug.Log($"{item.inDate}");
+            // }
         });
     }
 }
