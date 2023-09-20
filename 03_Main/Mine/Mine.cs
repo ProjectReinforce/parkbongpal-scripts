@@ -116,17 +116,6 @@ public class Mine : MonoBehaviour, Rental
                 currentGoldText.text = gold.ToString();
                 break;
         }
-        // if (lendedWeapon is null) return;
-        // if (gold >= MaxGold)
-        // {
-        //     gold = MaxGold;
-        //     return;
-        // }
-        // elapse -= Time.fixedDeltaTime;
-        // if (elapse > 0) return;
-        // elapse += INTERVAL;
-        // gold += (int)(_goldPerMin * INTERVAL / 60);
-        // currentGoldText.text = gold.ToString();
     }
 
     public void Lend(Weapon _weapon)
@@ -223,9 +212,12 @@ public class Mine : MonoBehaviour, Rental
         if (gold < 100)
         {
             Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
+
+            _callback?.Invoke();
             return;
         }
         Managers.Game.Player.AddGold(gold);
+        Managers.Alarm.Warning($"{gold} Gold를 수령했습니다.");
         gold = 0;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
@@ -245,6 +237,25 @@ public class Mine : MonoBehaviour, Rental
         });
         if (CallChecker.Instance != null)
             CallChecker.Instance.CountCall();
+    }
+
+    public int Receipt()
+    {
+        bool condition = lendedWeapon != null && gold > 0 && mineStatus == MineStatus.Owned;
+        if (!condition) return 0;
+        int resultGold = gold;
+        Managers.Game.Player.AddGold(gold, false);
+        gold = 0;
+        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        Param param = new Param();
+        param.Add(nameof(WeaponData.colum.borrowedDate), date);
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
+
+        lendedWeapon.SetBorrowedDate(date);
+        currentGoldText.text = gold.ToString();
+            
+        return resultGold;
     }
 
     // todo : 서버 타임 받아오는 부분 통합해야함

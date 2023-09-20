@@ -43,31 +43,47 @@ public class MineManager
             item.Value.SetGold(currentTime);
     }
 
-    // =====================================================================
-    // =====================================================================
-    private Mine _currentMine;
-    public Mine currentMine
+    public void ReceiptAllGolds()
     {
-        get => _currentMine;
-        set
+        int totalGold = 0;
+        foreach (var item in mines)
+            totalGold += item.Value.Receipt();
+
+        Param param = new Param();
+        param.Add(nameof(UserData.colum.gold), Managers.Game.Player.Data.gold);
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
+        Transactions.SendCurrent((callback) =>
         {
-            // mineDetail.ViewUpdate(value);
-        }
+            Managers.Alarm.Warning($"{totalGold} Gold를 수령했습니다.");
+        });
     }
 
-    int mineCount;
+    // =====================================================================
+    // =====================================================================
+    // private Mine _currentMine;
+    // public Mine currentMine
+    // {
+    //     get => _currentMine;
+    //     set
+    //     {
+    //         // mineDetail.ViewUpdate(value);
+    //     }
+    // }
 
-    void Initialize()
-    {
-        // int mineCount = ResourceManager.Instance.mineDatas.Count;
-        mineCount = Managers.ServerData.MineDatas.Length;
+    // int mineCount;
+
+    // void Initialize()
+    // {
+    //     // int mineCount = ResourceManager.Instance.mineDatas.Count;
+    //     // mineCount = Managers.ServerData.MineDatas.Length;
         
-        // for (int i = 0; i < mineCount; i++)
-        // {
-        //     // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
-        //     mines[i].Unlock(Managers.ServerData.UserData.level);
-        // }
-    }
+    //     // for (int i = 0; i < mineCount; i++)
+    //     // {
+    //     //     // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
+    //     //     mines[i].Unlock(Managers.ServerData.UserData.level);
+    //     // }
+    // }
 
     // private void Start()
     // {
@@ -81,21 +97,6 @@ public class MineManager
     //         }
     //     });
     // }
-    
-
-    public void UnlockMines(int playerLevel)
-    {
-        // List<string> mineNames = new List<string>(); 
-        // for (int i = 0; i < mines.Length; i++)
-        // {
-        //     string unlockMine= mines[i].Unlock(playerLevel);
-        //     if(unlockMine is null) continue;
-        //     mineNames.Add(unlockMine);
-        // }
-        // if(mineNames.Count<1)return;
-
-        // Managers.Alarm.Warning($"{string.Join(", ", mineNames)}이(가) 열렸습니다.");
-    }
 
     // public void ClearWeapon()
     // {
@@ -118,7 +119,6 @@ public class MineManager
     //     currentMine.Receipt();
     // }
     
-
     // private int totalGold;
     // [SerializeField] private UnityEngine.UI.Button receiptButton;
     // IEnumerator Wait3min()
