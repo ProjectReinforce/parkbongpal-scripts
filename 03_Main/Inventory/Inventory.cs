@@ -7,6 +7,7 @@ using UnityEngine;
 public class Inventory
 {
     List<Weapon> weapons = new();
+    public List<Weapon> Weapons => weapons;
 
     public Inventory()
     {
