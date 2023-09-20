@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class PostDetail : MonoBehaviour
 {
     //제목 이름 날짜 내용 
-    [SerializeField] Text title, author, date, content;
+    [SerializeField] Text title, author, content, date;
+    //아이템이 있을경우 : 보상수령  /  없을경우 : 삭제하기
+    [SerializeField] Text ButtonText;
     PostSlot currentSlot;
 
     public void SetDetail(PostSlot slot)
@@ -15,8 +17,8 @@ public class PostDetail : MonoBehaviour
         PostData data = slot.postData;
         title.text = data.title;
         author.text = data.author;
-        date.text = data.sentDate;
         content.text = data.content;
+        date.text = data.sentDate;
     }
 
     // private void OnDisable()
@@ -32,6 +34,7 @@ public class PostDetail : MonoBehaviour
      
     public void ReceiptThis()
     {
+        ButtonText.text = "보상 수령";
         Post.Instance.Receipt(currentSlot);
         gameObject.SetActive(false);
     }

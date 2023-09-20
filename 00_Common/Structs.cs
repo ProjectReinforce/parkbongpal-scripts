@@ -376,6 +376,7 @@ public struct RefinementData
 public struct PostData
 {
     public string content,  title, author, sentDate , inDate;// 필요 없음 expirationDate, reservationDate, nickname, ,
+    // (추가필요?)우편으로 선물주는 수량
     // public BaseWeaponData[] items;
 }
 
