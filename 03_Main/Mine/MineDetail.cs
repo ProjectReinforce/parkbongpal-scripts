@@ -106,6 +106,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
+                // todo: 해제 전 골드 수령 부분 추가해야 함.
                 _mine.SetWeapon(null);
                 UpdateUIRelatedLendedWeapon(_mine);
 

@@ -118,6 +118,7 @@ public class Mine : MonoBehaviour, Rental
         }
     }
 
+    // todo : SetWeapon이랑 통합해야함.
     public void Lend(Weapon _weapon)
     {
         if (lendedWeapon != null)
