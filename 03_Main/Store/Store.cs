@@ -25,6 +25,7 @@ public class Store : MonoBehaviour
     const int COST_GOLD = 10000; // 고정된 변수를 통해 뽑기 당 필요한 재화 설정
     const int COST_DIAMOND = 300;
     private const int ONE = 1; // 임시적으로 작동하게 만듦
+    // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
     public void Drawing(int type) // 뽑기 시 사용하는 함수
     {
         if (Managers.Game.Inventory.Weapons.Count + ONE > Consts.MAX_WEAPON_SLOT_COUNT)
@@ -69,7 +70,7 @@ public class Store : MonoBehaviour
     }
 
     private const int TEN = 10; // 무기제작 횟수를 변수로 저장함
-
+    // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
     public void BatchDrawing(int type) // 10번 뽑기 시 활용하는 함수
     {
         if (Managers.Game.Inventory.Weapons.Count + TEN > Consts.MAX_WEAPON_SLOT_COUNT)
