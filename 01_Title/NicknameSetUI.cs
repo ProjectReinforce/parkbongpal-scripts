@@ -83,7 +83,7 @@ public class NicknameSetUI : MonoBehaviour
             {
                 // Debug.Log("신규 유저 데이터 삽입 성공!");
                 Backend.BMember.UpdateNickname(_nickname);
-                Utills.LoadScene(SceneName.R_Main_V6_SEH.ToString());
+                Utills.LoadScene(SceneName.R_Main_V6.ToString());
             }
             else
             {
