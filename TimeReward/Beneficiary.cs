@@ -54,7 +54,7 @@ public class Beneficiary : Singleton<Beneficiary>//수혜자 역할
             case (int)RewardType.Soul:
                 Managers.Game.Player.AddSoul(todayReward.value);
                 break;
-            case (int)RewardType.Stone:
+            case (int)RewardType.Ore:
                 Managers.Game.Player.AddStone(todayReward.value);
                 break;
             // case (int)RewardType.Weapon:

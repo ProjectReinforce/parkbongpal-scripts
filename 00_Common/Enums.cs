@@ -109,7 +109,7 @@ public enum RewardType
     Gold,
     Diamond,
     Soul,
-    Stone
+    Ore
 }
 
 public enum RecordType
@@ -151,4 +151,11 @@ public enum TapType
     MiniGame,
     Pidea,
     Ranking
+}
+
+public enum MineStatus
+{
+    Locked,
+    Building,
+    Owned
 }

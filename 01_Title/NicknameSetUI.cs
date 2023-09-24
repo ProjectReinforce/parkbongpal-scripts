@@ -69,6 +69,14 @@ public class NicknameSetUI : MonoBehaviour
 
     void InsertNewUserData(string _nickname)
     {
+        // Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new Param()));
+        // Param param = new()
+        // {
+        //     {nameof(MineBuildData.mineIndex), 1},
+        //     {nameof(MineBuildData.mineIndex), 3},
+        //     {nameof(MineBuildData.mineIndex), 5},
+        // };
+        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
         SendQueue.Enqueue(Backend.GameData.Insert, nameof(UserData), new Param(), callback =>
         {
             if(callback.IsSuccess())

@@ -11,7 +11,8 @@ public class GameManager
     public Inventory Inventory => inventory;
     ReinforceInfos reinforce;
     public ReinforceInfos Reinforce => reinforce;
-
+    MineManager mine;
+    public MineManager Mine => mine;
 
     public void MainThreadPoll()
     {
@@ -32,6 +33,7 @@ public class GameManager
         player.Initialize();
         inventory = new();
         reinforce = new();
+        mine = new();
 
         HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>();
 

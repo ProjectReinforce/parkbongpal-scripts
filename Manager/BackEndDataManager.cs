@@ -9,9 +9,13 @@ public class JsonMapperRegisterImporter
     public JsonMapperRegisterImporter()
     {
         JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
+        JsonMapper.RegisterImporter<string, ulong>(s => ulong.Parse(s));
         JsonMapper.RegisterImporter<string, long>(s => long.Parse(s));
+        JsonMapper.RegisterImporter<string, float>(s => float.Parse(s));
+        JsonMapper.RegisterImporter<string, DateTime>(s => DateTime.Parse(s));
         JsonMapper.RegisterImporter<string, RecordType>(s => Utills.StringToEnum<RecordType>(s));
         JsonMapper.RegisterImporter<string, QuestType>(s => Utills.StringToEnum<QuestType>(s));
+        JsonMapper.RegisterImporter<string, RewardType>(s => Utills.StringToEnum<RewardType>(s));
         JsonMapper.RegisterImporter<string, int[]>(s =>
         {
             // Split the input string by ',' and parse each element into an int
@@ -41,11 +45,9 @@ public class JsonMapperRegisterImporter
 
 public class BackEndDataManager
 {
-    public WeaponData[] UserWeapons;
     public BaseWeaponData[] BaseWeaponDatas;
     public MineData[] MineDatas;
     public int[] ExpDatas;
-    public UserData UserData;
     public GachaData[] GachaDatas;
     public AttendanceData[] AttendanceDatas;
     public QuestData[] QuestDatas;
@@ -56,6 +58,7 @@ public class BackEndDataManager
     public SoulCraftingData SoulCraftingData;
     public RefinementData RefinementData;
     public Decomposit[] DecompositDatas;
+
     Where SearchFromMyIndate = new();
 
     readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
@@ -85,6 +88,7 @@ public class BackEndDataManager
         SetOwnedWeaponId();
         GetRankList();
         GetQuestClearData();
+        GetMineBuildData();
 
         LoadAllChart();
 
@@ -448,15 +452,16 @@ public class BackEndDataManager
     }
     #endregion
 
+    public WeaponData[] UserWeapons;
     void GetOwnedWeaponData()
     {
-
         GetMyBackEndData<WeaponData>(nameof(WeaponData),  (data) =>
         {
             UserWeapons=data ;
         });
     }
 
+    public UserData UserData;
     void GetUserData()
     {
         GetMyBackEndData<UserData>(nameof(UserData),  (data) =>
@@ -494,7 +499,6 @@ public class BackEndDataManager
             ownedWeaponIds[i] = new Material(LockMaterial);
         }
 
-
         GetMyBackEndData<PideaData>(nameof(PideaData),  (data) =>
         {
             foreach (PideaData pidea in data)
@@ -507,7 +511,6 @@ public class BackEndDataManager
     
     private DateTime serverTime;
     public DateTime ServerTime => serverTime;
-    
     
     public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
     public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
@@ -566,5 +569,18 @@ public class BackEndDataManager
             questRecordDatas = data;
         });
     }
-    
+
+    public MineBuildData[] mineBuildDatas;
+    void GetMineBuildData()
+    {
+        GetMyBackEndData<MineBuildData>(nameof(MineBuildData),  (data) =>
+        {
+            mineBuildDatas = data;
+
+            // foreach (var item in mineBuildDatas)
+            // {
+            //     Debug.Log($"{item.inDate}");
+            // }
+        });
+    }
 }
