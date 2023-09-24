@@ -39,7 +39,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     {
         foreach (var slot in slots)
         {
-            slotAction(slot.myWeapon);
+            // slotAction(slot.myWeapon);
         }
     }
     public void SetInventoryOption(IInventoryOption option)//기본,광산,강화,미니게임이 사용
