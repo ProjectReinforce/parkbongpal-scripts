@@ -22,7 +22,7 @@ public class Weapon
     int _power;
     public int power =>_power;
 
-    public Slot myslot;
+    // public Slot myslot;
 
     public Weapon(WeaponData _data)
     {

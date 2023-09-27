@@ -189,7 +189,7 @@ public class SlotModeUIDecomposition : SlotModeUI
 
     public override void Selected(Weapon _weaponFromEvent)
     {
-        if (_weaponFromEvent.data.mineId != -1)
+        if (_weaponFromEvent != null && _weaponFromEvent.data.mineId != -1)
         {
             Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
             return;

@@ -106,6 +106,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
+                // todo: 해제 전 골드 수령 부분 추가해야 함.
                 _mine.SetWeapon(null);
                 UpdateUIRelatedLendedWeapon(_mine);
 
@@ -163,8 +164,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer
         //     skillDescription.text = String.Join(", ", skillNames);
         // }
 
-   private void InventoryConfirm()
-   {
     //    Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
     //    if (currentWeapon is null) return;
     // //    Mine tempMine = Quarry.Instance.currentMine;
@@ -194,5 +193,4 @@ public class MineDetail : MonoBehaviour, IGameInitializer
         
     // //    Quarry.Instance.currentMine= tempMine ;
     //    InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
-   }
 }

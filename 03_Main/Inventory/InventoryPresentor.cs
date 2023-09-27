@@ -21,7 +21,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         set
         {
             _currentWeapon = value;
-            inventoryViewer.UpdateCurrentWeapon(value);
+            // inventoryViewer.UpdateCurrentWeapon(value);
 
         }
     }
@@ -39,12 +39,12 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
     {
         foreach (var slot in slots)
         {
-            slotAction(slot.myWeapon);
+            // slotAction(slot.myWeapon);
         }
     }
     public void SetInventoryOption(IInventoryOption option)//기본,광산,강화,미니게임이 사용
     {
-        inventoryViewer.SetInventoryOption(option);
+        // inventoryViewer.SetInventoryOption(option);
     }
 
     public void CloseInventory()

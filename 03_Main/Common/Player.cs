@@ -199,6 +199,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
         };
 
@@ -214,6 +215,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
         };
 
@@ -229,6 +231,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
         };
 
@@ -244,6 +247,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
         };
 
@@ -260,6 +264,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
             {nameof(UserData.colum.weaponSoul), Data.weaponSoul}
         };
@@ -277,6 +282,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold},
             {nameof(UserData.colum.stone), Data.stone}
         };
@@ -293,6 +299,7 @@ public class Player
         Param param = new()
         {
             {nameof(UserData.colum.exp), Data.exp + _exp},
+            {nameof(UserData.colum.level), Data.level},
             {nameof(UserData.colum.gold), Data.gold + _gold},
             {nameof(UserData.colum.diamond), Data.diamond + _diamond}
         };

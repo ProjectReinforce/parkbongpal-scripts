@@ -89,14 +89,14 @@ public class Inventory
                 WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), _baseWeaponData[i]);
                 Weapon weapon = new(weaponData);
                 weapons.Add(weapon);
-                // if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
-                // {
-                //     Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
-                //         { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
-                //         { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
-                //     }));
-                //     Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
-                // }
+                if (Pidea.Instance.CheckLockWeapon(_baseWeaponData[i].index))
+                {
+                    Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
+                        { nameof(PideaData.colum.ownedWeaponId), _baseWeaponData[i].index },
+                        { nameof(PideaData.colum.rarity), _baseWeaponData[i].rarity }
+                    }));
+                    Pidea.Instance.GetNewWeapon(_baseWeaponData[i].index);
+                }
             }
         });
     }

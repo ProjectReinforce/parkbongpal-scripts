@@ -15,7 +15,7 @@ public abstract class ReinforceButtonUIBase : MonoBehaviour
     {
         reinforceManager = Managers.Game.Reinforce;
         TryGetComponent(out reinforceButton);
-        qualificationUI = transform.GetChild(2).gameObject;
+        qualificationUI = transform.GetChild(0).gameObject;
         qualificationUI.transform.GetChild(2).TryGetComponent(out qualificationText);
 
         SetQualificationMessage();

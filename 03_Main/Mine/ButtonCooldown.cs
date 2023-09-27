@@ -10,6 +10,10 @@ public class ButtonCooldown : MonoBehaviour
     void Awake()
     {
         TryGetComponent(out button);
+        button.onClick.AddListener(() =>
+        {
+            Managers.Game.Mine.ReceiptAllGolds();
+        });
     }
 
     public void StartCooldown()
