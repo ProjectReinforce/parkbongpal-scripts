@@ -169,11 +169,11 @@ public class Mine : MonoBehaviour, Rental
         }
 
         float oneHitDMG = rental.GetOneHitDMG();// 함수가있으면 ??
-        if (oneHitDMG <= 0)
-        {
-            Managers.Alarm.Warning($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
-            return;
-        }
+        // if (oneHitDMG <= 0)
+        // {
+        //     Managers.Alarm.Warning($"공격력이 {-oneHitDMG + 1}만큼 부족합니다");
+        //     return;
+        // }
 
         _rangePerSize = rental.GetRangePerSize(); //한번휘두를때 몇개나 영향을 주나
         _hpPerDMG = rental.GetHpPerDMG();//몇방때려야 하나를 캐는지

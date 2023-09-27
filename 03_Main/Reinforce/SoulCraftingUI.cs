@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class SoulCraftingUI : ReinforceUIBase
 {
-    Text successUpgradeCountText;
     Text upgradeCountText;
     Text atkText;
     Text soulCostText;
@@ -13,7 +12,6 @@ public class SoulCraftingUI : ReinforceUIBase
     {
         base.Awake();
 
-        successUpgradeCountText = Utills.Bind<Text>("Text_SuccessCount", transform);
         upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
         atkText = Utills.Bind<Text>("AttackPower", transform);
         soulCostText = Utills.Bind<Text>("Soul_T", transform);

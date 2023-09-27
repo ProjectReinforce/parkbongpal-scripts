@@ -59,6 +59,7 @@ public class NormalReinforce : Reinforce
         NormalReinforceData data = resourceManager.NormalReinforceData;
         int goldCost = data.GetGoldCost((Rarity)_weapon.data.rarity);
 
+        // todo : 각 강화 UI에서 조작되도록 수정
         if (_weapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
         {
             goldCost = data.GetGoldCost((Rarity)_weapon.data.rarity) * 10;
@@ -136,6 +137,7 @@ public class SoulCrafting : Reinforce
         int goldCost = data.goldCost;
         int soulCost = data.soulCost;
 
+        // todo : 각 강화 UI에서 조작되도록 수정
         if (_weapon.data.SoulStat[(int)StatType.upgradeCount] <= 0)
         {
             goldCost = data.goldCost * 10;
