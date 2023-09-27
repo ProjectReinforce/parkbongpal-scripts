@@ -38,6 +38,5 @@ public class PostDetail : MonoBehaviour
     {
         ButtonText.text = "보상 수령";
         Post.Instance.Receipt(currentSlot);
-        //gameObject.SetActive(false);
     }
 }

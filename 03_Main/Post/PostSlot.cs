@@ -22,6 +22,5 @@ public class PostSlot : NewThing
         Debug.Log("메일내용 팝업");
         // 어찌 연결되고있는건지... 체크...
         Post.Instance.ViewCurrent(this);
-
     }
 }

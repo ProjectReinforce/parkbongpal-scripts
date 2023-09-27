@@ -119,8 +119,8 @@ public class Post : Singleton<Post>
         detail.SetDetail(slot);
         //detailPopup.SetActive(true);
         Debug.Log("상세창 뜨시오");
-        detail.transform.parent.gameObject.SetActive(true);
-
+        // 오픈팝업 스크립트 코드로 연결하기
+        Managers.UI.OpenPopup(detail.transform.parent.gameObject);
     }
 
 }
