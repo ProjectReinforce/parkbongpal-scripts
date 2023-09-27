@@ -5,7 +5,7 @@ public class BackendManager : MonoBehaviour
 {
     void Awake()
     {
-        var bro = Backend.Initialize();
+        var bro = Backend.Initialize(); // 백엔드 서비스를 초기화해서 bro변수에 결과를 담아둠
 
         if(bro.IsSuccess())
             Debug.Log($"초기화 성공 : {bro}");

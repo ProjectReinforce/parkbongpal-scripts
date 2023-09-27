@@ -5,13 +5,13 @@ using UnityEngine.UI;
 using BackEnd;
 using System.Text.RegularExpressions;
 
-public class NicknameSetUI : MonoBehaviour
+public abstract class NicknameSetUIBase : MonoBehaviour
 {
-    InputField nicknameInput;
-    Image nicknameInputImage;
-    Text messageText;
-    Button confirmButton;
-    void Awake()
+    protected InputField nicknameInput;
+    protected Image nicknameInputImage;
+    protected Text messageText;
+    protected Button confirmButton;
+    protected void Awake()
     {
         nicknameInput = Utills.Bind<InputField>("Nickname_InputField", transform);
         nicknameInputImage = Utills.Bind<Image>("Nickname_InputField", transform);
@@ -19,9 +19,9 @@ public class NicknameSetUI : MonoBehaviour
         confirmButton = Utills.Bind<Button>("Button_Confirm", transform);
     }
 
-    const int MINLENGTH = 2;
-    const int MAXLENGTH = 8;
-    Coroutine coroutine;
+    protected const int MINLENGTH = 2;
+    protected const int MAXLENGTH = 8;
+    protected Coroutine coroutine;
     public void CheckNickname()
     {
         string nickname = nicknameInput.text;
@@ -48,7 +48,7 @@ public class NicknameSetUI : MonoBehaviour
         }
     }
 
-    void CheckNicknameDuplication(string _nickname)
+    protected void CheckNicknameDuplication(string _nickname)
     {
         confirmButton.interactable = false;
 
@@ -63,39 +63,14 @@ public class NicknameSetUI : MonoBehaviour
                 return;
             }
 
-            InsertNewUserData(_nickname);
+            FunctionAfterCallback(_nickname);
         });
     }
 
-    void InsertNewUserData(string _nickname)
-    {
-        // Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new Param()));
-        // Param param = new()
-        // {
-        //     {nameof(MineBuildData.mineIndex), 1},
-        //     {nameof(MineBuildData.mineIndex), 3},
-        //     {nameof(MineBuildData.mineIndex), 5},
-        // };
-        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
-        SendQueue.Enqueue(Backend.GameData.Insert, nameof(UserData), new Param(), callback =>
-        {
-            if(callback.IsSuccess())
-            {
-                // Debug.Log("신규 유저 데이터 삽입 성공!");
-                Backend.BMember.UpdateNickname(_nickname);
-                Utills.LoadScene(SceneName.R_Main_V6.ToString());
-            }
-            else
-            {
-                // Debug.LogError($"신규 유저 데이터 삽입 실패 : {bro}");
-                Managers.Alarm.Danger($"신규 유저 데이터 삽입 실패 : {callback}");
-            }
-            confirmButton.interactable = true;
-        });
-    }
+    protected abstract void FunctionAfterCallback(string _nickname = null);
 
-    readonly WaitForSeconds waitForBlinkDelay = new(0.1f);
-    IEnumerator PrintAlertText(string _message)
+    protected readonly WaitForSeconds waitForBlinkDelay = new(0.1f);
+    protected IEnumerator PrintAlertText(string _message)
     {
         messageText.text = _message;
 

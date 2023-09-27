@@ -50,7 +50,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_JH.ToString());
             }
             else
             {
@@ -177,7 +177,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_JH.ToString());
                 break;
             case 201:
                 Managers.UI.OpenPopup(NicknamePopup);
@@ -189,7 +189,7 @@ public class Login : MonoBehaviour
     {
         // 액세스 토큰 삭제, 즉 토큰 로그인 불가 (로그인이 먼저 되어야함)
         Backend.BMember.Logout();
-        Utills.LoadScene("Start");
+        Utills.LoadScene("R_Start");
     }
 
     public void OnClickDeleteData()

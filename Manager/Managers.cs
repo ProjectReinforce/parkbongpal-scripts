@@ -31,6 +31,9 @@ public class Managers : MonoBehaviour
     SoundManager sound;
     public static SoundManager Sound { get => Instance.sound; }
 
+    /// <summary>
+    /// Managers클래스를 초기화하고 있을경우 instance로 내보내고, 없을경우 생성해서 파괴되지 않도록 한다.
+    /// </summary>
     static void Initialize()
     {
         GameObject managers = GameObject.Find("Managers");
@@ -48,6 +51,10 @@ public class Managers : MonoBehaviour
         DontDestroyOnLoad(instance);
     }
 
+    /// <summary>
+    /// 화면이 항상 켜져있도록 설정하고 managers를 초기화합니다.
+    /// 씬 로드 핸들러를 등록합니다. ( 중복방지를 위해 먼저 제거하고 추가합니다. )
+    /// </summary>
     void Awake()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -58,12 +65,19 @@ public class Managers : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    /// <summary>
+    /// 작업 처리하게 함
+    /// </summary>
     void Update()
     {
         game?.MainThreadPoll();
         ui?.InputCheck();
     }
 
+    /// <summary>
+    /// 현재 게임이 메인씬이며 애플리케이션이 포커스를 얻었을 때 광산의 골드를 계산한다?
+    /// </summary>
+    /// <param name="_hasFocus"></param>
     void OnApplicationFocus(bool _hasFocus)
     {
         bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;
@@ -71,6 +85,14 @@ public class Managers : MonoBehaviour
             game.Mine.CalculateGoldAllMines();
     }
 
+    /// <summary>
+    /// 씬이 로드될때 초기화 하는 역할
+    /// 스타트씬에서는 게임, 알람, 이벤트 매니저, UI 매니저, 사운드 매니저를 초기화
+    /// 로딩씬에서는 리소스 매니저, 백엔드 데이터 매니저를 초기화
+    /// 설정되어있는 메인씬에서는 게임 매니저를 세팅합니다.
+    /// </summary>
+    /// <param name="_scene"></param>
+    /// <param name="_loadSceneMode"></param>
     void OnSceneLoaded(Scene _scene, LoadSceneMode _loadSceneMode)
     {
         SceneName sceneName = Utills.StringToEnum<SceneName>(_scene.name);
@@ -96,7 +118,7 @@ public class Managers : MonoBehaviour
                     serverData.Initialize();
                 }
                 break;
-            case SceneName.R_Main_V6:
+            case SceneName.R_Main_V6_JH:
                 game.Set();
                 break;
         }
