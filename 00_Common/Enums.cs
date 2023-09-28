@@ -3,7 +3,8 @@
     R_Start,
     R_LoadingScene,
     R_Main_V6_JH,
-    R_Main_V6
+    R_Main_V6,
+    R_Main_V6_SH
 }
 
 public enum Rarity
