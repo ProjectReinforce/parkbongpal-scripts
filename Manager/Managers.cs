@@ -40,14 +40,10 @@ public class Managers : MonoBehaviour
         if (managers == null)
         {
             managers = new GameObject("Managers");
-            instance = managers.AddComponent<Managers>();
             managers.AddComponent<SendQueueMgr>();
             managers.AddComponent<BackendManager>();
         }
-        else
-        {
-            managers.TryGetComponent(out instance);
-        }
+        managers.TryGetComponent(out instance);
         DontDestroyOnLoad(instance);
     }
 
@@ -60,6 +56,9 @@ public class Managers : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
         Initialize();
+
+        if (instance != null && instance != this)
+            Destroy(gameObject);
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -103,7 +102,7 @@ public class Managers : MonoBehaviour
                 game ??= new();
                 alarm ??= new(transform);
                 eventM ??= new();
-                ui ??= new();
+                ui = new();
                 sound ??= new();
                 break;
             case SceneName.R_LoadingScene:

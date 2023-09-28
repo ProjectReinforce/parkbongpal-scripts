@@ -43,7 +43,14 @@ public class UIManager
         
         // 현재 열려있는 팝업 모두 Off
         while (uiStack.Count > 0)
+        {
+            if (uiStack.Peek() == null)
+            {
+                uiStack.Pop();
+                continue;
+            }
             uiStack.Pop().SetActive(false);
+        }
 
         // 탭 이동 처리
         if (currentTapType != TapType.Main_Mine)            // 만약 현재 열린탭이 Main_Mine이 아닌경우 ( 맞으면 건너뜀 ) // 다른 탭으로 이동할 때만 작동

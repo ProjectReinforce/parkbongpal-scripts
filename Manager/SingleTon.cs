@@ -21,8 +21,8 @@ namespace Manager
         /// </summary>
         protected virtual void Awake()
         {
-            if (Instance != null)
-                Destroy(gameObject);
+            // if (Instance != null)
+            //     Destroy(gameObject);
             gameObject.TryGetComponent(out BillPughSingleTon.instance);
         }
     }

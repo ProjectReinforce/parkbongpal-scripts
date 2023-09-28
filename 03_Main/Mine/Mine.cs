@@ -184,6 +184,8 @@ public class Mine : MonoBehaviour, Rental
         if (miss > 0)
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
+        if (goldPerMin < 0)
+            goldPerMin = 0;
     }
 
     public void SetWeapon(Weapon _lendedWeapon, DateTime _currentTime = default )
