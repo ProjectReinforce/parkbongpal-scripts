@@ -25,7 +25,7 @@ public class UIManager
             if (uiStack.Count > 0)
                 ClosePopup();
             else
-                Application.Quit();
+                Managers.Alarm.WarningWithButton("게임을 종료하시겠습니까?", () => Application.Quit());
         }
     }
 

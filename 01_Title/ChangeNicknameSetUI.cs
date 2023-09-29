@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using BackEnd;
 using System.Text.RegularExpressions;
-using UnityEditor.Scripting;
 
 public class ChangeNicknameSetUI : NicknameSetUIBase
 {

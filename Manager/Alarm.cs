@@ -10,6 +10,7 @@ public interface ISetMessage
 public class Alarm
 {
     Warning warningMessage;
+    CustomWarning warningWithButton;
     Danger dangerMessage;
 
     /// <summary>
@@ -21,9 +22,11 @@ public class Alarm
     public Alarm(Transform _rootTransform)
     {
         warningMessage = Utills.Bind<Warning>("CommonWarning", _rootTransform);
+        warningWithButton = Utills.Bind<CustomWarning>("CustomWarning", _rootTransform);
         dangerMessage = Utills.Bind<Danger>("BigWarning", _rootTransform);
 
         warningMessage.Initialize();
+        warningWithButton.Initialize();
         dangerMessage.Initialize();
     }
 
@@ -35,6 +38,11 @@ public class Alarm
     public void Warning(string _message, string _title = "알림")
     {
         warningMessage.Set(_title, _message);
+    }
+    
+    public void WarningWithButton(string _message, Action _buttonClickEvent, string _title = "알림")
+    {
+        warningWithButton.Set(_title, _message, _buttonClickEvent);
     }
 
     /// <summary>
