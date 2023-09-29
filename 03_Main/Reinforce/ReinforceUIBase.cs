@@ -67,7 +67,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
     protected abstract void RegisterAdditionalButtonClickEvent();
 
-    protected void RegisterButtonClickEvent()
+    protected virtual void RegisterButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() =>
         {
