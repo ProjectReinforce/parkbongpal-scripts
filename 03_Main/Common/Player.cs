@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using BackEnd;
-using Manager;
 using UnityEngine;
 
 public class Player
 {
-    TopUIDatatViewer topUIDatatViewer;
-    [SerializeField] InventorySourceViewer inventoryUIViwer;
+    // TopUIDatatViewer topUIDatatViewer;
     [SerializeField] UserData userData;
     public UserData Data => userData;
     RecordData recordData;
@@ -15,7 +13,7 @@ public class Player
 
     public Player()
     {
-        topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
+        // topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
         userData = Managers.ServerData.UserData;
 
         recordData = new RecordData();
@@ -24,7 +22,7 @@ public class Player
     public void Initialize()
     {
         recordData.LoadOrInitRecord(userData.inDate);
-        topUIDatatViewer.Initialize();
+        // topUIDatatViewer.Initialize();
     }
 
     void UpdateBackEndData(string columnName, int _data)
@@ -43,11 +41,7 @@ public class Player
         if (CallChecker.Instance != null)
             CallChecker.Instance.CountCall();
     }
-    void LateUpdateBackEndData(string columnName, int _data)
-    {
-        Param param = new() { { columnName, _data }};
-        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData),Data.inDate,Backend.UserInDate ,param));
-    }
+
     void UpdateBackEndScore(string uuid, string columnName, int _data)
     {
         Param param = new() { { columnName, _data }};
@@ -72,18 +66,8 @@ public class Player
         recordData.ModifyGoldRecord(_gold);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
-        topUIDatatViewer.UpdateGold();
-        return true;
-    }
-    public bool LateAddGold(int _gold, bool _directUpdate = true)
-    {
-        if (userData.gold + _gold < 0) return false;
-        userData.gold += _gold;
-
-        recordData.ModifyGoldRecord(_gold);
-        if (_directUpdate)
-            LateUpdateBackEndData(nameof(UserData.colum.gold), userData.gold);
-        topUIDatatViewer.UpdateGold();
+        // topUIDatatViewer.UpdateGold();
+        Managers.Event.GoldChangeEvent?.Invoke();
         return true;
     }
 
@@ -95,8 +79,8 @@ public class Player
         recordData.ModifyDiamondRecord(_diamond);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.diamond), userData.diamond);
-        topUIDatatViewer.UpdateDiamond();
-
+        // topUIDatatViewer.UpdateDiamond();
+        Managers.Event.DiamondChangeEvent?.Invoke();
         return true;
     }
     
@@ -130,7 +114,8 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.exp), userData.exp);
-        topUIDatatViewer.UpdateExp();
+        // topUIDatatViewer.UpdateExp();
+        Managers.Event.ExpChangeEvent?.Invoke();
     }
 
     void LevelUp(bool _directUpdate = true)
@@ -141,8 +126,8 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.level), userData.level);
-        topUIDatatViewer.UpdateLevel();
-        // Quarry.Instance.UnlockMines(userData.level);
+        // topUIDatatViewer.UpdateLevel();
+        Managers.Event.LevelChangeEvent?.Invoke();
 
         if (userData.exp >= Managers.ServerData.ExpDatas[userData.level-1])
             LevelUp();
@@ -154,7 +139,8 @@ public class Player
         userData.favoriteWeaponId = _weaponId;
 
         UpdateBackEndData(nameof(UserData.colum.favoriteWeaponId), userData.favoriteWeaponId);
-        topUIDatatViewer.UpdateWeaponIcon();
+        // topUIDatatViewer.UpdateWeaponIcon();
+        Managers.Event.FavoriteWeaponChangeEvent?.Invoke();
     }
 
     public void SetGoldPerMin(int _goldPerMin)
@@ -162,12 +148,14 @@ public class Player
         userData.goldPerMin = _goldPerMin;
         UpdateBackEndScore(BackEndDataManager.GOLD_UUID,nameof(UserData.colum.goldPerMin), userData.goldPerMin);
     }
+
     public void ComparisonMineGameScore(int score)
     {
         if (userData.mineGameScore <= score) return;
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }
+
     public void SetCombatScore(int score)
     {
         userData.combatScore = score;

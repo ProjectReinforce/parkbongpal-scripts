@@ -55,7 +55,7 @@ public class MineManager
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent((callback) =>
         {
-            Managers.Alarm.Warning($"{totalGold} Gold를 수령했습니다.");
+            Managers.Alarm.Warning($"{totalGold:n0} Gold를 수령했습니다.");
         });
     }
 

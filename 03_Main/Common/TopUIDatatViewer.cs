@@ -15,7 +15,8 @@ public class TopUIDatatViewer : MonoBehaviour
     Text diamondText;
     Player player;
 
-    public void Initialize()
+    void Start()
+    // public void Initialize()
     {
         player = Managers.Game.Player;
         favoriteWeaponIcon = Utills.Bind<Image>("Image_Weapon", transform);
@@ -25,10 +26,23 @@ public class TopUIDatatViewer : MonoBehaviour
         goldText = Utills.Bind<Text>("Text_Gold", transform);
         diamondText = Utills.Bind<Text>("Text_Diamond", transform);
 
+        Managers.Event.GoldChangeEvent -= UpdateGold;
+        Managers.Event.GoldChangeEvent += UpdateGold;
+        Managers.Event.DiamondChangeEvent -= UpdateDiamond;
+        Managers.Event.DiamondChangeEvent += UpdateDiamond;
+        Managers.Event.LevelChangeEvent -= UpdateLevel;
+        Managers.Event.LevelChangeEvent += UpdateLevel;
+        Managers.Event.NicknameChangeEvent -= UpdateNickname;
+        Managers.Event.NicknameChangeEvent += UpdateNickname;
+        Managers.Event.ExpChangeEvent -= UpdateExp;
+        Managers.Event.ExpChangeEvent += UpdateExp;
+        Managers.Event.FavoriteWeaponChangeEvent -= UpdateWeaponIcon;
+        Managers.Event.FavoriteWeaponChangeEvent += UpdateWeaponIcon;
+
         AllInfoUpdate();
     }
 
-    public void AllInfoUpdate()
+    void AllInfoUpdate()
     {
         UpdateGold();
         UpdateDiamond();
@@ -38,33 +52,32 @@ public class TopUIDatatViewer : MonoBehaviour
         UpdateWeaponIcon();
     }
 
-    // todo : 전부 옵저버 방식으로 변경
-    public void UpdateGold()
+    void UpdateGold()
     {
-        goldText.text = player.Data.gold.ToString();           // 유저 보유 돈
+        goldText.text = player.Data.gold.ToString("n0");           // 유저 보유 돈
     }
 
-    public void UpdateDiamond()
+    void UpdateDiamond()
     {
-        diamondText.text = player.Data.diamond.ToString();     // 유저 보유 다이아
+        diamondText.text = player.Data.diamond.ToString("n0");     // 유저 보유 다이아
     }
 
-    public void UpdateLevel()
+    void UpdateLevel()
     {
         levelText.text = player.Data.level.ToString(); // 유저 레벨
     }
 
-    public void UpdateNickname()
+    void UpdateNickname()
     {
         nickNameText.text = BackEnd.Backend.UserNickName;   // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
-    public void UpdateExp()
+    void UpdateExp()
     {
         expSlider.value = (float)player.Data.exp / Managers.ServerData.ExpDatas[player.Data.level-1];                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
-    public void UpdateWeaponIcon()
+    void UpdateWeaponIcon()
     {
         // 무기 번호에 따른 아이콘 변경 기능 추가
         // favoriteWeaponIcon.sprite = ;

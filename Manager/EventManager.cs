@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class EventManager
 {
@@ -12,4 +11,13 @@ public class EventManager
     public Action ReinforceMaterialRegistEvent;     // 강화 재료 등록 이벤트
     public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
+
+    #region TopUI
+    public Action GoldChangeEvent;
+    public Action DiamondChangeEvent;
+    public Action LevelChangeEvent;
+    public Action NicknameChangeEvent;
+    public Action ExpChangeEvent;
+    public Action FavoriteWeaponChangeEvent;
+    #endregion
 }
