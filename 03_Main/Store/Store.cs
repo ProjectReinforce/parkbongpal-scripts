@@ -28,7 +28,7 @@ public class Store : MonoBehaviour
     // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
     public void Drawing(int type) // 뽑기 시 사용하는 함수
     {
-        if (Managers.Game.Inventory.Weapons.Count + ONE > Consts.MAX_WEAPON_SLOT_COUNT)
+        if (Managers.Game.Inventory.CheckRemainSlots(ONE))
         {
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
             return;
@@ -73,7 +73,7 @@ public class Store : MonoBehaviour
     // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
     public void BatchDrawing(int type) // 10번 뽑기 시 활용하는 함수
     {
-        if (Managers.Game.Inventory.Weapons.Count + TEN > Consts.MAX_WEAPON_SLOT_COUNT)
+        if (Managers.Game.Inventory.CheckRemainSlots(TEN))
         {
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
             return;
