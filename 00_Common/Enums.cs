@@ -3,7 +3,6 @@
     R_Start,
     R_LoadingScene,
     R_Main_V6,
-    R_Main_V6_SH
 }
 
 public enum Rarity
@@ -68,7 +67,6 @@ public enum ChartName
     quest,
     skillData,
     decomposit
-    
 }
 
 public enum StatType
