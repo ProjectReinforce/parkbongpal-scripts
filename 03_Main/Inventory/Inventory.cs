@@ -86,8 +86,11 @@ public class Inventory
             LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
             for (int i = 0; i < json.Count; i++)
             {
-                WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), _baseWeaponData[i]);
-                Weapon weapon = new(weaponData);
+                WeaponData weaponData = new(json[i]["inDate"].ToString(), _baseWeaponData[i]);
+                Weapon weapon = new(weaponData)
+                {
+                    IsNew = true
+                };
                 weapons.Add(weapon);
                 if (Pidea.Instance.CheckLockWeapon(_baseWeaponData[i].index))
                 {

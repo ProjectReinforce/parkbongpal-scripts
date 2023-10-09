@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class SoulCraftingUI : ReinforceUIBase
 {
+    ReinforceRestoreUI reinforceRestoreUI;
     Text upgradeCountText;
     Text atkText;
     Text soulCostText;
@@ -12,6 +13,14 @@ public class SoulCraftingUI : ReinforceUIBase
     {
         base.Awake();
 
+        reinforceRestoreUI = Utills.Bind<ReinforceRestoreUI>("ClearUpgradeCount_S", transform);
+        void callback(BackEnd.BackendReturnObject bro)
+        {
+            // todo : 연출 재생 후 결과 출력되도록
+            // reinforceButton.interactable = true;
+            CheckQualification();
+        }
+        reinforceRestoreUI.Initialize(reinforceType, callback);
         upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
         atkText = Utills.Bind<Text>("AttackPower", transform);
         soulCostText = Utills.Bind<Text>("Soul_T", transform);
@@ -50,12 +59,34 @@ public class SoulCraftingUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TrySoulCraft(-goldCost, -soulCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => UpdateAtk());
+    }
+
+    protected override void RegisterButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() =>
+        {
+            if (reinforceManager.SelectedWeapon.data.SoulStat[(int)StatType.upgradeCount] <= 0)
+            {
+                Managers.UI.OpenPopup(reinforceRestoreUI.gameObject);
+            }
+            else
+            {
+                reinforceButton.interactable = false;
+                void callback(BackEnd.BackendReturnObject bro)
+                {
+                    // todo : 연출 재생 후 결과 출력되도록
+                    // reinforceButton.interactable = true;
+                    CheckQualification();
+                }
+                Managers.Game.Player.TrySoulCraft(-goldCost, -soulCost);
+                reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);
+                UpdateAtk();
+            }
+        });
     }
 
     bool CheckGold()

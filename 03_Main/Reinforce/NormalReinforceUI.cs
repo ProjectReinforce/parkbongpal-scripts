@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class NormalReinforceUI : ReinforceUIBase
 {
+    ReinforceRestoreUI reinforceRestoreUI;
     Text[] currentSuccessCountText = new Text[2];
     Image weaponIcon;
     Text weaponNameText;
@@ -17,6 +18,14 @@ public class NormalReinforceUI : ReinforceUIBase
     {
         base.Awake();
 
+        reinforceRestoreUI = Utills.Bind<ReinforceRestoreUI>("ClearUpgradeCount_S", transform);
+        void callback(BackEnd.BackendReturnObject bro)
+        {
+            // todo : 연출 재생 후 결과 출력되도록
+            // reinforceButton.interactable = true;
+            CheckQualification();
+        }
+        reinforceRestoreUI.Initialize(reinforceType, callback);
         currentSuccessCountText[0] = Utills.Bind<Text>("Text_SuccessCount1", transform);
         currentSuccessCountText[1] = Utills.Bind<Text>("Text_SuccessCount2", transform);
         weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
@@ -58,11 +67,33 @@ public class NormalReinforceUI : ReinforceUIBase
 
     protected override void RegisterPreviousButtonClickEvent()
     {
-        reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryNormalReinforce(-goldCost));
     }
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
+    }
+
+    protected override void RegisterButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() =>
+        {
+            if (reinforceManager.SelectedWeapon.data.NormalStat[(int)StatType.upgradeCount] <= 0)
+            {
+                Managers.UI.OpenPopup(reinforceRestoreUI.gameObject);
+            }
+            else
+            {
+                reinforceButton.interactable = false;
+                void callback(BackEnd.BackendReturnObject bro)
+                {
+                    // todo : 연출 재생 후 결과 출력되도록
+                    // reinforceButton.interactable = true;
+                    CheckQualification();
+                }
+                Managers.Game.Player.TryNormalReinforce(-goldCost);
+                reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);
+            }
+        });
     }
 
     protected bool CheckGold()

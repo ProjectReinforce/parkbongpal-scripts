@@ -34,6 +34,18 @@ public class SlotModeUI
             lendingImage.gameObject.SetActive(true);
         else
             lendingImage.gameObject.SetActive(false);
+
+        if (weapon != null && weapon.IsNew == true)
+        {
+            newImage.gameObject.SetActive(true);
+            Debug.Log(weapon.IsNew);
+            // weapon.IsNew = false;
+        }
+        else
+        {
+            newImage.gameObject.SetActive(false);
+            Debug.Log("꺼버림");
+        }
     }
 
     public virtual void ResetSpecificView()

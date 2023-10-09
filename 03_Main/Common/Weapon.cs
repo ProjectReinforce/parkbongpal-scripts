@@ -2,11 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BackEnd;
-using Manager;
 using UnityEngine;
 
 [Serializable]
-public class Weapon
+public class Weapon : IVisibleNew
 {
     static Reinforce[] reinforces =
     {
@@ -21,6 +20,8 @@ public class Weapon
     public readonly string Description;
     int _power;
     public int power =>_power;
+
+    public bool IsNew { get; set; } = false;
 
     // public Slot myslot;
 
