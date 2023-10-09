@@ -28,7 +28,7 @@ public class AttenanceSlot : MonoBehaviour    // 출석부에 사용되는 슬�
         }
         else
         {
-            stamp.color = Color.black;
+            stamp.color = Color.gray;
         }
     }
 
