@@ -7,6 +7,7 @@ public class ResourceManager
 {
     [SerializeField] Sprite[] baseWeaponSprites;
     [SerializeField] Sprite[] skills;
+    [SerializeField] Sprite[] postItems;
     public Sprite[] weaponRaritySlot;
     public Sprite DefaultMine;
     public Notifyer notifyer;
@@ -25,6 +26,7 @@ public class ResourceManager
         weaponRaritySlot = Resources.LoadAll<Sprite>("Sprites/Slots");
         DefaultMine = Resources.Load<Sprite>("Sprites/Enviroment/Mine_Door_1");
         notifyer = Resources.Load<Notifyer>("Notifyer");
+        postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
     }
 
     /// <summary>
@@ -49,5 +51,10 @@ public class ResourceManager
     public Sprite GetSkill(int index)
     {
         return skills[index];
+    }
+    
+    public Sprite GetPostItem(int index)
+    {
+        return postItems[index];
     }
 }
