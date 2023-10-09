@@ -6,6 +6,11 @@ using LitJson;
 
 public class JsonMapperRegisterImporter
 {
+    /// <summary>
+    /// 데이터 변환작업을 하기위해 Json 문자열을 JsonMapper에 저장한 후,
+    /// int형과 Dictionary형으로 파싱하는 작업을 함
+    /// 다른곳에서 이 데이터를 사용할 때 파싱되어져서 사용할 수 있어 따로 파싱할 필요를 없앤다.
+    /// </summary>
     public JsonMapperRegisterImporter()
     {
         JsonMapper.RegisterImporter<string, int>(s => int.Parse(s));
@@ -45,44 +50,50 @@ public class JsonMapperRegisterImporter
 
 public class BackEndDataManager
 {
-    public BaseWeaponData[] BaseWeaponDatas;
-    public MineData[] MineDatas;
-    public int[] ExpDatas;
-    public GachaData[] GachaDatas;
-    public AttendanceData[] AttendanceDatas;
-    public QuestData[] QuestDatas;
-    public SkillData[] SkillDatas;
-    public AdditionalData AdditionalData;
-    public NormalReinforceData NormalReinforceData;
-    public MagicCarveData MagicCarveData;
-    public SoulCraftingData SoulCraftingData;
-    public RefinementData RefinementData;
-    public Decomposit[] DecompositDatas;
+    public BaseWeaponData[] BaseWeaponDatas;            // 무기 데이터
+    public MineData[] MineDatas;                        // 광산 데이터
+    public int[] ExpDatas;                              // 경험치 데이터
+    public GachaData[] GachaDatas;                      // 가챠 데이터
+    public AttendanceData[] AttendanceDatas;            // 출석 데이터
+    public QuestData[] QuestDatas;                      // 퀘스트 데이터
+    public SkillData[] SkillDatas;                      // 스킬 데이터
+    public AdditionalData AdditionalData;               // 추가옵션 데이터
+    public NormalReinforceData NormalReinforceData;     // 일반강화 데이터
+    public MagicCarveData MagicCarveData;               // 마법부여 데이터
+    public SoulCraftingData SoulCraftingData;           // 영혼세공 데이터
+    public RefinementData RefinementData;               // 재련 데이터
+    public Decomposit[] DecompositDatas;                // 분해? 데이터
 
+    // 사용자 데이터를 검색하기 위한 검색 필터
     Where SearchFromMyIndate = new();
 
+    // 무기 데이터를 등급별로 저장하기 위한 리스트 배열
     readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
         new List<BaseWeaponData>[System.Enum.GetValues(typeof(Rarity)).Length];
-    public BaseWeaponData GetBaseWeaponData(int index)
+    public BaseWeaponData GetBaseWeaponData(int index)  //인덱스로 기본 무기 데이터를 가져오는 함수
     {
         return BaseWeaponDatas[index];
     }
 
-    public BaseWeaponData GetBaseWeaponData(Rarity rairity)
+    public BaseWeaponData GetBaseWeaponData(Rarity rairity) // 특정 등급의 기본 무기 데이터를 랜덤으로 가져오는 함수
     {
         Debug.Log("rarity"+rairity);
         int countOfRarity = baseWeaponDatasFromRarity[(int)rairity].Count;
         return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, countOfRarity)];
     }
-    
+
+    /// <summary>
+    /// 백엔드데이터 매니저를 초기화하는 함수
+    /// </summary>
     public void Initialize()
     {
-        SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);
-        for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)
+        SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);  // 현재 사용자를 위한 검색 필터 설정
+        for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)                             // 희귀도별 기본 무기 데이터를 저장할 리스트 배열 초기화
             baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
+            
+        new JsonMapperRegisterImporter();   // 새롭게 인스턴스를 생성하여 파싱을 한다.
 
-        new JsonMapperRegisterImporter();
-
+        // 백엔드에서 데이터 로드
         GetUserData();
         GetOwnedWeaponData();
         SetOwnedWeaponId();
@@ -324,6 +335,10 @@ public class BackEndDataManager
         }
     }
 
+    /// <summary>
+    /// 경험치 데이터 로드하는 함수
+    /// </summary>
+    /// <param name="_fromBackEnd"></param>
     void GetExpData(bool _fromBackEnd)
     // void GetExpData()
     {
@@ -366,23 +381,31 @@ public class BackEndDataManager
     }
     
     #region Load all chart from local or BackEnd
-    
+
+    /// <summary>
+    /// _chartId는 차트의 고유 ID이며, _dataProcess는 차트 데이터를 처리하는 콜백 함수
+    /// </summary>
     void SetChartData<T>(string _chartId, System.Action<T[]> _dataProcess) where T: struct
     {
+        // 로컬 저장소에서 차트 데이터를 먼저 로드
         string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
+        // 로컬 저장소에서 성공적으로 데이터를 로드한 경우
         if (GetLocalChartData<T>(_chartId, _dataProcess))
         {
             // Debug.Log($"로컬 차트 로드 완료 : {loadedChart}");
-            SceneLoader.ResourceLoadComplete();
+            SceneLoader.ResourceLoadComplete(); // 호출하여 리소스 로드가 완료되었음을 전달
         }
+        // 로컬 저장소에서 데이터를 로드하지 못한 경우
         else
-            GetBackEndChartData<T>(_chartId, _dataProcess);
+            GetBackEndChartData<T>(_chartId, _dataProcess); // Backend에서 데이터를 가져오는 메서드를 호출합니다.
     }
     #endregion
     
     #region For download to BackEnd chart
-    
 
+    /// <summary>
+    /// _callback은 차트 데이터를 처리하는 콜백 함수
+    /// </summary>
     void GetBackEndChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
     {
         SendQueue.Enqueue(Backend.Chart.GetOneChartAndSave, _chartId, bro =>
@@ -394,14 +417,17 @@ public class BackEndDataManager
                 return;
             }
 
-            JsonData json = BackendReturnObject.Flatten(bro.Rows());
+            JsonData json = BackendReturnObject.Flatten(bro.Rows());    // Backend에서 반환된 데이터를 JsonData로 변환
             // Debug.Log($"[ResourceM] {_chartId} 수신 완료 : {json.Count}개");
         
-            _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
-            SceneLoader.ResourceLoadComplete();
+            _callback(JsonMapper.ToObject<T[]>(json.ToJson())); // Json 데이터를 제네릭 타입 T로 변환하여 _callback 함수에 전달
+            SceneLoader.ResourceLoadComplete(); // 호출하여 리소스 로드가 완료되었음을 전달
         });
     }
 
+    /// <summary>
+    /// tableName은 데이터를 가져올 테이블 이름
+    /// </summary>
     void GetMyBackEndData<T>(string tableName, System.Action<T[]> _callback) where T: struct
     {
         SendQueue.Enqueue(Backend.GameData.Get, tableName, SearchFromMyIndate, 150, bro =>
@@ -411,19 +437,20 @@ public class BackEndDataManager
                 Debug.LogError(bro);
                 return;
             }
-            JsonData json = BackendReturnObject.Flatten(bro.Rows());
+            JsonData json = BackendReturnObject.Flatten(bro.Rows());    // Backend에서 반환된 데이터를 JsonData로 변환합니다.
             // Debug.Log($"[ResourceM] {tableName} 수신 완료 : {json.Count}개");
         
-            _callback(JsonMapper.ToObject<T[]>(json.ToJson()));
-            SceneLoader.ResourceLoadComplete();
+            _callback(JsonMapper.ToObject<T[]>(json.ToJson())); // Json 데이터를 제네릭 타입 T로 변환하여 _callback 함수에 전달
+            SceneLoader.ResourceLoadComplete(); // 호출하여 리소스 로드가 완료되었음을 전달
         });
         if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+            CallChecker.Instance.CountCall();   // 함수 콜수를 추적
     }
     #endregion
 
     #region For load to local chart
     
+    // 로컬 차트 데이터 로드
     bool GetLocalChartData<T>(string _chartId, System.Action<T[]> _callback) where T: struct
     {
         string loadedChart = Backend.Chart.GetLocalChartData(_chartId);
@@ -440,6 +467,7 @@ public class BackEndDataManager
         return false;
     }
 
+    // 문자열을 JSON 데이터로 파싱
     const int CUT_LENGTH = 8;
     JsonData StringToJson(string _targetString)
     {
@@ -452,6 +480,7 @@ public class BackEndDataManager
     }
     #endregion
 
+    // 유저 보유 무기 데이터 로드
     public WeaponData[] UserWeapons;
     void GetOwnedWeaponData()
     {
@@ -461,6 +490,7 @@ public class BackEndDataManager
         });
     }
 
+    // 유저 데이터 로드
     public UserData UserData;
     void GetUserData()
     {
@@ -487,6 +517,7 @@ public class BackEndDataManager
         });
     }
 
+    // 보유한(한번 획득했던) 무기 ID 데이터 로드
     public Material[] ownedWeaponIds = new Material[150];
     void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
     {
@@ -520,7 +551,8 @@ public class BackEndDataManager
     public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
-    
+
+    // 랭킹 리스트 로드
     void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
     {
         deligate[0] = (count) =>
@@ -561,6 +593,7 @@ public class BackEndDataManager
         SceneLoader.ResourceLoadComplete();
     }
 
+    // 퀘스트 기록 데이터 로드
     public QuestRecord[] questRecordDatas;
     void GetQuestClearData()
     {
@@ -570,6 +603,7 @@ public class BackEndDataManager
         });
     }
 
+    // 광산 건설 데이터 로드
     public MineBuildData[] mineBuildDatas;
     void GetMineBuildData()
     {

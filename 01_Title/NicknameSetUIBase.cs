@@ -54,12 +54,12 @@ public abstract class NicknameSetUIBase : MonoBehaviour
 
         SendQueue.Enqueue(Backend.BMember.CheckNicknameDuplication, _nickname, callback =>
         {
+            confirmButton.interactable = true;
             if(!callback.IsSuccess())
             {
                 if(coroutine != null)
                     StopCoroutine(coroutine);
                 coroutine = StartCoroutine(PrintAlertText("이미 존재하는 닉네임입니다."));
-                confirmButton.interactable = true;
                 return;
             }
 

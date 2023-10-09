@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RankSlot:MonoBehaviour
+public class RankSlot : MonoBehaviour
 {
     [SerializeField]  UnityEngine.UI.Text rank;
     [SerializeField]  UnityEngine.UI.Text nickName;
@@ -19,7 +19,4 @@ public class RankSlot:MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    
-    
-
 }
