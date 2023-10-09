@@ -19,15 +19,15 @@ public class QuestTapToggleUI : MonoBehaviour
         TryGetComponent(out toggle);
         transform.GetChild(1).TryGetComponent(out text);
 
-        toggle.onValueChanged.AddListener(ChangeUI);
+        toggle.onValueChanged.AddListener(ChangeUI);    // 해당 onvaluechanged를 통해 토글 상태 변경에 대한 함수 작동
     }
 
-    void ChangeUI(bool _isSelected)
+    void ChangeUI(bool _isSelected) // 토글의 상태가 변경될 때 호출되는 함수
     {
         if (_isSelected)
         {
-            text.color = selectedColor;
-            rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, normalY);
+            text.color = selectedColor; // 선택되었을 시 색 변경
+            rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, normalY);  // 선택되었을 시 위치 변경
         }
         else
         {
