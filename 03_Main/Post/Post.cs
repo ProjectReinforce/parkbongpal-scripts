@@ -17,7 +17,6 @@ public class Post : Singleton<Post>
     [SerializeField] Text postCount;
     [SerializeField] List<PostSlot> slots;
     [SerializeField] PostDetail detail;
-    [SerializeField] GameObject detailPopup;
     protected override void Awake()
     {
         base.Awake();
@@ -116,7 +115,7 @@ public class Post : Singleton<Post>
     //    slots.Clear();
     //}
 
-    public void Receipt(PostSlot slot)//하나 수령
+    public void RemoveSlot(PostSlot slot)//하나 수령
     {
         slots.Remove(slot);
         //Remove(slot);

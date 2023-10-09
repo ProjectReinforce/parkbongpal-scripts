@@ -5,8 +5,6 @@ public class PostDetail : MonoBehaviour
 {
     //제목 보낸이 내용 날짜
     [SerializeField] Text title, author, content, date;
-    [SerializeField] PostItemSlot itemSlotPrefab;
-    [SerializeField] RectTransform itemBox;
     [SerializeField] PostItemSlot[] postItemSlots;
 
     PostSlot currentSlot;
@@ -39,7 +37,7 @@ public class PostDetail : MonoBehaviour
     }
     public void ReceiptButton()
     {
-        Post.Instance.Receipt(currentSlot);
+        Post.Instance.RemoveSlot(currentSlot);
         if (currentSlot.postItemDatas.Count == 0)
             return;
 
