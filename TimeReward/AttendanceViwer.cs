@@ -24,29 +24,24 @@ public class AttendanceViwer : MonoBehaviour //출석부 상태 보여주는 역
             slots[i] = currentSlot;
         }
     }
-    public void TodayCheck(int today)
+    public void TodayCheck(int _today, bool _todayCheck)
     {
-        if (today >= dataLength)
-            today = dataLength - 1;
+        if (_today >= dataLength)
+            _today = dataLength - 1;
 
-        for (int i = 0; i < today; i++)
+        for (int i = 0; i < _today; i++)
         {
             slots[i].CheckStamp(false);
         }
 
+        if(_todayCheck == false)
+        {
+            slots[_today].CheckStamp(true);
+        }
     }
 
-    public void ButtonOn(int today)
+    public void ButtonOn(int _today)
     {
-        slots[today].CheckStamp(true);
-    }
-
-    public void TodayCheck2(int today)
-    {
-        TodayCheck(today);
-        ButtonOn(today);
-
-        //slots[today].CheckStamp();
-        //slots[today].SetToday(days[2]);
+        slots[_today].CheckStamp(true);
     }
 }

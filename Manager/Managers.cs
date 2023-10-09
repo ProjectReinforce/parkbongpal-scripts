@@ -117,7 +117,7 @@ public class Managers : MonoBehaviour
                     serverData.Initialize();
                 }
                 break;
-            case SceneName.R_Main_V6_SEH:
+            case SceneName.R_Main_V6:
                 game.Set();
                 break;
         }

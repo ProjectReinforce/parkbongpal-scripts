@@ -19,10 +19,10 @@ public class AttenanceSlot : MonoBehaviour    // 출석부에 사용되는 슬�
         whatDay.sprite = _whatDay;
         dayCount.text = _dayCount;
     }
-    public void CheckStamp(bool colorCheck)
+    public void CheckStamp(bool _colorCheck)
     {
         stamp.transform.parent.gameObject.SetActive(true);
-        if(colorCheck)
+        if(_colorCheck)
         {
             stamp.color = Color.red;
         }

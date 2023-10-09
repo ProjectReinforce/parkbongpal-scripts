@@ -18,14 +18,7 @@ public class Beneficiary : Singleton<Beneficiary> //수혜자 역할
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
         }
         viwer.Initialize();
-        if(rewardCheck)
-        {
-            viwer.TodayCheck(days);
-        }
-        else
-        {
-            viwer.TodayCheck2(days);
-        }
+        viwer.TodayCheck(days,rewardCheck);
     }
 
     public void ButtonOn()
