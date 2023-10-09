@@ -10,7 +10,7 @@ public class Ranking : MonoBehaviour
     const int PORT_COUNT = 2;
     Rank[][][] ranks = new Rank[PORT_COUNT][][];    // 3차원 배열 ==> 첫번째[0이면 탑랭크, 1이면 마이랭크], 2번째[랭킹의 종류], 3번째[각 차트]
     [SerializeField] RectTransform[] viewPorts;
-    [SerializeField] RectTransform[] viewPorts123;
+    //[SerializeField] RectTransform[] viewPorts123;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     TopRankSlot[][] slotLists123 = new TopRankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     [SerializeField] GameObject nullMyRanknullMyRank;
@@ -56,12 +56,14 @@ public class Ranking : MonoBehaviour
     /// <param name="index">클릭한 랭킹</param>
     public void ClickTab(int index)
     {
+        //Managers.Game.Player.SetGoldPerMin(120000);
+        //Managers.Game.Player.SetCombatScore(600);
         for (int i = 0; i < PORT_COUNT; i++)
         {
-            if(index < 3)
-            {
-                SetSlotTo123(slotLists[i],ranks[i][index]);
-            }
+            //if(index < 3)
+            //{
+               // setslotto123(slotlists[i],ranks[i][index]);
+            //}
             SetSlotTo(slotLists[i],ranks[i][index]);
         }
     }
@@ -85,18 +87,18 @@ public class Ranking : MonoBehaviour
             else
             {
                 //if(ranks[i].rank < 3)
-                if(ranks[i].rank == 1 || ranks[i].rank == 2 || ranks[i].rank == 3)
-                {
-                    viewPorts[1].gameObject.SetActive(false);
-                    viewPorts[2].gameObject.SetActive(true);
-                    nullMyRanknullMyRank.SetActive(false);
-                }
-                else
-                {
+                //if(ranks[i].rank == 1 || ranks[i].rank == 2 || ranks[i].rank == 3)
+                //{
+                //    viewPorts[1].gameObject.SetActive(false);
+                //    viewPorts[2].gameObject.SetActive(true);
+                //    nullMyRanknullMyRank.SetActive(false);
+                //}
+                //else
+                //{
                     viewPorts[1].gameObject.SetActive(true);
                     viewPorts[2].gameObject.SetActive(false);
                     nullMyRanknullMyRank.SetActive(false);
-                }
+                //}
             }
 
             if (i >= ranks.Length)

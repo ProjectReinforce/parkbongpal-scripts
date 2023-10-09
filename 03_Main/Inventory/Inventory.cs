@@ -26,9 +26,9 @@ public class Inventory
 
     public bool CheckRemainSlots(int _slotCount)
     {
-        if (weapons.Count + _slotCount > Consts.MAX_WEAPON_SLOT_COUNT)
-            return false;
-        return true;
+        if (weapons.Count + _slotCount >= Consts.MAX_WEAPON_SLOT_COUNT)
+            return true;
+        return false;
     }
 
     public void Sort(SortType _sortType)
