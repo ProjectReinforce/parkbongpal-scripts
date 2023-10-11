@@ -50,15 +50,21 @@ public class InventoryController : MonoBehaviour, IGameInitializer
                 Slot newSlot = Instantiate(existsSlots[0], contenetTransform);
                 slots[i] = newSlot;
             }
-            slots[i].Initialize(this);
+            slots[i].Initialize();
         }
     }
 
     public void Set(InventoryType _inventoryType)
     {
-        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // foreach (var item in slots)
+        //     item.ResetUI((int)CurrentInventoryType);
+
         CurrentInventoryType = _inventoryType;
-        InventoryOpenOptions[(int)_inventoryType]?.Set();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
+        // foreach (var item in slots)
+        //     item.SetUI((int)CurrentInventoryType);
+            
         Managers.Event.UIRefreshEvent?.Invoke();
     }
 
@@ -69,10 +75,16 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
         foreach (var item in slots)
         {
+            item.SetUI((int)CurrentInventoryType);
             if (item.gameObject.activeSelf == true) continue;
             item.gameObject.SetActive(true);
-
         }
+    }
+
+    void OnDisable()
+    {
+        foreach (var item in slots)
+            item.ResetUI((int)CurrentInventoryType);
     }
 
     public void SortWeapons(Dropdown _test)
