@@ -14,7 +14,7 @@ public class SlotModeUI
     protected Image newImage;
     protected int targetIndex;
 
-    protected UIObject[] defualtUIObjects;
+    protected UIObject[] defaultUIObjects;
     protected UIObject[] eventUIObjects;
 
     public SlotModeUI(Slot _slot, int _siblingIndex)
@@ -34,7 +34,7 @@ public class SlotModeUI
 
     protected virtual void SetUIObjects()
     {
-        defualtUIObjects = new UIObject[]
+        defaultUIObjects = new UIObject[]
         {
             new SlotRarityImage(targetIndex, rarityImage),
             new WeaponIcon(targetIndex, weaponIcon, slotButton),
@@ -50,13 +50,15 @@ public class SlotModeUI
 
     public virtual void SetUI()
     {
+        if (slot.gameObject.activeSelf == false)
+            slot.gameObject.SetActive(true);
         // Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
         // if (weapon != null && weapon.data.mineId != -1)
         //     lendingImage.gameObject.SetActive(true);
         // else
         //     lendingImage.gameObject.SetActive(false);
-        foreach (var item in defualtUIObjects)
+        foreach (var item in defaultUIObjects)
         {
             if (item is null) continue;
             item.Active();
@@ -65,7 +67,13 @@ public class SlotModeUI
 
     public virtual void ResetUI()
     {
-        foreach (var item in defualtUIObjects)
+        foreach (var item in defaultUIObjects)
+        {
+            if (item is null) continue;
+            item.Deactive();
+        }
+
+        foreach (var item in eventUIObjects)
         {
             if (item is null) continue;
             item.Deactive();
@@ -92,6 +100,14 @@ public class SlotModeUI
                 item.Deactive();
             }
         }
+    }
+
+    public virtual void RegisterCustomUIEvent()
+    {
+    }
+
+    public virtual void DeregisterCustomUIEvent()
+    {
     }
 
     // public virtual void SpecificView()
@@ -155,20 +171,66 @@ public class SlotModeUIMine : SlotModeUI
     {
     }
 
+    // public override void Selected(Weapon _weaponFromEvent)
+    // {
+    //     Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+    //     if (weapon == _weaponFromEvent)
+    //         selectedImage.gameObject.SetActive(true);
+    //     else
+    //         selectedImage.gameObject.SetActive(false);
+    // }
+}
+
+public class SlotModeUIReinforce : SlotModeUI
+{
+    public SlotModeUIReinforce(Slot _slot, int _siblingIndex) : base(_slot, _siblingIndex)
+    {
+    }
+
     protected override void SetUIObjects()
     {
-        base.SetUIObjects();
+        defaultUIObjects = new UIObject[]
+        {
+            new SlotRarityImage(targetIndex, rarityImage),
+            new WeaponIcon(targetIndex, weaponIcon, slotButton),
+            new LendingImage(targetIndex, lendingImage),
+            new NewImage(targetIndex, newImage),
+            new CheckImage(targetIndex, checkImage)
+        };
+
+        eventUIObjects = new UIObject[]
+        {
+            new SelectedImage(targetIndex, selectedImage),
+        };
     }
 
-    public override void UIEvent(Weapon[] _weapon)
+    public override void SetUI()
     {
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
-
-        if (_weapon.Contains(weapon))
-            selectedImage.gameObject.SetActive(true);
-        else
-            selectedImage.gameObject.SetActive(false);
+        base.SetUI();
     }
+
+    public override void ResetUI()
+    {
+        base.ResetUI();
+    }
+
+    // public override void SpecificView()
+    // {
+    //     base.SpecificView();
+
+    //     Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+    //     if (weapon != null && weapon == Managers.Game.Reinforce.SelectedWeapon)
+    //         checkImage.gameObject.SetActive(true);
+    //     else
+    //         checkImage.gameObject.SetActive(false);
+    // }
+
+    // public override void ResetSpecificView()
+    // {
+    //     checkImage.gameObject.SetActive(false);
+    // }
 
     // public override void Selected(Weapon _weaponFromEvent)
     // {
@@ -181,93 +243,105 @@ public class SlotModeUIMine : SlotModeUI
     // }
 }
 
-// public class SlotModeUIReinforce : SlotModeUI
-// {
-//     public SlotModeUIReinforce(Slot _slot, int _siblingIndex) : base(_slot, _siblingIndex)
-//     {
-//     }
+public class SlotModeUIReinforceMaterial : SlotModeUI
+{
+    public SlotModeUIReinforceMaterial(Slot _slot, int _siblingIndex) : base(_slot, _siblingIndex)
+    {
+    }
 
-//     public override void SpecificView()
-//     {
-//         base.SpecificView();
+    protected override void SetUIObjects()
+    {
+        defaultUIObjects = new UIObject[]
+        {
+            new SlotRarityImage(targetIndex, rarityImage),
+            new WeaponIcon(targetIndex, weaponIcon, slotButton),
+            new LendingImage(targetIndex, lendingImage),
+            new NewImage(targetIndex, newImage),
+            new CheckImage(targetIndex, checkImage)
+        };
+
+        eventUIObjects = new UIObject[]
+        {
+            new SelectedImage(targetIndex, selectedImage),
+        };
+    }
+
+    public override void SetUI()
+    {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (weapon != null && (Managers.Game.Reinforce.SelectedWeapon.data.rarity != weapon.data.rarity || Managers.Game.Reinforce.SelectedWeapon == weapon ))
+        {
+            slot.gameObject.SetActive(false);
+            return;
+        }
+
+        foreach (var item in defaultUIObjects)
+        {
+            if (item is null) continue;
+            item.Active();
+        }
+    }
+
+    public override void RegisterCustomUIEvent()
+    {
+        Managers.Event.ReinforceMaterialChangeEvent += defaultUIObjects[4].Deactive;
+        Managers.Event.ReinforceMaterialChangeEvent += defaultUIObjects[4].Active;
+    }
+
+    public override void DeregisterCustomUIEvent()
+    {
+        Managers.Event.ReinforceMaterialChangeEvent -= defaultUIObjects[4].Deactive;
+        Managers.Event.ReinforceMaterialChangeEvent -= defaultUIObjects[4].Active;
+    }
+
+    // public override void SpecificView()
+    // {
+    //     base.SpecificView();
         
-//         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+    //     Managers.Event.ReinforceMaterialChangeEvent += CheckMaterials;
 
-//         if (weapon != null && weapon == Managers.Game.Reinforce.SelectedWeapon)
-//             checkImage.gameObject.SetActive(true);
-//         else
-//             checkImage.gameObject.SetActive(false);
-//     }
+    //     Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
-//     public override void ResetSpecificView()
-//     {
-//         checkImage.gameObject.SetActive(false);
-//     }
+    //     if (weapon is not null && weapon.data.rarity != Managers.Game.Reinforce.SelectedWeapon.data.rarity)
+    //     {
+    //         slot.gameObject.SetActive(false);
+    //         return;
+    //     }
 
-//     public override void Selected(Weapon _weaponFromEvent)
-//     {
-//         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+    //     if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
+    //         checkImage.gameObject.SetActive(true);
+    //     else
+    //         checkImage.gameObject.SetActive(false);
+    // }
 
-//         if (weapon == _weaponFromEvent)
-//             selectedImage.gameObject.SetActive(true);
-//         else
-//             selectedImage.gameObject.SetActive(false);
-//     }
-// }
+    // public override void Selected(Weapon _weaponFromEvent)
+    // {
+    //     Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
-// public class SlotModeUIReinforceMaterial : SlotModeUI
-// {
-//     public SlotModeUIReinforceMaterial(Slot _slot, int _siblingIndex) : base(_slot, _siblingIndex)
-//     {
-//     }
+    //     if (weapon == _weaponFromEvent)
+    //         selectedImage.gameObject.SetActive(true);
+    //     else
+    //         selectedImage.gameObject.SetActive(false);
+    // }
 
-//     public override void SpecificView()
-//     {
-//         base.SpecificView();
-        
-//         Managers.Event.ReinforceMaterialChangeEvent += CheckMaterials;
+    // public override void ResetSpecificView()
+    // {
+    //     Managers.Event.ReinforceMaterialChangeEvent -= CheckMaterials;
 
-//         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+    //     checkImage.gameObject.SetActive(false);
+    // }
 
-//         if (weapon is not null && weapon.data.rarity != Managers.Game.Reinforce.SelectedWeapon.data.rarity)
-//         {
-//             slot.gameObject.SetActive(false);
-//             return;
-//         }
+    // void CheckMaterials()
+    // {
+    //     Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
-//         if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
-//             checkImage.gameObject.SetActive(true);
-//         else
-//             checkImage.gameObject.SetActive(false);
-//     }
-
-//     public override void Selected(Weapon _weaponFromEvent)
-//     {
-//         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
-
-//         if (weapon == _weaponFromEvent)
-//             selectedImage.gameObject.SetActive(true);
-//         else
-//             selectedImage.gameObject.SetActive(false);
-//     }
-
-//     public override void ResetSpecificView()
-//     {
-//         Managers.Event.ReinforceMaterialChangeEvent -= CheckMaterials;
-
-//         checkImage.gameObject.SetActive(false);
-//     }
-
-//     void CheckMaterials()
-//     {
-//         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
-
-//         if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
-//             checkImage.gameObject.SetActive(true);
-//         else
-//             checkImage.gameObject.SetActive(false);
-//     }
-// }
+    //     if (Managers.Game.Reinforce.SelectedMaterials.Contains(weapon) || weapon == Managers.Game.Reinforce.SelectedWeapon)
+    //         checkImage.gameObject.SetActive(true);
+    //     else
+    //         checkImage.gameObject.SetActive(false);
+    // }
+}
 
 // public class SlotModeUIDecomposition : SlotModeUI
 // {

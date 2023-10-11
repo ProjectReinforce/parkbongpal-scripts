@@ -73,11 +73,12 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
 
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
         {
             item.SetUI((int)CurrentInventoryType);
-            if (item.gameObject.activeSelf == true) continue;
-            item.gameObject.SetActive(true);
+            // if (item.gameObject.activeSelf == true) continue;
+            // item.gameObject.SetActive(true);
         }
     }
 
@@ -85,6 +86,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     {
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
     }
 
     public void SortWeapons(Dropdown _test)

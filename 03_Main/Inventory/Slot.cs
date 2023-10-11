@@ -22,15 +22,15 @@ public class Slot : MonoBehaviour
     public void Initialize()
     {
         TryGetComponent(out slotButton);
-        SlotButton.onClick.AddListener(() =>
-        {
-            Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
-            // Managers.Event.SlotSelectEvent -= Selected;
-            // Managers.Event.SlotSelectEvent += Selected;
-            // Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
-            Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
-            Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
-        });
+        // SlotButton.onClick.AddListener(() =>
+        // {
+        //     Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
+        //     // Managers.Event.SlotSelectEvent -= Selected;
+        //     // Managers.Event.SlotSelectEvent += Selected;
+        //     // Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
+        //     Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
+        //     Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
+        // });
         TryGetComponent(out rarityImage);
         // defaultSlot = RarityImage.sprite;
         WeaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
@@ -45,9 +45,9 @@ public class Slot : MonoBehaviour
         slotModeUIs = new SlotModeUI[]
         {
             new SlotModeUI(this, transform.GetSiblingIndex()),
-            new SlotModeUI(this, transform.GetSiblingIndex()),
-            new SlotModeUI(this, transform.GetSiblingIndex()),
-            new SlotModeUI(this, transform.GetSiblingIndex()),
+            new SlotModeUIMine(this, transform.GetSiblingIndex()),
+            new SlotModeUIReinforce(this, transform.GetSiblingIndex()),
+            new SlotModeUIReinforceMaterial(this, transform.GetSiblingIndex()),
             new SlotModeUI(this, transform.GetSiblingIndex()),
             new SlotModeUI(this, transform.GetSiblingIndex())
             // new SlotModeUIDefault(this, transform.GetSiblingIndex()),
@@ -83,11 +83,13 @@ public class Slot : MonoBehaviour
     public void RegistUIEvent()
     {
         Managers.Event.SlotClickEvent += slotModeUIs[currentInventoryType].UIEvent;
+        slotModeUIs[currentInventoryType].RegisterCustomUIEvent();
     }
 
     public void DeregistUIEvent()
     {
         Managers.Event.SlotClickEvent -= slotModeUIs[currentInventoryType].UIEvent;
+        slotModeUIs[currentInventoryType].DeregisterCustomUIEvent();
     }
 
     // void Awake()

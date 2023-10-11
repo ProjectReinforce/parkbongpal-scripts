@@ -112,11 +112,6 @@ public class NewImage : UIObject
         if (weapon.IsNew == false) return;
         base.Active();
     }
-
-    public override void Deactive()
-    {
-        base.Deactive();
-    }
 }
 
 public class SelectedImage : UIObject
@@ -124,33 +119,21 @@ public class SelectedImage : UIObject
     public SelectedImage(int _targetWeaponIndex, Image _targetImage) : base(_targetWeaponIndex, _targetImage)
     {
     }
+}
+
+public class CheckImage : UIObject
+{
+    public CheckImage(int _targetWeaponIndex, Image _targetImage) : base(_targetWeaponIndex, _targetImage)
+    {
+    }
 
     public override void Active()
     {
-        base.Active();
-    }
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
+        if (weapon is null) return;
 
-    public override void Deactive()
-    {
-        base.Deactive();
+        bool isSelectedForReinforce = Managers.Game.Reinforce.SelectedWeapon == weapon || (Managers.Game.Reinforce.SelectedMaterials.Count != 0 && Managers.Game.Reinforce.SelectedMaterials.Contains(weapon));
+        if (isSelectedForReinforce)
+            base.Active();
     }
 }
-
-// public class CheckImage : UIObject
-// {
-//     public CheckImage(Weapon _targetWeapon, Image _targetImage) : base(_targetWeapon, _targetImage)
-//     {
-//     }
-
-//     public override void Active()
-//     {
-//         if (targetWeapon is null) return;
-//         if (Managers.Game.Reinforce.SelectedWeapon != targetWeapon) return;
-//         base.Active();
-//     }
-
-//     public override void Deactive()
-//     {
-//         base.Deactive();
-//     }
-// }
