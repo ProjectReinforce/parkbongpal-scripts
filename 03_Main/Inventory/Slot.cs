@@ -22,13 +22,15 @@ public class Slot : MonoBehaviour
     public void Initialize()
     {
         TryGetComponent(out slotButton);
-        // SlotButton.onClick.AddListener(() =>
-        // {
-        //     // Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
-        //     // Managers.Event.SlotSelectEvent -= Selected;
-        //     // Managers.Event.SlotSelectEvent += Selected;
-        //     Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
-        // });
+        SlotButton.onClick.AddListener(() =>
+        {
+            Debug.Log($"{Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()).Name} 클릭됨");
+            // Managers.Event.SlotSelectEvent -= Selected;
+            // Managers.Event.SlotSelectEvent += Selected;
+            // Managers.Event.SlotSelectEvent?.Invoke(Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex()));
+            Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
+            Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
+        });
         TryGetComponent(out rarityImage);
         // defaultSlot = RarityImage.sprite;
         WeaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
@@ -168,7 +170,7 @@ public class Slot : MonoBehaviour
     // Start is called before the first frame update
     // [SerializeField] SlotViewer slotViwer;
     
-    public Weapon myWeapon { get; set; }
+    // public Weapon myWeapon { get; set; }
     
     // public static int  weaponCount=0;
     // public void UpdateLend()

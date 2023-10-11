@@ -37,9 +37,14 @@ public class SlotModeUI
         defualtUIObjects = new UIObject[]
         {
             new SlotRarityImage(targetIndex, rarityImage),
-            new WeaponIcon(targetIndex, weaponIcon),
+            new WeaponIcon(targetIndex, weaponIcon, slotButton),
             new LendingImage(targetIndex, lendingImage),
             new NewImage(targetIndex, newImage)
+        };
+
+        eventUIObjects = new UIObject[]
+        {
+            new SelectedImage(targetIndex, selectedImage),
         };
     }
 
@@ -69,6 +74,24 @@ public class SlotModeUI
 
     public virtual void UIEvent(Weapon[] _weapon)
     {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (_weapon.Contains(weapon))
+        {
+            foreach (var item in eventUIObjects)
+            {
+                if (item is null) continue;
+                item.Active();
+            }
+        }
+        else
+        {
+            foreach (var item in eventUIObjects)
+            {
+                if (item is null) continue;
+                item.Deactive();
+            }
+        }
     }
 
     // public virtual void SpecificView()
@@ -135,29 +158,6 @@ public class SlotModeUIMine : SlotModeUI
     protected override void SetUIObjects()
     {
         base.SetUIObjects();
-
-        eventUIObjects = new UIObject[]
-        {
-            null
-        };
-    }
-
-    public override void SetUI()
-    {
-        foreach (var item in defualtUIObjects)
-        {
-            if (item is null) continue;
-            item.Active();
-        }
-    }
-
-    public override void ResetUI()
-    {
-        foreach (var item in defualtUIObjects)
-        {
-            if (item is null) continue;
-            item.Deactive();
-        }
     }
 
     public override void UIEvent(Weapon[] _weapon)

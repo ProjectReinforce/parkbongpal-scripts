@@ -52,8 +52,17 @@ public class SlotRarityImage : UIObject
 
 public class WeaponIcon : UIObject
 {
-    public WeaponIcon(int _targetWeaponIndex, Image _targetImage) : base(_targetWeaponIndex, _targetImage)
+    Button button;
+
+    public WeaponIcon(int _targetWeaponIndex, Image _targetImage, Button _button) : base(_targetWeaponIndex, _targetImage)
     {
+        button = _button;
+
+        button.onClick.AddListener(() =>
+        {
+            Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
+            Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
+        });
     }
 
     public override void Active()
@@ -62,7 +71,14 @@ public class WeaponIcon : UIObject
 
         if (weapon is null) return;
         image.sprite = Managers.Resource.GetBaseWeaponSprite(weapon.data.baseWeaponIndex);
+        button.enabled = true;
         base.Active();
+    }
+
+    public override void Deactive()
+    {
+        button.enabled = false;
+        base.Deactive();
     }
 }
 
@@ -103,24 +119,22 @@ public class NewImage : UIObject
     }
 }
 
-// public class SelectedImage : UIObject
-// {
-//     public SelectedImage(Weapon _targetWeapon, Image _targetImage) : base(_targetWeapon, _targetImage)
-//     {
-//     }
+public class SelectedImage : UIObject
+{
+    public SelectedImage(int _targetWeaponIndex, Image _targetImage) : base(_targetWeaponIndex, _targetImage)
+    {
+    }
 
-//     public override void Active()
-//     {
-//         if (targetWeapon is null) return;
-//         if (Managers.Game.Reinforce.SelectedWeapon != targetWeapon) return;
-//         base.Active();
-//     }
+    public override void Active()
+    {
+        base.Active();
+    }
 
-//     public override void Deactive()
-//     {
-//         base.Deactive();
-//     }
-// }
+    public override void Deactive()
+    {
+        base.Deactive();
+    }
+}
 
 // public class CheckImage : UIObject
 // {
