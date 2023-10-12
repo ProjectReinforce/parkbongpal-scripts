@@ -11,7 +11,8 @@ public class QuestContentsInitializer : MonoBehaviour
     [SerializeField] Transform onceIngContents;
     [SerializeField] Transform onceClearContents;
     Dictionary<RecordType, List<QuestContent>> questContents = new();
-    Dictionary<int, QuestContent> quests = new();
+    static Dictionary<int, QuestContent> quests = new();    // 괜찮은 건지.......?
+    List<QuestType> typeSelect;
 
     // Dictionary<QuestType, Dictionary<RecordType, List<QuestData>>> questDatasGroupByType = new();
 
@@ -43,6 +44,7 @@ public class QuestContentsInitializer : MonoBehaviour
             // questDatasGroupByType.Add(recordType, new());
         }
 
+        typeSelect = new List<QuestType>();
         foreach (var item in Managers.ServerData.QuestDatas)    // 서버에 있는 퀘스트 데이타들을 돔
         {
             QuestContent questContent = pool.GetOne();  // 퀘스트 컨텐츠를 퀘스트컨텐츠 풀형 클래스에 있는 GetOne함수를 실행해 넣음
@@ -63,7 +65,7 @@ public class QuestContentsInitializer : MonoBehaviour
 
             questContents[item.recordType].Add(questContent);   // 퀘스트 컨텐츠에 저장된 아이템의 타입에 따라 퀘스트 컨텐츠를 추가하고
             quests.Add(item.questId, questContent); // 딕셔너리에 퀘스트 아이디와 퀘스트 컨텐츠를 저장함
-
+            typeSelect.Add(item.questRepeatType);
             // questDatasGroupByType[item.questRepeatType][item.recordType].Add(item);
         }
 
@@ -105,31 +107,31 @@ public class QuestContentsInitializer : MonoBehaviour
 
         // Managers.Game.Player.Record.getDiamondEvent -= () => UpdateLevelContent(RecordType.GetDiamond);
         // Managers.Game.Player.Record.getDiamondEvent += () => UpdateLevelContent(RecordType.GetDiamond);
-        
+
         // Managers.Game.Player.Record.useDiamondEvent -= () => UpdateLevelContent(RecordType.UseDiamond);
         // Managers.Game.Player.Record.useDiamondEvent += () => UpdateLevelContent(RecordType.UseDiamond);
-        
+
         // Managers.Game.Player.Record.produceWeaponEvent -= () => UpdateLevelContent(RecordType.ProduceWeapon);
         // Managers.Game.Player.Record.produceWeaponEvent += () => UpdateLevelContent(RecordType.ProduceWeapon);
-        
+
         // Managers.Game.Player.Record.advanceProduceWeaponEvent -= () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
         // Managers.Game.Player.Record.advanceProduceWeaponEvent += () => UpdateLevelContent(RecordType.AdvanceProduceWeapon);
-        
+
         // Managers.Game.Player.Record.tryPromoteEvent -= () => UpdateLevelContent(RecordType.TryPromote);
         // Managers.Game.Player.Record.tryPromoteEvent += () => UpdateLevelContent(RecordType.TryPromote);
-        
+
         // Managers.Game.Player.Record.tryAdditionalEvent -= () => UpdateLevelContent(RecordType.TryAdditional);
         // Managers.Game.Player.Record.tryAdditionalEvent += () => UpdateLevelContent(RecordType.TryAdditional);
-        
+
         // Managers.Game.Player.Record.tryReinforceEvent -= () => UpdateLevelContent(RecordType.TryReinforce);
         // Managers.Game.Player.Record.tryReinforceEvent += () => UpdateLevelContent(RecordType.TryReinforce);
-        
+
         // Managers.Game.Player.Record.tryMagicEvent -= () => UpdateLevelContent(RecordType.TryMagic);
         // Managers.Game.Player.Record.tryMagicEvent += () => UpdateLevelContent(RecordType.TryMagic);
-        
+
         // Managers.Game.Player.Record.trySoulEvent -= () => UpdateLevelContent(RecordType.TrySoul);
         // Managers.Game.Player.Record.trySoulEvent += () => UpdateLevelContent(RecordType.TrySoul);
-        
+
         // Managers.Game.Player.Record.tryRefineEvent -= () => UpdateLevelContent(RecordType.TryRefine);
         // Managers.Game.Player.Record.tryRefineEvent += () => UpdateLevelContent(RecordType.TryRefine);
     }
@@ -146,9 +148,20 @@ public class QuestContentsInitializer : MonoBehaviour
             item.UpdateContent();
     }
 
+    static public void OpenQuestID(int _openContents)   // 괜찮을까......?
+    {
+        quests[_openContents].gameObject.SetActive(true);
+    }
+
     void ClearCheck()   // 서버 데이터에 있는 questRecordDatas를 돌며 퀘스트 아이디 순서에 따라 클리어 함수를 작동함
     {
-        foreach (var one in Managers.ServerData.questRecordDatas)
-            quests[one.questId].Cleared();
+        int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
+        for (int i = 0; i < progressQuestIdsByType.Length; i++)
+        {
+            foreach (QuestContent one in questContents[(RecordType)i])
+            {
+                one.IdCompare(progressQuestIdsByType[i], typeSelect[i]);    //todo : 퀘스트 타입에 따른 처리 (일간, 주간, 업적)
+            }  
+        }
     }
 }

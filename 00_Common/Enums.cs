@@ -114,8 +114,8 @@ public enum RewardType
 
 public enum RecordType
 {
+    Tutorial,
     LevelUp,
-    Activate,
     UseGold,
     GetGold,
     UseDiamond,
@@ -134,7 +134,6 @@ public enum RecordType
     Attendance,
     GetBonus,
     SeeAds,
-    Tutorial
 }
 
 public enum QuestType
