@@ -12,6 +12,6 @@ public class NullWeaponSelectEventRegister : MonoBehaviour
     {
         TryGetComponent(out button);
 
-        button.onClick.AddListener(() => Managers.Event.SlotSelectEvent(null));
+        button.onClick.AddListener(() => Managers.Event.SlotSelectEvent?.Invoke(null));
     }
 }

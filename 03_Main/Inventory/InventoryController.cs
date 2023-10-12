@@ -65,7 +65,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         // foreach (var item in slots)
         //     item.SetUI((int)CurrentInventoryType);
             
-        Managers.Event.UIRefreshEvent?.Invoke();
+        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     void OnEnable()

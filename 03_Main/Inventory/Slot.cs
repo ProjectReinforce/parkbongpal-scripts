@@ -48,8 +48,8 @@ public class Slot : MonoBehaviour
             new SlotModeUIMine(this, transform.GetSiblingIndex()),
             new SlotModeUIReinforce(this, transform.GetSiblingIndex()),
             new SlotModeUIReinforceMaterial(this, transform.GetSiblingIndex()),
-            new SlotModeUI(this, transform.GetSiblingIndex()),
-            new SlotModeUI(this, transform.GetSiblingIndex())
+            new SlotModeUIMiniGame(this, transform.GetSiblingIndex()),
+            new SlotModeUIDecomposition(this, transform.GetSiblingIndex())
             // new SlotModeUIDefault(this, transform.GetSiblingIndex()),
             // new SlotModeUIMine(this, transform.GetSiblingIndex()),
             // new SlotModeUIReinforce(this, transform.GetSiblingIndex()),
@@ -84,12 +84,18 @@ public class Slot : MonoBehaviour
     {
         Managers.Event.SlotClickEvent += slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].RegisterCustomUIEvent();
+
+        Managers.Event.UIRefreshEvent += slotModeUIs[currentInventoryType].ResetUI;
+        Managers.Event.UIRefreshEvent += slotModeUIs[currentInventoryType].SetUI;
     }
 
     public void DeregistUIEvent()
     {
         Managers.Event.SlotClickEvent -= slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].DeregisterCustomUIEvent();
+        
+        Managers.Event.UIRefreshEvent -= slotModeUIs[currentInventoryType].ResetUI;
+        Managers.Event.UIRefreshEvent -= slotModeUIs[currentInventoryType].SetUI;
     }
 
     // void Awake()

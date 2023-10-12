@@ -58,10 +58,12 @@ public class WeaponIcon : UIObject
     {
         button = _button;
 
+        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() =>
         {
             Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
             Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
+            Managers.Event.SlotSelectEvent?.Invoke(weapon);
         });
     }
 
@@ -129,11 +131,11 @@ public class CheckImage : UIObject
 
     public override void Active()
     {
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
-        if (weapon is null) return;
+        // Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
+        // if (weapon is null) return;
 
-        bool isSelectedForReinforce = Managers.Game.Reinforce.SelectedWeapon == weapon || (Managers.Game.Reinforce.SelectedMaterials.Count != 0 && Managers.Game.Reinforce.SelectedMaterials.Contains(weapon));
-        if (isSelectedForReinforce)
+        // bool isSelectedForReinforce = Managers.Game.Reinforce.SelectedWeapon == weapon || (Managers.Game.Reinforce.SelectedMaterials.Count != 0 && Managers.Game.Reinforce.SelectedMaterials.Contains(weapon));
+        // if (isSelectedForReinforce)
             base.Active();
     }
 }
