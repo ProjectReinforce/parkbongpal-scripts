@@ -14,6 +14,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public Button DecompositionButton { get; private set; }
     public Button ConfirmMaterialsButton { get; private set; }
 
+    ScrollRect scrollRect;
     Text soulText;
     Text oreText;
     
@@ -28,6 +29,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         ConfirmMaterialsButton = Utills.Bind<Button>("Button_MaterialConfirm", transform);
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
+        scrollRect = Utills.Bind<ScrollRect>("Scroll View_Slot", transform);
 
         InventoryOpenOptions = new IInventoryOpenOption[]
         {
@@ -70,6 +72,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
     void OnEnable()
     {
+        scrollRect.normalizedPosition = Vector2.one;
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
 

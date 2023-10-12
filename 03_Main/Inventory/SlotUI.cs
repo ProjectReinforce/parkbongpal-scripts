@@ -78,7 +78,11 @@ public class SlotModeUI
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
         if (_weapon.Contains(weapon))
+        {
             clickEventUIObject.Active();
+            weapon.IsNew = false;
+            defaultUIObjects[3].Deactive();
+        }
         else
             clickEventUIObject.Deactive();
     }
