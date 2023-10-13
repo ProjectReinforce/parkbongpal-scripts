@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Post : Singleton<Post>
+public class Post : Singleton<Post>, IGameInitializer
 {
-    const int MAX_COUNT = 20;
+    const int MAX_COUNT = 11;
 
     [SerializeField] GameObject mySelf;
     Notifyer notifyer;
@@ -21,9 +21,16 @@ public class Post : Singleton<Post>
     {
         base.Awake();
         //notifyer = Instantiate(Managers.Resource.notifyer, mySelf.transform);
+        //ReciveFromServer();
+        //UpdatePostCount();
+    }
+    
+    public void GameInitialize()
+    {
         ReciveFromServer();
-        //postCount.text = $"{slots.Count}";
         UpdatePostCount();
+        //Debug.Log("Post GameInitialize() 실행");
+        // 여기에서 lastCallTime를....
     }
 
     private void ReciveFromServer()
@@ -49,15 +56,16 @@ public class Post : Singleton<Post>
             //Debug.Log("POST JSON =" + json.ToJson());
             for (int i = 0; i < json.Count; i++)
             {
-
                 PostData mailData = JsonMapper.ToObject<PostData>(json[i].ToJson());
                 if (slots.Find(o => o.postData.inDate == mailData.inDate))
                     continue;
+                //Debug.Log($"{i}번째 우편입니다.");
+                //Debug.Log("메일title : " + mailData.title);
                 //해당 데이터가 존재하면 아래 코드 필요없음.
                 PostSlot mail = Instantiate(prefab, mailBox);
 
                 //아이템이 있다면 아래 실행
-                Debug.Log("아이템이 존재합니다. : " + i);
+                //Debug.Log("아이템이 존재합니다. : " + i);
                 List<PostItemData> mailItemDatas = new List<PostItemData>();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
