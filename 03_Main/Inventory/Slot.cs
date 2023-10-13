@@ -82,7 +82,7 @@ public class Slot : MonoBehaviour
 
     public void RegistUIEvent()
     {
-        Managers.Event.SlotClickEvent += slotModeUIs[currentInventoryType].UIEvent;
+        Managers.Event.SlotSelectEvent += slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].RegisterCustomUIEvent();
 
         Managers.Event.UIRefreshEvent += slotModeUIs[currentInventoryType].ResetUI;
@@ -91,7 +91,7 @@ public class Slot : MonoBehaviour
 
     public void DeregistUIEvent()
     {
-        Managers.Event.SlotClickEvent -= slotModeUIs[currentInventoryType].UIEvent;
+        Managers.Event.SlotSelectEvent -= slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].DeregisterCustomUIEvent();
         
         Managers.Event.UIRefreshEvent -= slotModeUIs[currentInventoryType].ResetUI;

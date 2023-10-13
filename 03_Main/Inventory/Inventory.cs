@@ -62,6 +62,7 @@ public class Inventory
     // todo : 개선 필요, 뒤끝 연동 부분 분리해야 하지 않을지
     public void AddWeapons(BaseWeaponData[] _baseWeaponData)
     {
+        Transactions.SendCurrent();
         for (int i = 0; i < _baseWeaponData.Length; i++)
         {
             Param param = new()

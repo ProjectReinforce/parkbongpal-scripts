@@ -62,7 +62,7 @@ public class WeaponIcon : UIObject
         button.onClick.AddListener(() =>
         {
             Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
-            Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
+            // Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
             Managers.Event.SlotSelectEvent?.Invoke(weapon);
         });
     }
