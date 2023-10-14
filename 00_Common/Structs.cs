@@ -170,11 +170,16 @@ public struct UserData
     public string inDate;
     public DateTime owner_inDate,lastLogin;
 }
-public struct PideaData//광산차트
+public struct PideaData//도감차트
 {
     public int ownedWeaponId, rarity;
 
     public static PideaData colum;
+}
+public struct PideaCollectionData//컬렉션차트
+{
+    public int collectionId, idList;
+    public string collectionTitle;
 }
 
 [Serializable]

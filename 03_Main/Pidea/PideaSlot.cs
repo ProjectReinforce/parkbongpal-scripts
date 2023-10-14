@@ -19,6 +19,7 @@ public class PideaSlot : NewThing
     public void SetCurrent()
     {
         if(weaponImage.material.color == Color.black) return;
-        Pidea.Instance.SetCurrentWeapon(this);
+
+        Managers.Pidea.SetCurrentWeapon(this);
     }
 }

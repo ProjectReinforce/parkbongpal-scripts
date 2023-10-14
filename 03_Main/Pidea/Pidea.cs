@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Manager;
 using UnityEngine;
 
-public class Pidea : Singleton<Pidea>
+public class Pidea : MonoBehaviour//Singleton<Pidea>
 {
     [SerializeField] PideaSlot prefab ;
     [SerializeField] List< PideaSlot> pideaSlots;
@@ -37,8 +37,7 @@ public class Pidea : Singleton<Pidea>
             return result;
         }
     }
-
- 
+     
     public void SetCurrentWeapon(PideaSlot slot)
     {
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
@@ -60,10 +59,11 @@ public class Pidea : Singleton<Pidea>
         notifyer.GetNew(pideaSlots[index]);
     }
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
+        //base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
+        
         notifyer = Instantiate(Managers.Resource.notifyer,transform);
       
         materials = Managers.ServerData.ownedWeaponIds;
