@@ -87,6 +87,17 @@ public class SlotModeUI
             clickEventUIObject.Deactive();
     }
 
+    public void HideLendedWeaponSlot(bool _isHide)
+    {
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+
+        if (weapon is null) return;
+        if (_isHide && (weapon.data.mineId != -1))
+            slot.gameObject.SetActive(false);
+        else
+            slot.gameObject.SetActive(true);
+    }
+
     public virtual void RegisterCustomUIEvent()
     {
     }
