@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Post : Singleton<Post>, IGameInitializer
+public class Post : MonoBehaviour, IGameInitializer
 {
-    const int MAX_COUNT = 11;
+    const int MAX_COUNT = 30;
 
     [SerializeField] GameObject mySelf;
     Notifyer notifyer;
@@ -17,20 +17,26 @@ public class Post : Singleton<Post>, IGameInitializer
     [SerializeField] Text postCount;
     [SerializeField] List<PostSlot> slots;
     [SerializeField] PostDetail detail;
-    protected override void Awake()
+
+    void OnEnable()
     {
-        base.Awake();
-        //notifyer = Instantiate(Managers.Resource.notifyer, mySelf.transform);
-        //ReciveFromServer();
-        //UpdatePostCount();
+        Managers.Event.PostSlotSelectEvent -= ViewCurrent;
+        Managers.Event.PostSlotSelectEvent += ViewCurrent;
+        Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
+        Managers.Event.PostReceiptButtonSelectEvent += RemoveSlot;
+
+        if (Time.time - lastCallTime <= 1800) return;// 30분
+        ReciveFromServer();
     }
-    
+    void OnDisable()
+    {
+        Managers.Event.PostSlotSelectEvent -= ViewCurrent;
+        Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
+    }
     public void GameInitialize()
     {
         ReciveFromServer();
         UpdatePostCount();
-        //Debug.Log("Post GameInitialize() 실행");
-        // 여기에서 lastCallTime를....
     }
 
     private void ReciveFromServer()
@@ -42,6 +48,7 @@ public class Post : Singleton<Post>, IGameInitializer
                 Debug.LogError(callback);
                 return;
             }
+            lastCallTime = Time.time;
             JsonData json = callback.GetReturnValuetoJSON()["postList"];
             if (json.Count <= 0)
             {
@@ -51,21 +58,16 @@ public class Post : Singleton<Post>, IGameInitializer
             }
             slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
-            //Debug.Log("POST JSON COUNT =" + json.Count);
-
-            //Debug.Log("POST JSON =" + json.ToJson());
             for (int i = 0; i < json.Count; i++)
             {
                 PostData mailData = JsonMapper.ToObject<PostData>(json[i].ToJson());
                 if (slots.Find(o => o.postData.inDate == mailData.inDate))
                     continue;
-                //Debug.Log($"{i}번째 우편입니다.");
-                //Debug.Log("메일title : " + mailData.title);
+
                 //해당 데이터가 존재하면 아래 코드 필요없음.
                 PostSlot mail = Instantiate(prefab, mailBox);
 
                 //아이템이 있다면 아래 실행
-                //Debug.Log("아이템이 존재합니다. : " + i);
                 List<PostItemData> mailItemDatas = new List<PostItemData>();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
@@ -93,17 +95,28 @@ public class Post : Singleton<Post>, IGameInitializer
         });
     }
 
-    private void OnEnable()//목록조회
+    public void RemoveSlot(PostSlot slot)//하나 수령
     {
-        // 30분마다 불러올 수 있도록 가능한 위치에서 소환할수있또록ㄱㄱㄱ
-        if (Time.time - lastCallTime < 1800) return;// 30분
-        lastCallTime = Time.time;
-        ReciveFromServer();
+        slots.Remove(slot);
+        SendQueue.Enqueue(Backend.UPost.ReceivePostItem, PostType.Admin, slot.postData.inDate, bro =>
+        {
+            if (!bro.IsSuccess())
+            {
+                Debug.LogError("우편 수령에 실패했습니다.");
+            }
+            Destroy(slot.gameObject);
+        });
+        UpdatePostCount();
     }
-
-    public void PostUpdatePackageButton()
+    void ViewCurrent(PostSlot slot)
     {
-        ReciveFromServer();
+        // 우편슬롯을 눌렀을 때 해당 우편의 상세창내용창 뜸
+        detail.SetDetail(slot);
+        Managers.UI.OpenPopup(detail.transform.parent.gameObject);
+    }
+    public void UpdatePostCount()
+    {
+        postCount.text = $"{slots.Count}";
     }
 
     //public void BatchReceipt()//일괄 수령
@@ -122,40 +135,10 @@ public class Post : Singleton<Post>, IGameInitializer
     //    }
     //    slots.Clear();
     //}
-
-    public void RemoveSlot(PostSlot slot)//하나 수령
-    {
-        slots.Remove(slot);
-        //Remove(slot);
-        SendQueue.Enqueue(Backend.UPost.ReceivePostItem, PostType.Admin, slot.postData.inDate, bro =>
-        {
-            if (!bro.IsSuccess())
-            {
-                Debug.LogError("우편 수령에 실패했습니다.");
-            }
-            Destroy(slot.gameObject);
-        });
-        UpdatePostCount();
-    }
-
-    public void Remove(PostSlot slot)
-    {
-        // 보상을 받았으면 해당 우편은 삭제
-        notifyer.Remove(slot);
-    }
-
-
-    public void ViewCurrent(PostSlot slot)
-    {
-        // 우편을 눌렀을 때 해당 우편의 상세창 떠라
-        Debug.Log("상세창 Detail setting");
-        detail.SetDetail(slot);
-        Managers.UI.OpenPopup(detail.transform.parent.gameObject);
-    }
-
-    public void UpdatePostCount()
-    {
-        postCount.text = $"{slots.Count}";
-    }
+    //public void Remove(PostSlot slot)
+    //{
+    //    // 보상을 받았으면 해당 우편은 삭제
+    //    notifyer.Remove(slot);
+    //}
 
 }

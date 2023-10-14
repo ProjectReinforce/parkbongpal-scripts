@@ -21,4 +21,9 @@ public class EventManager
     public Action ExpChangeEvent;
     public Action FavoriteWeaponChangeEvent;
     #endregion
+
+    #region Post
+    public Action<PostSlot> PostSlotSelectEvent;            // 우편 슬롯 선택 이벤트
+    public Action<PostSlot> PostReceiptButtonSelectEvent;   // 우편 보상수령버튼 선택 이벤트
+    #endregion
 }

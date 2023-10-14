@@ -6,9 +6,9 @@ public class PostSlot : NewThing
     public PostData postData { get; set; }
     [SerializeField] private UnityEngine.UI.Text title;
     [SerializeField] private UnityEngine.UI.Text date;
-    [SerializeField] private UnityEngine.UI.Image item;     // 보여지는 아이템 이미지
+    [SerializeField] private UnityEngine.UI.Image item;     // Post창에 보여지는 아이템 이미지
     [SerializeField] private UnityEngine.UI.Text itemAmount;
-    [SerializeField] private GameObject items;    //아이템이 2개일 경우
+    [SerializeField] private GameObject items;              // 아이템이 1개 이상일 경우 보여주기위해
 
     public List<PostItemData> postItemDatas;
 
@@ -37,8 +37,7 @@ public class PostSlot : NewThing
     }
     public void ViewThis()
     {
-        Debug.Log("메일내용 팝업");
-        Post.Instance.ViewCurrent(this);
+        Managers.Event.PostSlotSelectEvent?.Invoke(this);
     }
 
 }
