@@ -16,6 +16,8 @@ public class InventoryOpenPopupRegister : OpenPopupRegister
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
         {
+            if (inventory.gameObject.activeSelf == true)
+                Managers.UI.ClosePopup();
             inventory.Set(inventoryOpenType);
             Managers.UI.OpenPopup(inventory.gameObject);
         });

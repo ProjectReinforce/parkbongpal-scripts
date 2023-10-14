@@ -14,6 +14,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public Button DecompositionButton { get; private set; }
     public Button ConfirmMaterialsButton { get; private set; }
 
+    ScrollRect scrollRect;
     Text soulText;
     Text oreText;
     
@@ -28,6 +29,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         ConfirmMaterialsButton = Utills.Bind<Button>("Button_MaterialConfirm", transform);
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
+        scrollRect = Utills.Bind<ScrollRect>("Scroll View_Slot", transform);
 
         InventoryOpenOptions = new IInventoryOpenOption[]
         {
@@ -50,29 +52,44 @@ public class InventoryController : MonoBehaviour, IGameInitializer
                 Slot newSlot = Instantiate(existsSlots[0], contenetTransform);
                 slots[i] = newSlot;
             }
-            slots[i].Initialize(this);
+            slots[i].Initialize();
         }
     }
 
     public void Set(InventoryType _inventoryType)
     {
-        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // foreach (var item in slots)
+        //     item.ResetUI((int)CurrentInventoryType);
+
         CurrentInventoryType = _inventoryType;
-        InventoryOpenOptions[(int)_inventoryType]?.Set();
-        Managers.Event.UIRefreshEvent?.Invoke();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
+        // foreach (var item in slots)
+        //     item.SetUI((int)CurrentInventoryType);
+            
+        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     void OnEnable()
     {
+        scrollRect.normalizedPosition = Vector2.one;
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
 
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
         {
-            if (item.gameObject.activeSelf == true) continue;
-            item.gameObject.SetActive(true);
-
+            item.SetUI((int)CurrentInventoryType);
+            // if (item.gameObject.activeSelf == true) continue;
+            // item.gameObject.SetActive(true);
         }
+    }
+
+    void OnDisable()
+    {
+        foreach (var item in slots)
+            item.ResetUI((int)CurrentInventoryType);
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
     }
 
     public void SortWeapons(Dropdown _test)

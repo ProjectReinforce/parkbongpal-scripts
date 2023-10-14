@@ -6,7 +6,7 @@ using System;
 
 public static class Transactions
 {
-    static List<TransactionValue>[] tvs =  { new(), new() };
+    static List<TransactionValue>[] tvs =  { new(), new(), new(), new(), new(), new(), new(), new(), new(), new() };
     // static List<TransactionValue> tvs =  new();
     static int currentIndex = 0;
 
@@ -18,6 +18,7 @@ public static class Transactions
     public static void Send(int _targetIndex, Action<BackendReturnObject> _callback = null)
     {
         if (tvs[_targetIndex].Count <= 0) return;
+        currentIndex = (currentIndex + 1) % tvs.Length;
 
         SendQueue.Enqueue(Backend.GameData.TransactionWriteV2, tvs[_targetIndex], (callback) => 
         {
@@ -44,7 +45,7 @@ public static class Transactions
         if (tvs[currentIndex].Count >= 10)
         {
             Send(currentIndex);
-            currentIndex = (currentIndex + 1) % 2;
+            // currentIndex = (currentIndex + 1) % tvs.Length;
         }
 
         tvs[currentIndex].Add(_transactionValue);

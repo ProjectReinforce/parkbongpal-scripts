@@ -51,7 +51,7 @@ public class Mine : MonoBehaviour, Rental
             {
                 // todo: 광산 여시겠습니까 확인 메시지창 출력
                 ulong diff = buildCost - (ulong)Managers.Game.Player.Data.gold;
-                Managers.Alarm.Warning($"골드가 {diff}만큼 부족합니다.");
+                Managers.Alarm.Warning($"{diff:n0} 골드가 부족합니다.");
                 return;
             }
             else
@@ -220,7 +220,7 @@ public class Mine : MonoBehaviour, Rental
             return;
         }
         Managers.Game.Player.AddGold(gold);
-        Managers.Alarm.Warning($"{gold} Gold를 수령했습니다.");
+        Managers.Alarm.Warning($"{gold:n0} 골드를 수령했습니다.");
         gold = 0;
         DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         Param param = new Param();
