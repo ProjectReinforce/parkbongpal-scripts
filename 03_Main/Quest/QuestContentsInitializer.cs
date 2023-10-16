@@ -34,19 +34,19 @@ public class QuestContentsInitializer : MonoBehaviour
         //         i.Value.Add(recordType, new());
         // }
 
-        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
+        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType)); // 문자열 배열에 Enum형 들의 이름을 저장함
         foreach (var item in recordTypeNames)
         {
-            RecordType recordType = Utills.StringToEnum<RecordType>(item);
+            RecordType recordType = Utills.StringToEnum<RecordType>(item); // item에 들어가 있는 문자열을 열거형으로 변환
 
-            questContents.Add(recordType, new List<QuestContent>());
+            questContents.Add(recordType, new List<QuestContent>()); // 해당 열거형 변수들과 새로운 QuestContetnt 리스트를 딕셔너리에 저장함
             // questDatasGroupByType.Add(recordType, new());
         }
 
-        foreach (var item in Managers.ServerData.QuestDatas)
+        foreach (var item in Managers.ServerData.QuestDatas)    // 서버에 있는 퀘스트 데이타들을 돔
         {
-            QuestContent questContent = pool.GetOne();
-            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);
+            QuestContent questContent = pool.GetOne();  // 퀘스트 컨텐츠를 퀘스트컨텐츠 풀형 클래스에 있는 GetOne함수를 실행해 넣음
+            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);   // 선언된 변수를 초기화하며 각 day, week, once들에 저장된 transform값을 대입해 초기화함)
 
             // switch (item.questRepeatType)
             // {
@@ -61,8 +61,8 @@ public class QuestContentsInitializer : MonoBehaviour
             //         break;
             // }
 
-            questContents[item.recordType].Add(questContent);
-            quests.Add(item.questId, questContent);
+            questContents[item.recordType].Add(questContent);   // 퀘스트 컨텐츠에 저장된 아이템의 타입에 따라 퀘스트 컨텐츠를 추가하고
+            quests.Add(item.questId, questContent); // 딕셔너리에 퀘스트 아이디와 퀘스트 컨텐츠를 저장함
 
             // questDatasGroupByType[item.questRepeatType][item.recordType].Add(item);
         }
@@ -134,19 +134,19 @@ public class QuestContentsInitializer : MonoBehaviour
         // Managers.Game.Player.Record.tryRefineEvent += () => UpdateLevelContent(RecordType.TryRefine);
     }
 
-    void UpdateAllContent()
+    void UpdateAllContent() // 옵저버패턴으로 변경해야된다.
     {
         foreach (var one in quests)
             one.Value.UpdateContent();
     }
 
-    void UpdateLevelContent(RecordType _recordType)
+    void UpdateLevelContent(RecordType _recordType) // 현재 사용 안 함
     {
         foreach (var item in questContents[_recordType])
             item.UpdateContent();
     }
 
-    void ClearCheck()
+    void ClearCheck()   // 서버 데이터에 있는 questRecordDatas를 돌며 퀘스트 아이디 순서에 따라 클리어 함수를 작동함
     {
         foreach (var one in Managers.ServerData.questRecordDatas)
             quests[one.questId].Cleared();

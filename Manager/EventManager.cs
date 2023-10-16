@@ -9,8 +9,10 @@ public class EventManager
     public Action ReinforceWeaponChangeEvent;       // 강화 무기 변경 이벤트
     public Action ReinforceMaterialChangeEvent;     // 강화 재료 변경 이벤트
     public Action ReinforceMaterialRegistEvent;     // 강화 재료 등록 이벤트
+    public Action<Weapon[]> DecompositionWeaponChangeEvent;
     public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
+    public Action<bool> HideLendedWeaponToggleEvent;
 
     #region TopUI
     public Action GoldChangeEvent;
@@ -19,5 +21,10 @@ public class EventManager
     public Action NicknameChangeEvent;
     public Action ExpChangeEvent;
     public Action FavoriteWeaponChangeEvent;
+    #endregion
+
+    #region Post
+    public Action<PostSlot> PostSlotSelectEvent;            // 우편 슬롯 선택 이벤트
+    public Action<PostSlot> PostReceiptButtonSelectEvent;   // 우편 보상수령버튼 선택 이벤트
     #endregion
 }

@@ -6,57 +6,57 @@ using UnityEngine;
 
 public class TutorialPlayer : MonoBehaviour
 {
-    void Awake()
-    {
-        bool clearedTutorial = false;
+//     void Awake()
+//     {
+//         bool clearedTutorial = false;
 
-        foreach (var item in Managers.ServerData.questRecordDatas)
-        {
-            if (item.questId == 0)
-            {
-                clearedTutorial = true;
-                break;
-            }
-        }
+//         foreach (var item in Managers.ServerData.questRecordDatas)
+//         {
+//             if (item.questId == 0)
+//             {
+//                 clearedTutorial = true;
+//                 break;
+//             }
+//         }
 
-        if (clearedTutorial == false)
-        {
-            // todo: 튜토리얼 재생 여기서
-            // 아래 내용은 테스트용 코드임
-            // 튜토리얼 종료 후 기본 광산 3개 열어줌
-            // 튜토리얼 퀘스트는 클리어 할 수 있도록 로컬데이터로 저장.
-            Param param = new()
-            {
-                { nameof(QuestRecord.questId), 0 },
-                { nameof(QuestRecord.cleared), true }
-            };
+//         if (clearedTutorial == false)
+//         {
+//             // todo: 튜토리얼 재생 여기서
+//             // 아래 내용은 테스트용 코드임
+//             // 튜토리얼 종료 후 기본 광산 3개 열어줌
+//             // 튜토리얼 퀘스트는 클리어 할 수 있도록 로컬데이터로 저장.
+//             Param param = new()
+//             {
+//                 { nameof(QuestRecord.questId), 0 },
+//                 { nameof(QuestRecord.cleared), true }
+//             };
             
-            SendQueue.Enqueue(Backend.GameData.Insert, nameof(QuestRecord), param, callback =>
-            {
-                Managers.Alarm.Warning("튜토리얼 진행 시작");
-                OpenBasicMines();
-            });
-        }
-    }
+//             SendQueue.Enqueue(Backend.GameData.Insert, nameof(QuestRecord), param, callback =>
+//             {
+//                 Managers.Alarm.Warning("튜토리얼 진행 시작");
+//                 OpenBasicMines();
+//             });
+//         }
+//     }
 
-    // 초기 광산 오픈 함수
-    void OpenBasicMines()
-    {
-        foreach (var item in Managers.ServerData.MineDatas)
-        {
-            if (item.buildMin == 0)
-            {
-                Param param = new()
-                {
-                    { nameof(MineBuildData.mineIndex), item.index },
-                    { nameof(MineBuildData.buildStartTime), DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()) },
-                    { nameof(MineBuildData.buildCompleted), true }
-                };
+//     // 초기 광산 오픈 함수
+//     void OpenBasicMines()
+//     {
+//         foreach (var item in Managers.ServerData.MineDatas)
+//         {
+//             if (item.buildMin == 0)
+//             {
+//                 Param param = new()
+//                 {
+//                     { nameof(MineBuildData.mineIndex), item.index },
+//                     { nameof(MineBuildData.buildStartTime), DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()) },
+//                     { nameof(MineBuildData.buildCompleted), true }
+//                 };
 
-                Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
-            }
-        }
+//                 Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
+//             }
+//         }
 
-        Transactions.SendCurrent();
-    }
+//         Transactions.SendCurrent();
+//     }
 }

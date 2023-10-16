@@ -26,9 +26,9 @@ public class Inventory
 
     public bool CheckRemainSlots(int _slotCount)
     {
-        if (weapons.Count + _slotCount >= Consts.MAX_WEAPON_SLOT_COUNT)
-            return true;
-        return false;
+        if (weapons.Count + _slotCount <= Consts.MAX_WEAPON_SLOT_COUNT)
+            return false;
+        return true;
     }
 
     public void Sort(SortType _sortType)
@@ -62,6 +62,7 @@ public class Inventory
     // todo : 개선 필요, 뒤끝 연동 부분 분리해야 하지 않을지
     public void AddWeapons(BaseWeaponData[] _baseWeaponData)
     {
+        Transactions.SendCurrent();
         for (int i = 0; i < _baseWeaponData.Length; i++)
         {
             Param param = new()
@@ -92,13 +93,13 @@ public class Inventory
                     IsNew = true
                 };
                 weapons.Add(weapon);
-                if (Pidea.Instance.CheckLockWeapon(_baseWeaponData[i].index))
+                if (Managers.Pidea.CheckLockWeapon(_baseWeaponData[i].index))
                 {
                     Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                         { nameof(PideaData.colum.ownedWeaponId), _baseWeaponData[i].index },
                         { nameof(PideaData.colum.rarity), _baseWeaponData[i].rarity }
                     }));
-                    Pidea.Instance.GetNewWeapon(_baseWeaponData[i].index);
+                    Managers.Pidea.GetNewWeapon(_baseWeaponData[i].index);
                 }
             }
         });

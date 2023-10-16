@@ -58,11 +58,10 @@ public class DecompositionUI : MonoBehaviour
         if (_weapon != null && _weapon.data.mineId != -1)
             return;
         if (selectedWeapons.Contains(_weapon))
-        {
             selectedWeapons.Remove(_weapon);
-            return;
-        }
-        selectedWeapons.Add(_weapon);
+        else
+            selectedWeapons.Add(_weapon);
+        Managers.Event.DecompositionWeaponChangeEvent?.Invoke(selectedWeapons.ToArray());
 
         if (selectedWeapons.Count > 0)
             decompositionButton.interactable = true;

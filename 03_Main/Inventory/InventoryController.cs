@@ -9,11 +9,14 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public InventoryType CurrentInventoryType { get; private set; }
     public IInventoryOpenOption[] InventoryOpenOptions { get; private set;}
     public DetailInfoUI DetailInfo { get; private set; }
+    public Transform DefaultBackground { get; private set; }
     public DecompositionUI DecompositionUI { get; private set; }
     public Button SelectButton { get; private set; }
     public Button DecompositionButton { get; private set; }
     public Button ConfirmMaterialsButton { get; private set; }
+    public Toggle hideLendedWeaponToggle { get; private set; }
 
+    ScrollRect scrollRect;
     Text soulText;
     Text oreText;
     
@@ -22,12 +25,17 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         DetailInfo = Utills.Bind<DetailInfoUI>("DetailInfo_S", transform);
+        DefaultBackground = Utills.Bind<Transform>("DefaultBackground", transform);
         DecompositionUI = Utills.Bind<DecompositionUI>("Decomposition_S", transform);
         SelectButton = Utills.Bind<Button>("Button_Select", transform);
         DecompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
         ConfirmMaterialsButton = Utills.Bind<Button>("Button_MaterialConfirm", transform);
+        hideLendedWeaponToggle = Utills.Bind<Toggle>("Toggle_HideLendedWeapon", transform);
+        hideLendedWeaponToggle.onValueChanged.RemoveAllListeners();
+        hideLendedWeaponToggle.onValueChanged.AddListener((value) => Managers.Event.HideLendedWeaponToggleEvent?.Invoke(value));
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
+        scrollRect = Utills.Bind<ScrollRect>("Scroll View_Slot", transform);
 
         InventoryOpenOptions = new IInventoryOpenOption[]
         {
@@ -50,29 +58,44 @@ public class InventoryController : MonoBehaviour, IGameInitializer
                 Slot newSlot = Instantiate(existsSlots[0], contenetTransform);
                 slots[i] = newSlot;
             }
-            slots[i].Initialize(this);
+            slots[i].Initialize();
         }
     }
 
     public void Set(InventoryType _inventoryType)
     {
-        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        // foreach (var item in slots)
+        //     item.ResetUI((int)CurrentInventoryType);
+
         CurrentInventoryType = _inventoryType;
-        InventoryOpenOptions[(int)_inventoryType]?.Set();
-        Managers.Event.UIRefreshEvent?.Invoke();
+        // InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
+        // foreach (var item in slots)
+        //     item.SetUI((int)CurrentInventoryType);
+            
+        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     void OnEnable()
     {
+        scrollRect.normalizedPosition = Vector2.one;
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
 
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
         {
-            if (item.gameObject.activeSelf == true) continue;
-            item.gameObject.SetActive(true);
-
+            item.SetUI((int)CurrentInventoryType);
+            // if (item.gameObject.activeSelf == true) continue;
+            // item.gameObject.SetActive(true);
         }
+    }
+
+    void OnDisable()
+    {
+        foreach (var item in slots)
+            item.ResetUI((int)CurrentInventoryType);
+        InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
     }
 
     public void SortWeapons(Dropdown _test)

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Post : Singleton<Post>
+public class Post : MonoBehaviour, IGameInitializer
 {
-    const int MAX_COUNT = 20;
+    const int MAX_COUNT = 30;
 
     [SerializeField] GameObject mySelf;
     Notifyer notifyer;
@@ -17,14 +17,26 @@ public class Post : Singleton<Post>
     [SerializeField] Text postCount;
     [SerializeField] List<PostSlot> slots;
     [SerializeField] PostDetail detail;
-    [SerializeField] GameObject detailPopup;
 
-    protected override void Awake()
+    void OnEnable()
     {
-        base.Awake();
-        notifyer = Instantiate(Managers.Resource.notifyer, mySelf.transform);
+        Managers.Event.PostSlotSelectEvent -= ViewCurrent;
+        Managers.Event.PostSlotSelectEvent += ViewCurrent;
+        Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
+        Managers.Event.PostReceiptButtonSelectEvent += RemoveSlot;
+
+        if (Time.time - lastCallTime <= 1800) return;// 30분
         ReciveFromServer();
-        postCount.text = $"{slots.Count}";
+    }
+    void OnDisable()
+    {
+        Managers.Event.PostSlotSelectEvent -= ViewCurrent;
+        Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
+    }
+    public void GameInitialize()
+    {
+        ReciveFromServer();
+        UpdatePostCount();
     }
 
     private void ReciveFromServer()
@@ -36,65 +48,56 @@ public class Post : Singleton<Post>
                 Debug.LogError(callback);
                 return;
             }
+            lastCallTime = Time.time;
             JsonData json = callback.GetReturnValuetoJSON()["postList"];
+            if (json.Count <= 0)
+            {
+                //받아올 우편이 없는것
+                Debug.Log("우편함이 비어있습니다.");
+                return;
+            }
+            slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
-            Debug.Log("POST JSON COUNT ="+json.Count);
-            
-            Debug.Log("POST JSON =" + json.ToJson());
             for (int i = 0; i < json.Count; i++)
             {
-              
                 PostData mailData = JsonMapper.ToObject<PostData>(json[i].ToJson());
                 if (slots.Find(o => o.postData.inDate == mailData.inDate))
                     continue;
+
                 //해당 데이터가 존재하면 아래 코드 필요없음.
                 PostSlot mail = Instantiate(prefab, mailBox);
 
-                mail.Initialized(mailData);    // 관리자이름 넣으면 세팅이 안됨.
-                Debug.Log("나오니?");
+                //아이템이 있다면 아래 실행
+                List<PostItemData> mailItemDatas = new List<PostItemData>();
+                foreach (JsonData itemJson in json[i]["items"])
+                {
+                    Debug.Log("itemJson itemName : " + itemJson["item"]["itemName"].ToString());
+                    if (itemJson["chartName"].ToString() == "post")
+                    {
+                        PostItemData mailItemData = new PostItemData();
+                        mailItemData.itemId = int.Parse(itemJson["item"]["itemId"].ToString());
+                        mailItemData.itemName = itemJson["item"]["itemName"].ToString();
+                        mailItemData.itemCount = int.Parse(itemJson["itemCount"].ToString());
+                        mailItemDatas.Add(mailItemData);
+                    }
+                    else
+                        Debug.Log("존재하지않는 아이템차트 정보입니다.");
+                }
+                Debug.Log("mailItemDatas.Count : " + mailItemDatas.Count);
+                mail.Initialized(mailData, mailItemDatas);
+                
+                Debug.Log("메일 데이터 세팅 완료");
                 mail.gameObject.SetActive(true);
-                notifyer.GetNew(mail);
+                //notifyer.GetNew(mail);
                 slots.Add(mail);
-                Debug.Log("POST Slot COUNT =" + slots.Count);
-                postCount.text = $"{slots.Count}";
+                UpdatePostCount();
             }
         });
     }
 
-    private void OnEnable()//목록조회
-    {
-        // 30분마다 불러올 수 있도록 가능한 위치에서 소환할수있또록ㄱㄱㄱ
-        if (Time.time - lastCallTime < 1800) return;// 30분
-        lastCallTime = Time.time;
-        ReciveFromServer();
-    }
-
-    public void PostUpdatePackageButton()
-    {
-        ReciveFromServer();
-    }
-
-    public void BatchReceipt()//일괄 수령
-    {
-        notifyer.Clear();
-        SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Admin, bro =>
-        {
-            if (!bro.IsSuccess())
-            {
-                Debug.LogError("우편 일괄 수령에 실패했습니다.");
-            }
-        });
-        foreach (var slot in slots)
-        {
-            Destroy(slot.gameObject);
-        }
-        slots.Clear();
-    }
-
-    public void Receipt(PostSlot slot)//하나 수령
+    public void RemoveSlot(PostSlot slot)//하나 수령
     {
         slots.Remove(slot);
-        Remove(slot);
         SendQueue.Enqueue(Backend.UPost.ReceivePostItem, PostType.Admin, slot.postData.inDate, bro =>
         {
             if (!bro.IsSuccess())
@@ -103,24 +106,39 @@ public class Post : Singleton<Post>
             }
             Destroy(slot.gameObject);
         });
+        UpdatePostCount();
     }
-
-    public void Remove(PostSlot slot)
+    void ViewCurrent(PostSlot slot)
     {
-        // 보상을 받았으면 해당 우편은 삭제
-        notifyer.Remove(slot);
-    }
-    
-
-    public void ViewCurrent(PostSlot slot)
-    {
-        // 우편을 눌렀을 때 해당 우편의 상세창 떠라
-        Debug.Log("상세창 Detail setting");
+        // 우편슬롯을 눌렀을 때 해당 우편의 상세창내용창 뜸
         detail.SetDetail(slot);
-        //detailPopup.SetActive(true);
-        Debug.Log("상세창 뜨시오");
-        // 오픈팝업 스크립트 코드로 연결하기
         Managers.UI.OpenPopup(detail.transform.parent.gameObject);
     }
+    public void UpdatePostCount()
+    {
+        postCount.text = $"{slots.Count}";
+    }
+
+    //public void BatchReceipt()//일괄 수령
+    //{
+    //    notifyer.Clear();
+    //    SendQueue.Enqueue(Backend.UPost.ReceivePostItemAll, PostType.Admin, bro =>
+    //    {
+    //        if (!bro.IsSuccess())
+    //        {
+    //            Debug.LogError("우편 일괄 수령에 실패했습니다.");
+    //        }
+    //    });
+    //    foreach (var slot in slots)
+    //    {
+    //        Destroy(slot.gameObject);
+    //    }
+    //    slots.Clear();
+    //}
+    //public void Remove(PostSlot slot)
+    //{
+    //    // 보상을 받았으면 해당 우편은 삭제
+    //    notifyer.Remove(slot);
+    //}
 
 }
