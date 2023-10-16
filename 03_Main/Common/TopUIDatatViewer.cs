@@ -69,12 +69,12 @@ public class TopUIDatatViewer : MonoBehaviour
 
     void UpdateNickname()
     {
-        nickNameText.text = BackEnd.Backend.UserNickName;   // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
+        nickNameText.text = BackEnd.Backend.UserNickName;
     }
 
     void UpdateExp()
     {
-        expSlider.value = (float)player.Data.exp / Managers.ServerData.ExpDatas[player.Data.level-1];                          // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
+        expSlider.value = (float)player.Data.exp / Managers.ServerData.ExpDatas[player.Data.level-1];  // 유저 경험치 ( 메인화면에서 글로 보이지는 않음 )
     }
 
     void UpdateWeaponIcon()

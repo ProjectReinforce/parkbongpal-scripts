@@ -546,14 +546,15 @@ public class BackEndDataManager
     public const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
     public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
     public const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
-    public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID };
+    public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID};
+    //public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID };
 
     public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
 
     // 랭킹 리스트 로드
-    void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
+    public void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
     {
         deligate[0] = (count) =>
         {
@@ -582,6 +583,7 @@ public class BackEndDataManager
                 }
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
+                Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + json.ToJson());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 if (count >= UUIDs.Length) return;
                 deligate[1](++count);

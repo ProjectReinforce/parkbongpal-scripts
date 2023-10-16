@@ -160,3 +160,10 @@ public enum MineStatus
     Building,
     Owned
 }
+
+public enum RankingType
+{
+    분당골드량,
+    전투력,
+    미니게임
+}

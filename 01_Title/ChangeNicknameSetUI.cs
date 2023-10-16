@@ -20,7 +20,7 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
         Backend.BMember.UpdateNickname(_nickname);
         nickName.text = _nickname;
         inputField.text = "";
-        gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
         Managers.Event.NicknameChangeEvent?.Invoke();
         Managers.Alarm.Warning("닉네임이 변경되었습니다!");
     }
@@ -28,6 +28,6 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
     public void ClickNoButton()
     {
         inputField.text = "";
-        gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
     }
 }
