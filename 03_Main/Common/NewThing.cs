@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class NewThing:MonoBehaviour
 {
-    [SerializeField] GameObject newObject;
+    [SerializeField] UnityEngine.UI.Image newObject;
     
     public void SetNew()
     {
-         newObject.SetActive(true);
+         newObject.gameObject.SetActive(true);
     }
 
     public void NewClear()
     {
-        newObject.SetActive(false);
+        newObject.gameObject.SetActive(false);
     }
 }
 

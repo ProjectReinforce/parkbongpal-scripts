@@ -37,7 +37,8 @@ public class PostDetail : MonoBehaviour
     }
     public void ReceiptButton()
     {
-        Post.Instance.RemoveSlot(currentSlot);
+        Managers.Event.PostReceiptButtonSelectEvent.Invoke(currentSlot);
+
         if (currentSlot.postItemDatas.Count == 0)
             return;
 

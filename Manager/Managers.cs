@@ -26,6 +26,8 @@ public class Managers : MonoBehaviour
     public static BackEndDataManager ServerData { get => Instance.serverData; }
     EventManager eventM;
     public static EventManager Event { get => Instance.eventM; }
+    Pidea pidea;
+    public static Pidea Pidea { get => Instance.pidea;}
     UIManager ui;
     public static UIManager UI { get => Instance.ui; }
     SoundManager sound;
@@ -86,7 +88,7 @@ public class Managers : MonoBehaviour
 
     /// <summary>
     /// 씬이 로드될때 초기화 하는 역할
-    /// 스타트씬에서는 게임, 알람, 이벤트 매니저, UI 매니저, 사운드 매니저를 초기화
+    /// 스타트씬에서는 게임, 알람, 이벤트 매니저, 도감, UI 매니저, 사운드 매니저를 초기화
     /// 로딩씬에서는 리소스 매니저, 백엔드 데이터 매니저를 초기화
     /// 설정되어있는 메인씬에서는 게임 매니저를 세팅합니다.
     /// </summary>
@@ -102,6 +104,7 @@ public class Managers : MonoBehaviour
                 game ??= new();
                 alarm ??= new(transform);
                 eventM ??= new();
+                pidea ??= new();
                 ui = new();
                 sound ??= new();
                 break;

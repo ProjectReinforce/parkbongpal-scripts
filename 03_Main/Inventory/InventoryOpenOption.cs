@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryOpenOptionBase
 {
     protected InventoryController inventoryController;
+    protected Transform defaultBackground;
     protected DetailInfoUI detailInfoUI;
     protected DecompositionUI decompositionUI;
     protected Button selectButton;
@@ -22,6 +22,7 @@ public class InventoryOpenOptionBase
     {
         inventoryController = _inventoryController;
         detailInfoUI = _inventoryController.DetailInfo;
+        defaultBackground = _inventoryController.DefaultBackground;
         decompositionUI = _inventoryController.DecompositionUI;
         selectButton = _inventoryController.SelectButton;
         selectText = selectButton.transform.GetComponentInChildren<Text>();
@@ -40,7 +41,10 @@ public class InventoryOpenOptionBase
     {
         detailInfoUI.Refresh(_weapon);
         if (detailInfoUI.gameObject.activeSelf == false)
+        {
+            defaultBackground.gameObject.SetActive(false);
             detailInfoUI.gameObject.SetActive(true);
+        }
     }
 }
 
@@ -83,6 +87,7 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
 
         decompositionButton.gameObject.SetActive(false);
         selectButton.onClick.RemoveAllListeners();
+        defaultBackground.gameObject.SetActive(true);
     }
 
     // void SetCurrentWeapon(Weapon[] _weapon)
@@ -153,6 +158,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
         // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
         selectButton.onClick.RemoveAllListeners();
+        defaultBackground.gameObject.SetActive(true);
     }
 
     // void SetCurrentWeapon(Weapon[] _weapon)
@@ -224,6 +230,7 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
         // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
         selectButton.onClick.RemoveAllListeners();
+        defaultBackground.gameObject.SetActive(true);
     }
 
     // void SetCurrentWeapon(Weapon[] _weapon)
@@ -301,6 +308,7 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
 
         decompositionText.text = originButtonText;
         confirmMaterialsButton.gameObject.SetActive(false);
+        defaultBackground.gameObject.SetActive(true);
     }
 
     // void SetCurrentWeapon(Weapon[] _weapon)

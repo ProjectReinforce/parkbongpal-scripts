@@ -57,6 +57,8 @@ public class Slot : MonoBehaviour
             // new SlotModeUIDefault(this, transform.GetSiblingIndex()),
             // new SlotModeUIDecomposition(this, transform.GetSiblingIndex()),
         };
+        Managers.Event.HideLendedWeaponToggleEvent -= slotModeUIs[currentInventoryType].HideLendedWeaponSlot;
+        Managers.Event.HideLendedWeaponToggleEvent += slotModeUIs[currentInventoryType].HideLendedWeaponSlot;
     }
 
     void OnEnable()

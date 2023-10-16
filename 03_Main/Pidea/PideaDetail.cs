@@ -24,7 +24,6 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
         description.text = baseWeaponData.description;
         leftStats.text = $": {baseWeaponData.atk}\n: {baseWeaponData.atkSpeed}\n: {baseWeaponData.atkRange}\n: {baseWeaponData.accuracy}\n: {baseWeaponData.criticalRate}\n: {baseWeaponData.criticalDamage}";
         rightStats.text = $": {baseWeaponData.strength}\n: {baseWeaponData.intelligence}\n: {baseWeaponData.wisdom}\n: {baseWeaponData.technique}\n: {baseWeaponData.charm}\n: {baseWeaponData.constitution}";
-   
     }
 
     private void OnEnable()

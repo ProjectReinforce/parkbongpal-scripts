@@ -84,15 +84,15 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
 
         WeaponData weaponData = new WeaponData(bro.GetInDate(), baseWeaponData);//indate얻는 작업땜에 transaction에 넣기가 애매
         
-        if (Pidea.Instance.CheckLockWeapon(baseWeaponData.index))
+        if (Managers.Pidea.CheckLockWeapon(baseWeaponData.index))
         {
             
             Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                 { nameof(PideaData.colum.ownedWeaponId), baseWeaponData.index },
                 { nameof(PideaData.colum.rarity), baseWeaponData.rarity }
             }));
-            
-            Pidea.Instance.GetNewWeapon(baseWeaponData.index);
+
+            Managers.Pidea.GetNewWeapon(baseWeaponData.index);
         }
         Transactions.SendCurrent();
     }
@@ -134,13 +134,13 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         for (int i = 0; i < json.Count; i++)
         {
             WeaponData weaponData = new WeaponData(json[i]["inDate"].ToString(), baseWeaponData[i]);
-            if (Pidea.Instance.CheckLockWeapon(baseWeaponData[i].index))
+            if (Managers.Pidea.CheckLockWeapon(baseWeaponData[i].index))
             {
                 Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                     { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
                     { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
                 }));
-                Pidea.Instance.GetNewWeapon(baseWeaponData[i].index);
+                Managers.Pidea.GetNewWeapon(baseWeaponData[i].index);
             }
         }
         Transactions.SendCurrent();
