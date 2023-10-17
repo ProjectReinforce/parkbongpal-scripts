@@ -552,6 +552,7 @@ public class BackEndDataManager
     public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
+    bool isSceneLoadEnd = false;
 
     // 랭킹 리스트 로드
     public void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
@@ -587,12 +588,17 @@ public class BackEndDataManager
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 if (count >= UUIDs.Length) return;
                 deligate[1](++count);
+                Managers.Event.GetRankAfterTheFirstTime?.Invoke();
             });
         };
         foreach (var action in deligate)
             action(0);
         
-        SceneLoader.ResourceLoadComplete();
+        if(!isSceneLoadEnd)
+        {
+            SceneLoader.ResourceLoadComplete();
+            isSceneLoadEnd = true;
+        }
     }
 
     // 퀘스트 기록 데이터 로드

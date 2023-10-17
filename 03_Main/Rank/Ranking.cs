@@ -6,6 +6,7 @@ using Manager;
 using BackEnd;
 using BackEnd.Game.Rank;
 using LitJson;
+using UnityEngine.UI;
 
 public class Ranking : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class Ranking : MonoBehaviour
     [SerializeField] TopRankSlot topRankSlot;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     [SerializeField] GameObject nullMyRanknullMyRank;
+    [SerializeField] Toggle goldPerMin;
+    [SerializeField] Button rankingButton;
 
 
     void Awake()
@@ -29,62 +32,40 @@ public class Ranking : MonoBehaviour
             myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);  // 미니게임이 들어오면 if나 switch문으로 변경해야함
         }
         ClickTab(0);
+        // rankingButton.onClick.AddListener(() => RankingOnButtonAdd());
     }
 
-    const string GOLD_UUID="f5e47460-294b-11ee-b171-8f772ae6cc9f";
-    const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
-    const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
-    readonly string[] UUIDs = {GOLD_UUID, Power_UUID, MINI_UUID};
-    Action<int>[] deligate = new Action<int>[2];
-    void UpdateRankList()
+    void Start()
     {
-        deligate[0] = (count) =>
-        {
-            SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], callback =>
-            {
-                if (!callback.IsSuccess())
-                {
-                    Debug.LogError(callback);
-                    return;
-                }
-
-                JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                Managers.ServerData.topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
-                if(count>=UUIDs.Length) return;
-                deligate[0](++count);
-            });
-        };
-        deligate[1] = (count) =>
-        {
-            SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 1, callback =>
-            {
-                if (!callback.IsSuccess())
-                {
-                    Debug.LogError(callback);
-                    return;
-                }
-
-                JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                Managers.ServerData.myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
-                if (count >= UUIDs.Length) return;
-                deligate[1](++count);
-                for (int i = 0; i < PORT_COUNT; i++)
-                {
-                    myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);
-                    ClickTab(i);
-                }
-                ClickTab(0);
-            });
-        };
-        foreach (var action in deligate)
-            action(0);
+        Managers.Event.RankingTimeUpdateEvent -= RankUpdate;
+        Managers.Event.RankingTimeUpdateEvent += RankUpdate;
+        Managers.Event.GetRankAfterTheFirstTime -= GetRankSetMyRank;
+        Managers.Event.GetRankAfterTheFirstTime += GetRankSetMyRank;
     }
 
+    void GetRankSetMyRank()
+    {
+        for (int i = 0; i < PORT_COUNT; i++)
+        {
+            myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);
+            ClickTab(i);
+        }
+        ClickTab(0);
+    }
     public void RankUpdate()
     {
-        UpdateRankList();
+        Managers.ServerData.GetRankList();
+        // if (goldPerMin != null)
+        // {
+        //     goldPerMin.isOn = true;
+        // }
     }
 
+    // void RankingOnButtonAdd()
+    // {
+    //     goldPerMin.isOn = true;
+    // }
+    
     Rank FindMyRankDataByNickname(RankingType _rankingType)
     {
         for(int i = 0; i < Managers.ServerData.myRanks[(int)_rankingType].Length; i++)
@@ -108,15 +89,7 @@ public class Ranking : MonoBehaviour
         // Managers.Game.Player.SetCombatScore(550);
         for (int i = 0; i < PORT_COUNT; i++)
         {
-            Debug.Log("ClickTab 안에서" + myRank[i].rank);
-            if(myRank[_index].rank <= 3)
-            {
-                SetSlotTo123(slotLists[i], ranks[i][_index], myRank[_index], _index);
-            }
-            else
-            {
-                SetSlotTo(slotLists[i], ranks[i][_index]);
-            }
+            SetSlotTo(slotLists[i], ranks[i][_index], myRank[_index], _index);
         }
     }
 
@@ -125,7 +98,7 @@ public class Ranking : MonoBehaviour
     /// </summary>
     /// <param name="slots">RankSlot 배열</param>
     /// <param name="ranks">랭킹 데이터 배열</param>
-    void SetSlotTo(RankSlot[] _slots, Rank[] _ranks)
+    void SetSlotTo(RankSlot[] _slots, Rank[] _ranks, Rank _myRankData, int _rankIndex)
     {
         for (int i = 0; i < _slots.Length; i++)
         {
@@ -138,9 +111,18 @@ public class Ranking : MonoBehaviour
             }
             else
             {
-                viewPorts[1].gameObject.SetActive(true);
-                viewPorts[2].gameObject.SetActive(false);
-                nullMyRanknullMyRank.SetActive(false);
+                if(_myRankData.rank <= 3)
+                {
+                    viewPorts[1].gameObject.SetActive(false);
+                    viewPorts[2].gameObject.SetActive(true);
+                    nullMyRanknullMyRank.SetActive(false);
+                }
+                else
+                {
+                    viewPorts[1].gameObject.SetActive(true);
+                    viewPorts[2].gameObject.SetActive(false);
+                    nullMyRanknullMyRank.SetActive(false);
+                }
             }
 
             if (i >= _ranks.Length)
@@ -151,35 +133,10 @@ public class Ranking : MonoBehaviour
             
             _slots[i].SetData(_ranks[i]);
         }
-    }
 
-    void SetSlotTo123(RankSlot[] _slots, Rank[] _ranks, Rank _myRankData, int _rankIndex)
-    {
-        for (int i = 0; i < _slots.Length; i++)
+        if(_myRankData.rank <= 3)
         {
-            if (_ranks is null)
-            {
-                viewPorts[1].gameObject.SetActive(false);
-                viewPorts[2].gameObject.SetActive(false);
-                nullMyRanknullMyRank.SetActive(true);
-                break;
-            }
-            else
-            {
-                viewPorts[1].gameObject.SetActive(false);
-                viewPorts[2].gameObject.SetActive(true);
-                nullMyRanknullMyRank.SetActive(false);
-            }
-
-            if (i >= _ranks.Length)
-            {
-                _slots[i].SetNull();
-                continue;
-            }
-
-            _slots[i].SetData(_ranks[i]);
-
-            switch (i)
+            switch (_rankIndex)
             {
                 // default:
                 // topRankSlot.SetNull();
