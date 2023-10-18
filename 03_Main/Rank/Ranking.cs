@@ -15,6 +15,7 @@ public class Ranking : MonoBehaviour
     Rank[] myRank = new Rank[2];    // 랭크의 종류에 따라 자신의 랭크정보만 담는 배열
     [SerializeField] RectTransform[] viewPorts;
     [SerializeField] RectTransform rankContent; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
+    [SerializeField] RectTransform rankScrollView; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] TopRankSlot topRankSlot;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     [SerializeField] GameObject nullMyRanknullMyRank;
@@ -84,7 +85,9 @@ public class Ranking : MonoBehaviour
     /// <param name="index">클릭한 랭킹</param>
     public void ClickTab(int _index)
     {
-        rankContent.anchoredPosition = new Vector2(rankContent.anchoredPosition.x, 0f);
+        float deltaY = Mathf.Clamp(rankScrollView.sizeDelta.y - rankContent.sizeDelta.y, 0, float.MaxValue);
+        rankContent.anchoredPosition = -Vector2.up * deltaY;
+        // rankContent.anchoredPosition = new Vector2(rankContent.anchoredPosition.x, 0f);
         // Managers.Game.Player.SetGoldPerMin(150000);
         // Managers.Game.Player.SetCombatScore(550);
         for (int i = 0; i < PORT_COUNT; i++)
