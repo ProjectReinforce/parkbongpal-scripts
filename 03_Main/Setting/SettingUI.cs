@@ -16,6 +16,7 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Text uuidText;
     [SerializeField] Button userUuidCopyButton;
     [SerializeField] Button syncGoogleButton;
+    [SerializeField] GameObject nicknameChange;
 
     void Start()
     {
@@ -104,6 +105,11 @@ public class SettingUI : MonoBehaviour
         }
     }
 
+    public void OpenChangeNickname()
+    {
+        Managers.UI.OpenPopup(nicknameChange);
+    }
+    
     public void UserUUIDCopy()
     {
         GUIUtility.systemCopyBuffer = uuidText.text["UUID : ".Length..];
@@ -111,9 +117,12 @@ public class SettingUI : MonoBehaviour
 
     public void OnClickLogout()
     {
-        // 액세스 토큰 삭제, 즉 토큰 로그인 불가 (로그인이 먼저 되어야함)
-        Backend.BMember.Logout();
-        Utills.LoadScene("R_Start");
+        Managers.Alarm.WarningWithButton("로그아웃을 하시겠습니까?", () => 
+        {        
+            // 액세스 토큰 삭제, 즉 토큰 로그인 불가 (로그인이 먼저 되어야함)
+            Backend.BMember.Logout();
+            Utills.LoadScene("R_Start");
+        });
     }
 
     public void OpenTitleWeaponInventory()

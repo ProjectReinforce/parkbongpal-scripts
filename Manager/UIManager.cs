@@ -99,14 +99,14 @@ public class UIManager
         if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
         uiStack.Push(_popup);
 
-        if (!_popup.TryGetComponent(out AnimationForPopup component))
-        {
-            component = _popup.AddComponent<AnimationForPopup>();
-            component.Initialize();
-        }
-        component.Show();
+        //if (!_popup.TryGetComponent(out AnimationForPopup component))
+        //{
+        //    component = _popup.AddComponent<AnimationForPopup>();
+        //    component.Initialize();
+        //}
+        //component.Show();
 
-        // _popup.SetActive(true);
+        _popup.SetActive(true);
     }
 
     /// <summary>
@@ -117,13 +117,13 @@ public class UIManager
     {
         GameObject popup = uiStack.Pop();
 
-        if (!popup.TryGetComponent(out AnimationForPopup component))
-        {
-            component = popup.AddComponent<AnimationForPopup>();
-            component.Initialize();
-        }
-        component.Hide();
-        
-        // popup.SetActive(false);
+        //if (!popup.TryGetComponent(out AnimationForPopup component))
+        //{
+        //    component = popup.AddComponent<AnimationForPopup>();
+        //    component.Initialize();
+        //}
+        //component.Hide();
+
+        popup.SetActive(false);
     }
 }

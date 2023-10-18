@@ -9,20 +9,7 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
 {
     [SerializeField] Text nickName;
     [SerializeField] InputField inputField;
-
-    // private void Start()
-    // {
-    //     inputField.onValueChanged.AddListener(OnInputFieldValueChanged);
-    // }
-
-    public void OnInputFieldValueChanged(string Text)
-    {
-        if (!gameObject.activeSelf)
-        {
-            inputField.text = "";
-        }
-    }
-
+    
     protected override void FunctionAfterCallback(string _nickname = null)
     {
         InsertNewUserData(_nickname);
@@ -32,7 +19,15 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
     {
         Backend.BMember.UpdateNickname(_nickname);
         nickName.text = _nickname;
-        gameObject.SetActive(false);
+        inputField.text = "";
+        Managers.UI.ClosePopup();
+        Managers.Event.NicknameChangeEvent?.Invoke();
         Managers.Alarm.Warning("닉네임이 변경되었습니다!");
+    }
+
+    public void ClickNoButton()
+    {
+        inputField.text = "";
+        Managers.UI.ClosePopup();
     }
 }

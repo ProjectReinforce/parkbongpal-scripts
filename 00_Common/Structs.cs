@@ -429,8 +429,9 @@ public struct QuestData
 [Serializable]
 public struct QuestRecord
 {
-    public int questId;
-    public bool cleared;
+    //public int questId;
+    public int[] idList;
+    public string inDate;
 }
 
 [Serializable]

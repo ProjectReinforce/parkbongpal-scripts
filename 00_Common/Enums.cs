@@ -2,7 +2,7 @@
 {
     R_Start,
     R_LoadingScene,
-    R_Main_V6_JH,
+    R_Main_V6_JHH,
     R_Main_V6,
     R_Main_V6_SEH
 }
@@ -114,8 +114,8 @@ public enum RewardType
 
 public enum RecordType
 {
+    Tutorial,
     LevelUp,
-    Activate,
     UseGold,
     GetGold,
     UseDiamond,
@@ -134,7 +134,6 @@ public enum RecordType
     Attendance,
     GetBonus,
     SeeAds,
-    Tutorial
 }
 
 public enum QuestType
@@ -158,4 +157,11 @@ public enum MineStatus
     Locked,
     Building,
     Owned
+}
+
+public enum RankingType
+{
+    분당골드량,
+    전투력,
+    미니게임
 }
