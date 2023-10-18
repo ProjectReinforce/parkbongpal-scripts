@@ -7,7 +7,7 @@ public class QuestContentsPool : MonoBehaviour
     [SerializeField] List<QuestContent> pool;
     [SerializeField] QuestContent origin;
 
-    public QuestContent GetOne()    // 공부해올것
+    public QuestContent GetOne()
     {
         foreach (var item in pool)
         {

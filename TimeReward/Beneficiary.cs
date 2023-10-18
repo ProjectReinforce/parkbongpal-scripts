@@ -41,8 +41,6 @@ public class Beneficiary : Singleton<Beneficiary> //수혜자 역할
             day = 0;
         Managers.Game.Player.SetAttendance(++day);
         days = day;
-        Debug.Log("누적 ="+days);
-        Debug.Log("함수 작동a4");
         return true;
     }
 

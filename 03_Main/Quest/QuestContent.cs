@@ -23,7 +23,25 @@ public class QuestContent : MonoBehaviour
     QuestData targetData;
     // List<QuestData> targetDatas;
 
-    public void Initialize(QuestData _targetData, Transform _dayContents, Transform _weekContents, Transform _onceIngContents, Transform _onceClearContents)    // 걱 컨텐츠의 위치를 받아옴.
+    public void IdCompare(int _questID, QuestType _repeatType)
+    {
+        if (_repeatType != targetData.questRepeatType)
+        {
+            return;
+        }
+        gameObject.SetActive(_questID >= targetData.questId);
+        if (_questID > targetData.questId)
+        {
+            Cleared();
+        }
+    }
+
+    //public RecordType returnType()
+    //{
+    //    return targetData.recordType;
+    //}
+
+    public void Initialize(QuestData _targetData, Transform _dayContents, Transform _weekContents, Transform _onceIngContents, Transform _onceClearContents)    // 각 컨텐츠의 위치를 받아옴.
     // public void Initialize(List<QuestData> _targetData)
     {
         dayContents = _dayContents; // day의 위치
@@ -73,13 +91,15 @@ public class QuestContent : MonoBehaviour
 
     void UpdateQuestRecord()    // 퀘스트에 대한 기록을 업데이트할 때 사용되는 함수
     {
+        int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
+        progressQuestIdsByType[(int)targetData.recordType] = targetData.questId + 1;
         Param param = new()
         {
-            { nameof(QuestRecord.questId), targetData.questId },
-            { nameof(QuestRecord.cleared), true }
+            { nameof(QuestRecord.idList), progressQuestIdsByType }
         };
-        
-        Transactions.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));   // 트랜잭션에 퀘스트 기록과 param에 들어간 퀘스트의 아이디 및 클리어 여부를 추가함
+
+        Debug.Log("indate " + Managers.ServerData.questRecordDatas[0].inDate);
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), Managers.ServerData.questRecordDatas[0].inDate, Backend.UserInDate, param));   // 트랜잭션에 퀘스트 기록과 param에 들어간 퀘스트의 아이디 및 클리어 여부를 추가함
 
         Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
         // 플레이어에게 퀘스트 리워드 타입과 해당하는 크기만큼의 재화를 줌
@@ -87,7 +107,7 @@ public class QuestContent : MonoBehaviour
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;   // 보상버튼에 대한 인터렉터블 off를 통해 끔
         Cleared();
-
+        QuestContentsInitializer.OpenQuestID(targetData.questId + 1, targetData.recordType);
         // List<TransactionValue> transactionValues =  new();
 
         // transactionValues.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
@@ -101,6 +121,7 @@ public class QuestContent : MonoBehaviour
         // Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
         // transactionValues = Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
     }
+
 
     public void UpdateContent()
     {
@@ -126,7 +147,7 @@ public class QuestContent : MonoBehaviour
             case RecordType.GetDiamond:
                 current = (long)player.Record.GetDiamond;
                 break;
-            case RecordType.GetItem:
+            case RecordType.GetItem:    // 승급, 뽑기를 통해 얻은 로직
                 break;
             case RecordType.RegisterItem:
                 current = Managers.Pidea.RegisteredWeaponCount;
@@ -164,7 +185,6 @@ public class QuestContent : MonoBehaviour
             case RecordType.SeeAds:
                 current = player.Record.SeeAds;
                 break;
-            case RecordType.Activate:
             case RecordType.Tutorial:
                 break;
         }
@@ -187,4 +207,5 @@ public class QuestContent : MonoBehaviour
         else
             getRewardButton.interactable = false;
     }
+
 }

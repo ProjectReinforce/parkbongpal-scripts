@@ -10,6 +10,7 @@ public class ResourceManager
     [SerializeField] Sprite[] postItems;
     public Sprite[] weaponRaritySlot;
     public Sprite DefaultMine;
+    public Sprite[] manufactureRaritySlot;
     public Notifyer notifyer;
 
     /// <summary>
@@ -24,6 +25,7 @@ public class ResourceManager
         baseWeaponSprites = Resources.LoadAll<Sprite>("Sprites/Weapons");
         skills = Resources.LoadAll<Sprite>("Sprites/Skills");
         weaponRaritySlot = Resources.LoadAll<Sprite>("Sprites/Slots");
+        manufactureRaritySlot = Resources.LoadAll<Sprite>("Sprites/Manufacture");
         DefaultMine = Resources.Load<Sprite>("Sprites/Enviroment/Mine_Door_1");
         notifyer = Resources.Load<Notifyer>("Notifyer");
         postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
@@ -41,6 +43,12 @@ public class ResourceManager
             return null;
         }
         return baseWeaponSprites[index];
+    }
+
+    public Sprite GetSlotChanges(int index)
+    {
+        // 예외처리
+        return manufactureRaritySlot[index]; // raritySlot의 인덱스에 따라 테두리가 변함
     }
 
     /// <summary>
