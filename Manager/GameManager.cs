@@ -13,6 +13,8 @@ public class GameManager
     public ReinforceInfos Reinforce => reinforce;
     MineManager mine;
     public MineManager Mine => mine;
+    Pidea pidea;
+    public Pidea Pidea => pidea;
 
     /// <summary>
     /// 메인 스레드에서 대기중인 작업을 하나씩 큐에서 빼며 처리해줌
@@ -46,6 +48,7 @@ public class GameManager
         inventory = new();
         reinforce = new();
         mine = new();
+        pidea = new();
 
         HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>();
 

@@ -36,7 +36,6 @@ public class Post : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         ReciveFromServer();
-        UpdatePostCount();
     }
 
     private void ReciveFromServer()
@@ -71,7 +70,6 @@ public class Post : MonoBehaviour, IGameInitializer
                 List<PostItemData> mailItemDatas = new List<PostItemData>();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
-                    Debug.Log("itemJson itemName : " + itemJson["item"]["itemName"].ToString());
                     if (itemJson["chartName"].ToString() == "post")
                     {
                         PostItemData mailItemData = new PostItemData();
@@ -83,7 +81,6 @@ public class Post : MonoBehaviour, IGameInitializer
                     else
                         Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
-                Debug.Log("mailItemDatas.Count : " + mailItemDatas.Count);
                 mail.Initialized(mailData, mailItemDatas);
                 
                 Debug.Log("메일 데이터 세팅 완료");

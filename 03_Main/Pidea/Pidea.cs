@@ -13,6 +13,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     [SerializeField] RectTransform currentTap;
     [SerializeField] UnityEngine.UI.ScrollRect scrollView;
     [SerializeField] RectTransform[] rarityTables;
+
     public void ClickTap(int index)
     {
         currentTap.gameObject.SetActive(false);
@@ -22,7 +23,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     }
     Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
-
 
     public int RegisteredWeaponCount
     {
@@ -78,6 +78,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
             foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
+                Debug.Log("collectionType : " + collectionType);
                 collection.AddSlot(pideaSlots[i],collectionType);
             }
         }

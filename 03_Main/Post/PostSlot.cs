@@ -16,7 +16,6 @@ public class PostSlot : NewThing
     {
         postData = data;
         title.text = data.title;
-        Debug.Log("*******메일제목 : " + title.text);
         date.text = data.sentDate.Substring(0, 10) + " / " + data.expirationDate[..10];
         postItemDatas = itemData;
         if (postItemDatas.Count != 0)
@@ -24,7 +23,6 @@ public class PostSlot : NewThing
             item.sprite = Managers.Resource.GetPostItem(postItemDatas[0].itemId - 1);
             itemAmount.enabled = true;
             itemAmount.text = postItemDatas[0].itemCount.ToString();
-            Debug.Log("첫번째 아이템 이름 : " + postItemDatas[0].itemName);
         }
         else
         {

@@ -6,6 +6,6 @@ public class PideaViwer:MonoBehaviour
 {
     private void OnDisable()
     {
-        Managers.Pidea.NotifyClear();
+        Managers.Game.Pidea.NotifyClear();
     }
 }

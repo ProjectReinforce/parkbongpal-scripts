@@ -26,8 +26,6 @@ public class Managers : MonoBehaviour
     public static BackEndDataManager ServerData { get => Instance.serverData; }
     EventManager eventM;
     public static EventManager Event { get => Instance.eventM; }
-    Pidea pidea;
-    public static Pidea Pidea { get => Instance.pidea;}
     UIManager ui;
     public static UIManager UI { get => Instance.ui; }
     SoundManager sound;
@@ -104,7 +102,6 @@ public class Managers : MonoBehaviour
                 game ??= new();
                 alarm ??= new(transform);
                 eventM ??= new();
-                pidea ??= new();
                 ui = new();
                 sound ??= new();
                 break;
