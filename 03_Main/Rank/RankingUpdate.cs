@@ -23,7 +23,7 @@ public class RankingUpdate : MonoBehaviour
         if (currentTime <= 0)
         {
             currentTime = countdownDuration;
-            Managers.Event.RankingTimeUpdateEvent?.Invoke();
+            Managers.ServerData.GetRankList(false);
         }
         UpdateTimeText();
     }

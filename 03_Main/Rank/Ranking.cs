@@ -13,14 +13,13 @@ public class Ranking : MonoBehaviour
     const int PORT_COUNT = 2;
     Rank[][][] ranks = new Rank[PORT_COUNT][][];    // 3차원 배열 ==> 첫번째[0이면 탑랭크, 1이면 마이랭크], 2번째[랭킹의 종류], 3번째[각 차트]
     Rank[] myRank = new Rank[2];    // 랭크의 종류에 따라 자신의 랭크정보만 담는 배열
+    int rankTabIndex = 0;
     [SerializeField] RectTransform[] viewPorts;
     [SerializeField] RectTransform rankContent; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] RectTransform rankScrollView; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] TopRankSlot topRankSlot;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     [SerializeField] GameObject nullMyRanknullMyRank;
-    [SerializeField] Toggle goldPerMin;
-    [SerializeField] Button rankingButton;
 
 
     void Awake()
@@ -33,13 +32,10 @@ public class Ranking : MonoBehaviour
             myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);  // 미니게임이 들어오면 if나 switch문으로 변경해야함
         }
         ClickTab(0);
-        // rankingButton.onClick.AddListener(() => RankingOnButtonAdd());
     }
 
     void Start()
     {
-        Managers.Event.RankingTimeUpdateEvent -= RankUpdate;
-        Managers.Event.RankingTimeUpdateEvent += RankUpdate;
         Managers.Event.GetRankAfterTheFirstTime -= GetRankSetMyRank;
         Managers.Event.GetRankAfterTheFirstTime += GetRankSetMyRank;
     }
@@ -49,23 +45,9 @@ public class Ranking : MonoBehaviour
         for (int i = 0; i < PORT_COUNT; i++)
         {
             myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);
-            ClickTab(i);
         }
-        ClickTab(0);
+        ClickTab(rankTabIndex);
     }
-    public void RankUpdate()
-    {
-        Managers.ServerData.GetRankList();
-        // if (goldPerMin != null)
-        // {
-        //     goldPerMin.isOn = true;
-        // }
-    }
-
-    // void RankingOnButtonAdd()
-    // {
-    //     goldPerMin.isOn = true;
-    // }
     
     Rank FindMyRankDataByNickname(RankingType _rankingType)
     {
@@ -90,6 +72,7 @@ public class Ranking : MonoBehaviour
         // rankContent.anchoredPosition = new Vector2(rankContent.anchoredPosition.x, 0f);
         // Managers.Game.Player.SetGoldPerMin(150000);
         // Managers.Game.Player.SetCombatScore(550);
+        rankTabIndex = _index;
         for (int i = 0; i < PORT_COUNT; i++)
         {
             SetSlotTo(slotLists[i], ranks[i][_index], myRank[_index], _index);

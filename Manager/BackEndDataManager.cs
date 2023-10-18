@@ -550,10 +550,9 @@ public class BackEndDataManager
     public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
-    bool isSceneLoadEnd = false;
 
     // 랭킹 리스트 로드
-    public void GetRankList()//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
+    public void GetRankList(bool isFirstCall = true)//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
     {
         deligate[0] = (count) =>
         {
@@ -592,10 +591,9 @@ public class BackEndDataManager
         foreach (var action in deligate)
             action(0);
         
-        if(!isSceneLoadEnd)
+        if(isFirstCall)
         {
             SceneLoader.ResourceLoadComplete();
-            isSceneLoadEnd = true;
         }
     }
 

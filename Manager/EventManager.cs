@@ -29,7 +29,6 @@ public class EventManager
     #endregion
 
     #region Ranking
-    public Action RankingTimeUpdateEvent;
     public Action GetRankAfterTheFirstTime;
     #endregion
 }
