@@ -11,8 +11,9 @@ public class QuestContentsInitializer : MonoBehaviour
     [SerializeField] Transform onceIngContents;
     [SerializeField] Transform onceClearContents;
     Dictionary<RecordType, List<QuestContent>> questContents = new();
-    static Dictionary<int, QuestContent> quests = new();    // 괜찮은 건지.......?
+    static Dictionary<int, QuestContent> quests = new();
     List<QuestType> typeSelect;
+    Dictionary<RecordType, List<int>> questCount = new();
 
     // Dictionary<QuestType, Dictionary<RecordType, List<QuestData>>> questDatasGroupByType = new();
 
@@ -41,6 +42,7 @@ public class QuestContentsInitializer : MonoBehaviour
             RecordType recordType = Utills.StringToEnum<RecordType>(item); // item에 들어가 있는 문자열을 열거형으로 변환
 
             questContents.Add(recordType, new List<QuestContent>()); // 해당 열거형 변수들과 새로운 QuestContetnt 리스트를 딕셔너리에 저장함
+            questCount.Add(recordType, new List<int>());
             // questDatasGroupByType.Add(recordType, new());
         }
 
@@ -64,10 +66,23 @@ public class QuestContentsInitializer : MonoBehaviour
             // }
 
             questContents[item.recordType].Add(questContent);   // 퀘스트 컨텐츠에 저장된 아이템의 타입에 따라 퀘스트 컨텐츠를 추가하고
+
             quests.Add(item.questId, questContent); // 딕셔너리에 퀘스트 아이디와 퀘스트 컨텐츠를 저장함
             typeSelect.Add(item.questRepeatType);
+            questCount[item.recordType].Add(item.questId);
             // questDatasGroupByType[item.questRepeatType][item.recordType].Add(item);
         }
+
+        // Todo : OpenQuestId 함수에 적용시켜야됨, 퀘스트 창을 열면 타입별로 나오게
+        // 예시용 코드
+        //for(int i = 0; i < questCount.Count; i++)   // 값을 순회하면서 퀘스트 카운트의 recordType에 따라 들어있는 퀘스트 아이디에 접근함 (2중 for문?)
+        //{
+        //    Debug.Log(questCount[(RecordType)i]);   // i의 값은 recordType으로 접근하기 위함
+        //    for(int j = 0; j < questCount[(RecordType)i].Count; j++)
+        //    {
+        //        Debug.Log(questCount[(RecordType)i][j]); // j값이 늘어나면 다음 인덱스로 접근하기 때문에 해당하는 퀘스트 아이디로 접근이 가능함 퀘스트가 추가되도 상관없음
+        //    }
+        //}
 
         // foreach (var item in questDatasGroupByType)
         // {
@@ -148,9 +163,20 @@ public class QuestContentsInitializer : MonoBehaviour
             item.UpdateContent();
     }
 
-    static public void OpenQuestID(int _openContents)   // 괜찮을까......?
+    static public void OpenQuestID(int _openContents, RecordType _recordType)
     {
         quests[_openContents].gameObject.SetActive(true);
+        //if(quests[_openContents].returnType() == _recordType)
+        //{
+        //    _openContents = _openContents - 1;
+        //}
+        // static을 하나 더 선언하는 방법 questCount를 static으로 선언하고 인자값 RecordType _recordType을 선언해 받음
+        //
+        //quests[questCount[_recordType][인덱스]].gameObject.SetActive(true);
+        //if (_openContents > questCount[_recordType][questCount[_recordType].Count])   // _openContents의 경우 questId를 받아오니 questCount의 타입별 카운트의 인덱스를 받아와서 비교함
+        //{
+        //    _openContents = _openContents - 1;
+        //}
     }
 
     void ClearCheck()   // 서버 데이터에 있는 questRecordDatas를 돌며 퀘스트 아이디 순서에 따라 클리어 함수를 작동함
@@ -160,7 +186,7 @@ public class QuestContentsInitializer : MonoBehaviour
         {
             foreach (QuestContent one in questContents[(RecordType)i])
             {
-                one.IdCompare(progressQuestIdsByType[i], typeSelect[i]);    //todo : 퀘스트 타입에 따른 처리 (일간, 주간, 업적)
+                one.IdCompare(progressQuestIdsByType[i], typeSelect[i]);
             }  
         }
     }

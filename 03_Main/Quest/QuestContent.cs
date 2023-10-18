@@ -36,19 +36,10 @@ public class QuestContent : MonoBehaviour
         }
     }
 
-    public void IsFirst()
-    {
-        if(targetData.precedeQuestId == -1)
-        {
-            gameObject.SetActive(true);
-        }
-    }
-
-    public bool TypeCompare(RecordType _target)
-    {
-        Debug.Log(_target + "ㅇㅇㅇㅇㅇㅇ");
-        return targetData.recordType == _target;
-    }
+    //public RecordType returnType()
+    //{
+    //    return targetData.recordType;
+    //}
 
     public void Initialize(QuestData _targetData, Transform _dayContents, Transform _weekContents, Transform _onceIngContents, Transform _onceClearContents)    // 각 컨텐츠의 위치를 받아옴.
     // public void Initialize(List<QuestData> _targetData)
@@ -116,7 +107,7 @@ public class QuestContent : MonoBehaviour
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;   // 보상버튼에 대한 인터렉터블 off를 통해 끔
         Cleared();
-        QuestContentsInitializer.OpenQuestID(targetData.questId + 1);
+        QuestContentsInitializer.OpenQuestID(targetData.questId + 1, targetData.recordType);
         // List<TransactionValue> transactionValues =  new();
 
         // transactionValues.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
@@ -130,6 +121,7 @@ public class QuestContent : MonoBehaviour
         // Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
         // transactionValues = Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
     }
+
 
     public void UpdateContent()
     {
