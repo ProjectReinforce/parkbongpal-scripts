@@ -37,7 +37,11 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             return result;
         }
     }
-     
+    public int PideaSetWeaponCount()
+    {
+        return RegisteredWeaponCount;
+    }
+
     public void SetCurrentWeapon(PideaSlot slot)
     {
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
@@ -50,6 +54,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     }
     public bool CheckLockWeapon(int index)
     {
+        Debug.Log("★");
         return materials[index].color == Color.black;
     }
     public void GetNewWeapon(int index)
@@ -83,5 +88,12 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             }
         }
     }
-  
+    private void OnEnable()
+    {
+        Managers.Event.PideaSlotSelectEvent += SetCurrentWeapon;
+        Managers.Event.PideaViwerOnDisableEvent += NotifyClear;
+        Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
+        Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
+    }
+
 }

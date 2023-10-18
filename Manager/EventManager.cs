@@ -31,4 +31,12 @@ public class EventManager
     #region Ranking
     public Action GetRankAfterTheFirstTime;
     #endregion
+
+    #region Pidea
+    public Action<PideaSlot> PideaSlotSelectEvent;          // 도감 슬롯 선택 이벤트
+    public Action PideaViwerOnDisableEvent;                 // 도감 UI창 꺼짐 체크 이벤트
+    public Predicate<int> PideaCheckEvent;                  // 도감에 등록되어있는지 유/무 확인하는 이벤트
+    public Action<int> PideaGetNewWeaponEvent;              // 도감에 해당 무기를 추가하는 이벤트
+    public Func<int> PideaSetWeaponCount;                   // 도감에 등록된 무기의 갯수 체크 이벤트 // 해당이벤트 사용... 
+    #endregion
 }

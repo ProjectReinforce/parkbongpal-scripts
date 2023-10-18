@@ -20,6 +20,7 @@ public class PideaSlot : NewThing
     {
         if(weaponImage.material.color == Color.black) return;
 
-        Managers.Game.Pidea.SetCurrentWeapon(this);
+        Managers.Event.PideaSlotSelectEvent?.Invoke(this);
+        //Managers.Game.Pidea.SetCurrentWeapon(this);
     }
 }
