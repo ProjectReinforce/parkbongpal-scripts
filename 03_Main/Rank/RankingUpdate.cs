@@ -8,7 +8,7 @@ public class RankingUpdate : MonoBehaviour
 {
     [SerializeField] Text timeText;
     //[SerializeField] float countdownDuration = 10; // 30 minutes in seconds
-    float countdownDuration = 10;
+    float countdownDuration = 1800;
     float currentTime;
 
     void Start()

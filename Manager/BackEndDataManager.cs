@@ -581,7 +581,6 @@ public class BackEndDataManager
                 }
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
-                Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + json.ToJson());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 if (count >= UUIDs.Length) return;
                 deligate[1](++count);
