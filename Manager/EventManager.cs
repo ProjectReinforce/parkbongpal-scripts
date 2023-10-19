@@ -12,7 +12,6 @@ public class EventManager
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
     public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
-    public Action<bool> HideLendedWeaponToggleEvent;
 
     #region TopUI
     public Action GoldChangeEvent;

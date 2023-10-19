@@ -14,6 +14,7 @@ public class Slot : MonoBehaviour
     public Image CheckImage { get; private set; }
     public Image SelectedImage { get; private set; }
     public Image NewImage { get; private set; }
+    public bool IsHideLendedWeapon { get; set; }
     // Sprite defaultSlot;
 
     SlotModeUI[] slotModeUIs;
@@ -57,8 +58,6 @@ public class Slot : MonoBehaviour
             // new SlotModeUIDefault(this, transform.GetSiblingIndex()),
             // new SlotModeUIDecomposition(this, transform.GetSiblingIndex()),
         };
-        Managers.Event.HideLendedWeaponToggleEvent -= slotModeUIs[currentInventoryType].HideLendedWeaponSlot;
-        Managers.Event.HideLendedWeaponToggleEvent += slotModeUIs[currentInventoryType].HideLendedWeaponSlot;
     }
 
     void OnEnable()

@@ -49,12 +49,19 @@ public class SlotModeUI
     {
         if (slot.gameObject.activeSelf == false)
             slot.gameObject.SetActive(true);
-        // Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
 
-        // if (weapon != null && weapon.data.mineId != -1)
-        //     lendingImage.gameObject.SetActive(true);
-        // else
-        //     lendingImage.gameObject.SetActive(false);
+        if (slot.IsHideLendedWeapon == true)
+        {
+            Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+            if (weapon != null && weapon.data.mineId != -1)
+            {
+                slot.gameObject.SetActive(false);
+                return;
+            }
+        }
+        else
+            slot.gameObject.SetActive(true);
+
         foreach (var item in defaultUIObjects)
         {
             if (item is null) continue;

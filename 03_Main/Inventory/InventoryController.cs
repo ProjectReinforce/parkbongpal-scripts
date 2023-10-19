@@ -32,7 +32,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         ConfirmMaterialsButton = Utills.Bind<Button>("Button_MaterialConfirm", transform);
         hideLendedWeaponToggle = Utills.Bind<Toggle>("Toggle_HideLendedWeapon", transform);
         hideLendedWeaponToggle.onValueChanged.RemoveAllListeners();
-        hideLendedWeaponToggle.onValueChanged.AddListener((value) => Managers.Event.HideLendedWeaponToggleEvent?.Invoke(value));
+        hideLendedWeaponToggle.onValueChanged.AddListener((value) => HideLendedWeapon(value));
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
         scrollRect = Utills.Bind<ScrollRect>("Scroll View_Slot", transform);
@@ -101,5 +101,15 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public void SortWeapons(Dropdown _test)
     {
         Managers.Game.Inventory.Sort((SortType)_test.value);
+    }
+
+    public void HideLendedWeapon(bool _toggleValue)
+    {
+        foreach (var item in slots)
+        {
+            item.IsHideLendedWeapon = _toggleValue;
+            item.ResetUI((int)CurrentInventoryType);
+            item.SetUI((int)CurrentInventoryType);
+        }
     }
 }
