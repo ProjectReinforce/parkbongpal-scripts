@@ -86,7 +86,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         
         if (Managers.Event.PideaCheckEvent(baseWeaponData.index))
         {
-            
+            Debug.Log("PideaCheckEvent");
             Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                 { nameof(PideaData.colum.ownedWeaponId), baseWeaponData.index },
                 { nameof(PideaData.colum.rarity), baseWeaponData.rarity }

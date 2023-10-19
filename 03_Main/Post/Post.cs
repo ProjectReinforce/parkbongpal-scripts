@@ -53,6 +53,7 @@ public class Post : MonoBehaviour, IGameInitializer
             {
                 //받아올 우편이 없는것
                 Debug.Log("우편함이 비어있습니다.");
+                UpdatePostCount();
                 return;
             }
             slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화

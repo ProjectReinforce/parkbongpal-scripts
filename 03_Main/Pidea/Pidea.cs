@@ -83,7 +83,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
             foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
-                Debug.Log("collectionType : " + collectionType);
+                //Debug.Log("collectionType : " + collectionType);
                 collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
