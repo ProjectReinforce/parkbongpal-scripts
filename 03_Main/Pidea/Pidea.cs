@@ -54,7 +54,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     }
     public bool CheckLockWeapon(int index)
     {
-        Debug.Log("★");
         return materials[index].color == Color.black;
     }
     public void GetNewWeapon(int index)
@@ -92,6 +91,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     {
         Managers.Event.PideaSlotSelectEvent += SetCurrentWeapon;
         Managers.Event.PideaViwerOnDisableEvent += NotifyClear;
+        Managers.Event.PideaCheckEvent += CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
     }
