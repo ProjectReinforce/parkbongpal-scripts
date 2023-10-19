@@ -97,7 +97,7 @@ public class Ranking : MonoBehaviour
             }
             else
             {
-                if(_myRankData.rank <= 3)
+                if(_myRankData.rank <= 3 && _myRankData.rank >= 1)
                 {
                     viewPorts[1].gameObject.SetActive(false);
                     viewPorts[2].gameObject.SetActive(true);
@@ -120,7 +120,7 @@ public class Ranking : MonoBehaviour
             _slots[i].SetData(_ranks[i]);
         }
 
-        if(_myRankData.rank <= 3)
+        if(_myRankData.rank <= 3 && _myRankData.rank >= 1)
         {
             switch (_rankIndex)
             {
