@@ -5,21 +5,21 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class InventoryOpenPopupRegister : OpenPopupRegister
+public class InventoryReplaceRegister : MonoBehaviour
 {
     [SerializeField] InventoryType inventoryOpenType;
+    protected Button button;
     InventoryController inventory;
 
-    protected override void Awake()
+    void Awake()
     {
         inventory = Utills.Bind<InventoryController>("Inventory_S");
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
         {
-            // if (inventory.gameObject.activeSelf == true)
-            //     Managers.UI.ClosePopup();
+            inventory.gameObject.SetActive(false);
             inventory.Set(inventoryOpenType);
-            Managers.UI.OpenPopup(inventory.gameObject);
+            inventory.gameObject.SetActive(true);
         });
     }
 }
