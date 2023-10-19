@@ -263,7 +263,6 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
 public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IInventoryOpenOption
 {
     // Weapon currentWeapon;
-    string originButtonText;
 
     public InventoryOpenOptionReinforceMaterial(InventoryController _inventoryController) : base(_inventoryController)
     {
@@ -306,7 +305,6 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
 
         selectButton.onClick.RemoveAllListeners();
 
-        decompositionText.text = originButtonText;
         confirmMaterialsButton.gameObject.SetActive(false);
         defaultBackground.gameObject.SetActive(true);
     }
@@ -346,12 +344,32 @@ public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOp
 
     public void Set()
     {
+        Managers.Event.SlotSelectEvent += SetDetailInfo;
+        Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+
+        selectButton.onClick.AddListener(() => 
+        {
+            if (currentWeapon.data.mineId != -1)
+            {
+                Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
+                return;
+            }
+            Managers.Event.SetMineGameWeapon?.Invoke(currentWeapon);
+            Managers.UI.ClosePopup();
+        });
         selectText.text = "선택하기";
         decompositionButton.gameObject.SetActive(false);
     }
 
     public void Reset()
     {
+        Managers.Event.SlotSelectEvent -= SetDetailInfo;
+        Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+
+        selectButton.onClick.RemoveAllListeners();
+
+        defaultBackground.gameObject.SetActive(true);
+        decompositionButton.gameObject.SetActive(true);
     }
 }
 

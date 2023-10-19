@@ -4,8 +4,13 @@ using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MineGame : Singleton<MineGame>
+public class MineGame : MonoBehaviour
 {
+    Weapon selectedWeapon;
+    // public Weapon SelectedWeapon
+    // {
+    //     get => selectedWeapon;
+    // }
     [SerializeField] TimerControl timerControl;
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
@@ -16,6 +21,11 @@ public class MineGame : Singleton<MineGame>
     bool isAttackAble = false;
     bool isPause;
 
+    void Awake() 
+    {
+        Managers.Event.SetMineGameWeapon -= SetWeapon;
+        Managers.Event.SetMineGameWeapon += SetWeapon;
+    }
     public void Resume()
     {
         pausePanel.gameObject.SetActive(false);
@@ -33,15 +43,19 @@ public class MineGame : Singleton<MineGame>
         }
     }
 
-    public Weapon currentWeapon { get; set; }
-    [SerializeField] WeaponBringer weaponBringer;
-    [SerializeField] GameObject inventory;
+    void SetWeapon(Weapon _weapon)
+    {
+        selectedWeapon = _weapon;
+    }
+    // public Weapon currentWeapon { get; set; }
+    // [SerializeField] WeaponBringer weaponBringer;
+    // [SerializeField] GameObject inventory;
     
     void OnEnable() // 게임을 다시 켰을때도 초기화
     {
-        InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
+        //InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
         // GameManager.Instance.OpenPopup(inventory);
-        ResetGame();
+        //ResetGame();
     }
     
     public void StartBlinkingAndCountdown()
@@ -67,8 +81,7 @@ public class MineGame : Singleton<MineGame>
 
     void Attack() // 데미지 계산 할 함수
     {
-        float damage = 40f;
-        rock.GetDamage(damage);
+        rock.GetDamage(selectedWeapon.power);
     }
 
     public void GameOver()

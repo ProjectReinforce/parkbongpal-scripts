@@ -31,6 +31,10 @@ public class EventManager
     public Action GetRankAfterTheFirstTime;
     #endregion
 
+    #region MineGame
+    public Action<Weapon> SetMineGameWeapon;
+    #endregion
+
     #region Pidea
     public Action<PideaSlot> PideaSlotSelectEvent;          // 도감 슬롯 선택 이벤트
     public Action PideaViwerOnDisableEvent;                 // 도감 UI창 꺼짐 체크 이벤트
