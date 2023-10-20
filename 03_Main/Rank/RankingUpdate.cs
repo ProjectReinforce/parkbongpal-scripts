@@ -7,25 +7,40 @@ using UnityEngine.UI;
 public class RankingUpdate : MonoBehaviour
 {
     [SerializeField] Text timeText;
+    [SerializeField] Button resetButton;
     //[SerializeField] float countdownDuration = 10; // 30 minutes in seconds
-    float countdownDuration = 1800;
+    float countdownDuration = 10;
     float currentTime;
+    bool isTimerEnd = false;
 
     void Start()
     {
         currentTime = countdownDuration;
+        resetButton.interactable = false;
+    }
+
+    public void RankResetButtonClick()
+    {
+        currentTime = countdownDuration;
+        Managers.ServerData.GetRankList(false);
+        isTimerEnd = false;
+        resetButton.interactable = false;
     }
 
     void Update()
     {
-        currentTime -= Time.deltaTime;
-
-        if (currentTime <= 0)
+        if(!isTimerEnd)
         {
-            currentTime = countdownDuration;
-            Managers.ServerData.GetRankList(false);
+            currentTime -= Time.deltaTime;
+            Debug.Log(currentTime);
+            UpdateTimeText();
+            if (currentTime <= 0.5)
+            {
+                isTimerEnd = true;
+                resetButton.interactable = true;
+            }
         }
-        UpdateTimeText();
+
     }
 
     void UpdateTimeText()
