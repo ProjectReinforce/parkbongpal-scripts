@@ -54,6 +54,7 @@ public class Managers : MonoBehaviour
     void Awake()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        Application.targetFrameRate = 60;
 
         Initialize();
 

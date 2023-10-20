@@ -150,7 +150,7 @@ public class QuestContent : MonoBehaviour
             case RecordType.GetItem:    // 승급, 뽑기를 통해 얻은 로직
                 break;
             case RecordType.RegisterItem:
-                //current = Managers.Event.PideaSetWeaponCount;
+                //current = Managers.Event.PideaSetWeaponCount.Invoke();
                 break;
             case RecordType.DisassembleItem:
                 current = player.Record.DisassembleItem;

@@ -1,6 +1,5 @@
 using BackEnd;
 using LitJson;
-using Manager;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +9,7 @@ public class Post : MonoBehaviour, IGameInitializer
     const int MAX_COUNT = 30;
 
     [SerializeField] GameObject mySelf;
+    [SerializeField] GameObject noPost;
     Notifyer notifyer;
     [SerializeField] PostSlot prefab;
     [SerializeField] float lastCallTime;
@@ -53,8 +53,11 @@ public class Post : MonoBehaviour, IGameInitializer
             {
                 //받아올 우편이 없는것
                 Debug.Log("우편함이 비어있습니다.");
+                noPost.SetActive(true);
+                UpdatePostCount();
                 return;
             }
+            noPost.SetActive(false);
             slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
             for (int i = 0; i < json.Count; i++)
@@ -82,7 +85,7 @@ public class Post : MonoBehaviour, IGameInitializer
                         Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
                 mail.Initialized(mailData, mailItemDatas);
-                
+
                 Debug.Log("메일 데이터 세팅 완료");
                 mail.gameObject.SetActive(true);
                 //notifyer.GetNew(mail);

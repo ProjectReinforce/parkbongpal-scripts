@@ -54,7 +54,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     }
     public bool CheckLockWeapon(int index)
     {
-        Debug.Log("★");
         return materials[index].color == Color.black;
     }
     public void GetNewWeapon(int index)
@@ -83,7 +82,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
             foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
-                Debug.Log("collectionType : " + collectionType);
+                //Debug.Log("collectionType : " + collectionType);
                 collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
@@ -92,6 +91,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     {
         Managers.Event.PideaSlotSelectEvent += SetCurrentWeapon;
         Managers.Event.PideaViwerOnDisableEvent += NotifyClear;
+        Managers.Event.PideaCheckEvent += CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
     }
