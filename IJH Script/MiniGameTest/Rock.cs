@@ -41,7 +41,7 @@ public class Rock : MonoBehaviour
         Debug.Log("오리지널 포지션" + originalPosition);
     }
 
-    public void GetDamage(float damage)
+    public void GetDamage(int damage)
     {
         hp -= damage;
         hp = Mathf.Clamp(hp, 0.0f, maxHp);
@@ -49,7 +49,7 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
-            score += (int)maxHp;
+            score += damage;
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);

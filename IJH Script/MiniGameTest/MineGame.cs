@@ -7,10 +7,6 @@ using UnityEngine.UI;
 public class MineGame : MonoBehaviour
 {
     Weapon selectedWeapon;
-    // public Weapon SelectedWeapon
-    // {
-    //     get => selectedWeapon;
-    // }
     [SerializeField] TimerControl timerControl;
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
@@ -19,13 +15,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject resultPanel;
     Coroutine startCountdown;
     bool isAttackAble = false;
-    bool isPause;
 
-    void Awake() 
-    {
-        Managers.Event.SetMineGameWeapon -= SetWeapon;
-        Managers.Event.SetMineGameWeapon += SetWeapon;
-    }
     public void Resume()
     {
         pausePanel.gameObject.SetActive(false);
@@ -42,20 +32,16 @@ public class MineGame : MonoBehaviour
             StopCoroutine(startCountdown);
         }
     }
+    
 
-    void SetWeapon(Weapon _weapon)
+    public void SetMineGameWeapon(Weapon _weapon)
     {
         selectedWeapon = _weapon;
     }
-    // public Weapon currentWeapon { get; set; }
-    // [SerializeField] WeaponBringer weaponBringer;
-    // [SerializeField] GameObject inventory;
     
-    void OnEnable() // 게임을 다시 켰을때도 초기화
+    void OnDisable()// 게임을 다시 켰을때도 초기화
     {
-        //InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
-        // GameManager.Instance.OpenPopup(inventory);
-        //ResetGame();
+        ResetGame();
     }
     
     public void StartBlinkingAndCountdown()
@@ -118,22 +104,6 @@ public class MineGame : MonoBehaviour
             {
                 Attack();
             }
-        }
-    }
-    public void ClickForPause()
-    {
-        // SH 추가.. 적용 실패...
-        if(!isPause)
-        {
-            isPause = true;
-            pausePanel.SetActive(true);
-            Time.timeScale = 0;
-        }
-        else
-        {
-            isPause = false;
-            pausePanel.SetActive(false);
-            Time.timeScale = 1;
         }
     }
 }

@@ -32,7 +32,8 @@ public class EventManager
     #endregion
 
     #region MineGame
-    public Action<Weapon> SetMineGameWeapon;
+    public Action<Weapon> SetMiniGameWeapon;
+    public Action SetMiniGame;
     #endregion
 
     #region Pidea
