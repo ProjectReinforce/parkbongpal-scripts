@@ -32,7 +32,6 @@ public class RankingUpdate : MonoBehaviour
         if(!isTimerEnd)
         {
             currentTime -= Time.deltaTime;
-            Debug.Log(currentTime);
             UpdateTimeText();
             if (currentTime <= 0.5)
             {
