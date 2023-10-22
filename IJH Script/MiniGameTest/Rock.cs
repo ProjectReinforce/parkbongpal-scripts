@@ -28,6 +28,17 @@ public class Rock : MonoBehaviour
         Debug.Log(originalPosition);
     }
 
+    void OnEnable() 
+    {
+        Managers.Event.ResetMiniGameScore -= ResetScore;
+        Managers.Event.ResetMiniGameScore += ResetScore;
+    }
+
+    void OnDisable() 
+    {
+        Managers.Event.ResetMiniGameScore -= ResetScore;
+    }
+
     public void ResetRockInfo()
     {
         maxHp = 500f;
@@ -44,12 +55,13 @@ public class Rock : MonoBehaviour
     public void GetDamage(int damage)
     {
         hp -= damage;
+        score += damage;
+        Debug.Log(score);
         hp = Mathf.Clamp(hp, 0.0f, maxHp);
         rockHpSlider.SetHpValue(hp, maxHp);
 
         if(hp <= 0)
         {
-            score += damage;
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
@@ -65,5 +77,10 @@ public class Rock : MonoBehaviour
 
             timerControl.CurrentTime += 20f;
         }
+    }
+
+    void ResetScore()
+    {
+        score = 0;
     }
 }

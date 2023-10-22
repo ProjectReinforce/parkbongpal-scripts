@@ -14,11 +14,15 @@ public class Player
     public Player()
     {
         // topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
-        userData = Managers.ServerData.UserData;
+        // userData = Managers.ServerData.UserData;
+        UpdateUserData();
 
         recordData = new RecordData();
     }
-
+    public void UpdateUserData()
+    {
+        userData = Managers.ServerData.UserData;
+    }
     public void Initialize()
     {
         recordData.LoadOrInitRecord(userData.inDate);
@@ -149,9 +153,9 @@ public class Player
         UpdateBackEndScore(BackEndDataManager.GOLD_UUID,nameof(UserData.colum.goldPerMin), userData.goldPerMin);
     }
 
-    public void ComparisonMineGameScore(int score)
+    public void SetMineGameScore(int score)
     {
-        if (userData.mineGameScore <= score) return;
+        // if (userData.mineGameScore <= score) return;
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }

@@ -33,7 +33,7 @@ public class RankingUpdate : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
             UpdateTimeText();
-            if (currentTime <= 0.5)
+            if (currentTime <= 0)
             {
                 isTimerEnd = true;
                 resetButton.interactable = true;
@@ -44,8 +44,8 @@ public class RankingUpdate : MonoBehaviour
 
     void UpdateTimeText()
     {
-        int minutes = Mathf.FloorToInt(currentTime / 60);
-        int seconds = Mathf.FloorToInt(currentTime % 60);
+        int minutes = (int)(currentTime / 60);
+        int seconds = (int)(currentTime % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

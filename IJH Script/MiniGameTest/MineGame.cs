@@ -75,9 +75,11 @@ public class MineGame : MonoBehaviour
         isAttackAble = false;
         Managers.Game.Player.AddGold(rock.Score);
         Debug.Log(rock.Score);
-        Managers.Game.Player.ComparisonMineGameScore(rock.Score);
+        Managers.Game.Player.SetMineGameScore(rock.Score);
         Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
+        Managers.Event.ResultScoreMineGame?.Invoke(rock.Score);
+        Managers.Event.ResetMiniGameScore?.Invoke();
     }
 
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화

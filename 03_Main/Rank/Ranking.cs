@@ -12,14 +12,14 @@ public class Ranking : MonoBehaviour
 {
     const int PORT_COUNT = 2;
     Rank[][][] ranks = new Rank[PORT_COUNT][][];    // 3차원 배열 ==> 첫번째[0이면 탑랭크, 1이면 마이랭크], 2번째[랭킹의 종류], 3번째[각 차트]
-    Rank[] myRank = new Rank[2];    // 랭크의 종류에 따라 자신의 랭크정보만 담는 배열
+    Rank[] onlyMyRank = new Rank[3];    // 랭크의 종류에 따라 자신의 랭크정보만 담는 배열
     int rankTabIndex = 0;
     [SerializeField] RectTransform[] viewPorts;
     [SerializeField] RectTransform rankContent; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] RectTransform rankScrollView; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] TopRankSlot topRankSlot;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
-    [SerializeField] GameObject nullMyRanknullMyRank;
+    int typeCount = Enum.GetValues(typeof(RankingType)).Length;
 
 
     void Awake()
@@ -29,22 +29,25 @@ public class Ranking : MonoBehaviour
         for (int i = 0; i < PORT_COUNT; i++)
         {
             slotLists[i] = viewPorts[i].GetComponentsInChildren<RankSlot>(); // 각 PORT에 viewPorts하위에 있는 RankSlot 컴포넌트를 찾아 slotLists 배열로 반환
-            myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);  // 미니게임이 들어오면 if나 switch문으로 변경해야함
+        }
+        for(int i = 0; i< typeCount; i++)
+        {
+            onlyMyRank[i] = FindMyRankDataByNickname((RankingType)i);
         }
         ClickTab(0);
     }
 
     void Start()
     {
-        Managers.Event.GetRankAfterTheFirstTime -= GetRankSetMyRank;
-        Managers.Event.GetRankAfterTheFirstTime += GetRankSetMyRank;
+        Managers.Event.GetRankAfterTheFirstTime -= SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTime += SetOnlyMyRank;
     }
 
-    void GetRankSetMyRank()
+    void SetOnlyMyRank()
     {
-        for (int i = 0; i < PORT_COUNT; i++)
+        for (int i = 0; i < typeCount; i++)
         {
-            myRank[i] = i == 0 ? FindMyRankDataByNickname(RankingType.분당골드량) : FindMyRankDataByNickname(RankingType.전투력);
+            onlyMyRank[i] = FindMyRankDataByNickname((RankingType)i);
         }
         ClickTab(rankTabIndex);
     }
@@ -75,7 +78,7 @@ public class Ranking : MonoBehaviour
         rankTabIndex = _index;
         for (int i = 0; i < PORT_COUNT; i++)
         {
-            SetSlotTo(slotLists[i], ranks[i][_index], myRank[_index], _index);
+            SetSlotTo(slotLists[i], ranks[i][_index], onlyMyRank[_index], _index);
         }
     }
 
@@ -88,27 +91,15 @@ public class Ranking : MonoBehaviour
     {
         for (int i = 0; i < _slots.Length; i++)
         {
-            if (_ranks is null)
+            if(_myRankData.rank <= 3 && _myRankData.rank >= 1)
             {
                 viewPorts[1].gameObject.SetActive(false);
-                viewPorts[2].gameObject.SetActive(false);
-                nullMyRanknullMyRank.SetActive(true);
-                break;
+                viewPorts[2].gameObject.SetActive(true);
             }
             else
             {
-                if(_myRankData.rank <= 3 && _myRankData.rank >= 1)
-                {
-                    viewPorts[1].gameObject.SetActive(false);
-                    viewPorts[2].gameObject.SetActive(true);
-                    nullMyRanknullMyRank.SetActive(false);
-                }
-                else
-                {
-                    viewPorts[1].gameObject.SetActive(true);
-                    viewPorts[2].gameObject.SetActive(false);
-                    nullMyRanknullMyRank.SetActive(false);
-                }
+                viewPorts[1].gameObject.SetActive(true);
+                viewPorts[2].gameObject.SetActive(false);
             }
 
             if (i >= _ranks.Length)
@@ -122,16 +113,7 @@ public class Ranking : MonoBehaviour
 
         if(_myRankData.rank <= 3 && _myRankData.rank >= 1)
         {
-            switch (_rankIndex)
-            {
-                // default:
-                // topRankSlot.SetNull();
-                // break;
-                case (int)RankingType.분당골드량: 
-                case (int)RankingType.전투력: 
-                topRankSlot.SetData(_myRankData, _myRankData.rank, _rankIndex);
-                break;
-            }
+            topRankSlot.SetData(_myRankData, _myRankData.rank, _rankIndex);
         }
     }
 }

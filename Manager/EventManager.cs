@@ -31,9 +31,11 @@ public class EventManager
     public Action GetRankAfterTheFirstTime;
     #endregion
 
-    #region MineGame
+    #region MiniGame
     public Action<Weapon> SetMiniGameWeapon;
+    public Action<int> ResultScoreMineGame;
     public Action SetMiniGame;
+    public Action ResetMiniGameScore;
     #endregion
 
     #region Pidea

@@ -65,7 +65,7 @@ public class BackEndDataManager
     public Decomposit[] DecompositDatas;                // 분해? 데이터
 
     // 사용자 데이터를 검색하기 위한 검색 필터
-    Where SearchFromMyIndate = new();
+    Where SearchFromMyIndate;
 
     // 무기 데이터를 등급별로 저장하기 위한 리스트 배열
     readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
@@ -87,6 +87,7 @@ public class BackEndDataManager
     /// </summary>
     public void Initialize()
     {
+        SearchFromMyIndate = new();
         SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);  // 현재 사용자를 위한 검색 필터 설정
         for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)                             // 희귀도별 기본 무기 데이터를 저장할 리스트 배열 초기화
             baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
