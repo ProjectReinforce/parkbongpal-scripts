@@ -70,15 +70,23 @@ public class MineGame : MonoBehaviour
         rock.GetDamage(selectedWeapon.power);
     }
 
+    void CompareScore(int _newScore)
+    {
+        if(Managers.Game.Player.Data.mineGameScore >= _newScore) return;
+        Managers.Game.Player.SetMineGameScore(_newScore);
+        Managers.ServerData.GetRankList(false);
+    }
+
     public void GameOver()
     {
         isAttackAble = false;
         Managers.Game.Player.AddGold(rock.Score);
-        Debug.Log(rock.Score);
-        Managers.Game.Player.SetMineGameScore(rock.Score);
-        Debug.Log(Managers.Game.Player.Data.gold);
+        // Debug.Log(rock.Score);
+        CompareScore(rock.Score);
+        // Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
-        Managers.Event.ResultScoreMineGame?.Invoke(rock.Score);
+        Managers.Event.ResultBestScoreMineGame?.Invoke();
+        Managers.Event.ResultNewScoreMineGame?.Invoke(rock.Score);
         Managers.Event.ResetMiniGameScore?.Invoke();
     }
 

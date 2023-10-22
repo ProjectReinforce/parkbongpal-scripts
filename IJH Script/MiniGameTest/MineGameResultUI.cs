@@ -10,8 +10,11 @@ public class MineGameResultUI : MonoBehaviour
 
     void OnEnable()
     {
-        Managers.Event.ResultScoreMineGame -= SetNowTurnScore;
-        Managers.Event.ResultScoreMineGame += SetNowTurnScore;
+        Managers.Event.ResultNewScoreMineGame -= SetNowTurnScore;
+        Managers.Event.ResultNewScoreMineGame += SetNowTurnScore;
+
+        Managers.Event.ResultBestScoreMineGame -= SetBestScore;
+        Managers.Event.ResultBestScoreMineGame += SetBestScore;
     }
 
     void SetNowTurnScore(int _score)
@@ -19,8 +22,14 @@ public class MineGameResultUI : MonoBehaviour
         nowTurnScore.text = _score.ToString();
     }
 
+    void SetBestScore()
+    {
+        bestScore.text = $"최고점수  : {Managers.Game.Player.Data.mineGameScore,6}";
+    }
+
     void OnDisable()
     {
-        Managers.Event.ResultScoreMineGame -= SetNowTurnScore;
+        Managers.Event.ResultNewScoreMineGame -= SetNowTurnScore;
+        Managers.Event.ResultBestScoreMineGame -= SetBestScore;
     }
 }

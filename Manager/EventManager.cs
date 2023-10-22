@@ -28,14 +28,16 @@ public class EventManager
     #endregion
 
     #region Ranking
-    public Action GetRankAfterTheFirstTime;
+    public Action<int> GetRankAfterTheFirstTime;
+    public Action<int, int> SettingRankingPageEvent;
     #endregion
 
     #region MiniGame
     public Action<Weapon> SetMiniGameWeapon;
-    public Action<int> ResultScoreMineGame;
+    public Action<int> ResultNewScoreMineGame;
     public Action SetMiniGame;
     public Action ResetMiniGameScore;
+    public Action ResultBestScoreMineGame;
     #endregion
 
     #region Pidea

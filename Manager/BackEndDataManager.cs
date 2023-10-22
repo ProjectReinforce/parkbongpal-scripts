@@ -548,7 +548,7 @@ public class BackEndDataManager
     public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
     public const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
     public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID};
-    public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
+    public Rank[][] topRanks = new Rank[UUIDs.Length][];
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
 
@@ -583,9 +583,9 @@ public class BackEndDataManager
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                Managers.Event.GetRankAfterTheFirstTime?.Invoke(count);
                 if (count >= UUIDs.Length) return;
                 deligate[1](++count);
-                Managers.Event.GetRankAfterTheFirstTime?.Invoke();
             });
         };
         foreach (var action in deligate)
