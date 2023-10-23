@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using LitJson;
+using System.Collections;
 
 public class JsonMapperRegisterImporter
 {
@@ -519,6 +520,7 @@ public class BackEndDataManager
 
     // 보유한(한번 획득했던) 무기 ID 데이터 로드
     public Material[] ownedWeaponIds = new Material[150];
+    public PideaData[] pideaWeaponsServerDatas;
     void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
     {
         Material LockMaterial = new(Shader.Find("UI/Default"))
@@ -536,6 +538,7 @@ public class BackEndDataManager
             {
                 ownedWeaponIds[pidea.ownedWeaponId].color = Color.white;
             }
+            pideaWeaponsServerDatas = data;
         });
     }
 

@@ -93,15 +93,16 @@ public class Inventory
                     IsNew = true
                 };
                 weapons.Add(weapon);
-                if (Managers.Event.PideaCheckEvent(_baseWeaponData[i].index))
+                if (Managers.Event.PideaCheckEvent.Invoke(_baseWeaponData[i].index))
                 {
                     Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                         { nameof(PideaData.colum.ownedWeaponId), _baseWeaponData[i].index },
                         { nameof(PideaData.colum.rarity), _baseWeaponData[i].rarity }
                     }));
-                    Managers.Event.PideaGetNewWeaponEvent(_baseWeaponData[i].index);
+                    Managers.Event.PideaGetNewWeaponEvent?.Invoke(_baseWeaponData[i].index);
                 }
             }
+            Transactions.SendCurrent();
         });
     }
 

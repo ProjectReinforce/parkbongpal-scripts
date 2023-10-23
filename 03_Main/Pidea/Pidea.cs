@@ -13,6 +13,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     [SerializeField] RectTransform currentTap;
     [SerializeField] UnityEngine.UI.ScrollRect scrollView;
     [SerializeField] RectTransform[] rarityTables;
+    List<PideaData> pideaWeaponsrDatas;
 
     public void ClickTap(int index)
     {
@@ -58,6 +59,8 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     }
     public void GetNewWeapon(int index)
     {
+        //게임중에 추가되는 무기 넣어줘야한다. 최애무기 설정에서 사용예정.
+        //pideaWeaponsrDatas.Add(materials)
         materials[index].color = Color.white;
         pideaSlots[index].SetNew();
         notifyer.GetNew(pideaSlots[index]);
@@ -86,14 +89,29 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
                 collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
+        //pideaWeaponsrDatas = new(Managers.ServerData.pideaWeaponsServerDatas);
     }
     private void OnEnable()
     {
+        Managers.Event.PideaSlotSelectEvent -= SetCurrentWeapon;
+        Managers.Event.PideaViwerOnDisableEvent -= NotifyClear;
+        Managers.Event.PideaCheckEvent -= CheckLockWeapon;
+        Managers.Event.PideaGetNewWeaponEvent -= GetNewWeapon;
+        Managers.Event.PideaSetWeaponCount -= PideaSetWeaponCount;
+
         Managers.Event.PideaSlotSelectEvent += SetCurrentWeapon;
         Managers.Event.PideaViwerOnDisableEvent += NotifyClear;
         Managers.Event.PideaCheckEvent += CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
+    }
+    private void OnDisable()
+    {
+        Managers.Event.PideaSlotSelectEvent -= SetCurrentWeapon;
+        Managers.Event.PideaViwerOnDisableEvent -= NotifyClear;
+        Managers.Event.PideaCheckEvent -= CheckLockWeapon;
+        Managers.Event.PideaGetNewWeaponEvent -= GetNewWeapon;
+        Managers.Event.PideaSetWeaponCount -= PideaSetWeaponCount;
     }
 
 }
