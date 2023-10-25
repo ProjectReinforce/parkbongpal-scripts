@@ -13,7 +13,7 @@ public class TitleNicknameSetUI : NicknameSetUIBase
     }
     IEnumerator AfterInitialize()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         Managers.Game.Player.UpdateUserData();
         Managers.Game.Player.SetGoldPerMin(0);
         Managers.Game.Player.SetCombatScore(0);
