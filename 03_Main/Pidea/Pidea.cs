@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Pidea : MonoBehaviour//Singleton<Pidea>
 {
@@ -20,6 +21,8 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         currentTap.gameObject.SetActive(false);
         currentTap = rarityTables[index];
         scrollView.content = currentTap;
+        float PosX = currentTap.anchoredPosition.x;
+        currentTap.anchoredPosition = new Vector2(PosX, 0);
         currentTap.gameObject.SetActive(true);
     }
     Notifyer notifyer;
@@ -61,9 +64,9 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     {
         //게임중에 추가되는 무기 넣어줘야한다. 최애무기 설정에서 사용예정.
         //pideaWeaponsrDatas.Add(materials)
-        materials[index].color = Color.white;
         pideaSlots[index].SetNew();
         notifyer.GetNew(pideaSlots[index]);
+        materials[index].color = Color.white;
     }
 
     void Awake()
@@ -72,7 +75,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
         
         notifyer = Instantiate(Managers.Resource.notifyer,transform);
-      
+
         materials = Managers.ServerData.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
         for (int i = 0; i < Managers.ServerData.BaseWeaponDatas.Length; i++)
@@ -85,7 +88,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
             foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
-                //Debug.Log("collectionType : " + collectionType);
                 collection.AddSlot(pideaSlots[i],collectionType);
             }
         }
