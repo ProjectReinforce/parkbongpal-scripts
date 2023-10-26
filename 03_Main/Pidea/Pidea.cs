@@ -32,7 +32,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             foreach (var item in materials)
             {
                 if (item.color == Color.white)
-                    result ++;
+                    result++;
             }
             return result;
         }
