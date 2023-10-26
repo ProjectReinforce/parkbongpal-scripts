@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Notifyer : MonoBehaviour
+public class Notifyer : MonoBehaviour, IGameInitializer
 {
     [SerializeField]List< NewThing> newThings; 
     [SerializeField]UnityEngine.UI.Text text;
-    public void Awake()
+    public void GameInitialize()
     {
         newThings = new List<NewThing>();
         Debug.Log("newThings 활성화됨");
