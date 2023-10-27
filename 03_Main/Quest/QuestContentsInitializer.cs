@@ -99,8 +99,8 @@ public class QuestContentsInitializer : MonoBehaviour
         //         // }
         //     }
         // }
-        Managers.Event.OpenQuestID += OpenQuestID;
-        Managers.Event.UpdateAllContent += UpdateAllContent;
+        Managers.Event.OpenQuestIDEvent += OpenQuestID;
+        Managers.Event.UpdateAllContentEvent += UpdateAllContent;
         ClearCheck();
     }
 
@@ -119,6 +119,7 @@ public class QuestContentsInitializer : MonoBehaviour
     {
         if(_recordType == quests[_openQuestID].TargetData.recordType)
         {
+            questContents[_recordType][_openQuestID].gameObject.SetActive(true);
             quests[_openQuestID].gameObject.SetActive(true);
         }
         else

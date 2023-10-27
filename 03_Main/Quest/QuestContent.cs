@@ -96,11 +96,11 @@ public class QuestContent : MonoBehaviour
         Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
         // 플레이어에게 퀘스트 리워드 타입과 해당하는 크기만큼의 재화를 줌
 
-        Managers.Event.OpenQuestID?.Invoke(targetData.questId + 1, targetData.recordType);
+        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.questId + 1, targetData.recordType);
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;   // 보상버튼에 대한 인터렉터블 off를 통해 끔
         Cleared();
-        Managers.Event.UpdateAllContent?.Invoke();
+        Managers.Event.UpdateAllContentEvent?.Invoke();
         // List<TransactionValue> transactionValues =  new();
 
 

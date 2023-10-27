@@ -32,9 +32,9 @@ public class EventManager
     #endregion
 
     #region Quest
-    public Action<int, RecordType> OpenQuestID;
-    public Action UpdateAllContent;
-    public Action ClearCheck;
+    public Action<int, RecordType> OpenQuestIDEvent;
+    public Action UpdateAllContentEvent;
+    public Action ClearCheckEvent;
     #endregion
 
     #region Pidea
