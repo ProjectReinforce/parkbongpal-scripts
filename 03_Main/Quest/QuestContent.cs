@@ -197,8 +197,8 @@ public class QuestContent : MonoBehaviour
         }
         else
         {
-            processText.text = $"{current} / {targetData.requestCount}";    // 진행이 되었다면 현재의 값과 타겟 데이터의 카운터를 보여줌 텍스트에 대입함
-            processSlider.value = (float)current / targetData.requestCount;
+            processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+            processSlider.value = (float)targetData.requestCount / targetData.requestCount;
         }
        
 

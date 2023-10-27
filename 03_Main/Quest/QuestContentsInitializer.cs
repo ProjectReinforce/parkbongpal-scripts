@@ -61,10 +61,14 @@ public class QuestContentsInitializer : MonoBehaviour
             // }
 
             questContents[item.recordType].Add(questContent);   // 퀘스트 컨텐츠에 저장된 아이템의 타입에 따라 퀘스트 컨텐츠를 추가하고
-
             quests.Add(item.questId, questContent); // 딕셔너리에 퀘스트 아이디와 퀘스트 컨텐츠를 저장함
             // questDatasGroupByType[item.questRepeatType][item.recordType].Add(item);
         }
+        //foreach(var one in questContents)
+        //{
+
+        //}
+        //    = questContents[(RecordType)i].Sort;
         // Todo : OpenQuestId 함수에 적용시켜야됨, 퀘스트 창을 열면 타입별로 나오게
         // 예시용 코드
         //for(int i = 0; i < questCount.Count; i++)   // 값을 순회하면서 퀘스트 카운트의 recordType에 따라 들어있는 퀘스트 아이디에 접근함 (2중 for문?)
