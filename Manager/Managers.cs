@@ -104,9 +104,11 @@ public class Managers : MonoBehaviour
                 alarm ??= new(transform);
                 eventM ??= new();
                 ui = new();
-                sound ??= new();
+                sound ??= new(transform);
+                sound.PlayBgm();
                 break;
             case SceneName.R_LoadingScene:
+                sound.PlayBgm(false);
                 if (resource is null)
                 {
                     resource = new();
@@ -120,6 +122,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6_JHH:
                 game.Set();
+                sound.PlayBgm();
                 break;
         }
     }

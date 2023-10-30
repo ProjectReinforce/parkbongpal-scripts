@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 [Serializable]
 public class SoundManager
 {
+    BgmPlayer bgmPlayer;
+    SfxPlayer sfxPlayer;
     bool isMuted;
     public bool IsMuted
     {
@@ -21,5 +23,24 @@ public class SoundManager
             PlayerPrefs.SetInt("SoundOption", muted);       // PlayerPrefs에 "SoundOption" 키로 저장함
             Debug.Log($"사운드 : {muted} 저장됨");
         }
+    }
+
+    public SoundManager(Transform _rootTransform)
+    {
+        bgmPlayer = Utills.Bind<BgmPlayer>("BgmPlayer", _rootTransform);
+        sfxPlayer = Utills.Bind<SfxPlayer>("SfxPlayer", _rootTransform);
+
+        bgmPlayer.Initialize();
+        sfxPlayer.Initialize();
+    }
+
+    public void PlayBgm(bool _isPlay = true)
+    {
+        bgmPlayer.PlayBgm(_isPlay);
+    }
+
+    public void PlaySfx(SfxType _sfxType)
+    {
+        sfxPlayer.PlaySfx(_sfxType);
     }
 }

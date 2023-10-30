@@ -165,3 +165,12 @@ public enum RankingType
     전투력,
     미니게임
 }
+
+public enum SfxType
+{
+    Click,
+    Button,
+    Win,
+    PopupOpen,
+    PopupClose
+}
