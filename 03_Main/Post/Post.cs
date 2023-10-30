@@ -47,21 +47,23 @@ public class Post : MonoBehaviour, IGameInitializer
                 Debug.LogError(callback);
                 return;
             }
-            Managers.Game.MainEnqueue(()=> lastCallTime = Time.time);
+            Managers.Game.MainEnqueue(() => lastCallTime = Time.time);
             JsonData json = callback.GetReturnValuetoJSON()["postList"];
             if (json.Count <= 0)
             {
                 //받아올 우편이 없는것
-                Debug.Log("우편함이 비어있습니다.");
-                noPost.SetActive(true);
-                UpdatePostCount();
+                Managers.Game.MainEnqueue(() =>
+                {
+                    Debug.Log("우편함이 비어있습니다.");
+                    noPost.SetActive(true);
+                    UpdatePostCount();
+                });
                 return;
             }
-            void PostScreenSetting()
+            Managers.Game.MainEnqueue(() =>
             {
                 noPost.SetActive(false);
-            }
-            Managers.Game.MainEnqueue(PostScreenSetting);
+            });
             slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
             for (int i = 0; i < json.Count; i++)
@@ -85,7 +87,7 @@ public class Post : MonoBehaviour, IGameInitializer
                         Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
                 // 메일내용 세팅 및 슬롯(우편목록) 세팅
-                Managers.Game.MainEnqueue(()=>
+                Managers.Game.MainEnqueue(() =>
                 {
                     PostSlot mail = Instantiate(prefab, mailBox);
 
