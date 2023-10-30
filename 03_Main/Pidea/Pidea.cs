@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Manager;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pidea : MonoBehaviour//Singleton<Pidea>
 {
-    [SerializeField] PideaSlot prefab ;
-    [SerializeField] List< PideaSlot> pideaSlots;
+    [SerializeField] PideaSlot prefab;
+    [SerializeField] List<PideaSlot> pideaSlots;
     [SerializeField] PideaCollection collection;
     [SerializeField] PideaDetail pideaDetail;
     [SerializeField] RectTransform currentTap;
@@ -36,7 +32,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             foreach (var item in materials)
             {
                 if (item.color == Color.white)
-                    result ++;
+                    result++;
             }
             return result;
         }
@@ -69,12 +65,18 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         materials[index].color = Color.white;
     }
 
+    void OpenSetting()
+    {
+
+    }
+
     void Awake()
     {
         //base.Awake();
         pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
-        
-        notifyer = Instantiate(Managers.Resource.notifyer,transform);
+
+        // 붙여놓기.
+        notifyer = Instantiate(Managers.Resource.notifyer, transform);
 
         materials = Managers.ServerData.ownedWeaponIds;
         // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
@@ -84,14 +86,14 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
             slot.gameObject.SetActive(true);
             slot.Initialized(i);
             pideaSlots.Add(slot);
-            
-            if(Managers.ServerData.BaseWeaponDatas[i].collection is null) continue;
+
+            if (Managers.ServerData.BaseWeaponDatas[i].collection[0] == -1) continue;
+
             foreach (int collectionType in Managers.ServerData.BaseWeaponDatas[i].collection)
             {
-                collection.AddSlot(pideaSlots[i],collectionType);
+                collection.AddSlot(pideaSlots[i], collectionType);
             }
         }
-        //pideaWeaponsrDatas = new(Managers.ServerData.pideaWeaponsServerDatas);
     }
     private void OnEnable()
     {
@@ -100,12 +102,14 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         Managers.Event.PideaCheckEvent -= CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent -= GetNewWeapon;
         Managers.Event.PideaSetWeaponCount -= PideaSetWeaponCount;
+        Managers.Event.PideaOpenSetting -= OpenSetting;
 
         Managers.Event.PideaSlotSelectEvent += SetCurrentWeapon;
         Managers.Event.PideaViwerOnDisableEvent += NotifyClear;
         Managers.Event.PideaCheckEvent += CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
+        Managers.Event.PideaOpenSetting += OpenSetting;
     }
     private void OnDisable()
     {
@@ -114,6 +118,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         Managers.Event.PideaCheckEvent -= CheckLockWeapon;
         Managers.Event.PideaGetNewWeaponEvent -= GetNewWeapon;
         Managers.Event.PideaSetWeaponCount -= PideaSetWeaponCount;
+        Managers.Event.PideaOpenSetting += OpenSetting;
     }
 
 }

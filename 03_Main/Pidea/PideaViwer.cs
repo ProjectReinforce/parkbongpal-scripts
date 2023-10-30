@@ -2,25 +2,13 @@
 
 public class PideaViwer:MonoBehaviour
 {
-    // 테스트중
-    //[SerializeField] UnityEngine.UI.Toggle trashToggle;
-    //[SerializeField] RectTransform trashScrollView;
-    //[SerializeField] UnityEngine.UI.Toggle pideaToggle;
-    //[SerializeField] GameObject pideaView;
-    //void OnEnable()
-    //{
-    //    OpenSetting();
-    //}
+    void OnEnable()
+    {
+        // ClickTap 함수 사용
+        Managers.Event.PideaOpenSetting?.Invoke();
+    }
     void OnDisable()
     {
         Managers.Event.PideaViwerOnDisableEvent?.Invoke();
     }
-    //void OpenSetting()
-    //{
-    //    pideaToggle.isOn = true;
-    //    trashToggle.isOn = true;
-    //    float PosX = trashScrollView.anchoredPosition.x;
-    //    trashScrollView.anchoredPosition = new Vector2(PosX, 0);
-    //    pideaView.SetActive(true);
-    //}
 }

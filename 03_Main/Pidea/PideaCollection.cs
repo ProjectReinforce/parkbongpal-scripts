@@ -13,6 +13,5 @@ public class PideaCollection : MonoBehaviour
         if(index<0)return;
         
         Instantiate(slot, collections[index]).Initialized(slot.baseWeaponIndex);
-        Debug.Log("ÄÃ·º¼Ç slot : " + slot.name);
     }
 }
