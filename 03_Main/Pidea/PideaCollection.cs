@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class PideaCollection : MonoBehaviour
 {
-
      [SerializeField] RectTransform[] collections;
 
     public void AddSlot(PideaSlot slot, int index)
@@ -14,5 +13,6 @@ public class PideaCollection : MonoBehaviour
         if(index<0)return;
         
         Instantiate(slot, collections[index]).Initialized(slot.baseWeaponIndex);
+        Debug.Log("ÄÃ·º¼Ç slot : " + slot.name);
     }
 }

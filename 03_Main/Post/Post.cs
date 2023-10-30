@@ -40,14 +40,14 @@ public class Post : MonoBehaviour, IGameInitializer
 
     private void ReciveFromServer()
     {
-        SendQueue.Enqueue(Backend.UPost.GetPostList, PostType.Admin, MAX_COUNT, callback =>
+        Backend.UPost.GetPostList(PostType.Admin, MAX_COUNT, callback =>
         {
             if (!callback.IsSuccess())
             {
                 Debug.LogError(callback);
                 return;
             }
-            lastCallTime = Time.time;
+            Managers.Game.MainEnqueue(()=> lastCallTime = Time.time);
             JsonData json = callback.GetReturnValuetoJSON()["postList"];
             if (json.Count <= 0)
             {
@@ -57,7 +57,11 @@ public class Post : MonoBehaviour, IGameInitializer
                 UpdatePostCount();
                 return;
             }
-            noPost.SetActive(false);
+            void PostScreenSetting()
+            {
+                noPost.SetActive(false);
+            }
+            Managers.Game.MainEnqueue(PostScreenSetting);
             slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
             for (int i = 0; i < json.Count; i++)
@@ -65,17 +69,13 @@ public class Post : MonoBehaviour, IGameInitializer
                 PostData mailData = JsonMapper.ToObject<PostData>(json[i].ToJson());
                 if (slots.Find(o => o.postData.inDate == mailData.inDate))
                     continue;
-
-                //해당 데이터가 존재하면 아래 코드 필요없음.
-                PostSlot mail = Instantiate(prefab, mailBox);
-
-                //아이템이 있다면 아래 실행
-                List<PostItemData> mailItemDatas = new List<PostItemData>();
+                //아이템 세팅
+                List<PostItemData> mailItemDatas = new();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
                     if (itemJson["chartName"].ToString() == "post")
                     {
-                        PostItemData mailItemData = new PostItemData();
+                        PostItemData mailItemData = new();
                         mailItemData.itemId = int.Parse(itemJson["item"]["itemId"].ToString());
                         mailItemData.itemName = itemJson["item"]["itemName"].ToString();
                         mailItemData.itemCount = int.Parse(itemJson["itemCount"].ToString());
@@ -84,13 +84,19 @@ public class Post : MonoBehaviour, IGameInitializer
                     else
                         Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
-                mail.Initialized(mailData, mailItemDatas);
+                // 메일내용 세팅 및 슬롯(우편목록) 세팅
+                Managers.Game.MainEnqueue(()=>
+                {
+                    PostSlot mail = Instantiate(prefab, mailBox);
 
-                Debug.Log("메일 데이터 세팅 완료");
-                mail.gameObject.SetActive(true);
-                //notifyer.GetNew(mail);
-                slots.Add(mail);
-                UpdatePostCount();
+                    mail.Initialized(mailData, mailItemDatas);
+
+                    Debug.Log("메일 데이터 세팅 완료");
+                    mail.gameObject.SetActive(true);
+                    //notifyer.GetNew(mail);
+                    slots.Add(mail);
+                    UpdatePostCount();
+                });
             }
         });
     }
@@ -116,6 +122,8 @@ public class Post : MonoBehaviour, IGameInitializer
     }
     public void UpdatePostCount()
     {
+        if (slots.Count == 0)
+            noPost.SetActive(true);
         postCount.text = $"{slots.Count}";
     }
 
