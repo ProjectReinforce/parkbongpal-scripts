@@ -120,7 +120,7 @@ public class Managers : MonoBehaviour
                     serverData.Initialize();
                 }
                 break;
-            case SceneName.R_Main_V6:
+            case SceneName.R_Main_V6_JHH:
                 game.Set();
                 sound.PlayBgm();
                 break;

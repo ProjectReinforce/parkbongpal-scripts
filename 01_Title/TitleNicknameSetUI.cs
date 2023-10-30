@@ -18,7 +18,7 @@ public class TitleNicknameSetUI : NicknameSetUIBase
         Managers.Game.Player.SetGoldPerMin(0);
         Managers.Game.Player.SetCombatScore(0);
         Managers.Game.Player.SetMineGameScore(0);
-        Utills.LoadScene(SceneName.R_Main_V6.ToString());
+        Utills.LoadScene(SceneName.R_Main_V6_JHH.ToString());
     }
     void InsertNewUserData(string _nickname)
     {
