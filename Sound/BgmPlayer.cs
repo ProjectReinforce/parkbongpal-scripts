@@ -12,7 +12,8 @@ public class BgmPlayer : MonoBehaviour
     {
         bgmPlayer = gameObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
-        bgmPlayer.loop = false;
+        bgmPlayer.loop = true;
+        bgmPlayer.volume = 0.5f;
         bgmPlayer.clip = bgmClip;
     }
 
