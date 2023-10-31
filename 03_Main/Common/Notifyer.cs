@@ -20,7 +20,6 @@ public class Notifyer : MonoBehaviour, IGameInitializer
     public void GetNew(NewThing newThing)
     {
         newThings.Add(newThing);
-        Debug.Log("Count : " + newThings.Count);
         TextUpdate();
     }
     public void Clear()
