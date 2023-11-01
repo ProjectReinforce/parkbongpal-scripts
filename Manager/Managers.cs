@@ -122,7 +122,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6:
                 game.Set();
-                sound.PlayBgm();
+                // sound.PlayBgm();
                 break;
         }
     }

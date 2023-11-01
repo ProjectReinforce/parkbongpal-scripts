@@ -15,6 +15,7 @@ public class SfxPlayer : MonoBehaviour
         sfxPlayers = new AudioSource[Enum.GetValues(typeof(SfxType)).Length];
         for(int i = 0; i < sfxPlayers.Length; i++)
         {
+            // sfxPlayers[i] = Managers.Resource.GetSfxSound((SfxType)i);
             sfxPlayers[i] = gameObject.AddComponent<AudioSource>();
             sfxPlayers[i].playOnAwake = false;
             sfxPlayers[i].bypassListenerEffects = true;
