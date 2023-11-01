@@ -6,6 +6,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     [SerializeField] PideaSlot prefab;
     [SerializeField] List<PideaSlot> pideaSlots;
     [SerializeField] PideaCollection collection;
+    [SerializeField] Notifyer notifyer;
     [SerializeField] PideaDetail pideaDetail;
     [SerializeField] RectTransform currentTap;
     [SerializeField] UnityEngine.UI.ScrollRect scrollView;
@@ -21,7 +22,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         currentTap.anchoredPosition = new Vector2(PosX, 0);
         currentTap.gameObject.SetActive(true);
     }
-    Notifyer notifyer;
     Material[] materials;//가진 웨폰아이디
 
     public int RegisteredWeaponCount
