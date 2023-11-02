@@ -42,8 +42,8 @@ public class Player
             }
             Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     void UpdateBackEndScore(string uuid, string columnName, int _data)

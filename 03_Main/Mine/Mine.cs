@@ -238,8 +238,8 @@ public class Mine : MonoBehaviour, Rental
             
             _callback?.Invoke();
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     public int Receipt()

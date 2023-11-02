@@ -445,8 +445,8 @@ public class BackEndDataManager
             _callback(JsonMapper.ToObject<T[]>(json.ToJson())); // Json 데이터를 제네릭 타입 T로 변환하여 _callback 함수에 전달
             SceneLoader.ResourceLoadComplete(); // 호출하여 리소스 로드가 완료되었음을 전달
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();   // 함수 콜수를 추적
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();   // 함수 콜수를 추적
     }
     #endregion
 

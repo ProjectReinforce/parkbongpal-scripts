@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CallChecker : Manager.Singleton<CallChecker>
+public class CallChecker : MonoBehaviour//Manager.Singleton<CallChecker>
 {
     [SerializeField] Text callsText;
     [SerializeField] Text recentCallsText;
@@ -13,13 +13,18 @@ public class CallChecker : Manager.Singleton<CallChecker>
 
     const float TIME_LIMIT = 10f;
 
+    void Start()
+    {
+        Managers.Etc.CallChecker = this;
+    }
+
     public void CountCall()
     {
         calls ++;
         recentCallLists.Add(Time.time);
     }
 
-    private void Update()
+    void Update()
     {
         callsText.text = $"Calls : {calls}";
         recentCallsText.text = $"10 secs : {recentCallLists.Count}";
