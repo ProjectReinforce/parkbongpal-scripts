@@ -43,7 +43,8 @@ public class Weapon : IVisibleNew
     }
     public void SetBorrowedDate()
     {
-        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        // _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        _data.borrowedDate = Managers.Etc.GetServerTime();
     }
 
     public void Lend(int mineId)

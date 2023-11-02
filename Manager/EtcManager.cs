@@ -25,6 +25,6 @@ public class EtcManager
 
     public DateTime GetServerTime()
     {
-        return serverTimeManager.GetServerTime();
+        return serverTimeManager.ServerTime;
     }
 }
