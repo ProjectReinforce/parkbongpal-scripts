@@ -35,7 +35,6 @@ public static class Utills
 
         float randomValue = random.Next(101) / 100f;
         float percent = randomValue * total;
-        Debug.Log(percent);
 
         for (int i = 0; i < _targetPercentArray.Length; i++)
         {
@@ -55,7 +54,6 @@ public static class Utills
 
         float randomValue = random.Next(101) / 100f;
         float percent = randomValue * total;
-        Debug.Log(percent);
 
         for (int i = 0; i < _targetPercentArray.Length; i++)
         {

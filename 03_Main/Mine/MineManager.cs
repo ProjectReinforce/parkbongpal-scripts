@@ -32,15 +32,25 @@ public class MineManager
         foreach (var item in Managers.Game.Inventory.Weapons)
         {
             if (item.data.mineId != -1)
-                mines[item.data.mineId].SetWeapon(item, DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
+            {
+                DateTime currentTime = Managers.Etc.GetServerTime();
+                // mines[item.data.mineId].SetWeapon(item, DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
+                mines[item.data.mineId].SetWeapon(item, currentTime);
+            }
         }
     }
 
-    public void CalculateGoldAllMines()
+    public void CalculateGoldAndBuildTimeAllMines()
     {
-        DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        // DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        DateTime currentTime = Managers.Etc.GetServerTime();
         foreach (var item in mines)
+        {
             item.Value.SetGold(currentTime);
+        }
+
+        foreach (var item in Managers.ServerData.mineBuildDatas)
+            mines[item.mineIndex].Building(item.buildStartTime);
     }
 
     public void ReceiptAllGolds()

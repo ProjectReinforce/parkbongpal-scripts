@@ -22,6 +22,10 @@ public class EventManager
     public Action FavoriteWeaponChangeEvent;
     #endregion
 
+    #region Quest
+    public Action QuestUpdateEvent;
+    #endregion
+
     #region Post
     public Action<PostSlot> PostSlotSelectEvent;            // 우편 슬롯 선택 이벤트
     public Action<PostSlot> PostReceiptButtonSelectEvent;   // 우편 보상수령버튼 선택 이벤트
@@ -38,6 +42,12 @@ public class EventManager
     public Action SetMiniGame;
     public Action ResetMiniGameScore;
     public Action ResultBestScoreMineGame;
+    #endregion
+
+    #region Quest
+    public Action<int, RecordType> OpenQuestIDEvent;
+    public Action UpdateAllContentEvent;
+    public Action ClearCheckEvent;
     #endregion
 
     #region Pidea

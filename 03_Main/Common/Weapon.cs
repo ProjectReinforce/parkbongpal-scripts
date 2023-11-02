@@ -43,7 +43,8 @@ public class Weapon : IVisibleNew
     }
     public void SetBorrowedDate()
     {
-        _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        // _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+        _data.borrowedDate = Managers.Etc.GetServerTime();
     }
 
     public void Lend(int mineId)
@@ -64,8 +65,8 @@ public class Weapon : IVisibleNew
             Debug.Log("성공"+callback);
         });
         // myslot.UpdateLend();
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;

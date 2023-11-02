@@ -5,7 +5,7 @@ using BackEnd;
 using BackEnd.Tcp;
 using LitJson;
 
-public class ChatManager : Manager.Singleton<ChatManager>
+public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
 {
     public bool ChatConnected { get; private set; }
     [SerializeField] Transform chatContent;
@@ -13,9 +13,10 @@ public class ChatManager : Manager.Singleton<ChatManager>
     Pooler<ChatMessage> pool;
     ChatMessage origin;
 
-    protected override void Awake()
+    // protected override void Awake()
+    void Awake()
     {
-        base.Awake();
+        // base.Awake();
 
         chatContent = Utills.Bind<Transform>("Content_Chat", transform);
         chatScroll = Utills.Bind<UnityEngine.UI.Scrollbar>("Scrollbar Vertical_Chat", transform);
@@ -37,6 +38,8 @@ public class ChatManager : Manager.Singleton<ChatManager>
         Backend.Chat.SetFilterReplacementChar('♡');
         Backend.Chat.SetTimeoutMessage("접속 종료됨.");
         Backend.Chat.SetRepeatedChatBlockMessage("도배 차단.");
+
+        Managers.Game.Chat = this;
     }
 
     const string TITLE_GUIDE = "안내";
