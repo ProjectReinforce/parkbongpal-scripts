@@ -40,12 +40,17 @@ public class MineManager
         }
     }
 
-    public void CalculateGoldAllMines()
+    public void CalculateGoldAndBuildTimeAllMines()
     {
         // DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         DateTime currentTime = Managers.Etc.GetServerTime();
         foreach (var item in mines)
+        {
             item.Value.SetGold(currentTime);
+        }
+
+        foreach (var item in Managers.ServerData.mineBuildDatas)
+            mines[item.mineIndex].Building(item.buildStartTime);
     }
 
     public void ReceiptAllGolds()
