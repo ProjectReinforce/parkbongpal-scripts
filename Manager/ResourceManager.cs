@@ -12,7 +12,7 @@ public class ResourceManager
     public Sprite DefaultMine;
     public Sprite[] manufactureRaritySlot;
     public Notifyer notifyer;
-    public AudioSource[] sfxSound;
+    public AudioClip[] sfxSound;
 
     /// <summary>
     /// "Sprites/Weapons" 경로에서 모든 스프라이트 리소스를 로드하고 배열에 저장함
@@ -30,7 +30,7 @@ public class ResourceManager
         DefaultMine = Resources.Load<Sprite>("Sprites/Enviroment/Mine_Door_1");
         notifyer = Resources.Load<Notifyer>("Notifyer");
         postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
-        sfxSound = Resources.LoadAll<AudioSource>("Sound");
+        sfxSound = Resources.LoadAll<AudioClip>("Sound/SfxSound");
     }
 
     /// <summary>
@@ -66,10 +66,5 @@ public class ResourceManager
     public Sprite GetPostItem(int index)
     {
         return postItems[index];
-    }
-
-    public AudioSource GetSfxSound(SfxType sfxType)
-    {
-        return sfxSound[(int)sfxType];
     }
 }

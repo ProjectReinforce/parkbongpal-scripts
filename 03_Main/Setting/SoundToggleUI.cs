@@ -31,5 +31,7 @@ public class SoundToggleUI : MonoBehaviour
             soundSlider.value = 0;
             Managers.Sound.IsMuted = true;
         }
+        Managers.Event.SfxSoundOnOffEvent?.Invoke();
+        Managers.Event.BgmSoundOnOffEvent?.Invoke();
     }
 }

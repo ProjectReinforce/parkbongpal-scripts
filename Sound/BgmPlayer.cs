@@ -8,12 +8,19 @@ public class BgmPlayer : MonoBehaviour
     [SerializeField] AudioClip bgmClip;
     AudioSource bgmPlayer;
 
+    // void Awake() 
+    // {
+    //     Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
+    //     Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
+    //     Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
+    // }
+
     public void Initialize()
     {
         bgmPlayer = gameObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
         bgmPlayer.loop = true;
-        bgmPlayer.volume = 0.5f;
+        bgmPlayer.volume = 1f;
         bgmPlayer.clip = bgmClip;
     }
 
@@ -27,5 +34,26 @@ public class BgmPlayer : MonoBehaviour
         {
             bgmPlayer.Stop();
         }
+    }
+
+    public void BgmEventInit()
+    {
+        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
+        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
+        Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
+    }
+
+    void BgmSoundOn()
+    {
+        bgmPlayer.volume = 1;
+        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
+        Managers.Event.BgmSoundOnOffEvent += BgmSoundOff;
+    }
+
+    void BgmSoundOff()
+    {
+        bgmPlayer.volume = 0;
+        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOff;
+        Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
     }
 }

@@ -9,18 +9,30 @@ public class SfxPlayer : MonoBehaviour
     [SerializeField] AudioClip[] sfxClip;
     int channelIndex;
     AudioSource[] sfxPlayers;
+    int sfxSoundLength = Enum.GetValues(typeof(SfxType)).Length;
 
+    // void Awake() 
+    // {
+    //     Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
+    //     Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
+    //     Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
+    // }
     public void Initialize()
     {
-        sfxPlayers = new AudioSource[Enum.GetValues(typeof(SfxType)).Length];
+        sfxPlayers = new AudioSource[sfxSoundLength];
+        sfxClip = Managers.Resource.sfxSound;
         for(int i = 0; i < sfxPlayers.Length; i++)
         {
-            // sfxPlayers[i] = Managers.Resource.GetSfxSound((SfxType)i);
             sfxPlayers[i] = gameObject.AddComponent<AudioSource>();
+            sfxPlayers[i].volume = 1f;
             sfxPlayers[i].playOnAwake = false;
             sfxPlayers[i].bypassListenerEffects = true;
         }
+        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
+        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
+        Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
     }
+
 
     public void PlaySfx(SfxType _sfxType)
     {
@@ -36,5 +48,25 @@ public class SfxPlayer : MonoBehaviour
             sfxPlayers[loopIndex].Play();
             break;
         }
+    }
+
+    public void SfxSoundOn()
+    {
+        for(int i = 0; i < sfxPlayers.Length; i++)
+        {
+            sfxPlayers[i].volume = 1;
+        }
+        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
+        Managers.Event.BgmSoundOnOffEvent += SfxSoundOff;
+    }
+
+    public void SfxSoundOff()
+    {
+        for(int i = 0; i < sfxPlayers.Length; i++)
+        {
+            sfxPlayers[i].volume = 0;
+        }
+        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
+        Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
     }
 }

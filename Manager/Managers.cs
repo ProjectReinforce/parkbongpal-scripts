@@ -108,7 +108,6 @@ public class Managers : MonoBehaviour
                 sound.PlayBgm();
                 break;
             case SceneName.R_LoadingScene:
-                // sound.PlayBgm(false);
                 if (resource is null)
                 {
                     resource = new();
@@ -120,9 +119,10 @@ public class Managers : MonoBehaviour
                     serverData.Initialize();
                 }
                 break;
-            case SceneName.R_Main_V6:
+            case SceneName.R_Main_V6_JHH:
                 game.Set();
-                // sound.PlayBgm();
+                sound.sfxPlayer.Initialize();
+                sound.bgmPlayer.BgmEventInit();
                 break;
         }
     }
