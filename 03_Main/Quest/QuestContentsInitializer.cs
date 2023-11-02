@@ -67,16 +67,14 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void OpenQuestID(int _openQuestID, RecordType _recordType)  // ¿Œµ¶Ω∫ ¡¢±Ÿ
     {
-        foreach(QuestContent one in questContents[_recordType])
+        if (_recordType == quests[_openQuestID].TargetData.recordType)
         {
-            if(one == quests[_openQuestID])
-            {
-                one.gameObject.SetActive(true);
-            }
-            else
-            {
-                one.Cleared();
-            }
+            quests[_openQuestID].gameObject.SetActive(true);
+        }
+        else
+        {
+            _openQuestID = _openQuestID - 1;
+            quests[_openQuestID].Cleared();
         }
     }
 
