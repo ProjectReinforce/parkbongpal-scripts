@@ -19,7 +19,8 @@ public class ManufactureResultUI : MonoBehaviour
         {
             spriteSlotArray[i].sprite = Managers.Resource.GetBaseWeaponSprite(resultWeapons[i].index);
             spriteSlotArray[i].transform.parent.gameObject.TryGetComponent<Image>(out Image bariations);   // spriteSlot의 부모객체 컴포넌트를 받아옴
-            bariations.sprite = Managers.Resource.GetSlotChanges(resultWeapons[i].rarity);  //spriteSlotBariation은 spriteSlotArray보다 상위객체임 상위객체의 자식객체를 받아오는 방법 생각                                                                                                   //자식객체가 이미 들어가있으므로 부모객체를 받아오는 방향으로 바꿈 
+            bariations.sprite = Managers.Resource.GetSlotChanges(resultWeapons[i].rarity);  //spriteSlotBariation은 spriteSlotArray보다 상위객체임 상위객체의 자식객체를 받아오는 방법 생각
+            spriteSlotArray[i].transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 
