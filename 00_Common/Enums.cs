@@ -4,7 +4,8 @@
     R_LoadingScene,
     R_Main_V6_JHH,
     R_Main_V6,
-    R_Main_V6_SEH
+    R_Main_V6_SEH,
+    R_Main_V6_Back
 }
 
 public enum Rarity
@@ -164,4 +165,13 @@ public enum RankingType
     분당골드량,
     전투력,
     미니게임
+}
+
+public enum SfxType
+{
+    Click,
+    Button,
+    Win,
+    PopupOpen,
+    PopupClose
 }

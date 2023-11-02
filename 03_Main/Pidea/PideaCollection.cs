@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class PideaCollection : MonoBehaviour
 {
-
      [SerializeField] RectTransform[] collections;
 
     public void AddSlot(PideaSlot slot, int index)

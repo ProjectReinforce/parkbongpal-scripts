@@ -13,6 +13,7 @@ public class GameManager
     public ReinforceInfos Reinforce => reinforce;
     MineManager mine;
     public MineManager Mine => mine;
+    public ChatManager Chat { get; set; }
 
     /// <summary>
     /// 메인 스레드에서 대기중인 작업을 하나씩 큐에서 빼며 처리해줌

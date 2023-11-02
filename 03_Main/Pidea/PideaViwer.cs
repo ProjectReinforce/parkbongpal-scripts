@@ -1,10 +1,13 @@
-﻿
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PideaViwer:MonoBehaviour
 {
-    private void OnDisable()
+    void OnEnable()
+    {
+        // ClickTap 함수 사용
+        Managers.Event.PideaOpenSetting?.Invoke();
+    }
+    void OnDisable()
     {
         Managers.Event.PideaViwerOnDisableEvent?.Invoke();
     }

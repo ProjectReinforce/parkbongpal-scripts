@@ -11,7 +11,15 @@ public class TitleNicknameSetUI : NicknameSetUIBase
     {
         InsertNewUserData(_nickname);
     }
-
+    IEnumerator AfterInitialize()
+    {
+        yield return new WaitForSeconds(2f);
+        Managers.Game.Player.UpdateUserData();
+        Managers.Game.Player.SetGoldPerMin(0);
+        Managers.Game.Player.SetCombatScore(0);
+        Managers.Game.Player.SetMineGameScore(0);
+        Utills.LoadScene(SceneName.R_Main_V6.ToString());
+    }
     void InsertNewUserData(string _nickname)
     {
         // Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new Param()));
@@ -28,7 +36,8 @@ public class TitleNicknameSetUI : NicknameSetUIBase
             {
                 // Debug.Log("신규 유저 데이터 삽입 성공!");
                 Backend.BMember.UpdateNickname(_nickname);
-                Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                Managers.ServerData.Initialize();
+                StartCoroutine(AfterInitialize());
             }
             else
             {

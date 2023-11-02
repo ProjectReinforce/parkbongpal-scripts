@@ -4,8 +4,9 @@ using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MineGame : Singleton<MineGame>
+public class MineGame : MonoBehaviour
 {
+    Weapon selectedWeapon;
     [SerializeField] TimerControl timerControl;
     [SerializeField] Rock rock;
     [SerializeField] Text text;     // 터치 스타트 텍스트
@@ -14,7 +15,6 @@ public class MineGame : Singleton<MineGame>
     [SerializeField] GameObject resultPanel;
     Coroutine startCountdown;
     bool isAttackAble = false;
-    bool isPause;
 
     public void Resume()
     {
@@ -32,15 +32,15 @@ public class MineGame : Singleton<MineGame>
             StopCoroutine(startCountdown);
         }
     }
-
-    public Weapon currentWeapon { get; set; }
-    [SerializeField] WeaponBringer weaponBringer;
-    [SerializeField] GameObject inventory;
     
-    void OnEnable() // 게임을 다시 켰을때도 초기화
+
+    public void SetMineGameWeapon(Weapon _weapon)
     {
-        InventoryPresentor.Instance.SetInventoryOption(weaponBringer);
-        // GameManager.Instance.OpenPopup(inventory);
+        selectedWeapon = _weapon;
+    }
+    
+    void OnDisable()// 게임을 다시 켰을때도 초기화
+    {
         ResetGame();
     }
     
@@ -67,18 +67,27 @@ public class MineGame : Singleton<MineGame>
 
     void Attack() // 데미지 계산 할 함수
     {
-        float damage = 40f;
-        rock.GetDamage(damage);
+        rock.GetDamage(selectedWeapon.power);
+    }
+
+    void CompareScore(int _newScore)
+    {
+        if(Managers.Game.Player.Data.mineGameScore >= _newScore) return;
+        Managers.Game.Player.SetMineGameScore(_newScore);
+        Managers.ServerData.GetRankList(false);
     }
 
     public void GameOver()
     {
         isAttackAble = false;
         Managers.Game.Player.AddGold(rock.Score);
-        Debug.Log(rock.Score);
-        Managers.Game.Player.ComparisonMineGameScore(rock.Score);
-        Debug.Log(Managers.Game.Player.Data.gold);
+        // Debug.Log(rock.Score);
+        CompareScore(rock.Score);
+        // Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
+        Managers.Event.ResultBestScoreMineGame?.Invoke();
+        Managers.Event.ResultNewScoreMineGame?.Invoke(rock.Score);
+        Managers.Event.ResetMiniGameScore?.Invoke();
     }
 
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
@@ -105,22 +114,6 @@ public class MineGame : Singleton<MineGame>
             {
                 Attack();
             }
-        }
-    }
-    public void ClickForPause()
-    {
-        // SH 추가.. 적용 실패...
-        if(!isPause)
-        {
-            isPause = true;
-            pausePanel.SetActive(true);
-            Time.timeScale = 0;
-        }
-        else
-        {
-            isPause = false;
-            pausePanel.SetActive(false);
-            Time.timeScale = 1;
         }
     }
 }

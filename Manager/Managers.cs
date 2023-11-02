@@ -30,6 +30,8 @@ public class Managers : MonoBehaviour
     public static UIManager UI { get => Instance.ui; }
     SoundManager sound;
     public static SoundManager Sound { get => Instance.sound; }
+    EtcManager etc;
+    public static EtcManager Etc { get => Instance.etc; }
 
     /// <summary>
     /// Managers클래스를 초기화하고 있을경우 instance로 내보내고, 없을경우 생성해서 파괴되지 않도록 한다.
@@ -72,6 +74,7 @@ public class Managers : MonoBehaviour
     {
         game?.MainThreadPoll();
         ui?.InputCheck();
+        etc?.Update();
     }
 
     /// <summary>
@@ -80,9 +83,12 @@ public class Managers : MonoBehaviour
     /// <param name="_hasFocus"></param>
     void OnApplicationFocus(bool _hasFocus)
     {
+        etc?.ReServeServerTime();
+        
         bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;
         if (isInMainScene)
             game.Mine.CalculateGoldAllMines();
+        // 건설시간 세팅 필요
     }
 
     /// <summary>
@@ -104,9 +110,12 @@ public class Managers : MonoBehaviour
                 alarm ??= new(transform);
                 eventM ??= new();
                 ui = new();
-                sound ??= new();
+                sound ??= new(transform);
+                sound.PlayBgm();
+                etc ??= new();
                 break;
             case SceneName.R_LoadingScene:
+                // sound.PlayBgm(false);
                 if (resource is null)
                 {
                     resource = new();
@@ -120,6 +129,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6_SEH:
                 game.Set();
+                // sound.PlayBgm();
                 break;
         }
     }

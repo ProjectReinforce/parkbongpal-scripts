@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using LitJson;
+using System.Collections;
 
 public class JsonMapperRegisterImporter
 {
@@ -65,7 +66,7 @@ public class BackEndDataManager
     public Decomposit[] DecompositDatas;                // 분해? 데이터
 
     // 사용자 데이터를 검색하기 위한 검색 필터
-    Where SearchFromMyIndate = new();
+    Where SearchFromMyIndate;
 
     // 무기 데이터를 등급별로 저장하기 위한 리스트 배열
     readonly List<BaseWeaponData>[] baseWeaponDatasFromRarity = 
@@ -87,6 +88,7 @@ public class BackEndDataManager
     /// </summary>
     public void Initialize()
     {
+        SearchFromMyIndate = new();
         SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);  // 현재 사용자를 위한 검색 필터 설정
         for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)                             // 희귀도별 기본 무기 데이터를 저장할 리스트 배열 초기화
             baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
@@ -443,8 +445,8 @@ public class BackEndDataManager
             _callback(JsonMapper.ToObject<T[]>(json.ToJson())); // Json 데이터를 제네릭 타입 T로 변환하여 _callback 함수에 전달
             SceneLoader.ResourceLoadComplete(); // 호출하여 리소스 로드가 완료되었음을 전달
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();   // 함수 콜수를 추적
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();   // 함수 콜수를 추적
     }
     #endregion
 
@@ -502,7 +504,8 @@ public class BackEndDataManager
             //     { nameof(UserData.colum.goldPerMin), userData.goldPerMin }
             // };
             // Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
-            serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            // serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            serverTime = Managers.Etc.GetServerTime();
             Param param = new() { { "lastLogin", serverTime }};
     
             SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), UserData.inDate, Backend.UserInDate, param, ( callback ) => 
@@ -519,6 +522,7 @@ public class BackEndDataManager
 
     // 보유한(한번 획득했던) 무기 ID 데이터 로드
     public Material[] ownedWeaponIds = new Material[150];
+    public PideaData[] pideaWeaponsServerDatas;
     void SetOwnedWeaponId()//도감용(한번이라도 소유했던 무기id)
     {
         Material LockMaterial = new(Shader.Find("UI/Default"))
@@ -536,6 +540,7 @@ public class BackEndDataManager
             {
                 ownedWeaponIds[pidea.ownedWeaponId].color = Color.white;
             }
+            pideaWeaponsServerDatas = data;
         });
     }
 
@@ -547,7 +552,7 @@ public class BackEndDataManager
     public const string Power_UUID="879b4b90-38e2-11ee-994d-3dafc128ce9b";
     public const string MINI_UUID="f869a450-38d0-11ee-bac4-99e002a1448c";
     public static readonly string[] UUIDs = { GOLD_UUID, Power_UUID, MINI_UUID};
-    public Rank[][] topRanks = new Rank[UUIDs.Length][] ;
+    public Rank[][] topRanks = new Rank[UUIDs.Length][];
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
 
@@ -582,9 +587,9 @@ public class BackEndDataManager
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
+                Managers.Event.GetRankAfterTheFirstTime?.Invoke(count);
                 if (count >= UUIDs.Length) return;
                 deligate[1](++count);
-                Managers.Event.GetRankAfterTheFirstTime?.Invoke();
             });
         };
         foreach (var action in deligate)

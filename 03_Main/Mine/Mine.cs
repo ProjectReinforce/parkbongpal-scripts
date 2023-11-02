@@ -222,7 +222,8 @@ public class Mine : MonoBehaviour, Rental
         Managers.Game.Player.AddGold(gold);
         Managers.Alarm.Warning($"{gold:n0} 골드를 수령했습니다.");
         gold = 0;
-        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        DateTime date = Managers.Etc.GetServerTime();
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate), date);
 
@@ -238,8 +239,8 @@ public class Mine : MonoBehaviour, Rental
             
             _callback?.Invoke();
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     public int Receipt()
@@ -249,7 +250,8 @@ public class Mine : MonoBehaviour, Rental
         int resultGold = gold;
         Managers.Game.Player.AddGold(gold, false);
         gold = 0;
-        DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        DateTime date = Managers.Etc.GetServerTime();
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.borrowedDate), date);
 
@@ -264,8 +266,9 @@ public class Mine : MonoBehaviour, Rental
     // todo : 서버 타임 받아오는 부분 통합해야함
     public void StartBuild()
     {
-        string serverTime = Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString();
-        DateTime startTime = DateTime.Parse(serverTime);
+        // string serverTime = Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString();
+        // DateTime startTime = DateTime.Parse(serverTime);
+        DateTime startTime = Managers.Etc.GetServerTime();
         // Debug.Log($"build start : {serverTime} / {startTime}");
         Building(startTime);
 
@@ -289,7 +292,8 @@ public class Mine : MonoBehaviour, Rental
     float remainTime;
     public void Building(DateTime _buildStartTime)
     {
-        DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        // DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+        DateTime currentTime = Managers.Etc.GetServerTime();
         TimeSpan timeSpan = currentTime - _buildStartTime;
         double tmp = timeSpan.TotalMilliseconds;
         remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 - (float)(tmp / 1000);
