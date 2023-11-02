@@ -64,6 +64,7 @@ public class BackEndDataManager
     public SoulCraftingData SoulCraftingData;           // 영혼세공 데이터
     public RefinementData RefinementData;               // 재련 데이터
     public Decomposit[] DecompositDatas;                // 분해? 데이터
+    public CollectionData[] CollectionDatas;            // 컬렉션 데이터
 
     // 사용자 데이터를 검색하기 위한 검색 필터
     Where SearchFromMyIndate;
@@ -107,7 +108,7 @@ public class BackEndDataManager
         // 테스트용
     }
 
-    const string VERSION_CHART_ID = "91114";
+    const string VERSION_CHART_ID = "96606";
     const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
     Dictionary<string, VersionInfo> localChartLists;
     Dictionary<string, VersionInfo> backEndChartLists;
@@ -332,6 +333,14 @@ public class BackEndDataManager
                     GetBackEndChartData<Decomposit>(chartId, DecompositDataProcess);
                 else
                     SetChartData<Decomposit>(chartId, DecompositDataProcess);
+                break;
+            // 컬렉션 목록 정보
+            case ChartName.collection:
+                void CollectionDataProcess(CollectionData[] data) { CollectionDatas = data; }
+                if (_fromBackEnd)
+                    GetBackEndChartData<CollectionData>(chartId, CollectionDataProcess);
+                else
+                    SetChartData<CollectionData>(chartId, CollectionDataProcess);
                 break;
         }
     }

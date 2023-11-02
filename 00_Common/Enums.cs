@@ -69,7 +69,8 @@ public enum ChartName
     exp,
     quest,
     skillData,
-    decomposit
+    decomposit,
+    collection
 }
 
 public enum StatType

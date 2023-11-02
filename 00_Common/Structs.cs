@@ -401,11 +401,19 @@ public struct PostData
 {
     public string content, title, author, inDate, sentDate, expirationDate;
 }
+
 [Serializable]
 public struct PostItemData
 {
     public string itemName, itemType;
     public int itemId, itemCount;
+}
+
+[Serializable]
+public struct CollectionData
+{
+    public string title;
+    public int index;
 }
 
 [Serializable]

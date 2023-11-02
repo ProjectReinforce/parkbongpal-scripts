@@ -67,19 +67,22 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
 
     void OpenSetting()
     {
-
+        // Trash 등급창 세팅
+        ClickTap(0);
     }
 
     void Awake()
     {
         //base.Awake();
-        pideaSlots = new List<PideaSlot>();//(slotBox.GetComponentsInChildren<PideaSlot>());
-
-        // 붙여놓기.
-        notifyer = Instantiate(Managers.Resource.notifyer, transform);
+        pideaSlots = new List<PideaSlot>();
 
         materials = Managers.ServerData.ownedWeaponIds;
-        // for (int i = 0; i < ResourceManager.Instance.baseWeaponDatas.Count; i++)
+
+        // 컬렉션 목록 슬롯 배치하기
+        foreach (CollectionData collectionList in Managers.ServerData.CollectionDatas)
+        {
+            collection.AddList(collectionList);
+        }
         for (int i = 0; i < Managers.ServerData.BaseWeaponDatas.Length; i++)
         {
             PideaSlot slot = Instantiate(prefab, rarityTables[Managers.ServerData.BaseWeaponDatas[i].rarity]);
