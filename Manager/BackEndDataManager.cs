@@ -78,7 +78,6 @@ public class BackEndDataManager
 
     public BaseWeaponData GetBaseWeaponData(Rarity rairity) // 특정 등급의 기본 무기 데이터를 랜덤으로 가져오는 함수
     {
-        Debug.Log("rarity"+rairity);
         int countOfRarity = baseWeaponDatasFromRarity[(int)rairity].Count;
         return baseWeaponDatasFromRarity[(int)rairity][Utills.random.Next(0, countOfRarity)];
     }
