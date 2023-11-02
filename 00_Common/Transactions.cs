@@ -36,8 +36,10 @@ public static class Transactions
             //     Debug.Log(item.table);
             _callback?.Invoke(callback);
         });
-        if (CallChecker.Instance != null)
-            CallChecker.Instance.CountCall();
+        // if (CallChecker.Instance != null)
+        //     CallChecker.Instance.CountCall();
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     public static void Add(TransactionValue _transactionValue)

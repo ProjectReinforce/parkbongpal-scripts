@@ -16,9 +16,11 @@ public class ChatResizer : MonoBehaviour
 
     public void ChatResize()
     {
-        if(!ChatManager.Instance.ChatConnected)
+        // if(!ChatManager.Instance.ChatConnected)
+        if(!Managers.Game.Chat.ChatConnected)
         {
-            ChatManager.Instance.CheckChatStatus();
+            // ChatManager.Instance.CheckChatStatus();
+            Managers.Game.Chat.CheckChatStatus();
             return;
         }
 
