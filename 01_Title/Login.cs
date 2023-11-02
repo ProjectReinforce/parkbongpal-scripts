@@ -50,7 +50,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_SEH.ToString());
             }
             else
             {
@@ -168,6 +168,7 @@ public class Login : MonoBehaviour
             _confirmButton.interactable = true;
             Param param = new()
             {
+
                 { nameof(QuestRecord.idList), new int[] { 0, 1, 16, 32, 48, 72, 96, 100, 114, 124, 139, 154, 167, 180, 193, 206, 219, 232, 236, 237 } }
             };
             Transactions.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
@@ -183,7 +184,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_SEH.ToString());
                 break;
             case 201:
                 Managers.UI.OpenPopup(NicknamePopup);

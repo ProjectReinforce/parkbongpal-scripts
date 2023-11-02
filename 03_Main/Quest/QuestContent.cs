@@ -24,7 +24,7 @@ public class QuestContent : MonoBehaviour
     QuestData targetData;
     // List<QuestData> targetDatas;
 
-    public void IdCompare(int _questID)
+    public void IdCompare(int _questID) // 해당 함수의 로직을 재구성할 필요가 있어보임
     {
         gameObject.SetActive(_questID >= targetData.questId);
         if (_questID > targetData.questId)
@@ -63,6 +63,7 @@ public class QuestContent : MonoBehaviour
         gameObject.SetActive(true);
 
         getRewardButton.onClick.AddListener(UpdateQuestRecord); // 해당 구문을 통해서 퀘스트에 대한 기록을 업데이트 함
+        //Managers.Event.ClearCheckEvent += Cleared;
     }
 
     public void Cleared()   // 퀘스트를 클리어할 때 사용되는 함수로 클리어가 됐을 때의 처리를 담당함
@@ -83,8 +84,8 @@ public class QuestContent : MonoBehaviour
 
     void UpdateQuestRecord()    // 퀘스트에 대한 기록을 업데이트할 때 사용되는 함수
     {
-        int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
-        progressQuestIdsByType[(int)targetData.recordType] = targetData.questId + 1;
+        int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;  // 이니셜라이즈
+        progressQuestIdsByType[(int)targetData.recordType] = targetData.questId + 1;    // 해당값도 바뀌어야됨
         Param param = new()
         {
             { nameof(QuestRecord.idList), progressQuestIdsByType }
@@ -96,7 +97,7 @@ public class QuestContent : MonoBehaviour
         Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
         // 플레이어에게 퀘스트 리워드 타입과 해당하는 크기만큼의 재화를 줌
 
-        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.questId + 1, targetData.recordType);
+        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.questId + 1, targetData.recordType); // 퀘스트 아이디의 +1 말고 다른 값을 주거나 혹은 다음 게임오브젝트에 접근할 수 있도록 만들어야됨
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;   // 보상버튼에 대한 인터렉터블 off를 통해 끔
         Cleared();
