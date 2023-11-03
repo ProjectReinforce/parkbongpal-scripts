@@ -32,8 +32,8 @@ public class RecordData
     public ulong UseDiamond => useDiamond;
     ulong getDiamond;
     public ulong GetDiamond => getDiamond;
-    // uint getItem;
-    // public uint GetItem => getItem;
+    uint getItem;
+    public uint GetItem => getItem;
     uint registerItem;
     public uint RegisterItem => registerItem;
     uint disassembleItem;
@@ -65,7 +65,7 @@ public class RecordData
     public Action useGoldEvent;
     public Action useDiamondEvent;
     public Action getDiamondEvent;
-    // public Action getItemEvent;
+    public Action getItemEvent;
     public Action registerItemEvent;
     public Action disassembleItemEvent;
     public Action produceWeaponEvent;
@@ -132,6 +132,7 @@ public class RecordData
         getGold = 0;
         useDiamond = 0;
         getDiamond = 0;
+        getItem = 0;
         registerItem = 0;
         disassembleItem = 0;
         produceWeapon = 0;

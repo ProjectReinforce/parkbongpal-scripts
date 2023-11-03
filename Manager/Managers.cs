@@ -87,7 +87,7 @@ public class Managers : MonoBehaviour
         
         bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;
         if (isInMainScene)
-            game.Mine.CalculateGoldAllMines();
+            game.Mine.CalculateGoldAndBuildTimeAllMines();
         // 건설시간 세팅 필요
     }
 

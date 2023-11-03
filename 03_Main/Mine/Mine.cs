@@ -263,7 +263,6 @@ public class Mine : MonoBehaviour, Rental
         return resultGold;
     }
 
-    // todo : 서버 타임 받아오는 부분 통합해야함
     public void StartBuild()
     {
         // string serverTime = Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString();
