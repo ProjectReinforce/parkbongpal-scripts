@@ -8,13 +8,6 @@ public class BgmPlayer : MonoBehaviour
     [SerializeField] AudioClip bgmClip;
     AudioSource bgmPlayer;
 
-    // void Awake() 
-    // {
-    //     Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
-    //     Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
-    //     Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
-    // }
-
     public void Initialize()
     {
         bgmPlayer = gameObject.AddComponent<AudioSource>();

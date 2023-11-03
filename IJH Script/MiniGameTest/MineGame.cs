@@ -85,9 +85,9 @@ public class MineGame : MonoBehaviour
         CompareScore(rock.Score);
         // Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
-        Managers.Event.ResultBestScoreMineGame?.Invoke();
-        Managers.Event.ResultNewScoreMineGame?.Invoke(rock.Score);
-        Managers.Event.ResetMiniGameScore?.Invoke();
+        Managers.Event.ResultBestScoreMineGameEvent?.Invoke();
+        Managers.Event.ResultNewScoreMineGameEvent?.Invoke(rock.Score);
+        Managers.Event.ResetMiniGameScoreEvent?.Invoke();
     }
 
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화

@@ -11,12 +11,6 @@ public class SfxPlayer : MonoBehaviour
     AudioSource[] sfxPlayers;
     int sfxSoundLength = Enum.GetValues(typeof(SfxType)).Length;
 
-    // void Awake() 
-    // {
-    //     Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
-    //     Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
-    //     Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
-    // }
     public void Initialize()
     {
         sfxPlayers = new AudioSource[sfxSoundLength];
@@ -35,9 +29,6 @@ public class SfxPlayer : MonoBehaviour
                 sfxPlayers[i].volume = 0f;
             }
         }
-        // Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
-        // Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
-        // Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
     }
 
 

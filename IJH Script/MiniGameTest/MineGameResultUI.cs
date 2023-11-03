@@ -10,11 +10,11 @@ public class MineGameResultUI : MonoBehaviour
 
     void OnEnable()
     {
-        Managers.Event.ResultNewScoreMineGame -= SetNowTurnScore;
-        Managers.Event.ResultNewScoreMineGame += SetNowTurnScore;
+        Managers.Event.ResultNewScoreMineGameEvent -= SetNowTurnScore;
+        Managers.Event.ResultNewScoreMineGameEvent += SetNowTurnScore;
 
-        Managers.Event.ResultBestScoreMineGame -= SetBestScore;
-        Managers.Event.ResultBestScoreMineGame += SetBestScore;
+        Managers.Event.ResultBestScoreMineGameEvent -= SetBestScore;
+        Managers.Event.ResultBestScoreMineGameEvent += SetBestScore;
     }
 
     void SetNowTurnScore(int _score)
@@ -29,7 +29,7 @@ public class MineGameResultUI : MonoBehaviour
 
     void OnDisable()
     {
-        Managers.Event.ResultNewScoreMineGame -= SetNowTurnScore;
-        Managers.Event.ResultBestScoreMineGame -= SetBestScore;
+        Managers.Event.ResultNewScoreMineGameEvent -= SetNowTurnScore;
+        Managers.Event.ResultBestScoreMineGameEvent -= SetBestScore;
     }
 }

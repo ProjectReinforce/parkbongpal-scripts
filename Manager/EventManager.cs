@@ -32,23 +32,18 @@ public class EventManager
     #endregion
 
     #region Ranking
-    public Action<int> GetRankAfterTheFirstTime;
+    public Action<int> GetRankAfterTheFirstTimeEvent;
     public Action<int, int> SettingRankingPageEvent;
     #endregion
 
     #region MiniGame
-    public Action<Weapon> SetMiniGameWeapon;
-    public Action<int> ResultNewScoreMineGame;
-    public Action SetMiniGame;
-    public Action ResetMiniGameScore;
-    public Action ResultBestScoreMineGame;
+    public Action<Weapon> SetMiniGameWeaponEvent;
+    public Action<int> ResultNewScoreMineGameEvent;
+    public Action SetMiniGameEvent;
+    public Action ResetMiniGameScoreEvent;
+    public Action ResultBestScoreMineGameEvent;
     #endregion
 
-    #region Sound
-    public Action SfxSoundOnOffEvent;
-    public Action BgmSoundOnOffEvent;
-    #endregion
-    
     #region Quest
     public Action<int, RecordType> OpenQuestIDEvent;
     public Action UpdateAllContentEvent;
