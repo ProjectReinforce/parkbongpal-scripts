@@ -39,8 +39,8 @@ public class Ranking : MonoBehaviour
 
     void Start()
     {
-        Managers.Event.GetRankAfterTheFirstTime -= SetOnlyMyRank;
-        Managers.Event.GetRankAfterTheFirstTime += SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTimeEvent -= SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTimeEvent += SetOnlyMyRank;
 
         Managers.Event.SettingRankingPageEvent -= SetSlotTo;
         Managers.Event.SettingRankingPageEvent += SetSlotTo;

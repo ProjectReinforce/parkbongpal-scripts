@@ -596,7 +596,7 @@ public class BackEndDataManager
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
-                Managers.Event.GetRankAfterTheFirstTime?.Invoke(count);
+                Managers.Event.GetRankAfterTheFirstTimeEvent?.Invoke(count);
                 deligate[1](++count);
             });
         };
