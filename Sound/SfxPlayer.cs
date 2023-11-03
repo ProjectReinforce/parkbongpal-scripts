@@ -24,13 +24,20 @@ public class SfxPlayer : MonoBehaviour
         for(int i = 0; i < sfxPlayers.Length; i++)
         {
             sfxPlayers[i] = gameObject.AddComponent<AudioSource>();
-            sfxPlayers[i].volume = 1f;
             sfxPlayers[i].playOnAwake = false;
             sfxPlayers[i].bypassListenerEffects = true;
+            if(Managers.Sound.IsMuted == true)
+            {
+                sfxPlayers[i].volume = 1f;
+            }
+            else
+            {
+                sfxPlayers[i].volume = 0f;
+            }
         }
-        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
-        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
-        Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
+        // Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
+        // Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
+        // Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
     }
 
 
@@ -54,19 +61,15 @@ public class SfxPlayer : MonoBehaviour
     {
         for(int i = 0; i < sfxPlayers.Length; i++)
         {
-            sfxPlayers[i].volume = 1;
+            sfxPlayers[i].volume = 1f;
         }
-        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOn;
-        Managers.Event.BgmSoundOnOffEvent += SfxSoundOff;
     }
 
     public void SfxSoundOff()
     {
         for(int i = 0; i < sfxPlayers.Length; i++)
         {
-            sfxPlayers[i].volume = 0;
+            sfxPlayers[i].volume = 0f;
         }
-        Managers.Event.BgmSoundOnOffEvent -= SfxSoundOff;
-        Managers.Event.BgmSoundOnOffEvent += SfxSoundOn;
     }
 }

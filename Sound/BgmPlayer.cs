@@ -20,8 +20,19 @@ public class BgmPlayer : MonoBehaviour
         bgmPlayer = gameObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
         bgmPlayer.loop = true;
-        bgmPlayer.volume = 1f;
         bgmPlayer.clip = bgmClip;
+    }
+
+    void Start() 
+    {
+        if(Managers.Sound.IsMuted == true)
+        {
+            bgmPlayer.volume = 1;
+        }
+        else
+        {
+            bgmPlayer.volume = 0;
+        }
     }
 
     public void PlayBgm(bool _isPlay)
@@ -36,24 +47,13 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
-    public void BgmEventInit()
-    {
-        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
-        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
-        Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
-    }
-
-    void BgmSoundOn()
+    public void BgmSoundOn()
     {
         bgmPlayer.volume = 1;
-        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOn;
-        Managers.Event.BgmSoundOnOffEvent += BgmSoundOff;
     }
 
-    void BgmSoundOff()
+    public void BgmSoundOff()
     {
         bgmPlayer.volume = 0;
-        Managers.Event.BgmSoundOnOffEvent -= BgmSoundOff;
-        Managers.Event.BgmSoundOnOffEvent += BgmSoundOn;
     }
 }

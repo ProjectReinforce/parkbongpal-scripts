@@ -561,6 +561,7 @@ public class BackEndDataManager
     {
         deligate[0] = (count) =>
         {
+            if (count >= UUIDs.Length) return;
             SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], callback =>
             {
                 if (!callback.IsSuccess())
@@ -571,12 +572,12 @@ public class BackEndDataManager
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
                 topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
-                if(count>=UUIDs.Length) return;
                 deligate[0](++count);
             });
         };
         deligate[1] = (count) =>
         {
+            if (count >= UUIDs.Length) return;
             SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 1, callback =>
             {
                 if (!callback.IsSuccess())
@@ -588,7 +589,6 @@ public class BackEndDataManager
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
                 myRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 Managers.Event.GetRankAfterTheFirstTime?.Invoke(count);
-                if (count >= UUIDs.Length) return;
                 deligate[1](++count);
             });
         };

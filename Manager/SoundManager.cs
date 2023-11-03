@@ -19,8 +19,7 @@ public class SoundManager
         set
         {
             isMuted = value;                                // isMuted 값을 설정
-            Debug.Log("사운드매니저" + value);
-            int muted = value == false ? 1 : 0;              // isMuted 값을 정수로 변환 // value가 true인 경우 1이, false인 경우 0이 muted변수에 할당되어짐
+            int muted = value == true ? 1 : 0;              // isMuted 값을 정수로 변환 // value가 true인 경우 1이, false인 경우 0이 muted변수에 할당되어짐
             PlayerPrefs.SetInt("SoundOption", muted);       // PlayerPrefs에 "SoundOption" 키로 저장함
             Debug.Log($"사운드 : {muted} 저장됨");
         }
@@ -35,9 +34,9 @@ public class SoundManager
         // sfxPlayer.Initialize();
     }
 
-    public void PlayBgm(bool _isPlay = true)
+    public void PlayBgm(bool _isMuted)
     {
-        bgmPlayer.PlayBgm(_isPlay);
+        bgmPlayer.PlayBgm(_isMuted);
     }
 
     public void PlaySfx(SfxType _sfxType)
