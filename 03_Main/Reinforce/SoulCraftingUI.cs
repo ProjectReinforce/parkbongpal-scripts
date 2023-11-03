@@ -40,6 +40,7 @@ public class SoulCraftingUI : ReinforceUIBase
         goldCost = Managers.ServerData.SoulCraftingData.goldCost;
         // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
         soulCost = 0;
+        reinforceRestoreUI.UpdateCost(goldCost * 10, soulCost * 10);
     }
 
     protected override void DeactiveElements()
