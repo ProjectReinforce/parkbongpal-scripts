@@ -18,6 +18,7 @@ public class SoulCraftingUI : ReinforceUIBase
         {
             // todo : 연출 재생 후 결과 출력되도록
             // reinforceButton.interactable = true;
+            UpdateAtk();
             CheckQualification();
         }
         reinforceRestoreUI.Initialize(reinforceType, callback);
@@ -38,8 +39,8 @@ public class SoulCraftingUI : ReinforceUIBase
     protected override void UpdateCosts()
     {
         goldCost = Managers.ServerData.SoulCraftingData.goldCost;
-        // soulCost = Manager.BackEndDataManager.Instance.soulCraftingData.soulCost;
-        soulCost = 0;
+        soulCost = Managers.ServerData.SoulCraftingData.soulCost;
+        // soulCost = 0;
         reinforceRestoreUI.UpdateCost(goldCost * 10, soulCost * 10);
     }
 
