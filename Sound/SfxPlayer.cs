@@ -7,60 +7,37 @@ public class SfxPlayer : MonoBehaviour
 {
     [Header("SFX")]
     [SerializeField] AudioClip[] sfxClip;
-    int channelIndex;
-    AudioSource[] sfxPlayers;
-    int sfxSoundLength = Enum.GetValues(typeof(SfxType)).Length;
+    AudioSource sfxPlayer;
 
     public void Initialize()
     {
-        sfxPlayers = new AudioSource[sfxSoundLength];
         sfxClip = Managers.Resource.sfxSound;
-        for(int i = 0; i < sfxPlayers.Length; i++)
+        sfxPlayer = gameObject.AddComponent<AudioSource>();
+        sfxPlayer.playOnAwake = false;
+        sfxPlayer.loop = false;
+        if(Managers.Sound.IsMuted == true)
         {
-            sfxPlayers[i] = gameObject.AddComponent<AudioSource>();
-            sfxPlayers[i].playOnAwake = false;
-            sfxPlayers[i].bypassListenerEffects = true;
-            if(Managers.Sound.IsMuted == true)
-            {
-                sfxPlayers[i].volume = 1f;
-            }
-            else
-            {
-                sfxPlayers[i].volume = 0f;
-            }
+            sfxPlayer.volume = 1f;
+        }
+        else
+        {
+            sfxPlayer.volume = 0f;
         }
     }
 
 
     public void PlaySfx(SfxType _sfxType)
     {
-        for(int i = 0; i < sfxPlayers.Length; i++)
-        {
-            int loopIndex = (i + channelIndex) % sfxPlayers.Length;
-
-            if(sfxPlayers[loopIndex].isPlaying)
-                continue;
-
-            channelIndex = loopIndex;
-            sfxPlayers[loopIndex].clip = sfxClip[(int)_sfxType];
-            sfxPlayers[loopIndex].Play();
-            break;
-        }
+        sfxPlayer.PlayOneShot(sfxClip[(int)_sfxType]);
     }
 
     public void SfxSoundOn()
     {
-        for(int i = 0; i < sfxPlayers.Length; i++)
-        {
-            sfxPlayers[i].volume = 1f;
-        }
+        sfxPlayer.volume = 1f;
     }
 
     public void SfxSoundOff()
     {
-        for(int i = 0; i < sfxPlayers.Length; i++)
-        {
-            sfxPlayers[i].volume = 0f;
-        }
+        sfxPlayer.volume = 0f;
     }
 }
