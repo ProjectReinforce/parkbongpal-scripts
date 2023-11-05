@@ -17,6 +17,7 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Button userUuidCopyButton;
     [SerializeField] Button syncGoogleButton;
     [SerializeField] GameObject nicknameChange;
+    // [SerializeField] Slider soundSlider;
 
     void Start()
     {
@@ -124,6 +125,18 @@ public class SettingUI : MonoBehaviour
             Utills.LoadScene("R_Start");
         });
     }
+
+    // public void SoundChanger()
+    // {
+    //     if(soundSlider.value == 0)
+    //     {
+    //         Managers.Sound.IsMuted = false;
+    //     }
+    //     else
+    //     {
+    //         Managers.Sound.IsMuted = true;
+    //     }
+    // }
 
     public void OpenTitleWeaponInventory()
     {

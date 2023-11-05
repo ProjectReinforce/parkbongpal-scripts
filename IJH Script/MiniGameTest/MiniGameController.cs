@@ -8,11 +8,11 @@ public class MiniGameController : MonoBehaviour
     Weapon selectedWeapon;
     void Awake() 
     {
-        Managers.Event.SetMiniGameWeapon -= SetWeapon;
-        Managers.Event.SetMiniGameWeapon += SetWeapon;
+        Managers.Event.SetMiniGameWeaponEvent -= SetWeapon;
+        Managers.Event.SetMiniGameWeaponEvent += SetWeapon;
 
-        Managers.Event.SetMiniGame -= SetMiniGame;
-        Managers.Event.SetMiniGame += SetMiniGame;
+        Managers.Event.SetMiniGameEvent -= SetMiniGame;
+        Managers.Event.SetMiniGameEvent += SetMiniGame;
     }
 
     void SetMiniGame()

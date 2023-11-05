@@ -30,13 +30,13 @@ public class Rock : MonoBehaviour
 
     void OnEnable() 
     {
-        Managers.Event.ResetMiniGameScore -= ResetScore;
-        Managers.Event.ResetMiniGameScore += ResetScore;
+        Managers.Event.ResetMiniGameScoreEvent -= ResetScore;
+        Managers.Event.ResetMiniGameScoreEvent += ResetScore;
     }
 
     void OnDisable() 
     {
-        Managers.Event.ResetMiniGameScore -= ResetScore;
+        Managers.Event.ResetMiniGameScoreEvent -= ResetScore;
     }
 
     public void ResetRockInfo()

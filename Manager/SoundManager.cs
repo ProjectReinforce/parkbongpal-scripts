@@ -4,8 +4,8 @@ using UnityEngine;
 [Serializable]
 public class SoundManager
 {
-    BgmPlayer bgmPlayer;
-    SfxPlayer sfxPlayer;
+    public SfxPlayer sfxPlayer;
+    public BgmPlayer bgmPlayer;
     bool isMuted;
     public bool IsMuted
     {
@@ -31,12 +31,12 @@ public class SoundManager
         sfxPlayer = Utills.Bind<SfxPlayer>("SfxPlayer", _rootTransform);
 
         bgmPlayer.Initialize();
-        sfxPlayer.Initialize();
+        // sfxPlayer.Initialize();
     }
 
-    public void PlayBgm(bool _isPlay = true)
+    public void PlayBgm(bool _isMuted)
     {
-        bgmPlayer.PlayBgm(_isPlay);
+        bgmPlayer.PlayBgm(_isMuted);
     }
 
     public void PlaySfx(SfxType _sfxType)

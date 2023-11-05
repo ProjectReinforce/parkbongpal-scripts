@@ -19,6 +19,7 @@ public class Ranking : MonoBehaviour
     [SerializeField] TopRankSlot topRankSlot;
     RankSlot[][] slotLists = new RankSlot[2][];     // 2차원 배열 ==> 첫번째[위와 동일], 2번째[해당 슬롯의 순서]
     int typeCount = Enum.GetValues(typeof(RankingType)).Length;
+    [SerializeField] GameObject nullMyRank;
 
 
     void Awake()
@@ -38,8 +39,8 @@ public class Ranking : MonoBehaviour
 
     void Start()
     {
-        Managers.Event.GetRankAfterTheFirstTime -= SetOnlyMyRank;
-        Managers.Event.GetRankAfterTheFirstTime += SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTimeEvent -= SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTimeEvent += SetOnlyMyRank;
 
         Managers.Event.SettingRankingPageEvent -= SetSlotTo;
         Managers.Event.SettingRankingPageEvent += SetSlotTo;
@@ -118,15 +119,24 @@ public class Ranking : MonoBehaviour
     {
         for (int i = 0; i < slotLists[idx].Length; i++)
         {
-            if(onlyMyRank[_rankIndex].rank <= 3 && onlyMyRank[_rankIndex].rank >= 1)
+            if(onlyMyRank[_rankIndex].score == 0)
             {
                 viewPorts[1].gameObject.SetActive(false);
-                viewPorts[2].gameObject.SetActive(true);
+                viewPorts[2].gameObject.SetActive(false);
+                nullMyRank.SetActive(true);
             }
             else
             {
-                viewPorts[1].gameObject.SetActive(true);
-                viewPorts[2].gameObject.SetActive(false);
+                if(onlyMyRank[_rankIndex].rank <= 3 && onlyMyRank[_rankIndex].rank >= 1)
+                {
+                    viewPorts[1].gameObject.SetActive(false);
+                    viewPorts[2].gameObject.SetActive(true);
+                }
+                else
+                {
+                    viewPorts[1].gameObject.SetActive(true);
+                    viewPorts[2].gameObject.SetActive(false);
+                }
             }
 
             if (i >= ranks[idx][_rankIndex].Length)

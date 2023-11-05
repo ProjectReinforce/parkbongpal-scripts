@@ -87,7 +87,7 @@ public class Managers : MonoBehaviour
         
         bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;
         if (isInMainScene)
-            game.Mine.CalculateGoldAllMines();
+            game.Mine.CalculateGoldAndBuildTimeAllMines();
         // 건설시간 세팅 필요
     }
 
@@ -111,11 +111,10 @@ public class Managers : MonoBehaviour
                 eventM ??= new();
                 ui = new();
                 sound ??= new(transform);
-                sound.PlayBgm();
+                sound.PlayBgm(sound.IsMuted);
                 etc ??= new();
                 break;
             case SceneName.R_LoadingScene:
-                // sound.PlayBgm(false);
                 if (resource is null)
                 {
                     resource = new();
@@ -129,7 +128,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6:
                 game.Set();
-                // sound.PlayBgm();
+                sound.sfxPlayer.Initialize();
                 break;
         }
     }

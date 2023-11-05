@@ -1,17 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PideaCollection : MonoBehaviour
 {
-     [SerializeField] RectTransform[] collections;
+    [SerializeField] RectTransform collections;
+    [SerializeField] CollectionList prefab;
+    List<CollectionList> collectionLists = new List<CollectionList>();
 
+    public void AddList(CollectionData collectionData)
+    {
+        CollectionList collectionList = Instantiate(prefab, collections);
+        collectionList.Initialized(collectionData);
+        collectionLists.Add(collectionList);
+    }
     public void AddSlot(PideaSlot slot, int index)
     {
-        if(index<0)return;
-        
-        Instantiate(slot, collections[index]).Initialized(slot.baseWeaponIndex);
+        if (index < 0) return;
+
+        Instantiate(slot, collectionLists[index].weapons).Initialized(slot.baseWeaponIndex);
     }
 }
