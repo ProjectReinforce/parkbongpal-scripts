@@ -13,7 +13,6 @@ public class QuestContentsInitializer : MonoBehaviour
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
-
     void Awake()
     {
         // string[] questTypeNames = System.Enum.GetNames(typeof(QuestType));
@@ -62,25 +61,33 @@ public class QuestContentsInitializer : MonoBehaviour
     void UpdateAllContent()
     {
         foreach (var one in quests)
-            one.Value.UpdateContent();
+        {
+            if(one.Value.TargetData.questRepeatType == QuestType.Once)
+            {
+                one.Value.UpdateContent();
+            }
+            else
+            {
+                one.Value.DayWeekUpdateContents();
+            }
+        }
     }
 
-    void OpenQuestID(int _openQuestID, RecordType _recordType)  // 인덱스 접근
+    void OpenQuestID(int _openQuestIndex, RecordType _recordType)
     {
-        if (_recordType == quests[_openQuestID].TargetData.recordType)
+        if (_recordType == questContents[_recordType][_openQuestIndex].TargetData.recordType)
         {
-            quests[_openQuestID].gameObject.SetActive(true);
+            questContents[_recordType][_openQuestIndex].gameObject.SetActive(true);
         }
         else
         {
-            _openQuestID = _openQuestID - 1;
-            quests[_openQuestID].Cleared();
+            _openQuestIndex = _openQuestIndex - 1;
+            questContents[_recordType][_openQuestIndex].Cleared();
         }
     }
 
     void ClearCheck()   // 서버 데이터에 있는 questRecordDatas를 돌며 퀘스트 아이디 순서에 따라 클리어 함수를 작동함
     {
-        //Managers.Event.ClearCheckEvent?.Invoke();
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
         for (int i = 0; i < progressQuestIdsByType.Length; i++)
         {
@@ -89,6 +96,10 @@ public class QuestContentsInitializer : MonoBehaviour
                 if(QuestType.Once == one.TargetData.questRepeatType)
                 { 
                     one.IdCompare(progressQuestIdsByType[i]);
+                }
+                else
+                {
+                    // Once가 아닐 때 클리어 처리를 해주는 로직
                 }
             }  
         }

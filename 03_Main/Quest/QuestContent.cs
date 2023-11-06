@@ -18,13 +18,11 @@ public class QuestContent : MonoBehaviour
     Transform onceIngContents;
     Transform onceClearContents;
 
-    // UIUpdater ui = new UIUpdater();
     bool isCleared;
     public QuestData TargetData => targetData;
     QuestData targetData;
-    // List<QuestData> targetDatas;
 
-    public void IdCompare(int _questID) // 해당 함수의 로직을 재구성할 필요가 있어보임
+    public void IdCompare(int _questID)
     {
         gameObject.SetActive(_questID >= targetData.questId);
         if (_questID > targetData.questId)
@@ -63,7 +61,6 @@ public class QuestContent : MonoBehaviour
         gameObject.SetActive(true);
 
         getRewardButton.onClick.AddListener(UpdateQuestRecord); // 해당 구문을 통해서 퀘스트에 대한 기록을 업데이트 함
-        //Managers.Event.ClearCheckEvent += Cleared;
     }
 
     public void Cleared()   // 퀘스트를 클리어할 때 사용되는 함수로 클리어가 됐을 때의 처리를 담당함
@@ -85,7 +82,7 @@ public class QuestContent : MonoBehaviour
     void UpdateQuestRecord()    // 퀘스트에 대한 기록을 업데이트할 때 사용되는 함수
     {
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;  // 이니셜라이즈
-        progressQuestIdsByType[(int)targetData.recordType] = targetData.questId + 1;    // 해당값도 바뀌어야됨
+        progressQuestIdsByType[(int)targetData.recordType] = targetData.precedeQuestId + 1;    // 해당값도 바뀌어야됨
         Param param = new()
         {
             { nameof(QuestRecord.idList), progressQuestIdsByType }
@@ -97,7 +94,7 @@ public class QuestContent : MonoBehaviour
         Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
         // 플레이어에게 퀘스트 리워드 타입과 해당하는 크기만큼의 재화를 줌
 
-        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.questId + 1, targetData.recordType); // 퀘스트 아이디의 +1 말고 다른 값을 주거나 혹은 다음 게임오브젝트에 접근할 수 있도록 만들어야됨
+        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType); // 퀘스트 아이디의 +1 말고 다른 값을 주거나 혹은 다음 게임오브젝트에 접근할 수 있도록 만들어야됨
         Debug.Log($"{targetData.questContent} 달성!");
         getRewardButton.interactable = false;   // 보상버튼에 대한 인터렉터블 off를 통해 끔
         Cleared();
@@ -117,11 +114,191 @@ public class QuestContent : MonoBehaviour
         // transactionValues = Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
     }
 
+    //public void DayWeekResetServerData(int[] _resetDatas)
+    //{
+    //    if(targetData.questRepeatType != QuestType.Once)
+    //    {
+    //        if(Managers.Etc.GetServerTime().Date == )
+    //        _resetDatas[(int)targetData.recordType] = targetData.questId - 1;
+    //    }
+    //}
+
+    public void DayWeekUpdateContents()
+    {
+        Player player = Managers.Game.Player;
+        descriptionText.text = targetData.questContent;
+
+        long daysCurrent = -1;
+        long weekCureent = -1;
+        if(transform.parent == dayContents)
+        {
+            switch (targetData.recordType)
+            {
+                case RecordType.LevelUp:
+                    daysCurrent = player.Data.level;
+                    break;
+                case RecordType.UseGold:
+                    daysCurrent = (long)player.Record.UseGold;
+                    break;
+                case RecordType.GetGold:
+                    daysCurrent = (long)player.Record.GetGold;
+                    break;
+                case RecordType.UseDiamond:
+                    daysCurrent = (long)player.Record.UseDiamond;
+                    break;
+                case RecordType.GetDiamond:
+                    daysCurrent = (long)player.Record.GetDiamond;
+                    break;
+                case RecordType.GetItem:
+                    break;
+                case RecordType.RegisterItem:
+                    break;
+                case RecordType.DisassembleItem:
+                    daysCurrent = player.Record.DisassembleItem;
+                    break;
+                case RecordType.ProduceWeapon:
+                    daysCurrent = player.Record.ProduceWeapon;
+                    break;
+                case RecordType.AdvanceProduceWeapon:
+                    daysCurrent = player.Record.AdvanceProduceWeapon;
+                    break;
+                case RecordType.DayTryPromote:
+                    daysCurrent = player.Record.DayTryPromote;
+                    break;
+                case RecordType.TryAdditional:
+                    daysCurrent = player.Record.TryAdditional;
+                    break;
+                case RecordType.DayTryReinforce:
+                    daysCurrent = player.Record.DayTryReinforce;
+                    break;
+                case RecordType.DayTryMagic:
+                    daysCurrent = player.Record.DayTryMagic;
+                    break;
+                case RecordType.TrySoul:
+                    daysCurrent = player.Record.TrySoul;
+                    break;
+                case RecordType.DayAttendance:
+                    daysCurrent = player.Record.DayAttendance;
+                    break;
+                case RecordType.DayGetBonus:
+                    daysCurrent = (long)player.Record.DayGetBonus;
+                    break;
+                case RecordType.DaySeeAds:
+                    daysCurrent = player.Record.DaySeeAds;
+                    break;
+                case RecordType.Tutorial:
+                    break;
+            }
+            if (daysCurrent != -1)
+            {
+                processText.text = $"{daysCurrent} / {targetData.requestCount}";
+                processSlider.value = (float)daysCurrent / targetData.requestCount;
+                if(daysCurrent >= targetData.requestCount)
+                {
+                    processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+                }
+            }
+            else
+            {
+                processText.text = "";
+                processSlider.value = 0;
+            }
+            if (daysCurrent >= targetData.requestCount && !isCleared)
+            {
+                getRewardButton.interactable = true;
+                transform.SetSiblingIndex(0);
+            }
+            else
+                getRewardButton.interactable = false;
+        }
+        else
+        {
+            switch (targetData.recordType)
+            {
+                case RecordType.LevelUp:
+                    weekCureent = player.Data.level;
+                    break;
+                case RecordType.UseGold:
+                    weekCureent = (long)player.Record.UseGold;
+                    break;
+                case RecordType.GetGold:
+                    weekCureent = (long)player.Record.GetGold;
+                    break;
+                case RecordType.UseDiamond:
+                    weekCureent = (long)player.Record.UseDiamond;
+                    break;
+                case RecordType.GetDiamond:
+                    weekCureent = (long)player.Record.GetDiamond;
+                    break;
+                case RecordType.GetItem: 
+                    break;
+                case RecordType.RegisterItem:
+                    //current = Managers.Event.PideaSetWeaponCount.Invoke();
+                    break;
+                case RecordType.DisassembleItem:
+                    weekCureent = player.Record.DisassembleItem;
+                    break;
+                case RecordType.ProduceWeapon:
+                    weekCureent = player.Record.ProduceWeapon;
+                    break;
+                case RecordType.AdvanceProduceWeapon:
+                    weekCureent = player.Record.AdvanceProduceWeapon;
+                    break;
+                case RecordType.WeekTryPromote:
+                    weekCureent = player.Record.WeekTryPromote;
+                    break;
+                case RecordType.TryAdditional:
+                    weekCureent = player.Record.TryAdditional;
+                    break;
+                case RecordType.WeekTryReinforce:
+                    weekCureent = player.Record.WeekTryReinforce;
+                    break;
+                case RecordType.WeekTryMagic:
+                    weekCureent = player.Record.WeekTryMagic;
+                    break;
+                case RecordType.TrySoul:
+                    weekCureent = player.Record.TrySoul;
+                    break;
+                case RecordType.WeekAttendance:
+                    weekCureent = player.Record.WeekAttandance;
+                    break;
+                case RecordType.WeekGetBonus:
+                    weekCureent = (long)player.Record.WeekGetBonus;
+                    break;
+                case RecordType.WeekSeeAds:
+                    weekCureent = player.Record.WeekSeeAds;
+                    break;
+                case RecordType.Tutorial:
+                    break;
+            }
+            if (weekCureent != -1)  // 값에 대한 초기화 및 진행이었을 경우 돈다
+            {
+                processText.text = $"{weekCureent} / {targetData.requestCount}";
+                processSlider.value = (float)weekCureent / targetData.requestCount;
+                if (weekCureent >= targetData.requestCount)
+                {
+                    processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+                }
+            }
+            else
+            {
+                processText.text = "";
+                processSlider.value = 0;
+            }
+            if (weekCureent >= targetData.requestCount && !isCleared)
+            {
+                getRewardButton.interactable = true;
+                transform.SetSiblingIndex(0);
+            }
+            else
+                getRewardButton.interactable = false;
+        }
+    }
+
 
     public void UpdateContent()
     {
         Player player = Managers.Game.Player;   // 플레이어의 정보를 대입하여 해당하는 업적 및 퀘스트 기록에 대한 검토를 위해 필요한 변수
-        // UpdateText(descriptionText, ResourceManager.Instance.questDatas[targetIndex].questContent);
         descriptionText.text = targetData.questContent; // 텍스트에 타겟 데이터로 부터 밭은 퀘스트 컨텐츠에 적힌 해당 퀘스트 이름을 대입함
 
         long current = -1;
@@ -171,15 +348,15 @@ public class QuestContent : MonoBehaviour
             case RecordType.TrySoul:
                 current = player.Record.TrySoul;
                 break;
-            case RecordType.Attendance:
-                current = player.Record.Attendance;
-                break;
-            case RecordType.GetBonus:
-                current = (long)player.Record.GetBonus;
-                break;
-            case RecordType.SeeAds:
-                current = player.Record.SeeAds;
-                break;
+            //case RecordType.Attendance:
+            //    current = player.Record.Attendance;
+            //    break;
+            //case RecordType.GetBonus:
+            //    current = (long)player.Record.GetBonus;
+            //    break;
+            //case RecordType.SeeAds:
+            //    current = player.Record.SeeAds;
+            //    break;
             case RecordType.Tutorial:
                 break;
         }

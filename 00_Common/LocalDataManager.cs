@@ -60,6 +60,42 @@ public class RecordData
     public ulong GetBonus => getBonus;
     uint seeAds;
     public uint SeeAds => seeAds;
+    // 일일
+    uint dayAttendance;
+    public uint DayAttendance => dayAttendance;
+
+    uint dayTryPromote;
+    public uint DayTryPromote => dayTryPromote;
+    uint dayTryMagic;
+    public uint DayTryMagic => dayTryMagic;
+    uint dayTryReinforce;
+    public uint DayTryReinforce => dayTryReinforce;
+    uint dayGetBonus;
+    public uint DayGetBonus => dayGetBonus;
+    uint daySeeAds;
+    public uint DaySeeAds => daySeeAds;
+    uint[] dayValGroups;
+    string[] dayValGroupsString;
+    DateTime saveDay;
+    public DateTime SaveDay => saveDay;
+    // 주간
+    uint weekAttendance;
+    public uint WeekAttandance => weekAttendance;
+    uint weekTryPromote;
+    public uint WeekTryPromote => weekTryPromote;
+    uint weekTryMagic;
+    public uint WeekTryMagic => weekTryMagic;
+    uint weekTryReinforce;
+    public uint WeekTryReinforce => weekTryReinforce;
+    uint weekGetBonus;
+    public uint WeekGetBonus => weekGetBonus;
+    uint weekSeeAds;
+    public uint WeekSeeAds => weekSeeAds;
+    uint[] weekValGroups;
+    string[] weekValGroupsString;
+    DateTime saveWeek;
+    public DateTime SaveWeek => saveWeek;
+
     public Action levelUpEvent;
     public Action getGoldEvent;
     public Action useGoldEvent;
@@ -79,12 +115,30 @@ public class RecordData
     public Action attendanceEvent;
     public Action getBonusEvent;
     public Action seeAdsEvent;
+    // 일일
+    public Action dayAttendanceEvent;
+    public Action dayTryPromoteEvent;
+    public Action dayTryMagicEvent;
+    public Action dayTryReinforceEvent;
+    public Action dayGetBonusEvent;
+    public Action daySeeAdsEvent;
+    // 주간
+    public Action weekAttendanceEvent;
+    public Action weekTryPromoteEvent;
+    public Action weekTryMagicEvent;
+    public Action weekTryReinforceEvent;
+    public Action weekGetBonusEvent;
+    public Action weekSeeAdsEvent;
 
     public void LoadOrInitRecord(string _userInDate)
     {
         userID = PlayerPrefs.GetString("UserID");
         Debug.Log($"loaded userID : {userID} / indate : {_userInDate}");
-        
+        dayValGroups = new uint[6] { dayAttendance, dayTryPromote, dayTryMagic, dayTryReinforce, dayGetBonus, daySeeAds };
+        dayValGroupsString = new string[6] { "DayAttendance", "DayTryPromote", "DayTryMagic", "DayTryReinforce", "DayGetBonus", "DaySeeAds" };
+        weekValGroups = new uint[6] { WeekAttandance, WeekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
+        weekValGroupsString = new string[6] { "WeekAttandance", "WeekTryPromote", "WeekTryMagic", "WeekTryReinforce", "WeekGetBonus", "WeekSeeAds" };
+
         if (_userInDate == userID)
         {
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
@@ -106,6 +160,26 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
             ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
             uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
+            // 일일 초기화
+            DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
+            ResetRecordDayData(dayValGroups, dayValGroupsString);
+            uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
+            uint.TryParse(PlayerPrefs.GetString("DayTryPromote"), out dayTryPromote);
+            uint.TryParse(PlayerPrefs.GetString("DayTryMagic"), out dayTryMagic);
+            uint.TryParse(PlayerPrefs.GetString("DayTryReinforce"), out dayTryReinforce);
+            uint.TryParse(PlayerPrefs.GetString("DayGetBonus"), out dayGetBonus);
+            uint.TryParse(PlayerPrefs.GetString("DaySeeAds"), out daySeeAds);
+
+            // 주간 초기화
+            DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
+            ResetRecordWeekData(weekValGroups, weekValGroupsString);
+            uint.TryParse(PlayerPrefs.GetString("WeekAttandance"), out weekAttendance);
+            uint.TryParse(PlayerPrefs.GetString("WeekTryPromote"), out weekTryPromote);
+            uint.TryParse(PlayerPrefs.GetString("WeekTryMagic"), out weekTryMagic);
+            uint.TryParse(PlayerPrefs.GetString("WeekTryReinforce"), out weekTryReinforce);
+            uint.TryParse(PlayerPrefs.GetString("WeekGetBonus"), out weekGetBonus);
+            uint.TryParse(PlayerPrefs.GetString("WeekSeeAds"), out weekSeeAds);
+
             // public uint GetItem = PlayerPrefs.GetString("UserID");
 
             return;
@@ -128,6 +202,23 @@ public class RecordData
         PlayerPrefs.DeleteKey("Attendance");
         PlayerPrefs.DeleteKey("GetBonus");
         PlayerPrefs.DeleteKey("SeeAds");
+        // 일일
+        PlayerPrefs.DeleteKey("SaveDay");
+        PlayerPrefs.DeleteKey("DayAttendance");
+        PlayerPrefs.DeleteKey("DayTryPromote");
+        PlayerPrefs.DeleteKey("DayTryMagic");
+        PlayerPrefs.DeleteKey("DayTryReinforce");
+        PlayerPrefs.DeleteKey("DayGetBonus");
+        PlayerPrefs.DeleteKey("DaySeeAds");
+        // 주간
+        PlayerPrefs.DeleteKey("SaveWeek");
+        PlayerPrefs.DeleteKey("WeekAttandance");
+        PlayerPrefs.DeleteKey("WeekTryPromote");
+        PlayerPrefs.DeleteKey("WeekTryMagic");
+        PlayerPrefs.DeleteKey("WeekTryReinforce");
+        PlayerPrefs.DeleteKey("WeekGetBonus");
+        PlayerPrefs.DeleteKey("WeekSeeAds");
+
         useGold = 0;
         getGold = 0;
         useDiamond = 0;
@@ -146,6 +237,22 @@ public class RecordData
         attendance = 0;
         getBonus = 0;
         seeAds = 0;
+        // 일일
+        saveDay = DateTime.MinValue;
+        dayAttendance = 0;
+        dayTryPromote = 0;
+        dayTryMagic = 0;
+        dayTryReinforce = 0;
+        dayGetBonus = 0;
+        daySeeAds = 0;
+        // 주간
+        saveWeek = DateTime.MinValue;
+        weekAttendance = 0;
+        weekTryPromote = 0;
+        weekTryMagic = 0;
+        weekTryReinforce = 0;
+        weekGetBonus = 0;
+        weekSeeAds = 0;
     }
 
     public void ModifyGoldRecord(int _gold)
@@ -240,6 +347,127 @@ public class RecordData
         tryRefineEvent?.Invoke();
     }
 
+    // 일일
+    public void ModifyDayTryReinforceRecord()
+    {
+        dayTryReinforce++;
+        PlayerPrefs.SetString("DayTryReinforce", dayTryReinforce.ToString());
+        dayTryReinforceEvent?.Invoke();
+    }
+
+    public void ModifyDayTryPromoteRecord()
+    {
+        dayTryPromote++;
+        PlayerPrefs.SetString("DayTryPromote", dayTryPromote.ToString());
+        dayTryPromoteEvent?.Invoke();
+    }
+
+    public void ModifyDayTryMagicRecord()
+    {
+        dayTryMagic++;
+        PlayerPrefs.SetString("DayTryMagic", dayTryMagic.ToString());
+        dayTryMagicEvent?.Invoke();
+    }
+
+    public void ModifyDayAttendanceRecord()
+    {
+        dayAttendance++;
+        PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
+        dayAttendanceEvent?.Invoke();
+    }
+
+    public void ModifyDayGetBonusRecord()
+    {
+        dayGetBonus++;
+        PlayerPrefs.SetString("DayGetBonus", dayGetBonus.ToString());
+        dayGetBonusEvent?.Invoke();
+    }
+
+    public void ModifyDaySeeAdsRecord()
+    {
+        daySeeAds++;
+        PlayerPrefs.SetString("DaySeeAds", daySeeAds.ToString());
+        daySeeAdsEvent?.Invoke();
+    }
+
+    public void ResetRecordDayData(uint[] _dayRecord, string[] _dayType)
+    {
+        if(saveDay.Date != Managers.Etc.GetServerTime().Date || saveDay.Date == DateTime.MinValue.Date)
+        {
+            for(int i = 0; i < _dayRecord.Length; i++)
+            {
+                _dayRecord[i] = 0;
+                PlayerPrefs.SetString(_dayType[i], _dayRecord[i].ToString());
+            }
+            saveDay = Managers.Etc.GetServerTime();
+            PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+        }
+    }
+
+    // 주간
+    public void ModifyWeekTryReinforceRecord()
+    {
+        weekTryReinforce++;
+        PlayerPrefs.SetString("WeekTryReinforce", weekTryReinforce.ToString());
+        weekTryReinforceEvent?.Invoke();
+    }
+
+    public void ModifyWeekTryPromoteRecord()
+    {
+        weekTryPromote++;
+        PlayerPrefs.SetString("WeekTryPromote", weekTryPromote.ToString());
+        weekTryPromoteEvent?.Invoke();
+    }
+
+    public void ModifyWeekTryMagicRecord()
+    {
+        weekTryMagic++;
+        PlayerPrefs.SetString("WeekTryMagic", weekTryMagic.ToString());
+        weekTryMagicEvent?.Invoke();
+    }
+
+    public void ModifyWeekAttendanceRecord()
+    {
+        weekAttendance++;
+        PlayerPrefs.SetString("WeekAttendance", weekAttendance.ToString());
+        weekAttendanceEvent?.Invoke();
+    }
+
+    public void ModifyWeekGetBonusRecord()
+    {
+        weekGetBonus++;
+        PlayerPrefs.SetString("WeekGetBonus", weekGetBonus.ToString());
+        weekGetBonusEvent?.Invoke();
+    }
+
+    public void ModifyWeekSeeAdsRecord()
+    {
+        weekSeeAds++;
+        PlayerPrefs.SetString("WeekSeeAds", weekSeeAds.ToString());
+        weekSeeAdsEvent?.Invoke();
+    }
+
+    public void ResetRecordWeekData(uint[] _weekRecord, string[] _weekType)
+    {
+        if (Managers.Etc.GetServerTime().DayOfWeek == DayOfWeek.Monday)
+        {
+            if (saveWeek.Date != Managers.Etc.GetServerTime().Date || saveWeek.Date == DateTime.MinValue.Date)
+            {
+                for (int i = 0; i < _weekRecord.Length; i++)
+                {
+                    _weekRecord[i] = 0;
+                    PlayerPrefs.SetString(_weekType[i], _weekRecord[i].ToString());
+                }
+                saveWeek = Managers.Etc.GetServerTime().Date;
+                PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
+            }
+        }
+    }
+
+    public DateTime ReturnSaveDay()
+    {
+        return saveDay.Date;
+    }
     // uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
     // uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
     // uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
