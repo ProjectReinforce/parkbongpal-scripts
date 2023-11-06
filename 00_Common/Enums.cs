@@ -132,9 +132,18 @@ public enum RecordType
     TryMagic,
     TrySoul,
     TryRefine,
-    Attendance,
-    GetBonus,
-    SeeAds,
+    DayAttendance,
+    DayTryPromote,
+    DayTryReinforce,
+    DayTryMagic,
+    DayGetBonus,
+    DaySeeAds,
+    WeekAttendance,
+    WeekTryPromote,
+    WeekTryReinforce,
+    WeekTryMagic,
+    WeekGetBonus,
+    WeekSeeAds
 }
 
 public enum QuestType
