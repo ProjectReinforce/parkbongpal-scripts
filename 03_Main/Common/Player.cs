@@ -169,6 +169,8 @@ public class Player
     public void SetAttendance(int day)
     {
         userData.attendance = day;
+        recordData.ModifyDayAttendanceRecord();
+        recordData.ModifyWeekAttendanceRecord();
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
@@ -186,6 +188,8 @@ public class Player
     {
         AddGold(_goldCost, false);
         recordData.ModifyTryPromoteRecord();
+        recordData.ModifyDayTryPromoteRecord();
+        recordData.ModifyWeekTryPromoteRecord();
         AddExp(50, false);
         
         Param param = new()
@@ -218,6 +222,8 @@ public class Player
     {
         AddGold(_goldCost, false);
         recordData.ModifyTryReinforceRecord();
+        recordData.ModifyDayTryReinforceRecord();
+        recordData.ModifyWeekTryReinforceRecord();
         AddExp(50, false);
         
         Param param = new()
@@ -234,6 +240,8 @@ public class Player
     {
         AddGold(_goldCost, false);
         recordData.ModifyTryMagicRecord();
+        recordData.ModifyDayTryMagicRecord();
+        recordData.ModifyWeekTryMagicRecord();
         AddExp(65, false);
         
         Param param = new()
@@ -298,5 +306,17 @@ public class Player
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent();
+    }
+
+    public void GetBonusCount(uint _totalGold)
+    {
+        if(_totalGold >= 10000)
+        {
+            recordData.ModifyDayGetBonusRecord();
+        }
+        if(_totalGold >= 50000)
+        {
+            recordData.ModifyWeekGetBonusRecord();
+        }
     }
 }

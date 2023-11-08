@@ -97,6 +97,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
                 collection.AddSlot(pideaSlots[i], collectionType);
             }
         }
+        Managers.Event.PideaCheckEvent += CheckLockWeapon;
     }
     private void OnEnable()
     {

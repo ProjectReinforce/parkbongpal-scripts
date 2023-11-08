@@ -67,6 +67,7 @@ public class MineManager
         {
             Managers.Alarm.Warning($"{totalGold:n0} Gold를 수령했습니다.");
         });
+        Managers.Game.Player.GetBonusCount((uint)totalGold);
     }
 
     // =====================================================================
