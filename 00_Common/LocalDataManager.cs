@@ -449,24 +449,28 @@ public class RecordData
 
     public void ResetRecordWeekData(uint[] _weekRecord, string[] _weekType)
     {
-        if (Managers.Etc.GetServerTime().DayOfWeek == DayOfWeek.Monday)
+        System.Globalization.CultureInfo cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
+        System.Globalization.CalendarWeekRule calenderWeekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
+        int saveWeeks = 0;
+        saveWeeks = cultureInfo.Calendar.GetWeekOfYear(saveWeek, calenderWeekRule, saveWeek.DayOfWeek);
+        int serverData = 0;
+        serverData = cultureInfo.Calendar.GetWeekOfYear(Managers.Etc.GetServerTime(), calenderWeekRule, Managers.Etc.GetServerTime().DayOfWeek);
+        if (saveWeek.Date != Managers.Etc.GetServerTime().Date || saveWeek.Date == DateTime.MinValue.Date) 
         {
-            if (saveWeek.Date != Managers.Etc.GetServerTime().Date || saveWeek.Date == DateTime.MinValue.Date)
+            if (saveWeeks != serverData) 
             {
-                for (int i = 0; i < _weekRecord.Length; i++)
+                if(Managers.Etc.GetServerTime().DayOfWeek >= DayOfWeek.Monday)
                 {
-                    _weekRecord[i] = 0;
-                    PlayerPrefs.SetString(_weekType[i], _weekRecord[i].ToString());
+                    for (int i = 0; i < _weekRecord.Length; i++)
+                    {
+                        _weekRecord[i] = 0;
+                        PlayerPrefs.SetString(_weekType[i], _weekRecord[i].ToString());
+                    }
+                    saveWeek = Managers.Etc.GetServerTime().Date;
+                    PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
                 }
-                saveWeek = Managers.Etc.GetServerTime().Date;
-                PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
             }
         }
-    }
-
-    public DateTime ReturnSaveDay()
-    {
-        return saveDay.Date;
     }
     // uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
     // uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);

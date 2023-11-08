@@ -42,7 +42,7 @@ public class NewUserDataInserter
 
                 string inDate = callback.FlattenRows()[0]["inDate"].ToString();
 
-                Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), inDate, new() { {"goldPerMin", 0 } }, callback =>
+                SendQueue.Enqueue(Backend.URank.User.UpdateUserScore, GOLD_UUID, nameof(UserData), inDate, new Param() { {"goldPerMin", 0 } }, callback =>
                 {
                     if (!callback.IsSuccess())
                     {
@@ -52,7 +52,7 @@ public class NewUserDataInserter
                     goldPerMinSuccess = true;
                     TryToChangeScene();
                 });
-                Backend.URank.User.UpdateUserScore(POWER_UUID, nameof(UserData), inDate, new() { {"combatScore", 0 } }, callback =>
+                SendQueue.Enqueue(Backend.URank.User.UpdateUserScore, POWER_UUID, nameof(UserData), inDate, new Param() { {"combatScore", 0 } }, callback =>
                 {
                     if (!callback.IsSuccess())
                     {
@@ -62,7 +62,7 @@ public class NewUserDataInserter
                     powerSuccess = true;
                     TryToChangeScene();
                 });
-                Backend.URank.User.UpdateUserScore(MINI_UUID, nameof(UserData), inDate, new() { {"mineGameScore", 0 } }, callback =>
+                SendQueue.Enqueue(Backend.URank.User.UpdateUserScore, MINI_UUID, nameof(UserData), inDate, new Param() { {"mineGameScore", 0 } }, callback =>
                 {
                     if (!callback.IsSuccess())
                     {
