@@ -120,11 +120,8 @@ public class Managers : MonoBehaviour
                     resource = new();
                     resource.Initialize();
                 }
-                if (serverData is null)
-                {
-                    serverData = new();
-                    serverData.Initialize();
-                }
+                serverData = new();
+                serverData.Initialize();
                 break;
             case SceneName.R_Main_V6:
                 game.Set();

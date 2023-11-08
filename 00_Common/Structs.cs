@@ -437,9 +437,10 @@ public struct QuestData
 [Serializable]
 public struct QuestRecord
 {
-    //public int questId;
     public int[] idList;
     public string inDate;
+    public DateTime saveDate;
+    public DateTime saveWeek;
 }
 
 [Serializable]

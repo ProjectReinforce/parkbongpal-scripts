@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Manager;
 using UnityEngine;
+using BackEnd;
 
 public class QuestContentsInitializer : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class QuestContentsInitializer : MonoBehaviour
         }
         Managers.Event.OpenQuestIDEvent += OpenQuestID;
         Managers.Event.UpdateAllContentEvent += UpdateAllContent;
+        DayWeekResetServerData();
         ClearCheck();
     }
 
@@ -75,7 +77,7 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void OpenQuestID(int _openQuestIndex, RecordType _recordType)
     {
-        if (_recordType == questContents[_recordType][_openQuestIndex].TargetData.recordType)
+        if (questContents[_recordType][_openQuestIndex].TargetData.recordType == _recordType)
         {
             questContents[_recordType][_openQuestIndex].gameObject.SetActive(true);
         }
@@ -86,20 +88,97 @@ public class QuestContentsInitializer : MonoBehaviour
         }
     }
 
+    public void DayWeekResetServerData()
+    {
+        System.DateTime resetDays = Managers.ServerData.questRecordDatas[0].saveDate;
+        System.DateTime resetWeeks = Managers.ServerData.questRecordDatas[0].saveWeek;
+        int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
+
+        // 일일 퀘스트 서버 초기화
+        if (Managers.Etc.GetServerTime().Date != resetDays.Date)
+        {
+            for (int i = 0; i < progressQuestIdsByType.Length; i++)
+            {
+                foreach (QuestContent one in questContents[(RecordType)i])
+                {
+                    if (one.TargetData.questRepeatType == QuestType.Day)
+                    {
+                        if (one.TargetData.questId != progressQuestIdsByType[(int)one.TargetData.recordType])
+                        {
+                            progressQuestIdsByType[(int)one.TargetData.recordType] = one.TargetData.questId;
+                        }
+                    }
+                }
+            }
+            resetDays = Managers.Etc.GetServerTime().Date;
+            Param param1 = new()
+            {
+                { nameof(QuestRecord.idList), progressQuestIdsByType },
+                { nameof(QuestRecord.saveDate), resetDays }
+            };
+            Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), Managers.ServerData.questRecordDatas[0].inDate, Backend.UserInDate, param1));
+            Transactions.SendCurrent();
+        }
+
+
+        System.Globalization.CultureInfo cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
+        System.Globalization.CalendarWeekRule calenderWeekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
+        int saveWeeks = 0;
+        saveWeeks = cultureInfo.Calendar.GetWeekOfYear(resetWeeks, calenderWeekRule, resetWeeks.DayOfWeek);
+        int serverData = 0;
+        serverData = cultureInfo.Calendar.GetWeekOfYear(Managers.Etc.GetServerTime(), calenderWeekRule, Managers.Etc.GetServerTime().DayOfWeek);
+        // 주간 퀘스트 초기화
+        if (Managers.Etc.GetServerTime().Date != resetWeeks.Date) 
+        {
+            if (saveWeeks != serverData) 
+            {
+                if (Managers.Etc.GetServerTime().DayOfWeek >= System.DayOfWeek.Monday)
+                {
+                    for (int i = 0; i < progressQuestIdsByType.Length; i++)
+                    {
+                        foreach (QuestContent one in questContents[(RecordType)i])
+                        {
+                            if (one.TargetData.questRepeatType == QuestType.Week)
+                            {
+                                if (one.TargetData.questId != progressQuestIdsByType[(int)one.TargetData.recordType])
+                                {
+                                    progressQuestIdsByType[(int)one.TargetData.recordType] = one.TargetData.questId;
+                                }
+                            }
+                        }
+                    }
+                    resetWeeks = Managers.Etc.GetServerTime().Date;
+                    Param param2 = new()
+                    {
+                        { nameof(QuestRecord.idList), progressQuestIdsByType },
+                        { nameof(QuestRecord.saveWeek), resetWeeks }
+                    };
+                    Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), Managers.ServerData.questRecordDatas[0].inDate, Backend.UserInDate, param2));
+                    Transactions.SendCurrent();
+                }
+            }   
+        } 
+        
+    }
+
     void ClearCheck()   // 서버 데이터에 있는 questRecordDatas를 돌며 퀘스트 아이디 순서에 따라 클리어 함수를 작동함
     {
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
         for (int i = 0; i < progressQuestIdsByType.Length; i++)
         {
+            Debug.Log(progressQuestIdsByType[i]);
             foreach (QuestContent one in questContents[(RecordType)i])
             {
-                if(QuestType.Once == one.TargetData.questRepeatType)
-                { 
+                if(one.TargetData.questRepeatType == QuestType.Once)
+                {
                     one.IdCompare(progressQuestIdsByType[i]);
                 }
                 else
                 {
-                    // Once가 아닐 때 클리어 처리를 해주는 로직
+                    if(one.TargetData.questId != progressQuestIdsByType[(int)i])
+                    {
+                        one.Cleared();
+                    }
                 }
             }  
         }
