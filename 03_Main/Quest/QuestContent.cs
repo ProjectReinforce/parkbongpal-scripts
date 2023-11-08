@@ -57,6 +57,10 @@ public class QuestContent : MonoBehaviour
 
         transform.localScale = Vector3.one; // 게임 오브젝트의 크기를 원래의 크기로 되돌리려 함 >> 해상도에 따라 알맞는 크기를 맞추기 위함
 
+        // todo: 임시 코드, 버그 원인 찾아서 해결해야 함
+        RectTransform rect = GetComponent<RectTransform>();
+        rect.anchoredPosition3D = new Vector3(rect.anchoredPosition3D.x, rect.anchoredPosition3D.y, 0);
+
         getRewardButton.interactable = false;   // 버튼을 누르면 해당 구문을 통해 버튼의 인터렉터블을 꺼서 기능을 못하게 함
         gameObject.SetActive(true);
 

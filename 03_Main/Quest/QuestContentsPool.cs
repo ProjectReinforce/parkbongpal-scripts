@@ -11,12 +11,12 @@ public class QuestContentsPool : MonoBehaviour
     {
         foreach (var item in pool)
         {
-            pool.Remove(item);  // poolÀ» ¼øÈ¸ÇÏ¸ç QuestContent ¿ÀºêÁ§Æ®¸¦ Ã£°í Á¦°ÅÇÔ
+            pool.Remove(item);  // poolï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï¸ï¿½ QuestContent ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return item;
         }
-        GameObject newObject = Instantiate(origin.gameObject);  // orginÀ» º¹Á¦ÇØ »õ·Î ¸¸µç º¯¼ö¿¡ ³ÖÀ½
-        if (!newObject.TryGetComponent(out QuestContent component)) // »õ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ trygetÄÄÆ÷³ÍÆ® ÇÔ¼ö¸¦ ÅëÇØ qusetcontent¸¦ Ã£À½
-            component = newObject.AddComponent<QuestContent>(); // ¾øÀ¸¸é »õ·Î¿î ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇÔ
-        return component;   // »ý¼ºµÇ°Å³ª Ã£¾ÆÁø ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ ¹ÝÈ¯ÇÔ
+        GameObject newObject = Instantiate(origin.gameObject);  // orginï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        if (!newObject.TryGetComponent(out QuestContent component)) // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ trygetï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ qusetcontentï¿½ï¿½ Ã£ï¿½ï¿½
+            component = newObject.AddComponent<QuestContent>(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½
+        return component;   // ï¿½ï¿½ï¿½ï¿½ï¿½Ç°Å³ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½
     }
 }

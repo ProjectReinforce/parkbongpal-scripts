@@ -33,21 +33,21 @@ public class QuestContentsInitializer : MonoBehaviour
         //         i.Value.Add(recordType, new());
         // }
 
-        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType)); // ¹®ÀÚ¿­ ¹è¿­¿¡ EnumÇü µéÀÇ ÀÌ¸§À» ÀúÀåÇÔ
+        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType)); // ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½è¿­ï¿½ï¿½ Enumï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         foreach (var item in recordTypeNames)
         {
-            RecordType recordType = Utills.StringToEnum<RecordType>(item); // item¿¡ µé¾î°¡ ÀÖ´Â ¹®ÀÚ¿­À» ¿­°ÅÇüÀ¸·Î º¯È¯
+            RecordType recordType = Utills.StringToEnum<RecordType>(item); // itemï¿½ï¿½ ï¿½ï¿½î°¡ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 
-            questContents.Add(recordType, new List<QuestContent>()); // ÇØ´ç ¿­°ÅÇü º¯¼öµé°ú »õ·Î¿î QuestContetnt ¸®½ºÆ®¸¦ µñ¼Å³Ê¸®¿¡ ÀúÀåÇÔ
+            questContents.Add(recordType, new List<QuestContent>()); // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ QuestContetnt ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
 
-        foreach (var item in Managers.ServerData.QuestDatas)    // ¼­¹ö¿¡ ÀÖ´Â Äù½ºÆ® µ¥ÀÌÅ¸µéÀ» µ¼
+        foreach (var item in Managers.ServerData.QuestDatas)    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         {
-            QuestContent questContent = pool.GetOne();  // Äù½ºÆ® ÄÁÅÙÃ÷¸¦ Äù½ºÆ®ÄÁÅÙÃ÷ Ç®Çü Å¬·¡½º¿¡ ÀÖ´Â GetOneÇÔ¼ö¸¦ ½ÇÇàÇØ ³ÖÀ½
-            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);   // ¼±¾ðµÈ º¯¼ö¸¦ ÃÊ±âÈ­ÇÏ¸ç °¢ day, week, onceµé¿¡ ÀúÀåµÈ transform°ªÀ» ´ëÀÔÇØ ÃÊ±âÈ­ÇÔ)
+            QuestContent questContent = pool.GetOne();  // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ GetOneï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);   // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ï¸ï¿½ ï¿½ï¿½ day, week, onceï¿½é¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ transformï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½)
 
-            questContents[item.recordType].Add(questContent);   // Äù½ºÆ® ÄÁÅÙÃ÷¿¡ ÀúÀåµÈ ¾ÆÀÌÅÛÀÇ Å¸ÀÔ¿¡ µû¶ó Äù½ºÆ® ÄÁÅÙÃ÷¸¦ Ãß°¡ÇÏ°í
-            quests.Add(item.questId, questContent); // µñ¼Å³Ê¸®¿¡ Äù½ºÆ® ¾ÆÀÌµð¿Í Äù½ºÆ® ÄÁÅÙÃ÷¸¦ ÀúÀåÇÔ
+            questContents[item.recordType].Add(questContent);   // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï°ï¿½
+            quests.Add(item.questId, questContent); // ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
         Managers.Event.OpenQuestIDEvent += OpenQuestID;
         Managers.Event.UpdateAllContentEvent += UpdateAllContent;
@@ -94,7 +94,7 @@ public class QuestContentsInitializer : MonoBehaviour
         System.DateTime resetWeeks = Managers.ServerData.questRecordDatas[0].saveWeek;
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
 
-        // ÀÏÀÏ Äù½ºÆ® ¼­¹ö ÃÊ±âÈ­
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         if (Managers.Etc.GetServerTime().Date != resetDays.Date)
         {
             for (int i = 0; i < progressQuestIdsByType.Length; i++)
@@ -127,7 +127,7 @@ public class QuestContentsInitializer : MonoBehaviour
         saveWeeks = cultureInfo.Calendar.GetWeekOfYear(resetWeeks, calenderWeekRule, resetWeeks.DayOfWeek);
         int serverData = 0;
         serverData = cultureInfo.Calendar.GetWeekOfYear(Managers.Etc.GetServerTime(), calenderWeekRule, Managers.Etc.GetServerTime().DayOfWeek);
-        // ÁÖ°£ Äù½ºÆ® ÃÊ±âÈ­
+        // ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
         if (Managers.Etc.GetServerTime().Date != resetWeeks.Date) 
         {
             if (saveWeeks != serverData) 
@@ -161,7 +161,7 @@ public class QuestContentsInitializer : MonoBehaviour
         
     }
 
-    void ClearCheck()   // ¼­¹ö µ¥ÀÌÅÍ¿¡ ÀÖ´Â questRecordDatas¸¦ µ¹¸ç Äù½ºÆ® ¾ÆÀÌµð ¼ø¼­¿¡ µû¶ó Å¬¸®¾î ÇÔ¼ö¸¦ ÀÛµ¿ÇÔ
+    void ClearCheck()   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½Ö´ï¿½ questRecordDatasï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Ûµï¿½ï¿½ï¿½
     {
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
         for (int i = 0; i < progressQuestIdsByType.Length; i++)
