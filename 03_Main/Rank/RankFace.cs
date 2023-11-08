@@ -11,7 +11,6 @@ public class RankFace : MonoBehaviour
     void OnEnable() 
     {
         ClickTab(rankTabIndex);
-        // Managers.Event.SettingRankingPageEvent?.Invoke();
     }
 
     public void ClickTab(int _index)
@@ -25,7 +24,6 @@ public class RankFace : MonoBehaviour
         for (int i = 0; i < Ranking.PORT_COUNT; i++)
         {
             Managers.Event.SettingRankingPageEvent?.Invoke(i, rankTabIndex);
-            // SetSlotTo(slotLists[i], ranks[i][_index], onlyMyRank[_index], _index);
         }
     }
 }

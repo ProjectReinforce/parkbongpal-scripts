@@ -184,3 +184,10 @@ public enum SfxType
     PopupOpen,
     PopupClose
 }
+
+public enum BgmType
+{
+    MainBgm,
+    ReinforceBgm,
+    MiniGameBgm
+}

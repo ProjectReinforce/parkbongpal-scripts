@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BackEnd;
 using UnityEngine;
@@ -158,6 +158,10 @@ public class Player
         // if (userData.mineGameScore <= score) return;
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
+    }
+    public void FirstResetMineGameScore(int score)
+    {
+        userData.mineGameScore = score;
     }
 
     public void SetCombatScore(int score)

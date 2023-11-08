@@ -6,12 +6,12 @@ using UnityEngine;
 public class SfxPlayer : MonoBehaviour
 {
     [Header("SFX")]
-    [SerializeField] AudioClip[] sfxClip;
+    [SerializeField] AudioClip[] sfxClips;
     AudioSource sfxPlayer;
 
     public void Initialize()
     {
-        sfxClip = Managers.Resource.sfxSound;
+        sfxClips = Managers.Resource.sfxSound;
         sfxPlayer = gameObject.AddComponent<AudioSource>();
         sfxPlayer.playOnAwake = false;
         sfxPlayer.loop = false;
@@ -28,7 +28,7 @@ public class SfxPlayer : MonoBehaviour
 
     public void PlaySfx(SfxType _sfxType)
     {
-        sfxPlayer.PlayOneShot(sfxClip[(int)_sfxType]);
+        sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType]);
     }
 
     public void SfxSoundOn()

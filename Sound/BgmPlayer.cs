@@ -5,7 +5,7 @@ using UnityEngine;
 public class BgmPlayer : MonoBehaviour
 {
     [Header("BGM")]
-    [SerializeField] AudioClip bgmClip;
+    [SerializeField] AudioClip[] bgmClips;
     AudioSource bgmPlayer;
 
     public void Initialize()
@@ -13,7 +13,7 @@ public class BgmPlayer : MonoBehaviour
         bgmPlayer = gameObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
         bgmPlayer.loop = true;
-        bgmPlayer.clip = bgmClip;
+        bgmPlayer.clip = bgmClips[0];
     }
 
     void Start() 
@@ -28,10 +28,12 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
-    public void PlayBgm(bool _isPlay)
+    public void PlayBgm(bool _isPlay, BgmType _bgmName)
     {
         if(_isPlay)
         {
+            bgmPlayer.Stop();
+            bgmPlayer.clip = bgmClips[(int)_bgmName];
             bgmPlayer.Play();
         }
         else

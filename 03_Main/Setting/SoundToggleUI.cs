@@ -27,7 +27,7 @@ public class SoundToggleUI : MonoBehaviour
             Managers.Sound.bgmPlayer.BgmSoundOff();
             Managers.Sound.sfxPlayer.SfxSoundOff();
             Managers.Sound.IsMuted = false;
-            Managers.Sound.PlayBgm(Managers.Sound.IsMuted); // 혹시 몰라서 false값이 될때 노래도 종료
+            Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MainBgm); // 혹시 몰라서 false값이 될때 노래도 종료
         }
         else
         {
@@ -35,7 +35,7 @@ public class SoundToggleUI : MonoBehaviour
             Managers.Sound.bgmPlayer.BgmSoundOn();
             Managers.Sound.sfxPlayer.SfxSoundOn();
             Managers.Sound.IsMuted = true;
-            Managers.Sound.PlayBgm(Managers.Sound.IsMuted);
+            Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MainBgm);
         }
     }
 }

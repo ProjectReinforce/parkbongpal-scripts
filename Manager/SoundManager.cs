@@ -34,9 +34,9 @@ public class SoundManager
         // sfxPlayer.Initialize();
     }
 
-    public void PlayBgm(bool _isMuted)
+    public void PlayBgm(bool _isMuted, BgmType _bgmName)
     {
-        bgmPlayer.PlayBgm(_isMuted);
+        bgmPlayer.PlayBgm(_isMuted, _bgmName);
     }
 
     public void PlaySfx(SfxType _sfxType)

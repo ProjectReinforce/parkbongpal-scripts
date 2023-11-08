@@ -8,7 +8,14 @@ public class RankSlot : MonoBehaviour
     
     public void SetData(Rank data)
     {
-        gameObject.SetActive(true);
+        if(data.score == 0)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
         rank.text = data.rank.ToString();
         nickName.text = data.nickname;
         score.text = data.score.ToString();
