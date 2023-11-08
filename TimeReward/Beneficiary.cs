@@ -2,7 +2,7 @@ using System;
 using Manager;
 using UnityEngine;
 
-public class Beneficiary : Singleton<Beneficiary> //수혜자 역할
+public class Beneficiary : MonoBehaviour//Singleton<Beneficiary> //수혜자 역할
 {
     [SerializeField] AttendanceViwer viwer;
 
