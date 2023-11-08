@@ -9,7 +9,6 @@ public class Notifyer : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         newThings = new List<NewThing>();
-        Debug.Log("newThings 활성화됨");
     }
 
     private void TextUpdate()
