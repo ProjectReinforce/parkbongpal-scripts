@@ -82,13 +82,14 @@ public class QuestContent : MonoBehaviour
     void UpdateQuestRecord()    // 퀘스트에 대한 기록을 업데이트할 때 사용되는 함수
     {
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;  // 이니셜라이즈
-        progressQuestIdsByType[(int)targetData.recordType] = targetData.precedeQuestId + 1;    // 해당값도 바뀌어야됨
+        progressQuestIdsByType[(int)targetData.recordType] = targetData.questId + 1;    // 해당값도 바뀌어야됨
         Param param = new()
         {
             { nameof(QuestRecord.idList), progressQuestIdsByType }
         };
 
         Debug.Log("indate " + Managers.ServerData.questRecordDatas[0].inDate);
+        Debug.Log("updateAt " + Managers.ServerData.questRecordDatas[0].saveDate);
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), Managers.ServerData.questRecordDatas[0].inDate, Backend.UserInDate, param));   // 트랜잭션에 퀘스트 기록과 param에 들어간 퀘스트의 아이디 및 클리어 여부를 추가함
 
         Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
@@ -113,15 +114,6 @@ public class QuestContent : MonoBehaviour
         // Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond], callback);
         // transactionValues = Managers.Game.Player.GetQuestRewards(transactionValues, targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
     }
-
-    //public void DayWeekResetServerData(int[] _resetDatas)
-    //{
-    //    if(targetData.questRepeatType != QuestType.Once)
-    //    {
-    //        if(Managers.Etc.GetServerTime().Date == )
-    //        _resetDatas[(int)targetData.recordType] = targetData.questId - 1;
-    //    }
-    //}
 
     public void DayWeekUpdateContents()
     {
