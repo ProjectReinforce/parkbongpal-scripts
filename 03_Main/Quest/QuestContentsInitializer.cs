@@ -77,7 +77,6 @@ public class QuestContentsInitializer : MonoBehaviour
         System.DateTime resetWeeks = Managers.ServerData.questRecordDatas[0].saveWeek;
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
 
-        // ���� ����Ʈ ���� �ʱ�ȭ
         if (Managers.Etc.GetServerTime().Date != resetDays.Date)
         {
             for (int i = 0; i < progressQuestIdsByType.Length; i++)

@@ -34,8 +34,6 @@ public class RecordData
     public ulong GetDiamond => getDiamond;
     uint getItem;
     public uint GetItem => getItem;
-    uint registerItem;
-    public uint RegisterItem => registerItem;
     uint disassembleItem;
     public uint DisassembleItem => disassembleItem;
     uint produceWeapon;
@@ -96,7 +94,6 @@ public class RecordData
     public Action useDiamondEvent;
     public Action getDiamondEvent;
     public Action getItemEvent;
-    public Action registerItemEvent;
     public Action disassembleItemEvent;
     public Action produceWeaponEvent;
     public Action advanceProduceWeaponEvent;
@@ -142,7 +139,6 @@ public class RecordData
             ulong.TryParse(PlayerPrefs.GetString("UseDiamond"), out useDiamond);
             ulong.TryParse(PlayerPrefs.GetString("GetDiamond"), out getDiamond);
             uint.TryParse(PlayerPrefs.GetString("GetItem"), out getItem);
-            uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
             uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
             uint.TryParse(PlayerPrefs.GetString("ProduceWeapon"), out produceWeapon);
             uint.TryParse(PlayerPrefs.GetString("AdvanceProduceWeapon"), out advanceProduceWeapon);
@@ -220,7 +216,6 @@ public class RecordData
         useDiamond = 0;
         getDiamond = 0;
         getItem = 0;
-        registerItem = 0;
         disassembleItem = 0;
         produceWeapon = 0;
         advanceProduceWeapon = 0;
@@ -283,20 +278,11 @@ public class RecordData
         }
     }
 
-    public void ModifyGetItemRecord(int _count)
+    public void ModifyGetItemRecord()
     {
-        if (_count <= 0) return;
-        getItem += (uint)_count;
+        getItem++;
         PlayerPrefs.SetString("GetItem", getItem.ToString());
         getItemEvent?.Invoke();
-    }
-
-    public void ModifyResisterItemRecord(int _count)
-    {
-        if (_count <= 0) return;
-        registerItem += (uint)_count;
-        PlayerPrefs.SetString("RegisterItem", registerItem.ToString());
-        registerItemEvent?.Invoke();
     }
 
     public void ModifyProduceRecord(int _count)

@@ -175,14 +175,9 @@ public class Player
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
-    public void SetResisterWeaponCount(int _count)
+    public void SetGetItemCount()
     {
-        recordData.ModifyResisterItemRecord(_count);
-    }
-
-    public void SetGetItemCount(int _count)
-    {
-        recordData.ModifyGetItemRecord(_count);
+        recordData.ModifyGetItemRecord();
     }
 
     public void TryProduceWeapon(int _count)

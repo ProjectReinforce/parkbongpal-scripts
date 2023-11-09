@@ -226,7 +226,7 @@ public class QuestContent : MonoBehaviour
                 current = player.Record.GetItem;
                 break;
             case RecordType.RegisterItem:
-                current = player.Record.RegisterItem;
+                current = (long)Managers.Event.PideaSetWeaponCount?.Invoke();
                 break;
             case RecordType.DisassembleItem:
                 current = player.Record.DisassembleItem;
