@@ -166,7 +166,6 @@ public class QuestContentsInitializer : MonoBehaviour
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
         for (int i = 0; i < progressQuestIdsByType.Length; i++)
         {
-            Debug.Log(progressQuestIdsByType[i]);
             foreach (QuestContent one in questContents[(RecordType)i])
             {
                 if(one.TargetData.questRepeatType == QuestType.Once)

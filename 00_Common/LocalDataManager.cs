@@ -80,7 +80,7 @@ public class RecordData
     public DateTime SaveDay => saveDay;
     // 주간
     uint weekAttendance;
-    public uint WeekAttandance => weekAttendance;
+    public uint WeekAttendance => weekAttendance;
     uint weekTryPromote;
     public uint WeekTryPromote => weekTryPromote;
     uint weekTryMagic;
@@ -136,7 +136,7 @@ public class RecordData
         Debug.Log($"loaded userID : {userID} / indate : {_userInDate}");
         dayValGroups = new uint[6] { dayAttendance, dayTryPromote, dayTryMagic, dayTryReinforce, dayGetBonus, daySeeAds };
         dayValGroupsString = new string[6] { "DayAttendance", "DayTryPromote", "DayTryMagic", "DayTryReinforce", "DayGetBonus", "DaySeeAds" };
-        weekValGroups = new uint[6] { WeekAttandance, WeekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
+        weekValGroups = new uint[6] { WeekAttendance, WeekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
         weekValGroupsString = new string[6] { "WeekAttandance", "WeekTryPromote", "WeekTryMagic", "WeekTryReinforce", "WeekGetBonus", "WeekSeeAds" };
 
         if (_userInDate == userID)
@@ -162,6 +162,10 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
             // 일일 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
+            if(saveDay == DateTime.MinValue)
+            {
+                saveDay = Managers.Etc.GetServerTime();
+            }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
             uint.TryParse(PlayerPrefs.GetString("DayTryPromote"), out dayTryPromote);
@@ -172,8 +176,12 @@ public class RecordData
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
+            if(saveWeek == DateTime.MinValue)
+            {
+                saveWeek = Managers.Etc.GetServerTime();
+            }
             ResetRecordWeekData(weekValGroups, weekValGroupsString);
-            uint.TryParse(PlayerPrefs.GetString("WeekAttandance"), out weekAttendance);
+            uint.TryParse(PlayerPrefs.GetString("WeekAttendance"), out weekAttendance);
             uint.TryParse(PlayerPrefs.GetString("WeekTryPromote"), out weekTryPromote);
             uint.TryParse(PlayerPrefs.GetString("WeekTryMagic"), out weekTryMagic);
             uint.TryParse(PlayerPrefs.GetString("WeekTryReinforce"), out weekTryReinforce);
@@ -212,7 +220,7 @@ public class RecordData
         PlayerPrefs.DeleteKey("DaySeeAds");
         // 주간
         PlayerPrefs.DeleteKey("SaveWeek");
-        PlayerPrefs.DeleteKey("WeekAttandance");
+        PlayerPrefs.DeleteKey("WeekAttendance");
         PlayerPrefs.DeleteKey("WeekTryPromote");
         PlayerPrefs.DeleteKey("WeekTryMagic");
         PlayerPrefs.DeleteKey("WeekTryReinforce");
@@ -373,6 +381,7 @@ public class RecordData
     {
         dayAttendance++;
         PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
+        Debug.Log(dayAttendance);
         dayAttendanceEvent?.Invoke();
     }
 
@@ -392,14 +401,13 @@ public class RecordData
 
     public void ResetRecordDayData(uint[] _dayRecord, string[] _dayType)
     {
-        if(saveDay.Date != Managers.Etc.GetServerTime().Date || saveDay.Date == DateTime.MinValue.Date)
+        if(saveDay.Date != Managers.Etc.GetServerTime().Date)
         {
             for(int i = 0; i < _dayRecord.Length; i++)
             {
                 _dayRecord[i] = 0;
                 PlayerPrefs.SetString(_dayType[i], _dayRecord[i].ToString());
             }
-            saveDay = Managers.Etc.GetServerTime();
             PlayerPrefs.SetString("SaveDay", saveDay.ToString());
         }
     }
@@ -430,6 +438,7 @@ public class RecordData
     {
         weekAttendance++;
         PlayerPrefs.SetString("WeekAttendance", weekAttendance.ToString());
+        Debug.Log(WeekAttendance);
         weekAttendanceEvent?.Invoke();
     }
 
@@ -455,7 +464,7 @@ public class RecordData
         saveWeeks = cultureInfo.Calendar.GetWeekOfYear(saveWeek, calenderWeekRule, saveWeek.DayOfWeek);
         int serverData = 0;
         serverData = cultureInfo.Calendar.GetWeekOfYear(Managers.Etc.GetServerTime(), calenderWeekRule, Managers.Etc.GetServerTime().DayOfWeek);
-        if (saveWeek.Date != Managers.Etc.GetServerTime().Date || saveWeek.Date == DateTime.MinValue.Date) 
+        if (saveWeek.Date != Managers.Etc.GetServerTime().Date) 
         {
             if (saveWeeks != serverData) 
             {

@@ -256,7 +256,7 @@ public class QuestContent : MonoBehaviour
                     weekCureent = player.Record.TrySoul;
                     break;
                 case RecordType.WeekAttendance:
-                    weekCureent = player.Record.WeekAttandance;
+                    weekCureent = player.Record.WeekAttendance;
                     break;
                 case RecordType.WeekGetBonus:
                     weekCureent = (long)player.Record.WeekGetBonus;
