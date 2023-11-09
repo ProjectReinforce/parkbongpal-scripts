@@ -14,7 +14,6 @@ public class Beneficiary : MonoBehaviour//Singleton<Beneficiary> //수혜자 역
     {
         if (rewardCheck = AttendanceCheck())//갱신했으면
         {
-            Receive();
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
         }
         viwer.Initialize();
@@ -27,6 +26,7 @@ public class Beneficiary : MonoBehaviour//Singleton<Beneficiary> //수혜자 역
         {
             viwer.ButtonOn(days);
             buttonOff = true;
+            Receive();
         }
     }
 
@@ -38,7 +38,7 @@ public class Beneficiary : MonoBehaviour//Singleton<Beneficiary> //수혜자 역
         if (lastLogin.Month == Managers.ServerData.ServerTime.Month &&
             lastLogin.Day == Managers.ServerData.ServerTime.Day) return false;
         if (lastLogin.Month != Managers.ServerData.ServerTime.Month)
-            day = 0;
+            day = -1;
         Managers.Game.Player.SetAttendance(++day);
         days = day;
         return true;

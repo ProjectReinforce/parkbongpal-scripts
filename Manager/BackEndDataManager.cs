@@ -513,6 +513,7 @@ public class BackEndDataManager
             // };
             // Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             // serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
+            Debug.Log($"last login : {UserData.lastLogin}");
             serverTime = Managers.Etc.GetServerTime();
             Param param = new() { { "lastLogin", serverTime }};
     

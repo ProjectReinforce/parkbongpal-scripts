@@ -1,3 +1,4 @@
+using System;
 using BackEnd;
 
 public class NewUserDataInserter
@@ -13,12 +14,20 @@ public class NewUserDataInserter
 
     public void InsertNewUserData()
     {
-        Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new Param()));
+        Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new() { {nameof(UserData.lastLogin), DateTime.MinValue} }));//, {nameof(UserData.attendance), -1} } ));
 
         Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 1}, {nameof(MineBuildData.buildCompleted), true} }));
         Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 3}, {nameof(MineBuildData.buildCompleted), true} }));
         Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 5}, {nameof(MineBuildData.buildCompleted), true} }));
         
+        Param param = new()
+        {
+            { nameof(QuestRecord.idList), new int[] { 0, 1, 16, 32, 48, 72, 96, 100, 114, 124, 139, 154, 167, 180, 193, 206, 219, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243 } },
+            { nameof(QuestRecord.saveDate), Managers.Etc.GetServerTime()},
+            { nameof(QuestRecord.saveWeek), Managers.Etc.GetServerTime()}
+        };
+        Transactions.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
+
         Transactions.SendCurrent(callback => 
         {
             if (!callback.IsSuccess())

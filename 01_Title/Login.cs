@@ -166,14 +166,6 @@ public class Login : MonoBehaviour
                 // Debug.LogError($"게스트 로그인 실패 : {callback}");
             }
             _confirmButton.interactable = true;
-            Param param = new()
-            {
-                { nameof(QuestRecord.idList), new int[] { 0, 1, 16, 32, 48, 72, 96, 100, 114, 124, 139, 154, 167, 180, 193, 206, 219, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243 } },
-                { nameof(QuestRecord.saveDate), Managers.Etc.GetServerTime()},
-                { nameof(QuestRecord.saveWeek), Managers.Etc.GetServerTime()}
-            };
-            Transactions.Add(TransactionValue.SetInsert(nameof(QuestRecord), param));
-            Transactions.SendCurrent();
         });
     }
 
