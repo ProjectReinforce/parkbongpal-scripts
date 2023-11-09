@@ -159,13 +159,10 @@ public class Player
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }
-    public void FirstResetMineGameScore(int score)
-    {
-        userData.mineGameScore = score;
-    }
 
     public void SetCombatScore(int score)
     {
+        if (userData.combatScore >= score) return;
         userData.combatScore = score;
         UpdateBackEndScore(BackEndDataManager.Power_UUID,nameof(UserData.colum.combatScore), userData.combatScore);
     }

@@ -55,6 +55,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             _mine.Lend(weapon);
 
             UpdateUIRelatedLendedWeapon(_mine);
+            Managers.Game.Mine.CalculateGoldPerMin();
         };
 
         nameText.text = _mine.GetMineData().name;
@@ -113,6 +114,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                     UpdateUIRelatedLendedWeapon(_mine);
 
                     weaponCollectButton.interactable = false;
+                    Managers.Game.Mine.CalculateGoldPerMin();
                 });
             });
             weaponCollectButton.interactable = true;
