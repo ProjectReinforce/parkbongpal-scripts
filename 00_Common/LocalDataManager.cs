@@ -164,7 +164,7 @@ public class RecordData
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
             if(saveDay == DateTime.MinValue)
             {
-                saveDay = Managers.Etc.GetServerTime();
+                saveDay = Managers.Etc.GetServerTime().Date;
             }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
@@ -176,9 +176,9 @@ public class RecordData
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
-            if(saveWeek == DateTime.MinValue)
+            if (saveWeek == DateTime.MinValue)
             {
-                saveWeek = Managers.Etc.GetServerTime();
+                saveWeek = Managers.Etc.GetServerTime().Date;
             }
             ResetRecordWeekData(weekValGroups, weekValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("WeekAttendance"), out weekAttendance);
@@ -381,7 +381,6 @@ public class RecordData
     {
         dayAttendance++;
         PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
-        Debug.Log(dayAttendance);
         dayAttendanceEvent?.Invoke();
     }
 
