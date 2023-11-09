@@ -224,8 +224,10 @@ public class Mine : MonoBehaviour, Rental
         gold = 0;
         // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         DateTime date = Managers.Etc.GetServerTime();
-        Param param = new Param();
-        param.Add(nameof(WeaponData.colum.borrowedDate), date);
+        Param param = new Param
+        {
+            { nameof(WeaponData.colum.borrowedDate), date }
+        };
 
         SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
         {
@@ -252,8 +254,10 @@ public class Mine : MonoBehaviour, Rental
         gold = 0;
         // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         DateTime date = Managers.Etc.GetServerTime();
-        Param param = new Param();
-        param.Add(nameof(WeaponData.colum.borrowedDate), date);
+        Param param = new()
+        {
+            { nameof(WeaponData.colum.borrowedDate), date }
+        };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
 
