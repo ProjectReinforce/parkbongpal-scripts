@@ -68,6 +68,10 @@ public class Slot : MonoBehaviour
     void OnDisable()
     {
         DeregistUIEvent();
+
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(transform.GetSiblingIndex());
+        if (weapon != null && weapon.IsNew == true)
+            weapon.IsNew = false;
     }
 
     public void SetUI(int _inventoryType)
