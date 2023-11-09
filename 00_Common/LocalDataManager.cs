@@ -54,12 +54,6 @@ public class RecordData
     public uint TrySoul => trySoul;
     uint tryRefine;
     public uint TryRefine => tryRefine;
-    uint attendance;
-    public uint Attendance => attendance;
-    ulong getBonus;
-    public ulong GetBonus => getBonus;
-    uint seeAds;
-    public uint SeeAds => seeAds;
     // 일일
     uint dayAttendance;
     public uint DayAttendance => dayAttendance;
@@ -147,6 +141,7 @@ public class RecordData
             // Debug.Log($"GetedGold : {getGold}");
             ulong.TryParse(PlayerPrefs.GetString("UseDiamond"), out useDiamond);
             ulong.TryParse(PlayerPrefs.GetString("GetDiamond"), out getDiamond);
+            uint.TryParse(PlayerPrefs.GetString("GetItem"), out getItem);
             uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
             uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
             uint.TryParse(PlayerPrefs.GetString("ProduceWeapon"), out produceWeapon);
@@ -157,9 +152,6 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("TryMagic"), out tryMagic);
             uint.TryParse(PlayerPrefs.GetString("TrySoul"), out trySoul);
             uint.TryParse(PlayerPrefs.GetString("TryRefine"), out tryRefine);
-            uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
-            ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
-            uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
             // 일일 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
             if(saveDay == DateTime.MinValue)
@@ -188,8 +180,6 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("WeekGetBonus"), out weekGetBonus);
             uint.TryParse(PlayerPrefs.GetString("WeekSeeAds"), out weekSeeAds);
 
-            // public uint GetItem = PlayerPrefs.GetString("UserID");
-
             return;
         }
         PlayerPrefs.SetString("UserID", _userInDate);
@@ -207,9 +197,7 @@ public class RecordData
         PlayerPrefs.DeleteKey("TryMagic");
         PlayerPrefs.DeleteKey("TrySoul");
         PlayerPrefs.DeleteKey("TryRefine");
-        PlayerPrefs.DeleteKey("Attendance");
-        PlayerPrefs.DeleteKey("GetBonus");
-        PlayerPrefs.DeleteKey("SeeAds");
+
         // 일일
         PlayerPrefs.DeleteKey("SaveDay");
         PlayerPrefs.DeleteKey("DayAttendance");
@@ -242,9 +230,7 @@ public class RecordData
         tryMagic = 0;
         trySoul = 0;
         tryRefine = 0;
-        attendance = 0;
-        getBonus = 0;
-        seeAds = 0;
+
         // 일일
         saveDay = DateTime.MinValue;
         dayAttendance = 0;
@@ -295,6 +281,22 @@ public class RecordData
             PlayerPrefs.SetString("UseDiamond", useDiamond.ToString());
             useDiamondEvent?.Invoke();
         }
+    }
+
+    public void ModifyGetItemRecord(int _count)
+    {
+        if (_count <= 0) return;
+        getItem += (uint)_count;
+        PlayerPrefs.SetString("GetItem", getItem.ToString());
+        getItemEvent?.Invoke();
+    }
+
+    public void ModifyResisterItemRecord(int _count)
+    {
+        if (_count <= 0) return;
+        registerItem += (uint)_count;
+        PlayerPrefs.SetString("RegisterItem", registerItem.ToString());
+        registerItemEvent?.Invoke();
     }
 
     public void ModifyProduceRecord(int _count)
@@ -354,6 +356,7 @@ public class RecordData
         PlayerPrefs.SetString("TryRefine", tryRefine.ToString());
         tryRefineEvent?.Invoke();
     }
+
 
     // 일일
     public void ModifyDayTryReinforceRecord()
@@ -480,11 +483,6 @@ public class RecordData
             }
         }
     }
-    // uint.TryParse(PlayerPrefs.GetString("RegisterItem"), out registerItem);
-    // uint.TryParse(PlayerPrefs.GetString("DisassembleItem"), out disassembleItem);
-    // uint.TryParse(PlayerPrefs.GetString("Attendance"), out attendance);
-    // ulong.TryParse(PlayerPrefs.GetString("GetBonus"), out getBonus);
-    // uint.TryParse(PlayerPrefs.GetString("SeeAds"), out seeAds);
 }
 
 

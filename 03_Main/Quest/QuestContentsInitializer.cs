@@ -16,38 +16,21 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void Awake()
     {
-        // string[] questTypeNames = System.Enum.GetNames(typeof(QuestType));
-        // foreach (var item in questTypeNames)
-        // {
-        //     QuestType questType = Utills.StringToEnum<QuestType>(item);
-
-        //     // questContents.Add(recordType, new List<QuestContent>());
-        //     questDatasGroupByType.Add(questType, new());
-        // }
-        // string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
-        // foreach (var item in recordTypeNames)
-        // {
-        //     RecordType recordType = Utills.StringToEnum<RecordType>(item);
-
-        //     foreach (var i in questDatasGroupByType)
-        //         i.Value.Add(recordType, new());
-        // }
-
-        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType)); // ���ڿ� �迭�� Enum�� ���� �̸��� ������
+        string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
         foreach (var item in recordTypeNames)
         {
-            RecordType recordType = Utills.StringToEnum<RecordType>(item); // item�� �� �ִ� ���ڿ��� ���������� ��ȯ
+            RecordType recordType = Utills.StringToEnum<RecordType>(item);
 
-            questContents.Add(recordType, new List<QuestContent>()); // �ش� ������ ������� ���ο� QuestContetnt ����Ʈ�� ��ųʸ��� ������
+            questContents.Add(recordType, new List<QuestContent>());
         }
 
-        foreach (var item in Managers.ServerData.QuestDatas)    // ������ �ִ� ����Ʈ ����Ÿ���� ��
+        foreach (var item in Managers.ServerData.QuestDatas)
         {
-            QuestContent questContent = pool.GetOne();  // ����Ʈ �������� ����Ʈ������ Ǯ�� Ŭ������ �ִ� GetOne�Լ��� ������ ����
-            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);   // ����� ������ �ʱ�ȭ�ϸ� �� day, week, once�鿡 ����� transform���� ������ �ʱ�ȭ��)
+            QuestContent questContent = pool.GetOne(); 
+            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);
 
-            questContents[item.recordType].Add(questContent);   // ����Ʈ �������� ����� �������� Ÿ�Կ� ���� ����Ʈ �������� �߰��ϰ�
-            quests.Add(item.questId, questContent); // ��ųʸ��� ����Ʈ ���̵�� ����Ʈ �������� ������
+            questContents[item.recordType].Add(questContent);
+            quests.Add(item.questId, questContent);
         }
         Managers.Event.OpenQuestIDEvent += OpenQuestID;
         Managers.Event.UpdateAllContentEvent += UpdateAllContent;
@@ -161,7 +144,7 @@ public class QuestContentsInitializer : MonoBehaviour
         
     }
 
-    void ClearCheck()   // ���� �����Ϳ� �ִ� questRecordDatas�� ���� ����Ʈ ���̵� ������ ���� Ŭ���� �Լ��� �۵���
+    void ClearCheck()
     {
         int[] progressQuestIdsByType = Managers.ServerData.questRecordDatas[0].idList;
         for (int i = 0; i < progressQuestIdsByType.Length; i++)
