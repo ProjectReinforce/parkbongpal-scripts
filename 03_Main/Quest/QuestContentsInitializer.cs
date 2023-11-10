@@ -109,7 +109,6 @@ public class QuestContentsInitializer : MonoBehaviour
         saveWeeks = cultureInfo.Calendar.GetWeekOfYear(resetWeeks, calenderWeekRule, resetWeeks.DayOfWeek);
         int serverData = 0;
         serverData = cultureInfo.Calendar.GetWeekOfYear(Managers.Etc.GetServerTime(), calenderWeekRule, Managers.Etc.GetServerTime().DayOfWeek);
-        // �ְ� ����Ʈ �ʱ�ȭ
         if (Managers.Etc.GetServerTime().Date != resetWeeks.Date) 
         {
             if (saveWeeks != serverData) 
