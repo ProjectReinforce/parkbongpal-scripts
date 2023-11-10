@@ -50,7 +50,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_SH.ToString());
             }
             else
             {
@@ -177,7 +177,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6_SH.ToString());
                 break;
             case 201:
                 Managers.UI.OpenPopup(NicknamePopup);
