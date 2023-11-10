@@ -93,6 +93,7 @@ public class Inventory
                     IsNew = true
                 };
                 weapons.Add(weapon);
+                Managers.Game.Player.SetCombatScore(weapon.power);
                 if (Managers.Event.PideaCheckEvent.Invoke(_baseWeaponData[i].index))
                 {
                     Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
