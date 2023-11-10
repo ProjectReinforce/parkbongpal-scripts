@@ -4,7 +4,8 @@
     R_LoadingScene,
     R_Main_V6_JHH,
     R_Main_V6,
-    R_Main_V6_SEH
+    R_Main_V6_SEH,
+    R_Main_V6_SH
 }
 
 public enum Rarity

@@ -48,7 +48,15 @@ public class GameManager
         reinforce = new();
         mine = new();
 
-        HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>();
+        HasIGameInitializer[] results = Utills.FindAllFromCanvas<HasIGameInitializer>("Canvas_Mine");
+
+        foreach (var item in results)
+        {
+            item.TryGetComponent(out IGameInitializer component);
+            component.GameInitialize();
+        }
+
+        results = Utills.FindAllFromCanvas<HasIGameInitializer>("Canvas_Game");
 
         foreach (var item in results)
         {

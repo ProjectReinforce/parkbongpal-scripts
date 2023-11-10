@@ -88,6 +88,6 @@ public class NewUserDataInserter
     void TryToChangeScene()
     {
         if (userDataSuccess && goldPerMinSuccess && powerSuccess && miniGameSuccess)
-            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6.ToString()));
+            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6_SH.ToString()));
     }
 }

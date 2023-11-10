@@ -45,7 +45,8 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     public void SetCurrentWeapon(PideaSlot slot)
     {
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
-        notifyer.Remove(slot);
+        if (notifyer.gameObject.activeSelf)
+            notifyer.Remove(slot);
     }
 
     public void NotifyClear()
@@ -73,7 +74,6 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
 
     void Awake()
     {
-        //base.Awake();
         pideaSlots = new List<PideaSlot>();
 
         materials = Managers.ServerData.ownedWeaponIds;
