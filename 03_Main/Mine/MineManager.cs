@@ -11,7 +11,7 @@ public class MineManager
 
     public MineManager()
     {
-        Mine[] results = Utills.FindAllFromCanvas<Mine>();
+        Mine[] results = Utills.FindAllFromCanvas<Mine>("Canvas_Mine");
 
         foreach (var item in results)
         {

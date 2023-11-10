@@ -118,9 +118,9 @@ public static class Utills
         return null;
     }
 
-    public static T[] FindAllFromCanvas<T>() where T : Component
+    public static T[] FindAllFromCanvas<T>(string _canvasName) where T : Component
     {
-        Transform root = GameObject.Find("Canvas_Game").transform;
+        Transform root = GameObject.Find(_canvasName).transform;
         return root.GetComponentsInChildren<T>(true);
     }
 }
