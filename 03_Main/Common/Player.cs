@@ -175,11 +175,6 @@ public class Player
         UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
-    public void SetGetItemCount()
-    {
-        recordData.ModifyGetItemRecord();
-    }
-
     public void TryProduceWeapon(int _count)
     {
         recordData.ModifyProduceRecord(_count);
