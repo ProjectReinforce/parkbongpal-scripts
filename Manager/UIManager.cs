@@ -24,6 +24,9 @@ public class UIManager
         {
             if (uiStack.Count > 0)
                 ClosePopup();
+            else if(Managers.Event.MiniGameEscEvent != null)
+                Managers.Event.MiniGameEscEvent?.Invoke();
+                // if(uiStack.Count <= 0) return;
             else
                 Managers.Alarm.WarningWithButton("게임을 종료하시겠습니까?", () => Application.Quit());
         }
@@ -97,7 +100,7 @@ public class UIManager
     public void OpenPopup(GameObject _popup)
     {
         if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
-        //Managers.Sound.PlaySfx(SfxType.PopupOpen);
+        Managers.Sound.PlaySfx(SfxType.PopupOpen);
         uiStack.Push(_popup);
 
         if (!_popup.TryGetComponent(out AnimationForPopup component))
@@ -116,7 +119,7 @@ public class UIManager
     /// </summary>
     public void ClosePopup()
     {
-        //Managers.Sound.PlaySfx(SfxType.PopupClose);
+        Managers.Sound.PlaySfx(SfxType.PopupClose);
         GameObject popup = uiStack.Pop();
 
         if (!popup.TryGetComponent(out AnimationForPopup component))

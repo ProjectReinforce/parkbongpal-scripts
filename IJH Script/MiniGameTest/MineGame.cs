@@ -23,6 +23,12 @@ public class MineGame : MonoBehaviour
         startCountdown = StartCoroutine(Countdown());
     }
 
+    void EscResume()
+    {
+        Managers.UI.ClosePopup();
+        startCountdown = StartCoroutine(Countdown());
+    }
+
     public void Pause()
     {
         isAttackAble = false;
@@ -39,9 +45,28 @@ public class MineGame : MonoBehaviour
         selectedWeapon = _weapon;
     }
     
+    void OnEnable()
+    {
+        Managers.Event.MiniGameEscEvent -= MiniGameisOn;
+        Managers.Event.MiniGameEscEvent += MiniGameisOn;
+    }
+
     void OnDisable()// 게임을 다시 켰을때도 초기화
     {
+        Managers.Event.MiniGameEscEvent -= MiniGameisOn;
         ResetGame();
+    }
+
+    public void MiniGameisOn()
+    {
+        if(!pausePanel.activeSelf)
+        {
+            Managers.UI.OpenPopup(pausePanel);
+        }
+        else
+        {
+            EscResume();
+        }
     }
     
     public void StartBlinkingAndCountdown()
@@ -93,6 +118,7 @@ public class MineGame : MonoBehaviour
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
     {
         ResetGame();
+        Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MiniGameBgm);
     }
 
     public void ResetGame()  // 초기화 함수

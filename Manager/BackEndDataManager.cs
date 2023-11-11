@@ -583,7 +583,6 @@ public class BackEndDataManager
                 topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 deligate[0](++count);
             });
-            Debug.Log("deligate0번 완료" + count);
             // for(int i = 0; i < topRanks.Length; i++)
             // {
             //     for(int j = 0; j < topRanks[i].Length; j++)

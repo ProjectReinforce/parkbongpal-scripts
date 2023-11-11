@@ -38,6 +38,7 @@ public class EventManager
     public Action SetMiniGameEvent;
     public Action ResetMiniGameScoreEvent;
     public Action ResultBestScoreMineGameEvent;
+    public Action MiniGameEscEvent;
     #endregion
 
     #region Quest
