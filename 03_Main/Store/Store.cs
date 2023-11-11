@@ -41,7 +41,7 @@ public class Store : MonoBehaviour
                 Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
             }
-            Managers.Game.Player.TryProduceWeapon(1);   // 무기 제작을 통해 얻은 무기에 대한 정보를 로컬에 저장하는 함수
+            Managers.Game.Player.TryProduceWeapon(1);
         }
         else
         {
@@ -53,7 +53,7 @@ public class Store : MonoBehaviour
             Managers.Game.Player.TryAdvanceProduceWeapon(1);
         }
 
-        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[ONE]; // 배열의 크기가 0인 배열을 만들어 하나의 무기를 임시적으로 획득하게 만듦
+        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[ONE];
         for (int i = 0; i < ONE; i++)
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]); 
@@ -103,11 +103,15 @@ public class Store : MonoBehaviour
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
             baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
+            if(rarity >= Rarity.unique)
+            {
+                Managers.Game.Player.Record.ModifyGetItemRecord();
+            }
             if (rarity >= Rarity.legendary)
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
         }
 
-        Managers.Game.Inventory.AddWeapons(baseWeaponDatas); // 뽑은 무기를 인벤토리에 넣는 함수
+        Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
         manufactureUI.SetInfo(type, baseWeaponDatas);
         Managers.UI.OpenPopup(manufactureUI.gameObject);
         if(manufactureUI.gameObject.activeSelf == true)

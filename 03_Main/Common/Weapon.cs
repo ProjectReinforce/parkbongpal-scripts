@@ -85,6 +85,7 @@ public class Weapon : IVisibleNew
         
         _power= (int)MathF.Round(calculatedDamage + statSumWithFactor, 0);
 
+        Managers.Game.Player.SetCombatScore(power);
         // Inventory.Instance.UpdateHighPowerWeaponData();
     }
 

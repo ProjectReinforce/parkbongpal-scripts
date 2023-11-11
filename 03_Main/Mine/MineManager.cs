@@ -11,7 +11,7 @@ public class MineManager
 
     public MineManager()
     {
-        Mine[] results = Utills.FindAllFromCanvas<Mine>();
+        Mine[] results = Utills.FindAllFromCanvas<Mine>("Canvas_Mine");
 
         foreach (var item in results)
         {
@@ -59,8 +59,10 @@ public class MineManager
         foreach (var item in mines)
             totalGold += item.Value.Receipt();
 
-        Param param = new Param();
-        param.Add(nameof(UserData.colum.gold), Managers.Game.Player.Data.gold);
+        Param param = new()
+        {
+            { nameof(UserData.colum.gold), Managers.Game.Player.Data.gold }
+        };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent((callback) =>
@@ -68,6 +70,14 @@ public class MineManager
             Managers.Alarm.Warning($"{totalGold:n0} Gold를 수령했습니다.");
         });
         Managers.Game.Player.GetBonusCount((uint)totalGold);
+    }
+
+    public void CalculateGoldPerMin()
+    {
+        int goldPerMin = 0;
+        foreach (var item in mines)
+            goldPerMin += item.Value.goldPerMin;
+        Managers.Game.Player.SetGoldPerMin(goldPerMin);
     }
 
     // =====================================================================

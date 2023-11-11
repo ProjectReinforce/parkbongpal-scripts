@@ -11,12 +11,12 @@ public class QuestContentsPool : MonoBehaviour
     {
         foreach (var item in pool)
         {
-            pool.Remove(item);  // pool�� ��ȸ�ϸ� QuestContent ������Ʈ�� ã�� ������
+            pool.Remove(item);
             return item;
         }
-        GameObject newObject = Instantiate(origin.gameObject);  // orgin�� ������ ���� ���� ������ ����
-        if (!newObject.TryGetComponent(out QuestContent component)) // �� ���� ������Ʈ�� tryget������Ʈ �Լ��� ���� qusetcontent�� ã��
-            component = newObject.AddComponent<QuestContent>(); // ������ ���ο� ������Ʈ�� �߰���
-        return component;   // �����ǰų� ã���� �ش� ������Ʈ�� ��ȯ��
+        GameObject newObject = Instantiate(origin.gameObject);
+        if (!newObject.TryGetComponent(out QuestContent component))
+            component = newObject.AddComponent<QuestContent>();
+        return component;
     }
 }
