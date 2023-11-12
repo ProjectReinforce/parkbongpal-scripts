@@ -89,6 +89,8 @@ public class Mine : MonoBehaviour, Rental
             case MineStatus.Locked:
                 break;
             case MineStatus.Building:
+                if (remainTime <= 0)
+                    BuildComplete();
                 elapse -= Time.fixedDeltaTime;
                 if (elapse >= 0) return;
                 elapse = INTERVAL;
@@ -99,8 +101,6 @@ public class Mine : MonoBehaviour, Rental
                 int m = remainTimeInt / 60;
                 remainTimeInt %= 60;
                 goldPerMinText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
-                if (remainTime <= 0)
-                    BuildComplete();
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
@@ -318,7 +318,7 @@ public class Mine : MonoBehaviour, Rental
         mineStatus = MineStatus.Owned;
         icon.color = Color.white;
         lockIcon.gameObject.SetActive(false);
-        goldPerMinText.text = "";
+        goldPerMinText.text = lendedWeapon == null ? "" : goldPerMin.ToString();
         
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() => 
