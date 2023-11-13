@@ -326,6 +326,9 @@ public class Mine : MonoBehaviour, Rental
         remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 - (float)(tmp / 1000);
         // Debug.Log($"build start : {currentTime} - {_buildStartTime} = {tmp} / {Managers.ServerData.MineDatas[mineIndex].buildMin * 60} - {(float)(tmp / 1000)}");
 
+        NPCWeaponChange(Managers.Resource.sampleWeapon);
+        doNPC.gameObject.SetActive(true);
+
         mineStatus = MineStatus.Building;
         lockIcon.gameObject.SetActive(false);
 
