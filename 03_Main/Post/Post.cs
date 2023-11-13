@@ -10,7 +10,7 @@ public class Post : MonoBehaviour, IGameInitializer
 
     [SerializeField] GameObject mySelf;
     [SerializeField] GameObject noPost;
-    Notifyer notifyer;
+    [SerializeField] Notifyer notifyer;
     [SerializeField] PostSlot prefab;
     [SerializeField] float lastCallTime;
     [SerializeField] RectTransform mailBox;
