@@ -346,13 +346,14 @@ public class Mine : MonoBehaviour, Rental
         {
             doNPC.gameObject.SetActive(false);
             restNPC.gameObject.SetActive(true);
+            goldPerMinText.text = "";
         }
         else
         {
             NPCWeaponChange(lendedWeapon.Icon);
             restNPC.gameObject.SetActive(false);
+            goldPerMinText.text = goldPerMin.ToString();
         }
-        goldPerMinText.text = "";
 
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() =>
