@@ -4,117 +4,106 @@ using UnityEngine;
 
 public class Store : MonoBehaviour
 {
-    private GachaData[] gacharsPercents; // 가챠 확률에 대한 변수로 GachaData에 있는 구조체를 통해 등급에 대한 변수로 다가갈 수 있게 만듦
-    private int[][] percents; // 배열을 활용하여 가챠 확률과 가챠 등급을 배정하는 변수
-    [SerializeField] ManufactureResultUI manufactureUI; // SetInfo 함수를 통해 베이스 웨폰 데이터의 정보를 넘겨줌
-    [SerializeField] ManufactureResultUI manufactureOneUI; // 마찬가지로 정보를 넘겨주기 위해 만든 변수임
+    private GachaData[] gacharsPercents;
+    private int[][] percents;
+    [SerializeField] ManufactureResultUI manufactureUI;
+    [SerializeField] ManufactureResultUI manufactureOneUI;
+    [SerializeField] UnityEngine.UI.Button normalGacha;
+    [SerializeField] UnityEngine.UI.Button normalTenGacha;
+    [SerializeField] UnityEngine.UI.Button epicGacha;
+    [SerializeField] UnityEngine.UI.Button epicTenGacha;
+    [SerializeField] GameObject cutSceneControl;
 
     protected void Awake()
     {
-        gacharsPercents = Managers.ServerData.GachaDatas; // 서버데이터에 저장된 가챠 데이터를 받아와 가챠 퍼센트에 넣음
-        percents = new int[gacharsPercents.Length][]; // 배열로 선언한 변수의 행에 변수 가챠 퍼센트에 대한 길이를 넣음
-        for (int i = 0; i < gacharsPercents.Length; i++) // 가챠데이터에 대한 정보를 percents라는 변수에 담는 for문
+        gacharsPercents = Managers.ServerData.GachaDatas;
+        percents = new int[gacharsPercents.Length][];
+        for (int i = 0; i < gacharsPercents.Length; i++)
         {
             GachaData gachaData = gacharsPercents[i];
             percents[i] = new[] { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
         }
 
+        normalGacha.onClick.AddListener(() => ExecuteManaufactureUI(0, ONE));
+        normalTenGacha.onClick.AddListener(() => ExecuteManaufactureUI(0, TEN));
+        epicGacha.onClick.AddListener(() => ExecuteManaufactureUI(1, ONE));
+        epicTenGacha.onClick.AddListener(() => ExecuteManaufactureUI(1, TEN));
     }
 
-    // 서버에서 받는 부분이 없음
-    const int COST_GOLD = 10000; // 고정된 변수를 통해 뽑기 당 필요한 재화 설정
+    const int COST_GOLD = 10000;
     const int COST_DIAMOND = 300;
-    private const int ONE = 1; // 임시적으로 작동하게 만듦
-    // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
-    public void Drawing(int type) // 뽑기 시 사용하는 함수
+    private const int ONE = 1;
+    private const int TEN = 10;
+
+    public void ExecuteManaufactureUI(int _type, int _count)
     {
-        if (Managers.Game.Inventory.CheckRemainSlots(ONE))
+        if (Managers.Game.Inventory.CheckRemainSlots(_count))
         {
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
             return;
         }
 
-        if (type == 0) // 타입에 따라 뽑기를 진행함
+        if (_type == 0)
         {
-            if (!Managers.Game.Player.AddGold(-COST_GOLD))
+            if(_count == TEN)
+            {
+                _count = _count - 1;
+            }
+            if (!Managers.Game.Player.AddGold(-COST_GOLD * _count))
             {
                 Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
             }
-            Managers.Game.Player.TryProduceWeapon(1);
+            Managers.Game.Player.TryProduceWeapon(_count);
+            if (_count > ONE)
+            {
+                _count = _count + 1;
+            }
         }
         else
         {
-            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND))
+            if(_count == TEN)
+            {
+                _count = _count - 1;
+            }
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * _count))
             {
                 Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
             }
-            Managers.Game.Player.TryAdvanceProduceWeapon(1);
+            Managers.Game.Player.TryAdvanceProduceWeapon(_count);
+            if(_count > ONE)
+            {
+                _count = _count + 1;
+            }
         }
 
-        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[ONE];
-        for (int i = 0; i < ONE; i++)
+        cutSceneControl.SetActive(true);
+
+        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[_count];
+        for (int i = 0; i < _count; i++)
         {
-            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]); 
+            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[_type]);
             baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
         }
 
-        Managers.Game.Inventory.AddWeapons(baseWeaponDatas);    // 얻은 무기를 인벤토리에 추가함
-        manufactureOneUI.SetInfo(type, baseWeaponDatas);  // 얻은 무기에 대한 정보를 넘겨줌
-        Managers.UI.OpenPopup(manufactureOneUI.gameObject);
-        if(manufactureOneUI.gameObject.activeSelf == true)
-            manufactureOneUI.ManuFactureSpriteChange();
-    }
-
-    private const int TEN = 10; // 무기제작 횟수를 변수로 저장함
-    // todo : 개선 필요. 슬롯, 재화 체크를 상점에서 할 이유가 없음.
-    public void BatchDrawing(int type) // 10번 뽑기 시 활용하는 함수
-    {
-        if (Managers.Game.Inventory.CheckRemainSlots(TEN))
-        {
-            Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
-            return;
-        }
-
-        if (type == 0)
-        {
-            if (!Managers.Game.Player.AddGold(-COST_GOLD * 9)) // 10퍼 할인이 적용된 모습
-            {
-                Managers.Alarm.Warning("골드가 부족합니다.");
-                return;
-            }
-            Managers.Game.Player.TryProduceWeapon(TEN);
-        }
-        else
-        {
-            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * 9))
-            {
-                Managers.Alarm.Warning("다이아몬드가 부족합니다.");
-                return;
-            }
-            Managers.Game.Player.TryAdvanceProduceWeapon(TEN);
-        }
- 
-        BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[TEN];
-        for (int i = 0; i < TEN; i++)
-        {
-            Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[type]);
-            baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
-            if(rarity >= Rarity.unique)
-            {
-                Managers.Game.Player.Record.ModifyGetItemRecord();
-            }
-            if (rarity >= Rarity.legendary)
-                SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
-        }
 
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
-        manufactureUI.SetInfo(type, baseWeaponDatas);
-        Managers.UI.OpenPopup(manufactureUI.gameObject);
-        if(manufactureUI.gameObject.activeSelf == true)
-            manufactureUI.ManuFactureSpriteChange();
+        if(_count == ONE)
+        {
+            manufactureOneUI.SetInfo(_type, baseWeaponDatas);
+            Managers.UI.OpenPopup(manufactureOneUI.gameObject);
+            if (manufactureOneUI.gameObject.activeSelf == true)
+                manufactureOneUI.ManuFactureSpriteChange();
+        }
+        else
+        {
+            manufactureUI.SetInfo(_type, baseWeaponDatas);
+            Managers.UI.OpenPopup(manufactureUI.gameObject);
+            if (manufactureUI.gameObject.activeSelf == true)
+                manufactureUI.ManuFactureSpriteChange();
+        }
     }
 }
