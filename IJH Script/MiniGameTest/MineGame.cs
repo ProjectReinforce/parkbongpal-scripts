@@ -61,6 +61,7 @@ public class MineGame : MonoBehaviour
     {
         if(!pausePanel.activeSelf)
         {
+            Pause();
             Managers.UI.OpenPopup(pausePanel);
         }
         else

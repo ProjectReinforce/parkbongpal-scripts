@@ -24,6 +24,17 @@ public class Ranking : MonoBehaviour
     {
         ranks[0] = Managers.ServerData.topRanks;
         ranks[1] = Managers.ServerData.myRanks;
+        if(Managers.ServerData.myRanks != null)
+        {
+            ranks[1] = Managers.ServerData.myRanks;
+        }
+        else
+        {
+            Managers.Game.Player.SetMineGameScore(0);
+            Managers.ServerData.GetRankList(false);
+            ranks[1] = Managers.ServerData.myRanks;
+        }
+
         for (int i = 0; i < PORT_COUNT; i++)
         {
             slotLists[i] = viewPorts[i].GetComponentsInChildren<RankSlot>(); // 각 PORT에 viewPorts하위에 있는 RankSlot 컴포넌트를 찾아 slotLists 배열로 반환
