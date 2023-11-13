@@ -54,7 +54,6 @@ public class Post : MonoBehaviour, IGameInitializer
                 //받아올 우편이 없는것
                 Managers.Game.MainEnqueue(() =>
                 {
-                    Debug.Log("우편함이 비어있습니다.");
                     noPost.SetActive(true);
                     UpdatePostCount();
                 });

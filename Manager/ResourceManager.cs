@@ -12,6 +12,7 @@ public class ResourceManager
     public Sprite DefaultMine;
     public Sprite[] manufactureRaritySlot;
     public Notifyer notifyer;
+    public Sprite sampleWeapon;
     public AudioClip[] sfxSound;
 
     /// <summary>
@@ -29,6 +30,7 @@ public class ResourceManager
         manufactureRaritySlot = Resources.LoadAll<Sprite>("Sprites/Manufacture");
         DefaultMine = Resources.Load<Sprite>("Sprites/Enviroment/Mine_Door_1");
         notifyer = Resources.Load<Notifyer>("Notifyer");
+        sampleWeapon = Resources.Load<Sprite>("SampleWeapon");
         postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
         sfxSound = Resources.LoadAll<AudioClip>("Sound/SfxSound");
     }

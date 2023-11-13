@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour
 {
-    [SerializeField] UnityEngine.UI.Image image;
+    [SerializeField] SpriteRenderer weapon;
 
-    public void WeaponChange(int _index)
+    public void WeaponChange(Sprite _weaponSprite)
     {
-        image.sprite = Managers.Resource.GetBaseWeaponSprite(_index);
+        weapon.sprite = _weaponSprite;
+        gameObject.SetActive(true);
     }
 }
