@@ -15,7 +15,7 @@ public class ReDrawingUI : MonoBehaviour
             reDrawingButton.onClick.AddListener(() => 
             {
                 Managers.UI.ClosePopup();
-                store.BatchDrawing(redrawingType);
+                store.ExpectManaufactureUI(redrawingType, redarwingCount);
             });
         }
         else
@@ -23,7 +23,7 @@ public class ReDrawingUI : MonoBehaviour
             reDrawingButton.onClick.AddListener(() => 
             {
                 Managers.UI.ClosePopup();
-                store.Drawing(redrawingType);
+                store.ExpectManaufactureUI(redrawingType, redarwingCount);
             });
         }
     }
