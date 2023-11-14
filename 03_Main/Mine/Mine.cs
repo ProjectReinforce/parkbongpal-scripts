@@ -1,5 +1,5 @@
-using System;
 using BackEnd;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +30,8 @@ public class Mine : MonoBehaviour, Rental
     Text nameText;
     Text goldPerMinText;
     Text currentGoldText;
+    [SerializeField] GameObject restNPC;
+    [SerializeField] NPCController doNPC;
 
     Rental rental;
     void Awake()
@@ -44,7 +46,7 @@ public class Mine : MonoBehaviour, Rental
         TryGetComponent(out icon);
         TryGetComponent(out mineButton);
         mineButton.onClick.RemoveAllListeners();
-        mineButton.onClick.AddListener(() => 
+        mineButton.onClick.AddListener(() =>
         {
             ulong buildCost = Managers.ServerData.MineDatas[mineIndex].buildCost;
             if ((ulong)Managers.Game.Player.Data.gold < buildCost)
@@ -69,7 +71,10 @@ public class Mine : MonoBehaviour, Rental
         nameText.text = mineData.name;
         goldPerMinText = Utills.Bind<Text>("Text_GoldPerMin", transform);
         currentGoldText = Utills.Bind<Text>("Text_CurrentGold", transform);
-        
+        restNPC = Utills.Bind<Transform>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Rest", transform).gameObject;
+        //doNPC = transform.GetChild(4).GetComponent<NPCController>();
+        doNPC = Utills.Bind<NPCController>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Do", transform);
+
         _rangePerSize = 0;
         _hpPerDMG = 0;
         goldPerMin = 0;
@@ -89,6 +94,8 @@ public class Mine : MonoBehaviour, Rental
             case MineStatus.Locked:
                 break;
             case MineStatus.Building:
+                if (remainTime <= 0)
+                    BuildComplete();
                 elapse -= Time.fixedDeltaTime;
                 if (elapse >= 0) return;
                 elapse = INTERVAL;
@@ -99,8 +106,6 @@ public class Mine : MonoBehaviour, Rental
                 int m = remainTimeInt / 60;
                 remainTimeInt %= 60;
                 goldPerMinText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
-                if (remainTime <= 0)
-                    BuildComplete();
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
@@ -130,24 +135,28 @@ public class Mine : MonoBehaviour, Rental
         lendedWeapon = _weapon;
         lendedWeapon.Lend(mineIndex);
 
+        NPCWeaponChange(lendedWeapon.Icon);
+        doNPC.gameObject.SetActive(true);
+        restNPC.SetActive(false);
+
         for (int i = 0; i < Consts.MAX_SKILL_COUNT; i++)
         {
             rental = rentalFactory.createRental(rental, (MagicType)_weapon.data.magic[i]);
         }
 
         SetInfo();
-        
+
         // SetGold(currentTime);
-        
+
 
         // Mine tempMine = Quarry.Instance.currentMine;
         // Weapon currentMineWeapon = tempMine.rentalWeapon;
-            
+
         // try
         // {
         //     int beforeGoldPerMin = tempMine.goldPerMin;
         //     currentWeapon.SetBorrowedDate();
-            
+
         //     tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
         //     Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
         // }
@@ -178,9 +187,9 @@ public class Mine : MonoBehaviour, Rental
         _rangePerSize = rental.GetRangePerSize(); //한번휘두를때 몇개나 영향을 주나
         _hpPerDMG = rental.GetHpPerDMG();//몇방때려야 하나를 캐는지
         int oneOreGold = BASE_GOLD << GetMineData().stage; //광물하나의 값
-        
+
         float time = hpPerDMG / (GetWeaponData().atkSpeed * rangePerSize); // 하나를 캐기위한 평균 시간
-        
+
         if (miss > 0)
             time *= 100 / (100 - miss);
         goldPerMin = (int)(oneOreGold * (60 / time));
@@ -188,7 +197,7 @@ public class Mine : MonoBehaviour, Rental
             goldPerMin = 0;
     }
 
-    public void SetWeapon(Weapon _lendedWeapon, DateTime _currentTime = default )
+    public void SetWeapon(Weapon _lendedWeapon, DateTime _currentTime = default)
     {
         if (_lendedWeapon == null)
         {
@@ -197,28 +206,40 @@ public class Mine : MonoBehaviour, Rental
             _rangePerSize = 0;
             _hpPerDMG = 0;
             goldPerMin = 0;
+
+            doNPC.gameObject.SetActive(false);
+            restNPC.SetActive(true);
             return;
         }
         rental = this;
         for (int i = 0; i < 2; i++)
         {
-            rental= rentalFactory.createRental(rental, (MagicType)_lendedWeapon.data.magic[i]);
+            rental = rentalFactory.createRental(rental, (MagicType)_lendedWeapon.data.magic[i]);
         }
-        
+
         lendedWeapon = _lendedWeapon;
+        // NPC에게 광산의 무기 올려주기.
+        NPCWeaponChange(lendedWeapon.Icon);
+        restNPC.SetActive(false);
         SetInfo();
         SetGold(_currentTime);
     }
 
+    public void NPCWeaponChange(Sprite _weaponSprite)
+    {
+        // NPC 무기 변경
+        doNPC.WeaponChange(_weaponSprite);
+    }
+
     public void Receipt(Action _callback = null)
     {
-        if (gold < 100)
-        {
-            Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
+        // if (gold < 100)
+        // {
+        //     Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
 
-            _callback?.Invoke();
-            return;
-        }
+        //     _callback?.Invoke();
+        //     return;
+        // }
         Managers.Game.Player.AddGold(gold);
         Managers.Alarm.Warning($"{gold:n0} 골드를 수령했습니다.");
         gold = 0;
@@ -229,16 +250,16 @@ public class Mine : MonoBehaviour, Rental
             { nameof(WeaponData.colum.borrowedDate), date }
         };
 
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param, ( callback ) => 
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param, (callback) =>
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log("Mine:수령실패"+callback);
+                Debug.Log("Mine:수령실패" + callback);
             }
 
             lendedWeapon.SetBorrowedDate(date);
             currentGoldText.text = gold.ToString();
-            
+
             _callback?.Invoke();
         });
         if (Managers.Etc.CallChecker != null)
@@ -263,7 +284,7 @@ public class Mine : MonoBehaviour, Rental
 
         lendedWeapon.SetBorrowedDate(date);
         currentGoldText.text = gold.ToString();
-            
+
         return resultGold;
     }
 
@@ -274,6 +295,9 @@ public class Mine : MonoBehaviour, Rental
         DateTime startTime = Managers.Etc.GetServerTime();
         // Debug.Log($"build start : {serverTime} / {startTime}");
         Building(startTime);
+
+        NPCWeaponChange(Managers.Resource.sampleWeapon);
+        doNPC.gameObject.SetActive(true);
 
         Param param = new()
         {
@@ -302,11 +326,14 @@ public class Mine : MonoBehaviour, Rental
         remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 - (float)(tmp / 1000);
         // Debug.Log($"build start : {currentTime} - {_buildStartTime} = {tmp} / {Managers.ServerData.MineDatas[mineIndex].buildMin * 60} - {(float)(tmp / 1000)}");
 
+        NPCWeaponChange(Managers.Resource.sampleWeapon);
+        doNPC.gameObject.SetActive(true);
+
         mineStatus = MineStatus.Building;
         lockIcon.gameObject.SetActive(false);
-        
+
         mineButton.onClick.RemoveAllListeners();
-        mineButton.onClick.AddListener(() => 
+        mineButton.onClick.AddListener(() =>
         {
             // Managers.Event.MineClickEvent?.Invoke(this);
             Managers.Alarm.Warning("아직 건설 중입니다.");
@@ -318,10 +345,21 @@ public class Mine : MonoBehaviour, Rental
         mineStatus = MineStatus.Owned;
         icon.color = Color.white;
         lockIcon.gameObject.SetActive(false);
-        goldPerMinText.text = "";
-        
+        if(lendedWeapon == null)
+        {
+            doNPC.gameObject.SetActive(false);
+            restNPC.gameObject.SetActive(true);
+            goldPerMinText.text = "";
+        }
+        else
+        {
+            NPCWeaponChange(lendedWeapon.Icon);
+            restNPC.gameObject.SetActive(false);
+            goldPerMinText.text = goldPerMin.ToString();
+        }
+
         mineButton.onClick.RemoveAllListeners();
-        mineButton.onClick.AddListener(() => 
+        mineButton.onClick.AddListener(() =>
         {
             Managers.Event.MineClickEvent?.Invoke(this);
         });
@@ -344,14 +382,14 @@ public class Mine : MonoBehaviour, Rental
     public void SetGold(DateTime currentTime)
     {
         if (lendedWeapon is null) return;
-        
+
         TimeSpan timeInterval = currentTime - lendedWeapon.data.borrowedDate;
-  
+
         if (timeInterval.TotalHours >= 2)
             timeInterval = TimeSpan.FromHours(2);
-       
+
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
-        
+
         currentGoldText.text = gold.ToString();
     }
 
@@ -369,7 +407,7 @@ public class Mine : MonoBehaviour, Rental
     int _goldPerMin;
     public int goldPerMin
     {
-        get =>_goldPerMin;
+        get => _goldPerMin;
 
         set
         {
@@ -402,6 +440,6 @@ public class Mine : MonoBehaviour, Rental
 
     public float GetHpPerDMG()
     {
-        return  Utills.Ceil(GetMineData().hp / GetOneHitDMG());
+        return Utills.Ceil(GetMineData().hp / GetOneHitDMG());
     }
 }

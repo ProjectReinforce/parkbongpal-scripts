@@ -12,6 +12,7 @@ public class EventManager
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
     public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
+    public Action<bool> RecieveAttendanceRewardEvent;
 
     #region TopUI
     public Action GoldChangeEvent;
@@ -58,5 +59,9 @@ public class EventManager
     public Action<int> PideaGetNewWeaponEvent;              // 도감에 해당 무기를 추가하는 이벤트
     public Func<int> PideaSetWeaponCount;                   // 도감에 등록된 무기의 갯수 체크 이벤트
     public Action PideaOpenSetting;                         // 도감 처음화면 세팅 이벤트
+    #endregion
+
+    #region NPC
+    public Action ChangeWeaponNPC;      // 광산에서 무기상태가 변경됨으로써 NPC 상태변화를 위한 이벤트
     #endregion
 }
