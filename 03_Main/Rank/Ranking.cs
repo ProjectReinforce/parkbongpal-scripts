@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Manager;
 using BackEnd;
-using BackEnd.Game.Rank;
 using LitJson;
 using UnityEngine.UI;
 
@@ -19,21 +17,19 @@ public class Ranking : MonoBehaviour
     int typeCount = Enum.GetValues(typeof(RankingType)).Length;
     [SerializeField] GameObject nullMyRank;
 
-
     void Awake()
+    {
+        Managers.Event.GetRankAfterTheFirstTimeEvent -= SetOnlyMyRank;
+        Managers.Event.GetRankAfterTheFirstTimeEvent += SetOnlyMyRank;
+
+        Managers.Event.SettingRankingPageEvent -= SetSlotTo;
+        Managers.Event.SettingRankingPageEvent += SetSlotTo;
+    }
+
+    void Start()
     {
         ranks[0] = Managers.ServerData.topRanks;
         ranks[1] = Managers.ServerData.myRanks;
-        if(Managers.ServerData.myRanks != null)
-        {
-            ranks[1] = Managers.ServerData.myRanks;
-        }
-        else
-        {
-            Managers.Game.Player.SetMineGameScore(0);
-            Managers.ServerData.GetRankList(false);
-            ranks[1] = Managers.ServerData.myRanks;
-        }
 
         for (int i = 0; i < PORT_COUNT; i++)
         {
@@ -45,14 +41,7 @@ public class Ranking : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        Managers.Event.GetRankAfterTheFirstTimeEvent -= SetOnlyMyRank;
-        Managers.Event.GetRankAfterTheFirstTimeEvent += SetOnlyMyRank;
-
-        Managers.Event.SettingRankingPageEvent -= SetSlotTo;
-        Managers.Event.SettingRankingPageEvent += SetSlotTo;
-    }
+    
 
     void SetOnlyMyRank(int i)
     {

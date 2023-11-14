@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 [Serializable]
@@ -22,11 +23,10 @@ public class UIManager
         if (InputLock == true) return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (uiStack.Count > 0)
+            if (uiStack.Count > 0 && Managers.Event.MiniGameEscEvent == null) 
                 ClosePopup();
             else if(Managers.Event.MiniGameEscEvent != null)
                 Managers.Event.MiniGameEscEvent?.Invoke();
-                // if(uiStack.Count <= 0) return;
             else
                 Managers.Alarm.WarningWithButton("게임을 종료하시겠습니까?", () => Application.Quit());
         }

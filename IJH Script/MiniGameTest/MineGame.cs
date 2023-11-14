@@ -15,22 +15,18 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject resultPanel;
     Coroutine startCountdown;
     bool isAttackAble = false;
+    bool isPauseOn = false;
 
     public void Resume()
     {
-        pausePanel.gameObject.SetActive(false);
-        mainButton.gameObject.SetActive(true);
-        startCountdown = StartCoroutine(Countdown());
-    }
-
-    void EscResume()
-    {
         Managers.UI.ClosePopup();
-        startCountdown = StartCoroutine(Countdown());
+        mainButton.gameObject.SetActive(true);
+        StartBlinkingAndCountdown();
     }
 
     public void Pause()
     {
+        Managers.UI.OpenPopup(pausePanel);
         isAttackAble = false;
         timerControl.StopOperating();
         if (startCountdown != null)
@@ -59,14 +55,13 @@ public class MineGame : MonoBehaviour
 
     public void MiniGameisOn()
     {
-        if(!pausePanel.activeSelf)
+        if(pausePanel.activeSelf == false)
         {
             Pause();
-            Managers.UI.OpenPopup(pausePanel);
         }
         else
         {
-            EscResume();
+            Resume();
         }
     }
     
@@ -100,7 +95,6 @@ public class MineGame : MonoBehaviour
     {
         if(Managers.Game.Player.Data.mineGameScore >= _newScore) return;
         Managers.Game.Player.SetMineGameScore(_newScore);
-        Managers.ServerData.GetRankList(false);
     }
 
     public void GameOver()

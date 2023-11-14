@@ -13,6 +13,12 @@ public class RankingUpdate : MonoBehaviour
     float currentTime;
     bool isTimerEnd = false;
 
+    void OnEnable()
+    {
+        Managers.Event.GetRankDoneEvent -= NewGetRankDone;
+        Managers.Event.GetRankDoneEvent += NewGetRankDone;
+    }
+
     void Start()
     {
         currentTime = countdownDuration;
@@ -23,6 +29,11 @@ public class RankingUpdate : MonoBehaviour
     {
         currentTime = countdownDuration;
         Managers.ServerData.GetRankList(false);
+    }
+
+    void NewGetRankDone()
+    {
+        Managers.Event.RankRefreshEvent?.Invoke();
         isTimerEnd = false;
         resetButton.interactable = false;
     }
@@ -47,5 +58,10 @@ public class RankingUpdate : MonoBehaviour
         int minutes = (int)(currentTime / 60);
         int seconds = (int)(currentTime % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    void OnDisable()
+    {
+        Managers.Event.GetRankDoneEvent -= NewGetRankDone;
     }
 }

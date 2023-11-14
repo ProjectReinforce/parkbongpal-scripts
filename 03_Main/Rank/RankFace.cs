@@ -10,6 +10,16 @@ public class RankFace : MonoBehaviour
 
     void OnEnable() 
     {
+        Debug.Log("OnEnable진입");
+        Managers.Event.RankRefreshEvent -= RankRefresh;
+        Managers.Event.RankRefreshEvent += RankRefresh;
+        Debug.Log("rankTabIndex" + rankTabIndex);
+        ClickTab(rankTabIndex);
+    }
+
+    void RankRefresh()
+    {
+        Debug.Log("RankRefresh 작동, rankTabIndex = " + rankTabIndex);
         ClickTab(rankTabIndex);
     }
 
@@ -25,5 +35,10 @@ public class RankFace : MonoBehaviour
         {
             Managers.Event.SettingRankingPageEvent?.Invoke(i, rankTabIndex);
         }
+    }
+
+    void OnDisable()
+    {
+        Managers.Event.RankRefreshEvent -= RankRefresh;
     }
 }

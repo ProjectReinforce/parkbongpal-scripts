@@ -30,6 +30,9 @@ public class EventManager
     #region Ranking
     public Action<int> GetRankAfterTheFirstTimeEvent;
     public Action<int, int> SettingRankingPageEvent;
+    public Action RankRefreshEvent;
+    public Action GetRankDoneEvent;
+
     #endregion
 
     #region MiniGame
@@ -39,6 +42,7 @@ public class EventManager
     public Action ResetMiniGameScoreEvent;
     public Action ResultBestScoreMineGameEvent;
     public Action MiniGameEscEvent;
+    public Action MiniGameOverEvent;
     #endregion
 
     #region Quest
