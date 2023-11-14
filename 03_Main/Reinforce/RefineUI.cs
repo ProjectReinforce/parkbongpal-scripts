@@ -115,6 +115,10 @@ public class RefineUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateStat();
+
+        UserData userData = Managers.Game.Player.Data;
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+        stoneCostText.text = userData.stone < oreCost ? $"<color=red>{oreCost}</color>" : $"<color=white>{oreCost}</color>";
     }
 
     protected override void RegisterPreviousButtonClickEvent()
@@ -130,27 +134,13 @@ public class RefineUI : ReinforceUIBase
     protected bool CheckGold()
     {
         UserData userData = Managers.Game.Player.Data;
-
-        if (userData.gold >= goldCost)
-        {
-            goldCostText.text = $"<color=white>{goldCost}</color>";
-            return true;
-        }
-        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
-        return false;
+        return userData.gold >= goldCost;
     }
 
     protected bool CheckOre()
     {
         UserData userData = Managers.Game.Player.Data;
-
-        if (userData.stone >= oreCost)
-        {
-            stoneCostText.text = $"<color=white>{oreCost}</color>";
-            return true;
-        }
-        stoneCostText.text = userData.stone < oreCost ? $"<color=red>{oreCost}</color>" : $"<color=white>{oreCost}</color>";
-        return false;
+        return userData.stone >= oreCost;
     }
 
     protected override bool Checks()

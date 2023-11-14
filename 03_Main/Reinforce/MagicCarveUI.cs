@@ -73,6 +73,30 @@ public class MagicCarveUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateSkill();
+
+        UserData userData = Managers.Game.Player.Data;
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        if (selectedWeapon.rarity < (int)Rarity.rare)
+        {
+            lockImages[0].enabled = true;
+            lockImages[1].enabled = true;
+            skillIcons[0].enabled = false;
+            skillIcons[1].enabled = false;
+        }
+        else
+        {
+            lockImages[0].enabled = false;
+            lockImages[1].enabled = true;
+            skillIcons[0].enabled = true;
+            skillIcons[1].enabled = false;
+            if (selectedWeapon.rarity >= (int)Rarity.legendary)
+            {
+                lockImages[1].enabled = false;
+                skillIcons[1].enabled = true;
+            }
+        }
     }
 
     protected override void RegisterPreviousButtonClickEvent()
@@ -88,40 +112,13 @@ public class MagicCarveUI : ReinforceUIBase
     bool CheckGold()
     {
         UserData userData = Managers.Game.Player.Data;
-        if (userData.gold < goldCost)
-        {
-            goldCostText.text = $"<color=red>{goldCost}</color>";
-            return false;
-        }
-        goldCostText.text = $"<color=white>{goldCost}</color>";
-        return true;
+        return userData.gold >= goldCost;
     }
 
     bool CheckRarity()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-
-        if (selectedWeapon.rarity < (int)Rarity.rare)
-        {
-            lockImages[0].enabled = true;
-            lockImages[1].enabled = true;
-            skillIcons[0].enabled = false;
-            skillIcons[1].enabled = false;
-            return false;
-        }
-        else
-        {
-            lockImages[0].enabled = false;
-            lockImages[1].enabled = true;
-            skillIcons[0].enabled = true;
-            skillIcons[1].enabled = false;
-            if (selectedWeapon.rarity >= (int)Rarity.legendary)
-            {
-                lockImages[1].enabled = false;
-                skillIcons[1].enabled = true;
-            }
-            return true;
-        }
+        return selectedWeapon.rarity >= (int)Rarity.rare;
     }
 
     protected override bool Checks()

@@ -120,39 +120,10 @@ public class PromoteUI : ReinforceUIBase
         UpdateWeaponImage();
         reinforceManager.ResetMaterials();
         UpdateMaterialsImage();
-    }
 
-    protected override void RegisterPreviousButtonClickEvent()
-    {
-        reinforceButton.onClick.AddListener(() =>
-        {
-            Managers.Game.Inventory.RemoveWeapons(reinforceManager.SelectedMaterials);
-            reinforceManager.ResetMaterials();
-            UpdateWeaponImage();
-            UpdateMaterialsImage();
-            Managers.Game.Player.TryPromote(-goldCost);
-        });
-    }
-
-    protected override void RegisterAdditionalButtonClickEvent()
-    {
-    }
-
-    bool CheckGold()
-    {
         UserData userData = Managers.Game.Player.Data;
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
 
-        if (userData.gold < goldCost)
-        {
-            goldCostText.text = $"<color=red>{goldCost}</color>";
-            return false;
-        }
-        goldCostText.text = $"<color=white>{goldCost}</color>";
-        return true;
-    }
-
-    bool CheckRarity()
-    {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         weaponSlots[0].sprite = slotSprites[weaponData.rarity];
@@ -190,12 +161,36 @@ public class PromoteUI : ReinforceUIBase
         }
         currentRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity).ToString());
         if (weaponData.rarity < (int)Rarity.legendary)
-        {
             nextRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity + 1).ToString());
-            return true;
-        }
         nextRarityNameText.text = currentRarityNameText.text;
-        return false;
+    }
+
+    protected override void RegisterPreviousButtonClickEvent()
+    {
+        reinforceButton.onClick.AddListener(() =>
+        {
+            Managers.Game.Inventory.RemoveWeapons(reinforceManager.SelectedMaterials);
+            reinforceManager.ResetMaterials();
+            UpdateWeaponImage();
+            UpdateMaterialsImage();
+            Managers.Game.Player.TryPromote(-goldCost);
+        });
+    }
+
+    protected override void RegisterAdditionalButtonClickEvent()
+    {
+    }
+
+    bool CheckGold()
+    {
+        UserData userData = Managers.Game.Player.Data;
+        return userData.gold >= goldCost;
+    }
+
+    bool CheckRarity()
+    {
+        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+        return weaponData.rarity >= (int)Rarity.rare;
     }
 
     bool CheckMaterials()

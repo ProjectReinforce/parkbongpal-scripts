@@ -69,8 +69,7 @@ public class NormalReinforceUI : ReinforceUIBase
         UpdateWeaponIcon();
 
         UserData userData = Managers.Game.Player.Data;
-        if (userData.gold < goldCost)
-            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
 
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
         int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
@@ -127,39 +126,13 @@ public class NormalReinforceUI : ReinforceUIBase
         UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold < goldCost)
-        {
-            goldCostText.text = $"<color=red>{goldCost}</color>";
             return false;
-        }
-        goldCostText.text = $"<color=white>{goldCost}</color>";
-        return true;
-    }
-
-    protected bool CheckUpgradeCount()
-    {
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
-
-        foreach (var item in currentSuccessCountText)
-            item.text = $"+ {successCount}";
-        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
-        {
-            arrowImage.enabled = false;
-            nextSuccessCountText.text = "";
-            upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
-        }
-        else
-        {
-            arrowImage.enabled = true;
-            nextSuccessCountText.text = $"+ {successCount + 1}";
-            upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
-        }
         return true;
     }
 
     protected override bool Checks()
     {
-        if (CheckGold() && CheckUpgradeCount()) return true;
+        if (CheckGold()) return true;
         return false;
     }
 }
