@@ -24,6 +24,8 @@ public class RecordData
 {
     string userID;
     public string UserID => userID;
+    uint tutorial;
+    public uint Tutorial => tutorial;
     ulong useGold;
     public ulong UseGold => useGold;
     ulong getGold;
@@ -88,6 +90,7 @@ public class RecordData
     DateTime saveWeek;
     public DateTime SaveWeek => saveWeek;
 
+    public Action tutorialClearEvent;
     public Action levelUpEvent;
     public Action getGoldEvent;
     public Action useGoldEvent;
@@ -132,6 +135,7 @@ public class RecordData
 
         if (_userInDate == userID)
         {
+            uint.TryParse(PlayerPrefs.GetString("Tutorial"), out tutorial);
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
             // Debug.Log($"UsedGold : {useGold}");
             ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
@@ -179,6 +183,7 @@ public class RecordData
             return;
         }
         PlayerPrefs.SetString("UserID", _userInDate);
+        PlayerPrefs.DeleteKey("Tutorial");
         PlayerPrefs.DeleteKey("UseGold");
         PlayerPrefs.DeleteKey("GetGold");
         PlayerPrefs.DeleteKey("UseDiamond");
@@ -211,6 +216,7 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekGetBonus");
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
+        tutorial = 0;
         useGold = 0;
         getGold = 0;
         useDiamond = 0;
@@ -242,6 +248,15 @@ public class RecordData
         weekTryReinforce = 0;
         weekGetBonus = 0;
         weekSeeAds = 0;
+    }
+
+    public void TutorialClearRecord(uint _clearCheck)
+    {
+        if(_clearCheck == 10)
+        {
+            tutorial = 1;
+            PlayerPrefs.SetString("Tutorial", tutorial.ToString());
+        }
     }
 
     public void ModifyGoldRecord(int _gold)

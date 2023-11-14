@@ -62,6 +62,11 @@ public class Player
         });
     }
 
+    public void TutorialCleared(uint _clearCheck)
+    {
+        recordData.TutorialClearRecord(_clearCheck);
+    }
+
     public bool AddGold(int _gold, bool _directUpdate = true)
     {
         if (userData.gold + _gold < 0) return false;

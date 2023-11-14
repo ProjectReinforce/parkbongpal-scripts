@@ -253,6 +253,7 @@ public class QuestContent : MonoBehaviour
                 current = player.Record.TrySoul;
                 break;
             case RecordType.Tutorial:
+                current = player.Record.Tutorial;
                 break;
         }
         if(transform.parent != onceClearContents)
