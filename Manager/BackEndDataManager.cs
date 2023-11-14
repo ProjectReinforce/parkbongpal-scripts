@@ -568,7 +568,6 @@ public class BackEndDataManager
     // 랭킹 리스트 로드
     public void GetRankList(bool isFirstCall = true)//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
     {
-        Debug.Log("GetRankList 실행");
         deligate[0] = (count) =>
         {
             if (count >= UUIDs.Length) return;

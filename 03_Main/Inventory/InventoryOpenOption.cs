@@ -404,3 +404,34 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
         decompositionButtonImage.color = originButtonColor;
     }
 }
+
+// public class InventoryOpenOptionSelectMyFavoriteWeapon : InventoryOpenOptionBase, IInventoryOpenOption
+// {
+//     public InventoryOpenOptionSelectMyFavoriteWeapon(InventoryController _inventoryController) : base(_inventoryController)
+//     {
+//     }
+
+//     public void Set()
+//     {
+//         Managers.Event.SlotSelectEvent += SetDetailInfo;
+//         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+
+//         selectButton.onClick.AddListener(() => 
+//         {
+//             Managers.UI.ClosePopup();
+//         });
+//         selectText.text = "선택하기";
+//         decompositionButton.gameObject.SetActive(false);
+//     }
+
+//     public void Reset()
+//     {
+//         Managers.Event.SlotSelectEvent -= SetDetailInfo;
+//         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+
+//         selectButton.onClick.RemoveAllListeners();
+
+//         defaultBackground.gameObject.SetActive(true);
+//         decompositionButton.gameObject.SetActive(true);
+//     }
+// }

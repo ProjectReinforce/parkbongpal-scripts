@@ -102,6 +102,7 @@ public enum InventoryType
     ReinforceMaterial,
     MiniGame,
     Decomposition
+    // SelectMyFavoriteWeapon
 }
 
 public enum RewardType
