@@ -8,6 +8,7 @@ public class NormalReinforceUI : ReinforceUIBase
 {
     ReinforceRestoreUI reinforceRestoreUI;
     Text[] currentSuccessCountText = new Text[2];
+    Image weaponRarity;
     Image weaponIcon;
     Text weaponNameText;
     Image arrowImage;
@@ -28,6 +29,7 @@ public class NormalReinforceUI : ReinforceUIBase
         reinforceRestoreUI.Initialize(reinforceType, callback);
         currentSuccessCountText[0] = Utills.Bind<Text>("Text_SuccessCount1", transform);
         currentSuccessCountText[1] = Utills.Bind<Text>("Text_SuccessCount2", transform);
+        weaponRarity = Utills.Bind<Image>("Box", transform);
         weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
         weaponNameText = Utills.Bind<Text>("WeaponName", transform);
         arrowImage = Utills.Bind<Image>("Image_Arrow", transform);
@@ -39,6 +41,7 @@ public class NormalReinforceUI : ReinforceUIBase
     {
         Weapon weapon = reinforceManager.SelectedWeapon;
 
+        weaponRarity.sprite = Managers.Resource.weaponRaritySlot[weapon.data.rarity];
         weaponIcon.sprite = weapon.Icon;
         weaponNameText.text = weapon.Name;
     }
@@ -64,6 +67,28 @@ public class NormalReinforceUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateWeaponIcon();
+
+        UserData userData = Managers.Game.Player.Data;
+        if (userData.gold < goldCost)
+            goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+        int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
+
+        foreach (var item in currentSuccessCountText)
+            item.text = $"+ {successCount}";
+        if (selectedWeapon.NormalStat[(int)StatType.upgradeCount] <= 0)
+        {
+            arrowImage.enabled = false;
+            nextSuccessCountText.text = "";
+            upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
+        }
+        else
+        {
+            arrowImage.enabled = true;
+            nextSuccessCountText.text = $"+ {successCount + 1}";
+            upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.NormalStat[(int)StatType.upgradeCount]}</color>";
+        }
     }
 
     protected override void RegisterPreviousButtonClickEvent()
