@@ -49,7 +49,6 @@ public class Player
     void UpdateBackEndScore(string uuid, string columnName, int _data)
     {
         Param param = new() { { columnName, _data }};
-        
        
         SendQueue.Enqueue(Backend.URank.User.UpdateUserScore,uuid, nameof(UserData), userData.inDate, param, callback => 
         {
@@ -172,7 +171,36 @@ public class Player
         userData.attendance = day;
         recordData.ModifyDayAttendanceRecord();
         recordData.ModifyWeekAttendanceRecord();
-        UpdateBackEndData(nameof(UserData.colum.attendance), day);
+
+        // UpdateBackEndData(nameof(UserData.colum.attendance), day);
+    }
+
+    public void SetInfoRelatedAttendance()
+    {
+        DateTime serverTime = Managers.Etc.GetServerTime();
+        Param param = new()
+        {
+            {nameof(UserData.colum.attendance), userData.attendance + 1},
+            {nameof(UserData.colum.lastLogin), serverTime},
+            {nameof(UserData.colum.exp), userData.exp},
+            {nameof(UserData.colum.level), userData.level},
+            {nameof(UserData.colum.gold), userData.gold},
+            {nameof(UserData.colum.diamond), userData.diamond},
+            {nameof(UserData.colum.weaponSoul), userData.weaponSoul},
+            {nameof(UserData.colum.stone), userData.stone},
+        };
+        
+        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), Data.inDate, Backend.UserInDate, param, ( callback ) => 
+        {
+            if (!callback.IsSuccess())
+            {
+                Debug.Log($"Player : 데이터 저장 실패 {callback.GetMessage()}");
+                return;
+            }
+            Debug.Log($"Player : 데이터 저장 성공 {callback}");
+        });
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     public void TryProduceWeapon(int _count)

@@ -513,19 +513,18 @@ public class BackEndDataManager
             // };
             // Backend.URank.User.UpdateUserScore(GOLD_UUID, nameof(UserData), userData.inDate, param);
             // serverTime = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
-            Debug.Log($"last login : {UserData.lastLogin}");
-            serverTime = Managers.Etc.GetServerTime();
-            Param param = new() { { "lastLogin", serverTime }};
+            // serverTime = Managers.Etc.GetServerTime();
+            // Param param = new() { { "lastLogin", serverTime }};
     
-            SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), UserData.inDate, Backend.UserInDate, param, ( callback ) => 
-            {
-                if (!callback.IsSuccess())
-                {
-                    Debug.Log($"GetUserData : lastLogin 데이터 저장 실패 {callback.GetMessage()}");
-                    return;
-                }
-                Debug.Log($"GetUserData : lastLogin 데이터 저장 성공 {callback}");
-            });
+            // SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(UserData), UserData.inDate, Backend.UserInDate, param, ( callback ) => 
+            // {
+            //     if (!callback.IsSuccess())
+            //     {
+            //         Debug.Log($"GetUserData : lastLogin 데이터 저장 실패 {callback.GetMessage()}");
+            //         return;
+            //     }
+            //     Debug.Log($"GetUserData : lastLogin 데이터 저장 성공 {callback}");
+            // });
         });
     }
 
