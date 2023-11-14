@@ -233,13 +233,13 @@ public class Mine : MonoBehaviour, Rental
 
     public void Receipt(Action _callback = null)
     {
-        if (gold < 100)
-        {
-            Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
+        // if (gold < 100)
+        // {
+        //     Managers.Alarm.Warning("모은 골드가 100 골드를 넘어야 합니다.");
 
-            _callback?.Invoke();
-            return;
-        }
+        //     _callback?.Invoke();
+        //     return;
+        // }
         Managers.Game.Player.AddGold(gold);
         Managers.Alarm.Warning($"{gold:n0} 골드를 수령했습니다.");
         gold = 0;
