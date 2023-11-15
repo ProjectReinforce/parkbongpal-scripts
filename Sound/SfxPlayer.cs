@@ -11,10 +11,21 @@ public class SfxPlayer : MonoBehaviour
 
     public void Initialize()
     {
-        sfxClips = Managers.Resource.sfxSound;
         sfxPlayer = gameObject.AddComponent<AudioSource>();
         sfxPlayer.playOnAwake = false;
         sfxPlayer.loop = false;
+        // if(Managers.Sound.IsMuted == true)
+        // {
+        //     sfxPlayer.volume = 1f;
+        // }
+        // else
+        // {
+        //     sfxPlayer.volume = 0f;
+        // }
+    }
+
+    void Start() 
+    {
         if(Managers.Sound.IsMuted == true)
         {
             sfxPlayer.volume = 1f;

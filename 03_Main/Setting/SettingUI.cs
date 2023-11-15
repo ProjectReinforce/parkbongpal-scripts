@@ -17,8 +17,8 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Button userUuidCopyButton;
     [SerializeField] Button syncGoogleButton;
     [SerializeField] GameObject nicknameChange;
-    // [SerializeField] Slider soundSlider;
-
+    // [SerializeField] Image myFavoriteWeapon;
+    
     void Start()
     {
         nicknameText.text = BackEnd.Backend.UserNickName;
