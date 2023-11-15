@@ -590,13 +590,12 @@ public class BackEndDataManager
                 if(!isFirstCall)
                 {
                     Managers.Event.GetRankDoneEvent?.Invoke();
-                    return;
                 }
                 else
                 {
                     SceneLoader.ResourceLoadComplete();
-                    return;
                 }
+                return;
             }
             SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 1, callback =>
             {
