@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 public class Notifyer : MonoBehaviour, IGameInitializer
 {
-    [SerializeField]List< NewThing> newThings; 
-    [SerializeField]UnityEngine.UI.Text text;
+    [SerializeField] List<NewThing> newThings;
+    [SerializeField] UnityEngine.UI.Text text;
     public void GameInitialize()
     {
         newThings = new List<NewThing>();
@@ -14,7 +12,7 @@ public class Notifyer : MonoBehaviour, IGameInitializer
     private void TextUpdate()
     {
         text.text = newThings.Count.ToString();
-        gameObject.SetActive(newThings.Count>0);
+        gameObject.SetActive(newThings.Count > 0);
     }
     public void GetNew(NewThing newThing)
     {
