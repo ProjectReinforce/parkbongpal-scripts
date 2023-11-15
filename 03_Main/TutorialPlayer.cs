@@ -18,21 +18,21 @@ public class TutorialPlayer : MonoBehaviour
 
         if (clearedtutorial == false)
         {
-            Managers.Alarm.Warning("튜토리얼 진행 시작");
-            uint tutorialIndex = 0;
-            if (Input.GetMouseButton(0))    // Todo : 순서에 맞게 튜토리얼 진행되는 로직 만들기, 마우스 클릭을 통한 다음 순서로 넘어가기
-            {
-                for (int i = 0; i < cutSceneArray.Length; i++)
-                {
+            //Managers.Alarm.Warning("튜토리얼 진행 시작");
+            //uint tutorialIndex = 0;
+            //if (Input.GetMouseButton(0))    // Todo : 순서에 맞게 튜토리얼 진행되는 로직 만들기, 마우스 클릭을 통한 다음 순서로 넘어가기
+            //{
+            //    for (int i = 0; i < cutSceneArray.Length; i++)
+            //    {
 
-                    cutSceneArray[i].SetActive(true);
-                    tutorialIndex += 1;
-                }
-            }
+            //        cutSceneArray[i].SetActive(true);
+            //        tutorialIndex += 1;
+            //    }
+            //}
 
 
-                clearedtutorial = true;
-                Managers.Game.Player.TutorialCleared(tutorialIndex);
+            //    clearedtutorial = true;
+            //    Managers.Game.Player.TutorialCleared(tutorialIndex);
             }
         }
     }
