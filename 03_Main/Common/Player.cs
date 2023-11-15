@@ -130,7 +130,7 @@ public class Player
     {
         userData.exp -= Managers.ServerData.ExpDatas[userData.level-1];
         userData.level ++;
-        recordData.levelUpEvent?.Invoke();
+        Managers.Event.LevelUpEvent?.Invoke();
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.colum.level), userData.level);

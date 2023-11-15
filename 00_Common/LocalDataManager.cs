@@ -90,40 +90,6 @@ public class RecordData
     DateTime saveWeek;
     public DateTime SaveWeek => saveWeek;
 
-    public Action tutorialClearEvent;
-    public Action levelUpEvent;
-    public Action getGoldEvent;
-    public Action useGoldEvent;
-    public Action useDiamondEvent;
-    public Action getDiamondEvent;
-    public Action getItemEvent;
-    public Action disassembleItemEvent;
-    public Action produceWeaponEvent;
-    public Action advanceProduceWeaponEvent;
-    public Action tryPromoteEvent;
-    public Action tryAdditionalEvent;
-    public Action tryReinforceEvent;
-    public Action tryMagicEvent;
-    public Action trySoulEvent;
-    public Action tryRefineEvent;
-    public Action attendanceEvent;
-    public Action getBonusEvent;
-    public Action seeAdsEvent;
-    // 일일
-    public Action dayAttendanceEvent;
-    public Action dayTryPromoteEvent;
-    public Action dayTryMagicEvent;
-    public Action dayTryReinforceEvent;
-    public Action dayGetBonusEvent;
-    public Action daySeeAdsEvent;
-    // 주간
-    public Action weekAttendanceEvent;
-    public Action weekTryPromoteEvent;
-    public Action weekTryMagicEvent;
-    public Action weekTryReinforceEvent;
-    public Action weekGetBonusEvent;
-    public Action weekSeeAdsEvent;
-
     public void LoadOrInitRecord(string _userInDate)
     {
         userID = PlayerPrefs.GetString("UserID");
@@ -266,13 +232,11 @@ public class RecordData
         {
             getGold += (ulong)_gold;
             PlayerPrefs.SetString("GetGold", getGold.ToString());
-            getGoldEvent?.Invoke();
         }
         else
         {
             useGold += (ulong)Mathf.Abs(_gold);
             PlayerPrefs.SetString("UseGold", useGold.ToString());
-            useGoldEvent?.Invoke();
         }
     }
 
@@ -283,13 +247,11 @@ public class RecordData
         {
             getDiamond += (ulong)_diamond;
             PlayerPrefs.SetString("GetDiamond", getDiamond.ToString());
-            getDiamondEvent?.Invoke();
         }
         else
         {
             useDiamond += (ulong)Mathf.Abs(_diamond);
             PlayerPrefs.SetString("UseDiamond", useDiamond.ToString());
-            useDiamondEvent?.Invoke();
         }
     }
 
@@ -297,7 +259,6 @@ public class RecordData
     {
         getItem++;
         PlayerPrefs.SetString("GetItem", getItem.ToString());
-        getItemEvent?.Invoke();
     }
 
     public void ModifyProduceRecord(int _count)
@@ -305,7 +266,6 @@ public class RecordData
         if (_count <= 0) return;
         produceWeapon += (uint)_count;
         PlayerPrefs.SetString("ProduceWeapon", produceWeapon.ToString());
-        produceWeaponEvent?.Invoke();
     }
 
     public void ModifyAdvanceProduceRecord(int _count)
@@ -313,49 +273,42 @@ public class RecordData
         if (_count <= 0) return;
         advanceProduceWeapon += (uint)_count;
         PlayerPrefs.SetString("AdvanceProduceWeapon", advanceProduceWeapon.ToString());
-        advanceProduceWeaponEvent?.Invoke();
     }
 
     public void ModifyTryPromoteRecord()
     {
         tryPromote ++;
         PlayerPrefs.SetString("TryPromote", tryPromote.ToString());
-        tryPromoteEvent?.Invoke();
     }
 
     public void ModifyTryAdditionalRecord()
     {
         tryAdditional ++;
         PlayerPrefs.SetString("TryAdditional", tryAdditional.ToString());
-        tryAdditionalEvent?.Invoke();
     }
 
     public void ModifyTryReinforceRecord()
     {
         tryReinforce ++;
         PlayerPrefs.SetString("TryReinforce", tryReinforce.ToString());
-        tryReinforceEvent?.Invoke();
     }
 
     public void ModifyTryMagicRecord()
     {
         tryMagic ++;
         PlayerPrefs.SetString("TryMagic", tryMagic.ToString());
-        tryMagicEvent?.Invoke();
     }
 
     public void ModifyTrySoulRecord()
     {
         trySoul ++;
         PlayerPrefs.SetString("TrySoul", trySoul.ToString());
-        trySoulEvent?.Invoke();
     }
 
     public void ModifyTryRefineRecord()
     {
         tryRefine ++;
         PlayerPrefs.SetString("TryRefine", tryRefine.ToString());
-        tryRefineEvent?.Invoke();
     }
 
 
@@ -364,42 +317,36 @@ public class RecordData
     {
         dayTryReinforce++;
         PlayerPrefs.SetString("DayTryReinforce", dayTryReinforce.ToString());
-        dayTryReinforceEvent?.Invoke();
     }
 
     public void ModifyDayTryPromoteRecord()
     {
         dayTryPromote++;
         PlayerPrefs.SetString("DayTryPromote", dayTryPromote.ToString());
-        dayTryPromoteEvent?.Invoke();
     }
 
     public void ModifyDayTryMagicRecord()
     {
         dayTryMagic++;
         PlayerPrefs.SetString("DayTryMagic", dayTryMagic.ToString());
-        dayTryMagicEvent?.Invoke();
     }
 
     public void ModifyDayAttendanceRecord()
     {
         dayAttendance++;
         PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
-        dayAttendanceEvent?.Invoke();
     }
 
     public void ModifyDayGetBonusRecord()
     {
         dayGetBonus++;
         PlayerPrefs.SetString("DayGetBonus", dayGetBonus.ToString());
-        dayGetBonusEvent?.Invoke();
     }
 
     public void ModifyDaySeeAdsRecord()
     {
         daySeeAds++;
         PlayerPrefs.SetString("DaySeeAds", daySeeAds.ToString());
-        daySeeAdsEvent?.Invoke();
     }
 
     public void ResetRecordDayData(uint[] _dayRecord, string[] _dayType)
@@ -420,43 +367,36 @@ public class RecordData
     {
         weekTryReinforce++;
         PlayerPrefs.SetString("WeekTryReinforce", weekTryReinforce.ToString());
-        weekTryReinforceEvent?.Invoke();
     }
 
     public void ModifyWeekTryPromoteRecord()
     {
         weekTryPromote++;
         PlayerPrefs.SetString("WeekTryPromote", weekTryPromote.ToString());
-        weekTryPromoteEvent?.Invoke();
     }
 
     public void ModifyWeekTryMagicRecord()
     {
         weekTryMagic++;
         PlayerPrefs.SetString("WeekTryMagic", weekTryMagic.ToString());
-        weekTryMagicEvent?.Invoke();
     }
 
     public void ModifyWeekAttendanceRecord()
     {
         weekAttendance++;
         PlayerPrefs.SetString("WeekAttendance", weekAttendance.ToString());
-        Debug.Log(WeekAttendance);
-        weekAttendanceEvent?.Invoke();
     }
 
     public void ModifyWeekGetBonusRecord()
     {
         weekGetBonus++;
         PlayerPrefs.SetString("WeekGetBonus", weekGetBonus.ToString());
-        weekGetBonusEvent?.Invoke();
     }
 
     public void ModifyWeekSeeAdsRecord()
     {
         weekSeeAds++;
         PlayerPrefs.SetString("WeekSeeAds", weekSeeAds.ToString());
-        weekSeeAdsEvent?.Invoke();
     }
 
     public void ResetRecordWeekData(uint[] _weekRecord, string[] _weekType)
