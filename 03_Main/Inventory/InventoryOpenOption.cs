@@ -354,7 +354,7 @@ public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOp
                 Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
                 return;
             }
-            Managers.Event.SetMiniGameEvent?.Invoke();
+            // Managers.Event.SetMiniGameEvent?.Invoke();
             Managers.Event.SetMiniGameWeaponEvent?.Invoke(currentWeapon);
             Managers.UI.ClosePopup();
         });

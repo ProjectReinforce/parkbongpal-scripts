@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class EventManager
 {
@@ -38,8 +40,9 @@ public class EventManager
 
     #region MiniGame
     public Action<Weapon> SetMiniGameWeaponEvent;
+    public Action<Sprite, string> SetMiniGameWeaponUIEvent;
     public Action<int> ResultNewScoreMineGameEvent;
-    public Action SetMiniGameEvent;
+    // public Action SetMiniGameEvent;
     public Action ResetMiniGameScoreEvent;
     public Action ResultBestScoreMineGameEvent;
     public Action MiniGameEscEvent;
