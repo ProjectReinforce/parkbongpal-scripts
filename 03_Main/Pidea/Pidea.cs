@@ -46,7 +46,7 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
     {
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
         if (notifyer.gameObject.activeSelf)
-            notifyer.Remove(slot);
+            notifyer.PideaRemove(slot);
     }
 
     public void NotifyClear()

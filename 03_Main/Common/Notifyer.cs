@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 public class Notifyer : MonoBehaviour, IGameInitializer
 {
-    [SerializeField]List< NewThing> newThings; 
-    [SerializeField]UnityEngine.UI.Text text;
+    [SerializeField] List<NewThing> newThings;
+    [SerializeField] UnityEngine.UI.Text text;
     public void GameInitialize()
     {
         newThings = new List<NewThing>();
@@ -14,7 +12,7 @@ public class Notifyer : MonoBehaviour, IGameInitializer
     private void TextUpdate()
     {
         text.text = newThings.Count.ToString();
-        gameObject.SetActive(newThings.Count>0);
+        gameObject.SetActive(newThings.Count > 0);
     }
     public void GetNew(NewThing newThing)
     {
@@ -30,11 +28,16 @@ public class Notifyer : MonoBehaviour, IGameInitializer
         newThings.Clear();
         TextUpdate();
     }
-    public void Remove(NewThing thing)
+    public void PideaRemove(NewThing thing)
     {
         Debug.Log("☆도감 삭제됩니다.");
         newThings.Remove(thing);
         thing.NewClear();
+        TextUpdate();
+    }
+    public void PostRemove(NewThing _newThing)
+    {
+        newThings.Remove(_newThing);
         TextUpdate();
     }
 }
