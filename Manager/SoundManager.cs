@@ -24,6 +24,12 @@ public class SoundManager
             Debug.Log($"사운드 : {muted} 저장됨");
         }
     }
+    int nowTapBgmIndex;
+    public int NowTapBgmIndex 
+    {
+        get => nowTapBgmIndex;
+        private set => nowTapBgmIndex = value;
+    }
 
     public SoundManager(Transform _rootTransform)
     {
@@ -31,12 +37,13 @@ public class SoundManager
         sfxPlayer = Utills.Bind<SfxPlayer>("SfxPlayer", _rootTransform);
 
         bgmPlayer.Initialize();
-        // sfxPlayer.Initialize();
+        sfxPlayer.Initialize();
     }
 
     public void PlayBgm(bool _isMuted, BgmType _bgmName)
     {
         bgmPlayer.PlayBgm(_isMuted, _bgmName);
+        nowTapBgmIndex = (int)_bgmName;
     }
 
     public void PlaySfx(SfxType _sfxType)

@@ -15,6 +15,8 @@ public class MineGameResultUI : MonoBehaviour
 
         Managers.Event.ResultBestScoreMineGameEvent -= SetBestScore;
         Managers.Event.ResultBestScoreMineGameEvent += SetBestScore;
+
+        Managers.UI.InputLock = true;
     }
 
     void SetNowTurnScore(int _score)
@@ -31,5 +33,6 @@ public class MineGameResultUI : MonoBehaviour
     {
         Managers.Event.ResultNewScoreMineGameEvent -= SetNowTurnScore;
         Managers.Event.ResultBestScoreMineGameEvent -= SetBestScore;
+        Managers.UI.InputLock = false;
     }
 }

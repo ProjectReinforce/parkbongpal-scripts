@@ -563,7 +563,7 @@ public class BackEndDataManager
     public Rank[][] topRanks = new Rank[UUIDs.Length][];
     public Rank[][] myRanks = new Rank[UUIDs.Length][];
     Action<int>[] deligate = new Action<int>[2];
-
+    
     // 랭킹 리스트 로드
     public void GetRankList(bool isFirstCall = true)//비동기에 타이밍 맞게 index를 전달하기 위해 재귀호출 구조 사용
     {
@@ -582,24 +582,43 @@ public class BackEndDataManager
                 topRanks[count] = JsonMapper.ToObject<Rank[]>(json.ToJson());
                 deligate[0](++count);
             });
-            Debug.Log("deligate0번 완료" + count);
-            // for(int i = 0; i < topRanks.Length; i++)
-            // {
-            //     for(int j = 0; j < topRanks[i].Length; j++)
-            //     {
-            //         Debug.Log("topRanks" + topRanks[i][j].nickname);
-            //     }
-            // }
         };
         deligate[1] = (count) =>
         {
-            if (count >= UUIDs.Length) return;
+            if (count >= UUIDs.Length)
+            {
+                if(!isFirstCall)
+                {
+                    Managers.Event.GetRankDoneEvent?.Invoke();
+                    return;
+                }
+                else
+                {
+                    SceneLoader.ResourceLoadComplete();
+                    return;
+                }
+            }
             SendQueue.Enqueue(Backend.URank.User.GetMyRank, UUIDs[count], 1, callback =>
             {
                 if (!callback.IsSuccess())
                 {
-                    Debug.LogError(callback);
-                    return;
+                    if(callback.GetMessage() == "userRank not found, userRank을(를) 찾을 수 없습니다")
+                    {
+                        SendQueue.Enqueue(Backend.URank.User.UpdateUserScore, MINI_UUID, nameof(UserData), UserData.inDate, new Param() { {"mineGameScore", 0 } }, callback =>
+                        {
+                            if (!callback.IsSuccess())
+                            {
+                                Managers.Game.MainEnqueue(() => Managers.Alarm.Danger($"랭킹 갱신 실패 : {callback}"));
+                                return;
+                            }
+                            GetRankList();
+                        });
+                    }
+                    else
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
                 }
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
@@ -610,11 +629,6 @@ public class BackEndDataManager
         };
         foreach (var action in deligate)
             action(0);
-        
-        if(isFirstCall)
-        {
-            SceneLoader.ResourceLoadComplete();
-        }
     }
 
     // 퀘스트 기록 데이터 로드
