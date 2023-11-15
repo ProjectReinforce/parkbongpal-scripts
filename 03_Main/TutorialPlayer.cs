@@ -6,57 +6,33 @@ using UnityEngine;
 
 public class TutorialPlayer : MonoBehaviour
 {
-//     void Awake()
-//     {
-//         bool clearedTutorial = false;
+    [SerializeField] GameObject[] cutSceneArray;
+    void Start()
+    {
+        bool clearedtutorial = false;
+        if (Managers.Game.Player.Record.Tutorial != 0)
+        {
+            clearedtutorial = true;
+            return;
+        }
 
-//         foreach (var item in Managers.ServerData.questRecordDatas)
-//         {
-//             if (item.questId == 0)
-//             {
-//                 clearedTutorial = true;
-//                 break;
-//             }
-//         }
+        if (clearedtutorial == false)
+        {
+            //Managers.Alarm.Warning("튜토리얼 진행 시작");
+            //uint tutorialIndex = 0;
+            //if (Input.GetMouseButton(0))    // Todo : 순서에 맞게 튜토리얼 진행되는 로직 만들기, 마우스 클릭을 통한 다음 순서로 넘어가기
+            //{
+            //    for (int i = 0; i < cutSceneArray.Length; i++)
+            //    {
 
-//         if (clearedTutorial == false)
-//         {
-//             // todo: 튜토리얼 재생 여기서
-//             // 아래 내용은 테스트용 코드임
-//             // 튜토리얼 종료 후 기본 광산 3개 열어줌
-//             // 튜토리얼 퀘스트는 클리어 할 수 있도록 로컬데이터로 저장.
-//             Param param = new()
-//             {
-//                 { nameof(QuestRecord.questId), 0 },
-//                 { nameof(QuestRecord.cleared), true }
-//             };
-            
-//             SendQueue.Enqueue(Backend.GameData.Insert, nameof(QuestRecord), param, callback =>
-//             {
-//                 Managers.Alarm.Warning("튜토리얼 진행 시작");
-//                 OpenBasicMines();
-//             });
-//         }
-//     }
+            //        cutSceneArray[i].SetActive(true);
+            //        tutorialIndex += 1;
+            //    }
+            //}
 
-//     // 초기 광산 오픈 함수
-//     void OpenBasicMines()
-//     {
-//         foreach (var item in Managers.ServerData.MineDatas)
-//         {
-//             if (item.buildMin == 0)
-//             {
-//                 Param param = new()
-//                 {
-//                     { nameof(MineBuildData.mineIndex), item.index },
-//                     { nameof(MineBuildData.buildStartTime), DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString()) },
-//                     { nameof(MineBuildData.buildCompleted), true }
-//                 };
 
-//                 Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
-//             }
-//         }
-
-//         Transactions.SendCurrent();
-//     }
-}
+            //    clearedtutorial = true;
+            //    Managers.Game.Player.TutorialCleared(tutorialIndex);
+            }
+        }
+    }
