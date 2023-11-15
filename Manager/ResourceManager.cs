@@ -13,7 +13,6 @@ public class ResourceManager
     public Sprite[] manufactureRaritySlot;
     public Notifyer notifyer;
     public Sprite sampleWeapon;
-    public AudioClip[] sfxSound;
 
     /// <summary>
     /// "Sprites/Weapons" 경로에서 모든 스프라이트 리소스를 로드하고 배열에 저장함
@@ -32,7 +31,6 @@ public class ResourceManager
         notifyer = Resources.Load<Notifyer>("Notifyer");
         sampleWeapon = Resources.Load<Sprite>("SampleWeapon");
         postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
-        sfxSound = Resources.LoadAll<AudioClip>("Sound/SfxSound");
     }
 
     /// <summary>

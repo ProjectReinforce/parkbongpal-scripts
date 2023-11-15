@@ -45,6 +45,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
             new InventoryOpenOptionReinforceMaterial(this),
             new InventoryOpenOptionMiniGame(this),
             new InventoryOpenOptionDecomposition(this),
+            // new InventoryOpenOptionSelectMyFavoriteWeapon(this),
         };
 
         Transform contenetTransform = Utills.Bind<Transform>("Content_Slot", transform);

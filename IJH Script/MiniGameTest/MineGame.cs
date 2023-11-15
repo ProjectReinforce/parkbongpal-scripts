@@ -15,16 +15,18 @@ public class MineGame : MonoBehaviour
     [SerializeField] GameObject resultPanel;
     Coroutine startCountdown;
     bool isAttackAble = false;
+    bool isPauseOn = false;
 
     public void Resume()
     {
-        pausePanel.gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
         mainButton.gameObject.SetActive(true);
-        startCountdown = StartCoroutine(Countdown());
+        StartBlinkingAndCountdown();
     }
 
     public void Pause()
     {
+        Managers.UI.OpenPopup(pausePanel);
         isAttackAble = false;
         timerControl.StopOperating();
         if (startCountdown != null)
@@ -39,9 +41,28 @@ public class MineGame : MonoBehaviour
         selectedWeapon = _weapon;
     }
     
+    void OnEnable()
+    {
+        Managers.Event.MiniGameEscEvent -= MiniGameisOn;
+        Managers.Event.MiniGameEscEvent += MiniGameisOn;
+    }
+
     void OnDisable()// 게임을 다시 켰을때도 초기화
     {
+        Managers.Event.MiniGameEscEvent -= MiniGameisOn;
         ResetGame();
+    }
+
+    public void MiniGameisOn()
+    {
+        if(pausePanel.activeSelf == false)
+        {
+            Pause();
+        }
+        else
+        {
+            Resume();
+        }
     }
     
     public void StartBlinkingAndCountdown()
@@ -74,7 +95,6 @@ public class MineGame : MonoBehaviour
     {
         if(Managers.Game.Player.Data.mineGameScore >= _newScore) return;
         Managers.Game.Player.SetMineGameScore(_newScore);
-        Managers.ServerData.GetRankList(false);
     }
 
     public void GameOver()
@@ -93,6 +113,7 @@ public class MineGame : MonoBehaviour
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
     {
         ResetGame();
+        Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MiniGameBgm);
     }
 
     public void ResetGame()  // 초기화 함수

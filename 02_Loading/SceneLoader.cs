@@ -9,7 +9,6 @@ public class SceneLoader : MonoBehaviour
 
     [SerializeField] Slider progressBar;
     [SerializeField] Text persentMessage;
-    [SerializeField] Image loadingIcon;
 
     public static void ResourceLoadComplete()
     {

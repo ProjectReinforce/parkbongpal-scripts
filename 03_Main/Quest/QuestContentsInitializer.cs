@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Manager;
 using UnityEngine;
 using BackEnd;
+using UnityEngine.UI;
 
 public class QuestContentsInitializer : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class QuestContentsInitializer : MonoBehaviour
     [SerializeField] Transform weekContents;
     [SerializeField] Transform onceIngContents;
     [SerializeField] Transform onceClearContents;
+    [SerializeField] ToggleGroup toggleGroup;
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
@@ -41,6 +43,14 @@ public class QuestContentsInitializer : MonoBehaviour
     private void OnEnable()
     {
         UpdateAllContent();
+        toggleGroup.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
+    }
+    private void OnDisable()
+    {
+        foreach(Toggle toggle in toggleGroup.GetComponentsInChildren<Toggle>())
+        {
+            toggle.isOn = false;
+        }
     }
 
     void UpdateAllContent()

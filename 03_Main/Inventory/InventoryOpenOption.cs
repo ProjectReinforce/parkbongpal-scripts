@@ -354,7 +354,7 @@ public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOp
                 Managers.Alarm.Warning("광산에 대여중인 무기입니다.");
                 return;
             }
-            Managers.Event.SetMiniGameEvent?.Invoke();
+            // Managers.Event.SetMiniGameEvent?.Invoke();
             Managers.Event.SetMiniGameWeaponEvent?.Invoke(currentWeapon);
             Managers.UI.ClosePopup();
         });
@@ -404,3 +404,34 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
         decompositionButtonImage.color = originButtonColor;
     }
 }
+
+// public class InventoryOpenOptionSelectMyFavoriteWeapon : InventoryOpenOptionBase, IInventoryOpenOption
+// {
+//     public InventoryOpenOptionSelectMyFavoriteWeapon(InventoryController _inventoryController) : base(_inventoryController)
+//     {
+//     }
+
+//     public void Set()
+//     {
+//         Managers.Event.SlotSelectEvent += SetDetailInfo;
+//         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
+
+//         selectButton.onClick.AddListener(() => 
+//         {
+//             Managers.UI.ClosePopup();
+//         });
+//         selectText.text = "선택하기";
+//         decompositionButton.gameObject.SetActive(false);
+//     }
+
+//     public void Reset()
+//     {
+//         Managers.Event.SlotSelectEvent -= SetDetailInfo;
+//         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
+
+//         selectButton.onClick.RemoveAllListeners();
+
+//         defaultBackground.gameObject.SetActive(true);
+//         decompositionButton.gameObject.SetActive(true);
+//     }
+// }
