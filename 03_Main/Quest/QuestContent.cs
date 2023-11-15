@@ -252,6 +252,9 @@ public class QuestContent : MonoBehaviour
             case RecordType.TrySoul:
                 current = player.Record.TrySoul;
                 break;
+            case RecordType.TryRefine:
+                current = player.Record.TryRefine;
+                break;
             case RecordType.Tutorial:
                 current = player.Record.Tutorial;
                 break;
