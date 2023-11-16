@@ -7,7 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class ShowAdButton : MonoBehaviour
 {
-    public AdType adType;
+    [SerializeField] AdType adType;
     Button button;
 
     void Awake()

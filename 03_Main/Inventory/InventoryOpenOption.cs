@@ -8,6 +8,7 @@ public class InventoryOpenOptionBase
     protected InventoryController inventoryController;
     protected Transform defaultBackground;
     protected DetailInfoUI detailInfoUI;
+    protected UpDownVisualer upDownVisualer;
     protected DecompositionUI decompositionUI;
     protected Button selectButton;
     protected Text selectText;
@@ -22,6 +23,7 @@ public class InventoryOpenOptionBase
     {
         inventoryController = _inventoryController;
         detailInfoUI = _inventoryController.DetailInfo;
+        upDownVisualer = _inventoryController.UpDownVisualer;
         defaultBackground = _inventoryController.DefaultBackground;
         decompositionUI = _inventoryController.DecompositionUI;
         selectButton = _inventoryController.SelectButton;
@@ -60,8 +62,6 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
     {
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
         Managers.Event.SlotSelectEvent += SetDetailInfo;
-        // Managers.Event.SlotClickEvent += SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent += SetDetailInfo;
 
         selectButton.onClick.AddListener(() => 
         {
@@ -82,43 +82,11 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
     {
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
-        // Managers.Event.SlotClickEvent -= SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
         decompositionButton.gameObject.SetActive(false);
         selectButton.onClick.RemoveAllListeners();
         defaultBackground.gameObject.SetActive(true);
     }
-
-    // void SetCurrentWeapon(Weapon[] _weapon)
-    // void SetCurrentWeapon(Weapon _weapon)
-    // {
-    //     // if (_weapon.Length != 1)
-    //     // {
-    //     //     Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //     //     return;
-    //     // }
-
-    //     // currentWeapon = _weapon[0];
-    //     currentWeapon = _weapon;
-    // }
-
-    // // void SetDetailInfo(Weapon[] _weapon)
-    // void SetDetailInfo(Weapon _weapon)
-    // {
-    //     // if (_weapon.Length != 1)
-    //     // {
-    //     //     Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //     //     return;
-    //     // }
-
-    //     // detailInfoUI.Refresh(_weapon[0]);
-    //     // if (detailInfoUI.gameObject.activeSelf == false)
-    //     //     detailInfoUI.gameObject.SetActive(true);
-    //     detailInfoUI.Refresh(_weapon);
-    //     if (detailInfoUI.gameObject.activeSelf == false)
-    //         detailInfoUI.gameObject.SetActive(true);
-    // }
 }
 
 public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOption
@@ -133,8 +101,6 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
     {
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
         Managers.Event.SlotSelectEvent += SetDetailInfo;
-        // Managers.Event.SlotClickEvent += SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent += SetDetailInfo;
         
         selectButton.onClick.AddListener(() => 
         {
@@ -154,38 +120,19 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
     {
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
-        // Managers.Event.SlotClickEvent -= SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
+        upDownVisualer.gameObject.SetActive(false);
         selectButton.onClick.RemoveAllListeners();
         defaultBackground.gameObject.SetActive(true);
     }
 
-    // void SetCurrentWeapon(Weapon[] _weapon)
-    // void SetCurrentWeapon(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
+    protected override void SetDetailInfo(Weapon _weapon)
+    {
+        upDownVisualer.ViewUpdate(currentWeapon);
+        upDownVisualer.gameObject.SetActive(true);
 
-    //     currentWeapon = _weapon[0];
-    // }
-
-    // // void SetDetailInfo(Weapon[] _weapon)
-    // void SetDetailInfo(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
-
-    //     detailInfoUI.Refresh(_weapon[0]);
-    //     if (detailInfoUI.gameObject.activeSelf == false)
-    //         detailInfoUI.gameObject.SetActive(true);
-    // }
+        base.SetDetailInfo(_weapon);
+    }
 }
 
 public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryOpenOption

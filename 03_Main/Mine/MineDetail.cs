@@ -95,15 +95,19 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponName.text = lendedWeapon.Name;
             weaponName.gameObject.SetActive(true);
             addIcon.gameObject.SetActive(false);
-            calculatedInfoText.text = $"{_mine.hpPerDMG}\n{_mine.rangePerSize}\n{_mine.goldPerMin}";
+            string hpPerDMG = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.hpPerDMG.ToString();
+            string rangePerSize = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.rangePerSize.ToString();
+            string goldPerMin = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.goldPerMin.ToString();
+            calculatedInfoText.text = $"{hpPerDMG}\n{rangePerSize}\n{goldPerMin}";
             skillDescription.text = "";
-
             for (int i = 0; i < lendedWeapon.data.magic.Length; i++)
             {
-                int magicIndex = lendedWeapon.data.magic[i];
-                if (magicIndex < 0) break;
-                skillDescription.text += $"{lendedWeapon.data.magic[i]} ";
+                if (lendedWeapon.data.magic[i] == -1) break;
+                skillDescription.text += Managers.ServerData.SkillDatas[lendedWeapon.data.magic[i]].skillName;
+                if (i == 0 && lendedWeapon.data.magic[^1] != -1)
+                    skillDescription.text += ", ";
             }
+
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
@@ -130,72 +134,4 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             goldCollectButton.interactable = true;
         }
     }
-
-        // nameText.text = mine.GetMineData().name;
-        // description.text = mine.GetMineData().description;
-        // stat1Text.text = $"경도 {mine.GetMineData().defence}";
-        // stat2Text.text = $"강도 {mine.GetMineData().hp}";
-        // stat3Text.text = $"크기 {mine.GetMineData().size}";
-        // stat4Text.text = $"평활 {mine.GetMineData().lubricity}";
-        // for (int i = 0; i < stageStars.Length; i++)
-        // {
-        //     stageStars[i].SetActive(true);
-        //     if(i+1>mine.GetMineData().stage) stageStars[i].SetActive(false);
-        // }
-        
-
-        // if (mine.rentalWeapon is null)
-        // {
-        //     addIcon.sprite = Managers.Resource.DefaultMine;
-        //     weaponName.text = "";
-        //     calculatedInfoText.text = $"0\n0\n0";
-        //     skillDescription.text = "";
-        // }
-        // else
-        // {
-        //     upDownVisualer.gameObject.SetActive(true);
-            
-        //     addIcon.sprite = mine.rentalWeapon.Icon;
-        //     weaponName.text = mine.rentalWeapon.Name;
-        //     calculatedInfoText.text = $"{mine.hpPerDMG}\n{mine.rangePerSize}\n{mine.goldPerMin}";
-        //     string[] skillNames= new string[2];
-        //     for (int i = 0; i < 2; i++)
-        //     {
-        //         int magicIndex = mine.rentalWeapon.data.magic[i];
-        //         if(magicIndex<0) break;
-        //         skillNames[i] = Managers.ServerData.SkillDatas[magicIndex].skillName;
- 
-        //     }
-        //     skillDescription.text = String.Join(", ", skillNames);
-        // }
-
-    //    Weapon currentWeapon = InventoryPresentor.Instance.currentWeapon;
-    //    if (currentWeapon is null) return;
-    // //    Mine tempMine = Quarry.Instance.currentMine;
-    //    Weapon currentMineWeapon = tempMine.rentalWeapon;
-        
-    //    try
-    //    {
-    //        if (currentWeapon.data.mineId >= 0)
-    //            throw  new Exception("광산에 대여해준 무기입니다.");
-    //        int beforeGoldPerMin = tempMine.goldPerMin;
-    //        currentWeapon.SetBorrowedDate();
-           
-    //        tempMine.SetWeapon(currentWeapon,DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
-    //        Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin+tempMine.goldPerMin-beforeGoldPerMin );
-    //    }
-    //    catch (Exception e)
-    //    {
-    //         Managers.Alarm.Warning(e.Message);
-    //        return;
-    //    }
-    //    if (currentMineWeapon is not null)
-    //    {
-    //        tempMine.Receipt();
-    //        currentMineWeapon.Lend(-1);
-    //    }
-    //    currentWeapon.Lend(tempMine.GetMineData().index);
-        
-    // //    Quarry.Instance.currentMine= tempMine ;
-    //    InventoryPresentor.Instance.currentWeapon = InventoryPresentor.Instance.currentWeapon;
 }
