@@ -93,6 +93,7 @@ public class Inventory
                     IsNew = true
                 };
                 weapons.Add(weapon);
+                // todo : 포문 다 돌고 난 후에 업데이트 되도록 수정 필요
                 Managers.Game.Player.SetCombatScore(weapon.power);
                 if (Managers.Event.PideaCheckEvent.Invoke(_baseWeaponData[i].index))
                 {

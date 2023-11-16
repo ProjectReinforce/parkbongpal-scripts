@@ -164,6 +164,7 @@ public class Player
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.colum.mineGameScore), userData.mineGameScore);
     }
 
+    // todo : 호출하면 아예 인벤토리에서 최고 점수로 업데이트 되도록 하면 될듯
     public void SetCombatScore(int score)
     {
         if (userData.combatScore >= score) return;
