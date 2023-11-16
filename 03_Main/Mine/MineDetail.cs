@@ -119,6 +119,15 @@ public class MineDetail : MonoBehaviour, IGameInitializer
 
                     weaponCollectButton.interactable = false;
                     Managers.Game.Mine.CalculateGoldPerMin();
+                    
+                    Transactions.SendCurrent(callback =>
+                    {
+                        if (!callback.IsSuccess())
+                        {
+                            Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                            return;
+                        }
+                    });
                 });
             });
             weaponCollectButton.interactable = true;
@@ -129,7 +138,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                 _mine.Receipt(() =>
                 {
                     goldCollectButton.interactable = true;
-                });
+                }, true);
             });
             goldCollectButton.interactable = true;
         }

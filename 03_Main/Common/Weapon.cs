@@ -51,22 +51,26 @@ public class Weapon : IVisibleNew
     {
         _data.mineId = mineId;
         SetBorrowedDate();
-        Param param = new Param();
-        param.Add(nameof(WeaponData.colum.mineId),mineId);
-        param.Add(nameof(WeaponData.colum.borrowedDate),_data.borrowedDate);
-
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
+        Param param = new()
         {
-            if (!callback.IsSuccess())
-            {
-                Debug.Log(callback);
-                return;
-            }
-            Debug.Log("성공"+callback);
-        });
+            { nameof(WeaponData.colum.mineId), mineId },
+            { nameof(WeaponData.colum.borrowedDate), _data.borrowedDate }
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), data.inDate, Backend.UserInDate, param));
+
+        // SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.Log(callback);
+        //         return;
+        //     }
+        //     Debug.Log("성공"+callback);
+        // });
         // myslot.UpdateLend();
-        if (Managers.Etc.CallChecker != null)
-            Managers.Etc.CallChecker.CountCall();
+        // if (Managers.Etc.CallChecker != null)
+        //     Managers.Etc.CallChecker.CountCall();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;
