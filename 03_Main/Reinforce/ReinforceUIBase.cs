@@ -87,6 +87,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
         Weapon weapon = reinforceManager.SelectedWeapon;
 
         UpdateCosts();
+        UpdateInformations();
         
         if (weapon is not null && Checks())
             reinforceButton.interactable = true;

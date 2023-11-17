@@ -13,16 +13,27 @@ public class ReinforceRestoreUI : MonoBehaviour
 
     public void Initialize(ReinforceType _reinforceType, Action<BackendReturnObject> _callback)
     {
+        Player player = Managers.Game.Player;
         reinforceButton = Utills.Bind<Button>("Button_OK", transform);
         reinforceButton.onClick.AddListener(() =>
         {
             switch (_reinforceType)
             {
                 case ReinforceType.normalReinforce:
-                Managers.Game.Player.TryNormalReinforce(-restoreGoldCost);
+                if (player.Data.gold < restoreGoldCost)
+                {
+                    Managers.Alarm.Warning("재화가 부족합니다.");
+                    return;
+                }
+                player.TryNormalReinforce(-restoreGoldCost);
                 break;
                 case ReinforceType.soulCrafting:
-                Managers.Game.Player.TrySoulCraft(-restoreGoldCost, -restoreSoulCost);
+                if (player.Data.gold < restoreGoldCost || player.Data.weaponSoul < restoreSoulCost)
+                {
+                    Managers.Alarm.Warning($"재화가 부족합니다.");
+                    return;
+                }
+                player.TrySoulCraft(-restoreGoldCost, -restoreSoulCost);
                 break;
             }
             Managers.Game.Reinforce.SelectedWeapon.ExecuteReinforce(_reinforceType, _callback);

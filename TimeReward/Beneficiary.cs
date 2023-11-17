@@ -8,6 +8,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
     AttendanceViwer viwer;
     Button outsideObjectButton;
     Button insideObjectButton;
+    Button adButton;
     int days;
     bool buttonOff;
     bool rewardCheck;
@@ -20,13 +21,19 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         outsideObjectButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
         insideObjectButton = Utills.Bind<Button>("Button_AttendanceCheck", transform);
         insideObjectButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
+        adButton = Utills.Bind<Button>("Button_Ad", transform);
 
-        if (rewardCheck = AttendanceCheck())//갱신했으면
-        {
+        if (rewardCheck = AttendanceCheck()) //갱신했으면
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
+        else
+        {
+            outsideObjectButton.enabled = false;
+            insideObjectButton.gameObject.SetActive(false);
+            buttonOff = true;
+            adButton.interactable = false;
         }
         viwer.Initialize();
-        viwer.TodayCheck(days,rewardCheck);
+        viwer.TodayCheck(days, rewardCheck);
     }
 
     void OnEnable()
@@ -39,16 +46,6 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         Managers.Event.RecieveAttendanceRewardEvent = null;
     }
 
-    // void Start() 
-    // {
-    //     if (rewardCheck = AttendanceCheck())//갱신했으면
-    //     {
-    //         Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
-    //     }
-    //     viwer.Initialize();
-    //     viwer.TodayCheck(days,rewardCheck);
-    // }
-
     public void ExcuteAttendance(bool _isAdsRewards)
     {
         if(!buttonOff && rewardCheck)
@@ -56,6 +53,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             viwer.ButtonOn(days);
             outsideObjectButton.enabled = false;
             insideObjectButton.gameObject.SetActive(false);
+            adButton.interactable = false;
             buttonOff = true;
             Receive(_isAdsRewards);
         }

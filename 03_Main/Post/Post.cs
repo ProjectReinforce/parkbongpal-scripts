@@ -54,7 +54,8 @@ public class Post : MonoBehaviour, IGameInitializer
                 //받아올 우편이 없는것
                 Managers.Game.MainEnqueue(() =>
                 {
-                    noPost.SetActive(true);
+                    //noPost.SetActive(true);
+                    //notifyer.gameObject.SetActive(false);
                     UpdatePostCount();
                 });
                 return;
@@ -94,7 +95,7 @@ public class Post : MonoBehaviour, IGameInitializer
 
                     Debug.Log("메일 데이터 세팅 완료");
                     mail.gameObject.SetActive(true);
-                    //notifyer.GetNew(mail);
+                    notifyer.GetNew(mail);
                     slots.Add(mail);
                     UpdatePostCount();
                 });
@@ -113,6 +114,7 @@ public class Post : MonoBehaviour, IGameInitializer
             }
             Destroy(slot.gameObject);
         });
+        notifyer.PostRemove(slot);
         UpdatePostCount();
     }
     void ViewCurrent(PostSlot slot)
@@ -124,7 +126,10 @@ public class Post : MonoBehaviour, IGameInitializer
     public void UpdatePostCount()
     {
         if (slots.Count == 0)
+        {
             noPost.SetActive(true);
+            notifyer.gameObject.SetActive(false);
+        }
         postCount.text = $"{slots.Count}";
     }
 

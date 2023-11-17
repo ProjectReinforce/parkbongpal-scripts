@@ -39,6 +39,9 @@ public class AdditionalUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateAtk();
+
+        UserData userData = Managers.Game.Player.Data;
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
     }
 
     protected override void RegisterPreviousButtonClickEvent()
@@ -56,11 +59,7 @@ public class AdditionalUI : ReinforceUIBase
         UserData userData = Managers.Game.Player.Data;
 
         if (userData.gold < goldCost)
-        {
-            goldCostText.text = $"<color=red>{goldCost}</color>";
             return false;
-        }
-        goldCostText.text = $"<color=white>{goldCost}</color>";
         return true;
     }
 
