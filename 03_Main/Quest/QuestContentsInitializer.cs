@@ -8,11 +8,12 @@ using UnityEngine.UI;
 public class QuestContentsInitializer : MonoBehaviour
 {
     [SerializeField] QuestContentsPool pool;
-    [SerializeField] Transform dayContents;
-    [SerializeField] Transform weekContents;
-    [SerializeField] Transform onceIngContents;
-    [SerializeField] Transform onceClearContents;
-    [SerializeField] ToggleGroup toggleGroup;
+    [SerializeField] RectTransform[] contents;
+    [SerializeField] RectTransform currentTap;
+    //[SerializeField] Transform dayContents;
+    //[SerializeField] Transform weekContents;
+    //[SerializeField] Transform onceIngContents;
+    //[SerializeField] Transform onceClearContents;
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
@@ -29,7 +30,7 @@ public class QuestContentsInitializer : MonoBehaviour
         foreach (var item in Managers.ServerData.QuestDatas)
         {
             QuestContent questContent = pool.GetOne(); 
-            questContent.Initialize(item, dayContents, weekContents, onceIngContents, onceClearContents);
+            questContent.Initialize(item, contents[0], contents[1], contents[2], contents[3]);
 
             questContents[item.recordType].Add(questContent);
             quests.Add(item.questId, questContent);
@@ -43,14 +44,19 @@ public class QuestContentsInitializer : MonoBehaviour
     private void OnEnable()
     {
         UpdateAllContent();
-        toggleGroup.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
     }
-    private void OnDisable()
+
+    public void ClickTap(int _index)
     {
-        foreach(Toggle toggle in toggleGroup.GetComponentsInChildren<Toggle>())
-        {
-            toggle.isOn = false;
-        }
+        currentTap.gameObject.SetActive(false);
+        currentTap = contents[_index];
+        float posX = currentTap.anchoredPosition.x;
+        currentTap.anchoredPosition = new Vector2(posX, 0);
+        if (_index > 1)
+            currentTap.gameObject.transform.parent.gameObject.SetActive(true);
+        else
+            currentTap.gameObject.transform.parent.parent.gameObject.SetActive(true);
+        currentTap.gameObject.SetActive(true);
     }
 
     void UpdateAllContent()
