@@ -50,7 +50,16 @@ public class MineManager
         }
 
         foreach (var item in Managers.ServerData.mineBuildDatas)
-            mines[item.mineIndex].Building(item.buildStartTime);
+        {
+            if (item.buildCompleted == true)
+            {
+                mines[item.mineIndex].BuildComplete();
+            }
+            else
+            {
+                mines[item.mineIndex].Building(item.buildStartTime);
+            }
+        }
     }
 
     public void ReceiptAllGolds()
@@ -61,7 +70,9 @@ public class MineManager
 
         Param param = new()
         {
-            { nameof(UserData.colum.gold), Managers.Game.Player.Data.gold }
+            { nameof(UserData.colum.gold), Managers.Game.Player.Data.gold },
+            { nameof(UserData.colum.stone), Managers.Game.Player.Data.stone },
+            { nameof(UserData.colum.diamond), Managers.Game.Player.Data.diamond },
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));

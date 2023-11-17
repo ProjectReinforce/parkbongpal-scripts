@@ -95,7 +95,7 @@ public class Mine : MonoBehaviour, Rental
                 break;
             case MineStatus.Building:
                 if (remainTime <= 0)
-                    BuildComplete();
+                    BuildComplete(true);
                 elapse -= Time.fixedDeltaTime;
                 if (elapse >= 0) return;
                 elapse = INTERVAL;
@@ -327,7 +327,8 @@ public class Mine : MonoBehaviour, Rental
         });
     }
 
-    public void BuildComplete()
+    bool alreadyUpdate = false;
+    public void BuildComplete(bool _needUpdate = false)
     {
         mineStatus = MineStatus.Owned;
         icon.color = Color.white;
@@ -351,19 +352,26 @@ public class Mine : MonoBehaviour, Rental
             Managers.Event.MineClickEvent?.Invoke(this);
         });
 
-        Param param = new()
+        if (alreadyUpdate == false && _needUpdate == true)
         {
-            { nameof(MineBuildData.buildCompleted), true }
-        };
-
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(MineBuildData), InDate, Backend.UserInDate, param, callback =>
-        {
-            if (!callback.IsSuccess())
+            Param param = new()
             {
-                Managers.Alarm.Danger($"통신 에러! : {callback}");
-                return;
-            }
-        });
+                { nameof(MineBuildData.buildCompleted), true }
+            };
+
+            SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(MineBuildData), InDate, Backend.UserInDate, param, callback =>
+            {
+                if (!callback.IsSuccess())
+                {
+                    Managers.Alarm.Danger($"통신 에러! : {callback}");
+                    return;
+                }
+                Debug.Log("광산 건설 완료, 서버 업데이트");
+                alreadyUpdate = _needUpdate;
+            });
+            if (Managers.Etc.CallChecker != null)
+                Managers.Etc.CallChecker.CountCall();
+        }
     }
 
     public void SetGold(DateTime currentTime)
