@@ -57,6 +57,16 @@ public class SoulCraftingUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateAtk();
+
+        UserData userData = Managers.Game.Player.Data;
+        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
+        soulCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
+
+        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
+
+        upgradeCountText.text = selectedWeapon.SoulStat[(int)StatType.upgradeCount] <= 0 ?
+        $"강화 가능 횟수 : <color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>" :
+        $"강화 가능 횟수 : <color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
     }
 
     protected override void RegisterPreviousButtonClickEvent()
@@ -94,43 +104,18 @@ public class SoulCraftingUI : ReinforceUIBase
     bool CheckGold()
     {
         UserData userData = Managers.Game.Player.Data;
-
-        if (userData.gold >= goldCost)
-        {
-            goldCostText.text = $"<color=white>{goldCost}</color>";
-            return true;
-        }
-        goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
-        return false;
+        return userData.gold >= goldCost;
     }
 
     bool CheckSoul()
     {
         UserData userData = Managers.Game.Player.Data;
-
-        if (userData.weaponSoul >= soulCost)
-        {
-            soulCostText.text = $"<color=white>{soulCost}</color>";
-            return true;
-        }
-        soulCostText.text = userData.weaponSoul < soulCost ? $"<color=red>{soulCost}</color>" : $"<color=white>{soulCost}</color>";
-        return false;
-    }
-
-    bool CheckUpgradeCount()
-    {
-        WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-
-        if (selectedWeapon.SoulStat[(int)StatType.upgradeCount] <= 0)
-            upgradeCountText.text = $"강화 가능 횟수 : <color=red>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
-        else
-            upgradeCountText.text = $"강화 가능 횟수 : <color=white>{selectedWeapon.SoulStat[(int)StatType.upgradeCount]}</color>";
-        return true;
+        return userData.weaponSoul >= soulCost;
     }
 
     protected override bool Checks()
     {
-        if (CheckGold() && CheckSoul() && CheckUpgradeCount()) return true;
+        if (CheckGold() && CheckSoul()) return true;
         return false;
     }
 }

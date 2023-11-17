@@ -20,6 +20,11 @@ public class DecompositionUI : MonoBehaviour
         return null;
     }
 
+    public void GetSelectedWeapons()
+    {
+        Managers.Event.DecompositionWeaponChangeEvent?.Invoke(selectedWeapons.ToArray());
+    }
+
     Button decompositionButton;
 
     void Awake()

@@ -76,15 +76,13 @@ public class QuestContentsInitializer : MonoBehaviour
 
     void OpenQuestID(int _openQuestIndex, RecordType _recordType)
     {
-        if (questContents[_recordType][_openQuestIndex].TargetData.recordType == _recordType)
-        {
-            questContents[_recordType][_openQuestIndex].gameObject.SetActive(true);
-        }
-        else
+        if (_openQuestIndex >= questContents[_recordType].Count)
         {
             _openQuestIndex = _openQuestIndex - 1;
             questContents[_recordType][_openQuestIndex].Cleared();
+            return;
         }
+        questContents[_recordType][_openQuestIndex].gameObject.SetActive(true);
     }
 
     public void DayWeekResetServerData()

@@ -192,3 +192,12 @@ public enum BgmType
     ReinforceBgm,
     MiniGameBgm
 }
+
+public enum AdType
+{
+    Attendance,
+    RefreshRank,
+    FreeDiamond,
+    FreeGold,
+    CollectBonus
+}

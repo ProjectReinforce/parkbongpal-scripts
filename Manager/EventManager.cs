@@ -53,6 +53,7 @@ public class EventManager
     public Action<int, RecordType> OpenQuestIDEvent;
     public Action UpdateAllContentEvent;
     public Action ClearCheckEvent;
+    public Action LevelUpEvent;
     #endregion
 
     #region Pidea

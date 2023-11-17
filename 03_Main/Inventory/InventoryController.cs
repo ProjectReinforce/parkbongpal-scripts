@@ -9,6 +9,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public InventoryType CurrentInventoryType { get; private set; }
     public IInventoryOpenOption[] InventoryOpenOptions { get; private set;}
     public DetailInfoUI DetailInfo { get; private set; }
+    public UpDownVisualer UpDownVisualer { get; private set; }
     public Transform DefaultBackground { get; private set; }
     public DecompositionUI DecompositionUI { get; private set; }
     public Button SelectButton { get; private set; }
@@ -25,6 +26,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         DetailInfo = Utills.Bind<DetailInfoUI>("DetailInfo_S", transform);
+        UpDownVisualer = Utills.Bind<UpDownVisualer>("UpDown_S", DetailInfo.transform);
         DefaultBackground = Utills.Bind<Transform>("DefaultBackground", transform);
         DecompositionUI = Utills.Bind<DecompositionUI>("Decomposition_S", transform);
         SelectButton = Utills.Bind<Button>("Button_Select", transform);
@@ -111,6 +113,8 @@ public class InventoryController : MonoBehaviour, IGameInitializer
             item.IsHideLendedWeapon = _toggleValue;
             item.ResetUI((int)CurrentInventoryType);
             item.SetUI((int)CurrentInventoryType);
+            if (CurrentInventoryType == InventoryType.Decomposition)
+                DecompositionUI.GetSelectedWeapons();
         }
     }
 }

@@ -8,8 +8,8 @@ public class SoulCraftingButtonUI : ReinforceButtonUIBase
     {
         base.Awake();
 
-        Managers.Game.Player.Record.levelUpEvent -= CheckQualification;
-        Managers.Game.Player.Record.levelUpEvent += CheckQualification;
+        Managers.Event.LevelUpEvent -= CheckQualification;
+        Managers.Event.LevelUpEvent += CheckQualification;
     }
     
     protected override bool Checks()

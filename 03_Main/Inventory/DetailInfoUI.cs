@@ -98,16 +98,16 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
 
         for (int i = 0; i < Consts.MAX_SKILL_COUNT; i++)
         {
-            if (weapon.data.magic[0] < 0)
+            if (weapon.data.magic[i] < 0)
             {
-                lockImages[0].gameObject.SetActive(true);
-                skillIcons[0].gameObject.SetActive(false);
+                lockImages[i].gameObject.SetActive(true);
+                skillIcons[i].gameObject.SetActive(false);
             }
             else
             {
-                lockImages[0].gameObject.SetActive(false);
-                skillIcons[0].sprite = Managers.Resource.GetSkill(weapon.data.magic[0]);
-                skillIcons[0].gameObject.SetActive(true);
+                lockImages[i].gameObject.SetActive(false);
+                skillIcons[i].sprite = Managers.Resource.GetSkill(weapon.data.magic[i]);
+                skillIcons[i].gameObject.SetActive(true);
             }
         }
 

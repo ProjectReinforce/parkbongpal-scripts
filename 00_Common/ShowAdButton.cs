@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using GoogleMobileAds.Api;
-using System;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class GoogleAds : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public class ShowAdButton : MonoBehaviour
 {
+    [SerializeField] AdType adType;
     Button button;
 
-    void Start()
+    void Awake()
     {
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
@@ -17,21 +18,24 @@ public class GoogleAds : MonoBehaviour
             ShowRewardedInterstitialAd();
             button.interactable = false;
         });
-        MobileAds.RaiseAdEventsOnUnityMainThread = true;
-        MobileAds.Initialize(intitStatus => {});
 
         LoadRewardedInterstitialAd();
     }
     
     // These ad units are configured to always serve test ads.
     #if UNITY_ANDROID
-    // string _adUnitId = "ca-app-pub-3940256099942544/5354046379";
-    // string _adUnitId = "ca-app-pub-3920142147368711/8099521950";
-    string _adUnitId = "ca-app-pub-3920142147368711/2814553999"; // 출첵 2배
+    static string[] _adUnitId =
+    {
+        "ca-app-pub-3920142147368711/2814553999", 
+        "ca-app-pub-3920142147368711/7765883379",
+        "ca-app-pub-3920142147368711/4544823668",
+        "ca-app-pub-3920142147368711/8099521950",
+        "ca-app-pub-3920142147368711/7468114870"
+    };
     #elif UNITY_IPHONE
-    string _adUnitId = "ca-app-pub-3940256099942544/6978759866";
+    static string _adUnitId = "ca-app-pub-3940256099942544/6978759866";
     #else
-    string _adUnitId = "unused";
+    static string _adUnitId = "unused";
     #endif
 
     RewardedAd rewardedInterstitialAd;
@@ -55,7 +59,7 @@ public class GoogleAds : MonoBehaviour
         adRequest.Keywords.Add("unity-admob-sample");
 
         // send the request to load the ad.
-        RewardedAd.Load(_adUnitId, adRequest,
+        RewardedAd.Load(_adUnitId[(int)adType], adRequest,
         (RewardedAd ad, LoadAdError error) =>
         {
             // if error is not null, the load request failed.
@@ -77,22 +81,28 @@ public class GoogleAds : MonoBehaviour
 
     public void ShowRewardedInterstitialAd()
     {
-        const string rewardMsg =
-            "Rewarded interstitial ad rewarded the user. Type: {0}, amount: {1}.";
-
         if (rewardedInterstitialAd != null && rewardedInterstitialAd.CanShowAd())
         {
             rewardedInterstitialAd.Show((Reward reward) =>
             {
                 // TODO: Reward the user.
-                Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-
-                Managers.Event.RecieveAttendanceRewardEvent?.Invoke(true);
+                switch (adType)
+                {
+                    case AdType.Attendance:
+                    Managers.Event.RecieveAttendanceRewardEvent?.Invoke(true);
+                    break;
+                    case AdType.RefreshRank:
+                    break;
+                    case AdType.FreeDiamond:
+                    break;
+                    case AdType.FreeGold:
+                    break;
+                    case AdType.CollectBonus:
+                    break;
+                }
             });
         }
     }
-
-    // rewardedInterstitialAd.Destroy();
 
     private void RegisterEventHandlers(RewardedAd ad)
     {
