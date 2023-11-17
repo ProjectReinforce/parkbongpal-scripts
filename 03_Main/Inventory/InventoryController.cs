@@ -113,6 +113,8 @@ public class InventoryController : MonoBehaviour, IGameInitializer
             item.IsHideLendedWeapon = _toggleValue;
             item.ResetUI((int)CurrentInventoryType);
             item.SetUI((int)CurrentInventoryType);
+            if (CurrentInventoryType == InventoryType.Decomposition)
+                DecompositionUI.GetSelectedWeapons();
         }
     }
 }
