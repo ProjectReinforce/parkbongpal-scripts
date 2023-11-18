@@ -28,8 +28,8 @@ public class Mine : MonoBehaviour, Rental
     Button mineButton;
     Image lockIcon;
     Text nameText;
-    Text goldPerMinText;
-    Text currentGoldText;
+    // Text goldPerMinText;
+    Text infoText;
     [SerializeField] GameObject restNPC;
     [SerializeField] NPCController doNPC;
 
@@ -72,8 +72,8 @@ public class Mine : MonoBehaviour, Rental
         lockIcon = Utills.Bind<Image>("Image_Lock", transform);
         nameText = Utills.Bind<Text>("Text_Name", transform);
         nameText.text = mineData.name;
-        goldPerMinText = Utills.Bind<Text>("Text_GoldPerMin", transform);
-        currentGoldText = Utills.Bind<Text>("Text_CurrentGold", transform);
+        // goldPerMinText = Utills.Bind<Text>("Text_GoldPerMin", transform);
+        infoText = Utills.Bind<Text>("Text_CurrentGold", transform);
         restNPC = Utills.Bind<Transform>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Rest", transform).gameObject;
         //doNPC = transform.GetChild(4).GetComponent<NPCController>();
         doNPC = Utills.Bind<NPCController>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Do", transform);
@@ -108,7 +108,8 @@ public class Mine : MonoBehaviour, Rental
                 remainTimeInt %= 3600;
                 int m = remainTimeInt / 60;
                 remainTimeInt %= 60;
-                goldPerMinText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
+                // goldPerMinText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
+                infoText.text = $"{h:D2}:{m:D2}:{remainTimeInt:D2}";
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
@@ -121,7 +122,7 @@ public class Mine : MonoBehaviour, Rental
                 if (elapse > 0) return;
                 elapse += INTERVAL;
                 gold += (int)(_goldPerMin * INTERVAL / 60);
-                currentGoldText.text = gold.ToString();
+                infoText.text = $"{gold:n0}";
                 break;
         }
     }
@@ -277,7 +278,7 @@ public class Mine : MonoBehaviour, Rental
         }
 
         // lendedWeapon.SetBorrowedDate(date);
-        currentGoldText.text = gold.ToString();
+        infoText.text = $"{gold:n0}";
 
         return resultGold;
     }
@@ -344,13 +345,14 @@ public class Mine : MonoBehaviour, Rental
         {
             doNPC.gameObject.SetActive(false);
             restNPC.gameObject.SetActive(true);
-            goldPerMinText.text = "";
+            // goldPerMinText.text = "";
+            infoText.text = "-";
         }
         else
         {
             NPCWeaponChange(lendedWeapon.Icon);
             restNPC.gameObject.SetActive(false);
-            goldPerMinText.text = goldPerMin.ToString();
+            // goldPerMinText.text = goldPerMin.ToString();
         }
 
         mineButton.onClick.RemoveAllListeners();
@@ -392,7 +394,7 @@ public class Mine : MonoBehaviour, Rental
 
         gold = (int)(timeInterval.TotalMilliseconds / 60000 * goldPerMin);
 
-        currentGoldText.text = gold.ToString();
+        infoText.text = $"{gold:n0}";
     }
 
     public MineData GetMineData()
@@ -413,7 +415,7 @@ public class Mine : MonoBehaviour, Rental
 
         set
         {
-            goldPerMinText.text = value.ToString();
+            // goldPerMinText.text = value.ToString();
             MaxGold = value * 120;
             _goldPerMin = value;
         }
