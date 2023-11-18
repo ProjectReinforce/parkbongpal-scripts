@@ -186,7 +186,7 @@ public class Player
         DateTime serverTime = Managers.Etc.GetServerTime();
         Param param = new()
         {
-            {nameof(UserData.colum.attendance), userData.attendance + 1},
+            {nameof(UserData.colum.attendance), userData.attendance},
             {nameof(UserData.colum.lastLogin), serverTime},
             {nameof(UserData.colum.exp), userData.exp},
             {nameof(UserData.colum.level), userData.level},
