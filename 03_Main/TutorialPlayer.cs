@@ -22,6 +22,7 @@ public class TutorialPlayer : MonoBehaviour
 
     void Start()
     {
+        Managers.UI.InputLock = true;
         panelTrans = new Transform[20];
         cheifLine = new string[20];
         bool clearedtutorial = false;
@@ -45,6 +46,7 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalk.text = cheifLine[0];
             panelTrans[0] = Utills.Bind<Transform>("Button_Manufacture_S");
             tutorialPanel.transform.position = panelTrans[index].position;
+            Debug.Log(panelTrans[0].position);
             textNextButton.gameObject.SetActive(true);
             panelTrans[4] = Utills.BindFromMine<Transform>("00_S");
             panelTrans[5] = Utills.Bind<Transform>("MiniGame");
@@ -74,13 +76,17 @@ public class TutorialPlayer : MonoBehaviour
         {
             ManufactureFinish();
         }
+        if(index == 4)
+        {
+            NextScene();
+        }
         if (index >= panelTrans.Length || panelTrans[index] == null)
         {
             index = 0;
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
         }
-        tutorialPanel.transform.position = panelTrans[index].position;
+        tutorialPanel.transform.position = panelTrans[index].transform.position;
     }
 
     void ManufactureTutorial()
@@ -90,36 +96,48 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.TryGetComponent(out SpriteRenderer sprite);
         sprite.sprite = cheifSprite[2];
         panelTrans[3] = Utills.Bind<Transform>("CloseButton_Manufacture");
-        panelTrans[1] = Utills.Bind<Transform>("Gacha_1_Gold");
+        Debug.Log(panelTrans[3].position);
+        panelTrans[1] = Utills.Bind<Transform>("Gacha_Normal_1");
+        Debug.Log(panelTrans[1].position);
         TextChanges();
         textNextButton.gameObject.SetActive(true);
     }
 
-    bool ManufactureTutorialTry()
+    void ManufactureTutorialTry()
     {
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
         storeUI.TutorialManufacture();
-        panelTrans[2] = Utills.Bind<Transform>("Button_Ok");
-        return true;
+        panelTrans[2] = Utills.Bind<Transform>("Button_Gacha_Ok_1");
+        Debug.Log(panelTrans[2]);
     }
 
     void ManufactureFinish()
     {
         Managers.UI.ClosePopup();
         TextChanges();
+        cheifControl.gameObject.SetActive(true);
+        cheifTalkObject.gameObject.SetActive(true);
         textNextButton.gameObject.SetActive(true);
     }
 
-    readonly WaitForSeconds waitForDotDelay = new(2.3f);
+    readonly WaitForSeconds waitForDotDelay = new(2.2f);
     IEnumerator StoreAfter()
     {
         yield return waitForDotDelay;
-        if(ManufactureTutorialTry() == true)
+        Managers.UI.InputLock = true;
+        tutorialPanel.transform.parent.gameObject.SetActive(true);
+    }
+
+    void NextScene()
+    {
+        if(!Managers.UI.CheckPopup())
         {
-            tutorialPanel.transform.parent.gameObject.SetActive(true);
+            Managers.UI.ClosePopup();
         }
+        Managers.Game.Player.Record.TutorialRecordIndex();
+        textNextButton.gameObject.SetActive(true);
     }
 
     void TextChanges()
