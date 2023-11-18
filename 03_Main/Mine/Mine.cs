@@ -49,22 +49,25 @@ public class Mine : MonoBehaviour, Rental
         mineButton.onClick.AddListener(() =>
         {
             ulong buildCost = Managers.ServerData.MineDatas[mineIndex].buildCost;
-            if ((ulong)Managers.Game.Player.Data.gold < buildCost)
+            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다.", () => 
             {
-                // todo: 광산 여시겠습니까 확인 메시지창 출력
-                ulong diff = buildCost - (ulong)Managers.Game.Player.Data.gold;
-                Managers.Alarm.Warning($"{diff:n0} 골드가 부족합니다.");
-                return;
-            }
-            else
-            {
-                // todo: 광산 건설 확인 메시지창 출력
-                Managers.Alarm.Warning("건설을 시작합니다.");
-                StartBuild();
-                if (buildCost <= int.MaxValue)
-                    Managers.Game.Player.AddGold(-(int)buildCost);
-                return;
-            }
+                Managers.UI.ClosePopup();
+
+                if ((ulong)Managers.Game.Player.Data.gold < buildCost)
+                {
+                    // todo: 광산 여시겠습니까 확인 메시지창 출력
+                    ulong diff = buildCost - (ulong)Managers.Game.Player.Data.gold;
+                    Managers.Alarm.Warning($"{diff:n0} 골드가 부족합니다.");
+                }
+                else
+                {
+                    // todo: 광산 건설 확인 메시지창 출력
+                    Managers.Alarm.Warning("건설을 시작합니다.");
+                    StartBuild();
+                    if (buildCost <= int.MaxValue)
+                        Managers.Game.Player.AddGold(-(int)buildCost);
+                }
+            });
         });
         lockIcon = Utills.Bind<Image>("Image_Lock", transform);
         nameText = Utills.Bind<Text>("Text_Name", transform);

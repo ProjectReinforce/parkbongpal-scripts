@@ -22,8 +22,6 @@ public class CustomWarning : Warning
         confirmButton.onClick.AddListener(() =>
         {
             _buttonEvent?.Invoke();
-
-            Managers.UI.ClosePopup();
         });
         Managers.UI.OpenPopup(gameObject);
     }
