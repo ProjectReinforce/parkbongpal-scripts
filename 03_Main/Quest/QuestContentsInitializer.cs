@@ -10,10 +10,6 @@ public class QuestContentsInitializer : MonoBehaviour
     [SerializeField] QuestContentsPool pool;
     [SerializeField] RectTransform[] contents;
     [SerializeField] RectTransform currentTap;
-    //[SerializeField] Transform dayContents;
-    //[SerializeField] Transform weekContents;
-    //[SerializeField] Transform onceIngContents;
-    //[SerializeField] Transform onceClearContents;
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
@@ -30,7 +26,11 @@ public class QuestContentsInitializer : MonoBehaviour
         foreach (var item in Managers.ServerData.QuestDatas)
         {
             QuestContent questContent = pool.GetOne(); 
-            questContent.Initialize(item, contents[0], contents[1], contents[2], contents[3]);
+            questContent.Initialize(item, 
+                                    contents[(int)QuestContents.dayContents], 
+                                    contents[(int)QuestContents.weekContents], 
+                                    contents[(int)QuestContents.onceIngContents], 
+                                    contents[(int)QuestContents.onceClearContents]);
 
             questContents[item.recordType].Add(questContent);
             quests.Add(item.questId, questContent);
@@ -52,10 +52,6 @@ public class QuestContentsInitializer : MonoBehaviour
         currentTap = contents[_index];
         float posX = currentTap.anchoredPosition.x;
         currentTap.anchoredPosition = new Vector2(posX, 0);
-        if (_index > 1)
-            currentTap.gameObject.transform.parent.gameObject.SetActive(true);
-        else
-            currentTap.gameObject.transform.parent.parent.gameObject.SetActive(true);
         currentTap.gameObject.SetActive(true);
     }
 
