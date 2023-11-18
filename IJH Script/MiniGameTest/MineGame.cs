@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
@@ -13,9 +14,9 @@ public class MineGame : MonoBehaviour
     [SerializeField] Button mainButton;
     [SerializeField] GameObject pausePanel;
     [SerializeField] GameObject resultPanel;
+    // [SerializeField] MiniGameDamageTextPooler pooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
-    bool isPauseOn = false;
 
     public void Resume()
     {
@@ -89,6 +90,15 @@ public class MineGame : MonoBehaviour
     void Attack() // 데미지 계산 할 함수
     {
         rock.GetDamage(selectedWeapon.power);
+        Managers.Event.SetMiniGameDamageTextEvent?.Invoke(selectedWeapon.power);
+        // Managers.Event.GetPoolEvent?.Invoke();
+        // pooler.GetPool();
+        // Invoke("releaseText", 0.5f);
+    }
+
+    void releaseText()
+    {
+        // Managers.Event.ReleaseMiniGameDamageTextEvent?.Invoke();
     }
 
     void CompareScore(int _newScore)
@@ -101,9 +111,7 @@ public class MineGame : MonoBehaviour
     {
         isAttackAble = false;
         Managers.Game.Player.AddGold(rock.Score);
-        // Debug.Log(rock.Score);
         CompareScore(rock.Score);
-        // Debug.Log(Managers.Game.Player.Data.gold);
         resultPanel.SetActive(true);
         Managers.Event.ResultBestScoreMineGameEvent?.Invoke();
         Managers.Event.ResultNewScoreMineGameEvent?.Invoke(rock.Score);

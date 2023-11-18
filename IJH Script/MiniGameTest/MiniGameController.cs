@@ -12,25 +12,17 @@ public class MiniGameController : MonoBehaviour
     {
         Managers.Event.SetMiniGameWeaponEvent -= SetWeapon;
         Managers.Event.SetMiniGameWeaponEvent += SetWeapon;
-
-        // Managers.Event.SetMiniGameEvent -= SetMiniGame;
-        // Managers.Event.SetMiniGameEvent += SetMiniGame;
     }
-
-    // void SetMiniGame()
-    // {
-    //     mineGame.gameObject.SetActive(true); 
-    // }
 
     void SetWeapon(Weapon _weapon)
     {
         selectedWeapon = _weapon;
         Managers.Event.SetMiniGameWeaponUIEvent?.Invoke(selectedWeapon.Icon, selectedWeapon.Name);
-        mineGame.SetMineGameWeapon(selectedWeapon);
     }
 
     public void ClickStartButton()
     {
+        mineGame.SetMineGameWeapon(selectedWeapon);
         mineGame.gameObject.SetActive(true);
     }
 }

@@ -47,6 +47,9 @@ public class EventManager
     public Action ResultBestScoreMineGameEvent;
     public Action MiniGameEscEvent;
     public Action MiniGameOverEvent;
+    public Action<int> SetMiniGameDamageTextEvent;
+    public Action ReleaseMiniGameDamageTextEvent;
+    public Action GetPoolEvent;
     #endregion
 
     #region Quest

@@ -7,6 +7,7 @@ public class MineGameResultUI : MonoBehaviour
 {
     [SerializeField] Text bestScore;
     [SerializeField] Text nowTurnScore;
+    [SerializeField] Text getGoldText;
 
     void OnEnable()
     {
@@ -22,6 +23,7 @@ public class MineGameResultUI : MonoBehaviour
     void SetNowTurnScore(int _score)
     {
         nowTurnScore.text = _score.ToString();
+        getGoldText.text = _score.ToString();
     }
 
     void SetBestScore()
