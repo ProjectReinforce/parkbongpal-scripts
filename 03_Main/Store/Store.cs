@@ -76,6 +76,7 @@ public class Store : MonoBehaviour
         }
 
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
 
         ManufactureResultUI targetManufactureResultUI = _count == ONE ? manufactureOneUI : manufactureUI;
         targetManufactureResultUI.SetInfo(_type, baseWeaponDatas);

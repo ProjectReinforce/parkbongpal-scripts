@@ -99,6 +99,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(false);
     }
 
     public void SortWeapons(Dropdown _test)
