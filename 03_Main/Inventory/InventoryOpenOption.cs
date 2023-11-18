@@ -101,7 +101,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
     {
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
         Managers.Event.SlotSelectEvent += SetDetailInfo;
-        
+
         selectButton.onClick.AddListener(() => 
         {
             if (currentWeapon.data.mineId != -1)
@@ -110,6 +110,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
                 return;
             }
             
+            upDownVisualer.SetCurrentWeapon(currentWeapon);
             Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
             Managers.UI.ClosePopup();
         });
@@ -128,10 +129,11 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
 
     protected override void SetDetailInfo(Weapon _weapon)
     {
-        upDownVisualer.ViewUpdate(currentWeapon);
-        upDownVisualer.gameObject.SetActive(true);
-
         base.SetDetailInfo(_weapon);
+
+        upDownVisualer.ViewUpdate(currentWeapon);
+        if (upDownVisualer.gameObject.activeSelf == false)
+            upDownVisualer.gameObject.SetActive(true);
     }
 }
 

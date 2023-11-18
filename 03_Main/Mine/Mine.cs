@@ -129,7 +129,7 @@ public class Mine : MonoBehaviour, Rental
         if (lendedWeapon != null)
         {
             lendedWeapon.Lend(-1);
-            Receipt();
+            Receipt(_needAddTransactions: false);
             // 골드 수령
         }
         lendedWeapon = _weapon;
@@ -253,21 +253,25 @@ public class Mine : MonoBehaviour, Rental
         //     Managers.Etc.CallChecker.CountCall();
     }
 
-    public int Receipt()
+    public int Receipt(bool _needAddTransactions = false)
     {
         bool condition = lendedWeapon != null && gold > 0 && mineStatus == MineStatus.Owned;
         if (!condition) return 0;
         int resultGold = gold;
         Managers.Game.Player.AddGold(gold, false);
         gold = 0;
-        // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-        // DateTime date = Managers.Etc.GetServerTime();
-        // Param param = new()
-        // {
-        //     { nameof(WeaponData.colum.borrowedDate), date }
-        // };
+        
+        if (_needAddTransactions == true)
+        {
+            // DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
+            DateTime date = Managers.Etc.GetServerTime();
+            Param param = new()
+            {
+                { nameof(WeaponData.colum.borrowedDate), date }
+            };
 
-        // Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
+            Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
+        }
 
         // lendedWeapon.SetBorrowedDate(date);
         currentGoldText.text = gold.ToString();

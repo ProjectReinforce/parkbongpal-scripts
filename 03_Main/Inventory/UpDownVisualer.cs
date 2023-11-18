@@ -79,6 +79,7 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
                 case <0:
                     arrowPositions[i].sprite = Arrows[0];
                     arrowPositions[i].color = red;
+                    quantity[i].color = red;
                     break;
                 default:
                     arrowPositions[i].sprite = Arrows[1];
@@ -86,6 +87,7 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
                 case >0:
                     arrowPositions[i].sprite = Arrows[2];
                     arrowPositions[i].color = green;
+                    quantity[i].color = green;
                     break;
             }
 
@@ -101,11 +103,16 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
 
     public void GameInitialize()
     {
-        Managers.Event.MineClickEvent += SetCurrentWeapon;
+        Managers.Event.MineClickEvent += SetCurrentWeaponFromMine;
     }
 
-    void SetCurrentWeapon(Mine _mine)
+    void SetCurrentWeaponFromMine(Mine _mine)
     {
         currentWeapon = _mine.GetWeapon();
+    }
+
+    public void SetCurrentWeapon(Weapon _weapon)
+    {
+        currentWeapon = _weapon;
     }
 }

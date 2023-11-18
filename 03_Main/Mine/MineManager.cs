@@ -66,7 +66,7 @@ public class MineManager
     {
         int totalGold = 0;
         foreach (var item in mines)
-            totalGold += item.Value.Receipt();
+            totalGold += item.Value.Receipt(_needAddTransactions: true);
 
         Param param = new()
         {
