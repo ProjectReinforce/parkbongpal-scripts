@@ -1,6 +1,7 @@
 ﻿using System;
 using Manager;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Store : MonoBehaviour
 {
@@ -8,11 +9,14 @@ public class Store : MonoBehaviour
     private int[][] percents;
     [SerializeField] ManufactureResultUI manufactureUI;
     [SerializeField] ManufactureResultUI manufactureOneUI;
-    [SerializeField] UnityEngine.UI.Button normalGacha;
-    [SerializeField] UnityEngine.UI.Button normalTenGacha;
-    [SerializeField] UnityEngine.UI.Button epicGacha;
-    [SerializeField] UnityEngine.UI.Button epicTenGacha;
+    [SerializeField] Button normalGacha;
+    [SerializeField] Button normalTenGacha;
+    [SerializeField] Button epicGacha;
+    [SerializeField] Button epicTenGacha;
+    [SerializeField] Button manufactureStartButton;
+    [SerializeField] Text manufactureText;
     [SerializeField] GameObject cutSceneControl;
+    int[] typeCount;
 
     void Awake()
     {
@@ -23,11 +27,13 @@ public class Store : MonoBehaviour
             GachaData gachaData = gacharsPercents[i];
             percents[i] = new[] { gachaData.trash, gachaData.old, gachaData.normal, gachaData.rare, gachaData.unique, gachaData.legendary };
         }
+        typeCount = new int[2];
 
-        normalGacha.onClick.AddListener(() => ExecuteManaufactureUI(0, ONE));
-        normalTenGacha.onClick.AddListener(() => ExecuteManaufactureUI(0, TEN));
-        epicGacha.onClick.AddListener(() => ExecuteManaufactureUI(1, ONE));
-        epicTenGacha.onClick.AddListener(() => ExecuteManaufactureUI(1, TEN));
+        normalGacha.onClick.AddListener(() => ReturnTypeCount(0, ONE));
+        normalTenGacha.onClick.AddListener(() => ReturnTypeCount(0, TEN));
+        epicGacha.onClick.AddListener(() => ReturnTypeCount(1, ONE));
+        epicTenGacha.onClick.AddListener(() => ReturnTypeCount(1, TEN));
+        manufactureStartButton.onClick.AddListener(() => ExecuteManaufactureUI(typeCount[0], typeCount[1]));
     }
 
     const int COST_GOLD = 10000;
@@ -35,8 +41,21 @@ public class Store : MonoBehaviour
     private const int ONE = 1;
     private const int TEN = 10;
 
+    public int[] ReturnTypeCount(int _type, int _count)
+    {
+        typeCount[0] = _type;
+        string typeCheck = _type == 0 ? manufactureText.text = "<color=red>일반</color> 무기 제작을 하시겠습니까?" : manufactureText.text = "<color=red>고급</color> 무기 제작을 하시겠습니까?";
+        typeCount[1] = _count;
+        return typeCount;
+    }
+
     public void ExecuteManaufactureUI(int _type, int _count)
     {
+        if(manufactureStartButton.transform.parent.parent.gameObject.activeSelf)
+        {
+            Managers.UI.ClosePopup(false);
+        }
+
         if (Managers.Game.Inventory.CheckRemainSlots(_count))
         {
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");

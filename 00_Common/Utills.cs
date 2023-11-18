@@ -118,6 +118,21 @@ public static class Utills
         return null;
     }
 
+    public static T BindFromMine<T>(string _targetObjectName, Transform _rootTransfrom = null) where T : Component
+    {
+        if(_rootTransfrom == null)
+            _rootTransfrom = GameObject.Find("Canvas_Mine").transform;
+        T[] results = _rootTransfrom.GetComponentsInChildren<T>(true);
+
+        foreach(var item in results)
+        {
+            if (item.gameObject.name.Equals(_targetObjectName))
+                return item;
+        }
+
+        return null;
+    }
+
     public static T[] FindAllFromCanvas<T>(string _canvasName) where T : Component
     {
         Transform root = GameObject.Find(_canvasName).transform;

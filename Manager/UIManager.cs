@@ -117,9 +117,12 @@ public class UIManager
     /// 팝업을 닫고 UI 스택에서 팝업을 제거하는 역할
     /// UI스택에서 팝업을 꺼내고 해당 팝업을 비활성화해줌
     /// </summary>
-    public void ClosePopup()
+    public void ClosePopup(bool soundPlay = true)
     {
-        Managers.Sound.PlaySfx(SfxType.PopupClose);
+        if(soundPlay)
+        {
+            Managers.Sound.PlaySfx(SfxType.PopupClose);
+        }
         GameObject popup = uiStack.Pop();
 
         if (!popup.TryGetComponent(out AnimationForPopup component))
@@ -130,5 +133,16 @@ public class UIManager
         component.Hide();
 
         // popup.SetActive(false);
+    }
+
+    public bool CheckPopup()
+    {
+        bool notFoundPopup = false;
+        if(uiStack == null)
+        {
+            notFoundPopup = true;
+        }
+
+        return notFoundPopup;
     }
 }

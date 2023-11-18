@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public class AttenanceSlot : MonoBehaviour    // 출석부에 사용되는 슬롯에 대한 코드
+public class AttenanceSlot : MonoBehaviour
 {
     [SerializeField] private UnityEngine.UI.Image icon;
     [SerializeField] private UnityEngine.UI.Text value;
