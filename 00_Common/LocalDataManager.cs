@@ -228,6 +228,7 @@ public class RecordData
     public void TutorialRecordIndex()
     {
         tutorialIndexCount++;
+        Debug.Log(tutorialIndexCount);
         PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
     }
 

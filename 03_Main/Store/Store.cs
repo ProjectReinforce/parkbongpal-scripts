@@ -33,7 +33,10 @@ public class Store : MonoBehaviour
         normalTenGacha.onClick.AddListener(() => ReturnTypeCount(0, TEN));
         epicGacha.onClick.AddListener(() => ReturnTypeCount(1, ONE));
         epicTenGacha.onClick.AddListener(() => ReturnTypeCount(1, TEN));
-        manufactureStartButton.onClick.AddListener(() => ExecuteManaufactureUI(typeCount[0], typeCount[1]));
+        if(manufactureStartButton != null)
+        {
+            manufactureStartButton.onClick.AddListener(() => ExecuteManaufactureUI(typeCount[0], typeCount[1]));
+        }
     }
 
     const int COST_GOLD = 10000;
@@ -92,6 +95,8 @@ public class Store : MonoBehaviour
             baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
+            else if(rarity >= Rarity.unique)
+                Managers.Game.Player.Record.ModifyGetItemRecord();
         }
 
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
@@ -101,5 +106,18 @@ public class Store : MonoBehaviour
         Managers.UI.OpenPopup(targetManufactureResultUI.gameObject);
         if (targetManufactureResultUI.gameObject.activeSelf == true)
             targetManufactureResultUI.ManuFactureSpriteChange();
+    }
+
+    public void TutorialManufacture()
+    {
+        Managers.Game.Player.TryProduceWeapon(1);
+        cutSceneControl.SetActive(true);
+        BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
+        tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(0);
+        Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
+        manufactureOneUI.SetInfo(0, tutorialBaseWeaponDatas);
+        Managers.UI.OpenPopup(manufactureOneUI.gameObject);
+        if (manufactureOneUI.gameObject.activeSelf == true)
+            manufactureOneUI.ManuFactureSpriteChange();
     }
 }
