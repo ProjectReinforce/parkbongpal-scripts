@@ -33,10 +33,10 @@ public class QuestContent : MonoBehaviour
 
     public void Initialize(QuestData _targetData, Transform _dayContents, Transform _weekContents, Transform _onceIngContents, Transform _onceClearContents)
     {
-        dayContents = _dayContents; // day의 위치
-        weekContents = _weekContents;   // week의 위치
-        onceIngContents = _onceIngContents; // 진행중 업적 위치
-        onceClearContents = _onceClearContents; // 완료된 업적 위치
+        dayContents = _dayContents;                 // day의 위치
+        weekContents = _weekContents;               // week의 위치
+        onceIngContents = _onceIngContents;         // 진행중 업적 위치
+        onceClearContents = _onceClearContents;     // 완료된 업적 위치
 
         targetData = _targetData;
 

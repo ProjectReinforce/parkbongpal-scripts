@@ -1,4 +1,6 @@
-﻿public enum SceneName
+﻿using System.ComponentModel;
+
+public enum SceneName
 {
     R_Start,
     R_LoadingScene,
@@ -200,4 +202,12 @@ public enum AdType
     FreeDiamond,
     FreeGold,
     CollectBonus
+}
+
+public enum QuestContents
+{
+    dayContents,
+    weekContents,
+    onceIngContents,
+    onceClearContents
 }

@@ -17,6 +17,7 @@ public class Post : MonoBehaviour, IGameInitializer
     [SerializeField] Text postCount;
     [SerializeField] List<PostSlot> slots;
     [SerializeField] PostDetail detail;
+    [SerializeField] Image newcheckImage;
 
     void OnEnable()
     {
@@ -54,8 +55,6 @@ public class Post : MonoBehaviour, IGameInitializer
                 //받아올 우편이 없는것
                 Managers.Game.MainEnqueue(() =>
                 {
-                    //noPost.SetActive(true);
-                    //notifyer.gameObject.SetActive(false);
                     UpdatePostCount();
                 });
                 return;
@@ -129,7 +128,10 @@ public class Post : MonoBehaviour, IGameInitializer
         {
             noPost.SetActive(true);
             notifyer.gameObject.SetActive(false);
+            newcheckImage.gameObject.SetActive(false);
         }
+        else
+            newcheckImage.gameObject.SetActive(true);
         postCount.text = $"{slots.Count}";
     }
 
