@@ -6,13 +6,16 @@ using UnityEngine;
 
 public class MineManager
 {
+    // 광산 관리용 리스트
     Dictionary<int, Mine> mines = new();
-    // Mine[] mines;
 
+    /// <summary>
+    /// 모든 광산 초기화
+    /// </summary>
     public MineManager()
     {
+        // 광산 리스트 등록
         Mine[] results = Utills.FindAllFromCanvas<Mine>("Canvas_Mine");
-
         foreach (var item in results)
         {
             int.TryParse(item.gameObject.name[..2], out int mineIndex);
@@ -20,6 +23,7 @@ public class MineManager
             mines.Add(mineIndex, item);
         }
 
+        // 광산 건설 여부 체크
         foreach (var item in Managers.ServerData.mineBuildDatas)
         {
             mines[item.mineIndex].InDate = item.inDate;
@@ -29,26 +33,30 @@ public class MineManager
                 mines[item.mineIndex].Building(item.buildStartTime);
         }
 
+        // 광산, 무기 정보 설정
         foreach (var item in Managers.Game.Inventory.Weapons)
         {
             if (item.data.mineId != -1)
             {
                 DateTime currentTime = Managers.Etc.GetServerTime();
-                // mines[item.data.mineId].SetWeapon(item, DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString()));
                 mines[item.data.mineId].SetWeapon(item, currentTime);
             }
         }
     }
 
-    public void CalculateGoldAndBuildTimeAllMines()
+    /// <summary>
+    /// 모든 광산 건설 시간 및 획득 재화 재계산 함수. OnApplicationFocus에서 호출
+    /// </summary>
+    public void CalculateCurrencyAndBuildTimeAllMines()
     {
-        // DateTime currentTime = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         DateTime currentTime = Managers.Etc.GetServerTime();
+        // 재화 재계산
         foreach (var item in mines)
         {
             item.Value.SetGold(currentTime);
         }
 
+        // 건설 여부 재확인
         foreach (var item in Managers.ServerData.mineBuildDatas)
         {
             if (item.buildCompleted == true)
@@ -62,6 +70,9 @@ public class MineManager
         }
     }
 
+    /// <summary>
+    /// 일괄 수령 함수
+    /// </summary>
     public void ReceiptAllGolds()
     {
         int totalGold = 0;
@@ -83,109 +94,14 @@ public class MineManager
         Managers.Game.Player.GetBonusCount((uint)totalGold);
     }
 
+    /// <summary>
+    /// 골드 획득량 랭킹 갱신용 함수.
+    /// </summary>
     public void CalculateGoldPerMin()
     {
-        int goldPerMin = 0;
+        int sum = 0;
         foreach (var item in mines)
-            goldPerMin += item.Value.goldPerMin;
-        Managers.Game.Player.SetGoldPerMin(goldPerMin);
+            sum += item.Value.goldPerMin;
+        Managers.Game.Player.SetGoldPerMin(sum);
     }
-
-    // =====================================================================
-    // =====================================================================
-    // private Mine _currentMine;
-    // public Mine currentMine
-    // {
-    //     get => _currentMine;
-    //     set
-    //     {
-    //         // mineDetail.ViewUpdate(value);
-    //     }
-    // }
-
-    // int mineCount;
-
-    // void Initialize()
-    // {
-    //     // int mineCount = ResourceManager.Instance.mineDatas.Count;
-    //     // mineCount = Managers.ServerData.MineDatas.Length;
-        
-    //     // for (int i = 0; i < mineCount; i++)
-    //     // {
-    //     //     // mines[i].Initialized(Managers.ServerData.MineDatas[i]);
-    //     //     mines[i].Unlock(Managers.ServerData.UserData.level);
-    //     // }
-    // }
-
-    // private void Start()
-    // {
-    //     DateTime currentTime =
-    //         DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-    //     InventoryPresentor.Instance.TravelInventory((weapon) =>
-    //     {
-    //         if (weapon?.data.mineId >= 0)
-    //         {
-    //             mines[weapon.data.mineId].SetWeapon(weapon,currentTime);
-    //         }
-    //     });
-    // }
-
-    // public void ClearWeapon()
-    // {
-    //     int beforeGoldPerMin = currentMine.goldPerMin;
-    //     Receipt(() =>
-    //     {
-    //         currentMine.SetWeapon(null);
-    //         Managers.Game.Player.SetGoldPerMin(Managers.Game.Player.Data.goldPerMin - beforeGoldPerMin);
-    //         currentMine = currentMine;
-    //     });
-    // }    
-    
-    // public void Receipt(Action _callback = null)
-    // {
-    //     currentMine.Receipt(_callback);
-    // }
-
-    // public void Receipt()
-    // {
-    //     currentMine.Receipt();
-    // }
-    
-    // private int totalGold;
-    // [SerializeField] private UnityEngine.UI.Button receiptButton;
-    // IEnumerator Wait3min()
-    // {
-    //     yield return new WaitForSeconds(180);
-    //     receiptButton.interactable = true;
-    // }
-    // public void BatchReceipt()
-    // {
-        
-    //     receiptButton.interactable = false;
-    //     DateTime date = DateTime.Parse(Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
-    //     // StartCoroutine(Wait3min());
-
-    //     for (int i = 0; i < mines.Length; i++)
-    //     {
-    //         if (mines[i].rentalWeapon is null) continue;
-    //         mines[i].rentalWeapon.SetBorrowedDate(date);
-    //         totalGold += mines[i].Gold;
-            
-    //         Param param = new Param
-    //         {
-    //             { nameof(WeaponData.colum.borrowedDate), date }
-    //         };
-            
-    //         Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData),mines[i].rentalWeapon.data.inDate,Backend.UserInDate ,param));
-            
-    //     }
-       
-    //     for (int i = 0; i < mines.Length; i++)
-    //     {
-    //         mines[i].Gold = 0;
-    //     }
-    //     Managers.Game.Player.LateAddGold(totalGold);
-    //     totalGold = 0;
-    //     Transactions.SendCurrent();
-    // }
 }
