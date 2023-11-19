@@ -52,21 +52,15 @@ public class MineManager
         DateTime currentTime = Managers.Etc.GetServerTime();
         // 재화 재계산
         foreach (var item in mines)
-        {
             item.Value.SetGold(currentTime);
-        }
 
         // 건설 여부 재확인
         foreach (var item in Managers.ServerData.mineBuildDatas)
         {
             if (item.buildCompleted == true)
-            {
                 mines[item.mineIndex].BuildComplete();
-            }
             else
-            {
                 mines[item.mineIndex].Building(item.buildStartTime);
-            }
         }
     }
 
@@ -75,21 +69,50 @@ public class MineManager
     /// </summary>
     public void ReceiptAllGolds()
     {
+        // 리팩 전
         int totalGold = 0;
-        foreach (var item in mines)
-            totalGold += item.Value.Receipt(_needAddTransactions: true);
+        
+        // 리팩 후 사용
+        // int totalDiamond = 0;
+        // int totalOre = 0;
 
+        foreach (var item in mines)
+            // 리팩 전
+            totalGold += item.Value.Receipt(_needAddTransactions: true);
+        // 리팩 후 사용
+        // {
+        //     (RewardType rewardType, int amount) = item.Value.Receipt();
+        //     switch (rewardType)
+        //     {
+        //         case RewardType.Gold:
+        //         totalGold += amount;
+        //         break;
+        //         case RewardType.Diamond:
+        //         totalDiamond += amount;
+        //         break;
+        //         case RewardType.Ore:
+        //         totalOre += amount;
+        //         break;
+        //     }
+        // }
+
+        // 리팩 전
         Param param = new()
         {
-            { nameof(UserData.colum.gold), Managers.Game.Player.Data.gold },
-            { nameof(UserData.colum.stone), Managers.Game.Player.Data.stone },
-            { nameof(UserData.colum.diamond), Managers.Game.Player.Data.diamond },
+            { nameof(UserData.column.gold), Managers.Game.Player.Data.gold },
+            { nameof(UserData.column.stone), Managers.Game.Player.Data.stone },
+            { nameof(UserData.column.diamond), Managers.Game.Player.Data.diamond },
         };
-
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
+        // 리팩 후 사용
+        // Managers.Game.Player.AddTransactionCurrency();
+        
         Transactions.SendCurrent((callback) =>
         {
+            // 리팩 전
             Managers.Alarm.Warning($"{totalGold:n0} Gold를 수령했습니다.");
+            // 리팩 후 사용
+            // Managers.Alarm.Warning($"Gold: {totalGold:n0}, Diamond: {totalDiamond:n0}, Ore: {totalOre:n0}를 수령했습니다.");
         });
         Managers.Game.Player.GetBonusCount((uint)totalGold);
     }

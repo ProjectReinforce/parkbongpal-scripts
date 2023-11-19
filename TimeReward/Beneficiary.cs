@@ -121,7 +121,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             //     InventoryPresentor.Instance.AddWeapon(BackEndDataManager.Instance.baseWeaponDatas[todayReward.value]);
             //     break;
         }
-        Managers.Game.Player.SetInfoRelatedAttendance();
+        Managers.Game.Player.UpdateInfoRelatedAttendanceToServer();
 
         Dictionary<RewardType, int> rewards = new()
         {

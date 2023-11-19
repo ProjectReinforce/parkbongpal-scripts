@@ -446,4 +446,10 @@ public class Mine : MonoBehaviour, Rental
     {
         return Utills.Ceil(GetMineData().hp / GetOneHitDMG());
     }
+
+    // todo: 임시. 지워야 함
+    public (RewardType, int) Receipt()
+    {
+        return (mineData.rewardType, gold);
+    }
 }

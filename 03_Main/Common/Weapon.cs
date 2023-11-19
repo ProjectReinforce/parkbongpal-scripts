@@ -37,24 +37,25 @@ public class Weapon : IVisibleNew
         SetPower();
     }
 
-    public void SetBorrowedDate(DateTime time)
+    public void SetBorrowedDate(DateTime _time)
     {
-        _data.borrowedDate = time;
+        _data.borrowedDate = _time;
     }
-    public void SetBorrowedDate()
-    {
-        // _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
-        _data.borrowedDate = Managers.Etc.GetServerTime();
-    }
+
+    // public void SetBorrowedDate()
+    // {
+    //     _data.borrowedDate = Managers.Etc.GetServerTime();
+    // }
 
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
-        SetBorrowedDate();
+        DateTime date = Managers.Etc.GetServerTime();
+        SetBorrowedDate(date);
         Param param = new()
         {
             { nameof(WeaponData.colum.mineId), mineId },
-            { nameof(WeaponData.colum.borrowedDate), _data.borrowedDate }
+            { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), data.inDate, Backend.UserInDate, param));

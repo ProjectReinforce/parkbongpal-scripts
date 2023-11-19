@@ -111,7 +111,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
-                // todo: 해제 전 골드 수령 부분 추가해야 함.
+                // 리팩 전
                 _mine.Receipt(() => 
                 {
                     _mine.SetWeapon(null);
@@ -129,16 +129,48 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                         }
                     });
                 });
+                // 리팩 후 사용
+                // weaponCollectButton.interactable = false;
+                // _mine.Receipt();
+                // _mine.CollectWeapon();
+                // UpdateUIRelatedLendedWeapon(_mine);
+                // Managers.Game.Mine.CalculateGoldPerMin();
+                // Managers.Game.Player.AddTransactionCurrency();
+                
+                // Transactions.SendCurrent(callback =>
+                // {
+                //     if (!callback.IsSuccess())
+                //     {
+                //         Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                //         return;
+                //     }
+                //     weaponCollectButton.interactable = true;
+                // });
             });
             weaponCollectButton.interactable = true;
             goldCollectButton.onClick.RemoveAllListeners();
             goldCollectButton.onClick.AddListener(() => 
             {
                 goldCollectButton.interactable = false;
+                // 리팩 전
                 _mine.Receipt(() =>
                 {
                     goldCollectButton.interactable = true;
                 }, true);
+
+                // 리팩 후 사용
+                // _mine.Receipt();
+                // Managers.Game.Player.AddTransactionCurrency();
+
+                // Transactions.SendCurrent(callback =>
+                // {
+                //     if (!callback.IsSuccess())
+                //     {
+                //         Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                //         return;
+                //     }
+                //     goldCollectButton.interactable = true;
+                // });
             });
             goldCollectButton.interactable = true;
         }
