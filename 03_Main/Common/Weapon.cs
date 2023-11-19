@@ -55,7 +55,8 @@ public class Weapon : IVisibleNew
         Param param = new()
         {
             { nameof(WeaponData.colum.mineId), mineId },
-            { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+            // { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+            { nameof(WeaponData.colum.borrowedDate), date }
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), data.inDate, Backend.UserInDate, param));

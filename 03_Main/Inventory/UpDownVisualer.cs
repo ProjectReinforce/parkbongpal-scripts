@@ -106,7 +106,8 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
         Managers.Event.MineClickEvent += SetCurrentWeaponFromMine;
     }
 
-    void SetCurrentWeaponFromMine(Mine _mine)
+    void SetCurrentWeaponFromMine(MineBase _mine)
+    // void SetCurrentWeaponFromMine(Mine _mine)
     {
         currentWeapon = _mine.GetWeapon();
     }

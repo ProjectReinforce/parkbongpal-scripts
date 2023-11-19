@@ -3,6 +3,16 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public interface Rental
+{
+    public MineData GetMineData();
+    public WeaponData GetWeaponData();
+    public float GetMiss();
+    public float GetOneHitDMG();
+    public int GetRangePerSize();
+    public float GetHpPerDMG();
+}
+
 public class MineBase : MonoBehaviour, Rental
 {
     protected static RentalFactory rentalFactory;
@@ -20,14 +30,15 @@ public class MineBase : MonoBehaviour, Rental
     protected int mineIndex;
     protected float remainTime;
     protected int currencyAmountLimit;
+    protected int currentCurrency;
     protected int CurrentCurrency
     {
-        get => CurrentCurrency;
+        get => currentCurrency;
         set
         {
-            CurrentCurrency = value;
-            if (CurrentCurrency > currencyAmountLimit) CurrentCurrency = currencyAmountLimit;
-            infoText.text = CurrentCurrency <= 0 ? "-" : $"{CurrentCurrency:n0}";
+            currentCurrency = value;
+            if (currentCurrency > currencyAmountLimit) currentCurrency = currencyAmountLimit;
+            infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency:n0}";
         }
     }
 
@@ -92,17 +103,27 @@ public class MineBase : MonoBehaviour, Rental
 
                 if ((ulong)Managers.Game.Player.Data.gold < buildCost)
                 {
-                    // todo: 광산 여시겠습니까 확인 메시지창 출력
                     ulong diff = buildCost - (ulong)Managers.Game.Player.Data.gold;
                     Managers.Alarm.Warning($"{diff:n0} 골드가 부족합니다.");
                 }
                 else
                 {
-                    // todo: 광산 건설 확인 메시지창 출력
-                    Managers.Alarm.Warning("건설을 시작합니다.");
-                    StartBuild();
                     if (buildCost <= int.MaxValue)
-                        Managers.Game.Player.AddGold(-(int)buildCost);
+                    {
+                        Managers.Alarm.Warning("건설을 시작합니다.");
+                        StartBuild();
+                        Managers.Game.Player.AddGold(-(int)buildCost, false);
+                        Managers.Game.Player.AddTransactionCurrency();
+                            
+                        Transactions.SendCurrent(callback =>
+                        {
+                            if (!callback.IsSuccess())
+                            {
+                                Managers.Alarm.Danger($"통신 에러! : {callback}");
+                                return;
+                            }
+                        });
+                    }
                 }
             });
         });
@@ -166,28 +187,32 @@ public class MineBase : MonoBehaviour, Rental
         CalculateCurrency();
     }
 
-    public (RewardType, int) Receipt()
+    public (RewardType rewardType, int amount) Receipt(bool _directUpdate = true)
     {
         bool condition = lendedWeapon != null && CurrentCurrency > 0;
         if (condition == false) return (mineData.rewardType, 0);
-
+        
+        int rewardAmount = CurrentCurrency;
         switch (mineData.rewardType)
         {
             case RewardType.Gold:
-            Managers.Game.Player.AddGold(CurrentCurrency, false);
+            Managers.Game.Player.AddGold(rewardAmount, false);
             break;
             case RewardType.Diamond:
-            Managers.Game.Player.AddDiamond(CurrentCurrency, false);
+            rewardAmount /= 100;
+            Managers.Game.Player.AddDiamond(rewardAmount, false);
             break;
             case RewardType.Ore:
-            Managers.Game.Player.AddStone(CurrentCurrency, false);
+            rewardAmount /= 10;
+            Managers.Game.Player.AddStone(rewardAmount, false);
             break;
         }
-        CurrentCurrency = 0;
+        CurrentCurrency -= rewardAmount;
         
-        lendedWeapon.Lend(mineIndex);
+        if (_directUpdate == true)
+            lendedWeapon.Lend(mineIndex);
 
-        return (mineData.rewardType, CurrentCurrency);
+        return (mineData.rewardType, rewardAmount);
     }
 
     public void CollectWeapon()
@@ -199,19 +224,16 @@ public class MineBase : MonoBehaviour, Rental
         hpPerDMG = 0;
         GoldPerMin = 0;
 
-        ChangeNPCWeapon(lendedWeapon.Icon);
-        doNPC.gameObject.SetActive(true);
-        restNPC.SetActive(false);
+        doNPC.gameObject.SetActive(false);
+        restNPC.SetActive(true);
     }
 
-    // todo : SetWeapon이랑 통합해야함.
     public void Lend(Weapon _weapon)
     {
         if (lendedWeapon != null)
         {
-            lendedWeapon.Lend(-1);
-            Receipt(_needAddTransactions: false);
-            // 골드 수령
+            Receipt(false);
+            CollectWeapon();
         }
         lendedWeapon = _weapon;
         lendedWeapon.Lend(mineIndex);
@@ -227,38 +249,6 @@ public class MineBase : MonoBehaviour, Rental
         }
 
         SetInfo();
-    }
-
-    /// <summary>
-    /// 무기 설정 함수.
-    /// </summary>
-    /// <param name="_lendedWeapon">대여할 무기</param>
-    public void SetWeapon(Weapon _lendedWeapon)
-    {
-        if (_lendedWeapon == null)
-        {
-            lendedWeapon.Lend(-1);
-            lendedWeapon = null;
-            rangePerSize = 0;
-            hpPerDMG = 0;
-            GoldPerMin = 0;
-
-            doNPC.gameObject.SetActive(false);
-            restNPC.SetActive(true);
-            return;
-        }
-        rental = this;
-        for (int i = 0; i < 2; i++)
-        {
-            rental = rentalFactory.createRental(rental, (MagicType)_lendedWeapon.data.magic[i]);
-        }
-
-        lendedWeapon = _lendedWeapon;
-        // NPC에게 광산의 무기 올려주기.
-        ChangeNPCWeapon(lendedWeapon.Icon);
-        restNPC.SetActive(false);
-        SetInfo();
-        CalculateCurrency();
     }
 
     /// <summary>
@@ -302,76 +292,9 @@ public class MineBase : MonoBehaviour, Rental
     }
 
     /// <summary>
-    /// 보상 수령 함수. 무기 회수, 보상 수령 (마인 디테일)에서 사용
-    /// </summary>
-    /// <param name="_callback"></param>
-    /// <param name="_directUpdate"></param>
-    public void Receipt(Action _callback = null, bool _directUpdate = false)
-    {
-        Managers.Game.Player.AddGold(CurrentCurrency, false);
-        Managers.Alarm.Warning($"{CurrentCurrency:n0} 골드를 수령했습니다.");
-        CurrentCurrency = 0;
-        DateTime date = Managers.Etc.GetServerTime();
-
-        if (_directUpdate == true)
-        {
-            Param param = new Param
-            {
-                { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
-            };
-
-            Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
-        }
-        _callback?.Invoke();
-
-        // SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param, (callback) =>
-        // {
-        //     if (!callback.IsSuccess())
-        //     {
-        //         Debug.Log("Mine:수령실패" + callback);
-        //     }
-
-        //     lendedWeapon.SetBorrowedDate(date);
-        //     currentGoldText.text = gold.ToString();
-
-        //     _callback?.Invoke();
-        // });
-        // if (Managers.Etc.CallChecker != null)
-        //     Managers.Etc.CallChecker.CountCall();
-    }
-
-    /// <summary>
-    /// 보상 수령 함수. 일괄 수령 & 무기 변경 시 수령에 사용
-    /// </summary>
-    /// <param name="_needAddTransactions">트랜잭션에 추가할 필요가 있으면 true</param>
-    /// <returns>수령할 재화 수량</returns>
-    public int Receipt(bool _needAddTransactions = false)
-    {
-        bool condition = lendedWeapon != null && CurrentCurrency > 0 && mineStatus == MineStatus.Owned;
-        if (!condition) return 0;
-
-        int result = CurrentCurrency;
-        Managers.Game.Player.AddGold(CurrentCurrency, false);
-        CurrentCurrency = 0;
-        
-        if (_needAddTransactions == true)
-        {
-            DateTime date = Managers.Etc.GetServerTime();
-            Param param = new()
-            {
-                { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
-            };
-
-            Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), lendedWeapon.data.inDate, Backend.UserInDate, param));
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// 현재 시간 기준으로 재화 계산 함수
     /// </summary>
-    protected void CalculateCurrency()
+    public void CalculateCurrency()
     {
         if (lendedWeapon is null) return;
 
@@ -459,7 +382,7 @@ public class MineBase : MonoBehaviour, Rental
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() =>
         {
-            // Managers.Event.MineClickEvent?.Invoke(this);
+            Managers.Event.MineClickEvent?.Invoke(this);
         });
 
         // NPC 처리
