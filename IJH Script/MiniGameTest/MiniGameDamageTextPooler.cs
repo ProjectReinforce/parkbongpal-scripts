@@ -15,9 +15,6 @@ public class MiniGameDamageTextPooler : MonoBehaviour
 
         Managers.Event.SetMiniGameDamageTextEvent -= GetPool;
         Managers.Event.SetMiniGameDamageTextEvent += GetPool;
-
-        // Managers.Event.ReleaseMiniGameDamageTextEvent -= ReleaseText;
-        // Managers.Event.ReleaseMiniGameDamageTextEvent += ReleaseText;
     }
 
     void Init()
@@ -59,26 +56,4 @@ public class MiniGameDamageTextPooler : MonoBehaviour
         minigameDamText.SetDamageText(_damage);
         minigameDamText.DestroyText();
     }
-
-    // float EaseFunction(float time, float duration, float overshootOrAmplitude, float period)
-    // {
-    //     return EaseOutQuint(time / duration);
-    // }
-
-    // float EaseOutQuint(float x)
-    // {
-    //     return 1 - Mathf.Pow(1 - x, 5);
-    // }
-
-    // void DotweenText()
-    // {
-    //     Sequence sequence = DOTween.Sequence();
-
-    //     sequence.Append(transform.DOLocalMove(Vector3.up * 100, 2f).SetEase(EaseFunction)).OnComplete(() => 
-    //     {
-    //         GameObject aaa = pool.Get();
-    //         aaa.TryGetComponent(out MiniGameDamageText minigameDamText);
-    //         minigameDamText.DestroyText();
-    //     });
-    // }
 }

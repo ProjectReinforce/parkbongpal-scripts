@@ -41,15 +41,9 @@ public class EventManager
     #region MiniGame
     public Action<Weapon> SetMiniGameWeaponEvent;
     public Action<Sprite, string> SetMiniGameWeaponUIEvent;
-    public Action<int> ResultNewScoreMineGameEvent;
     // public Action SetMiniGameEvent;
-    public Action ResetMiniGameScoreEvent;
-    public Action ResultBestScoreMineGameEvent;
     public Action MiniGameEscEvent;
-    public Action MiniGameOverEvent;
     public Action<int> SetMiniGameDamageTextEvent;
-    public Action ReleaseMiniGameDamageTextEvent;
-    public Action GetPoolEvent;
     #endregion
 
     #region Quest

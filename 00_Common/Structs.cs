@@ -479,3 +479,9 @@ public struct MineBuildData
     public bool buildCompleted;
     public int mineIndex;
 }
+
+[Serializable]
+public struct MinigameRewardPercent
+{
+    public int None, Soul, Ore;
+}
