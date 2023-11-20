@@ -12,9 +12,11 @@ public class EventManager
     public Action ReinforceMaterialChangeEvent;     // 강화 재료 변경 이벤트
     public Action ReinforceMaterialRegistEvent;     // 강화 재료 등록 이벤트
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
-    public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
+    public Action<MineBase> MineClickEvent;             // 광산 클릭 이벤트
+    // public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
     public Action<bool> RecieveAttendanceRewardEvent;
+    public Action<bool> InventoryNewAlarmEvent;
 
     #region TopUI
     public Action GoldChangeEvent;

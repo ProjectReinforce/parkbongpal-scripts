@@ -85,6 +85,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
         oreText.text = Managers.Game.Player.Data.stone.ToString();
 
+        Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
         {
@@ -99,11 +100,12 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(false);
     }
 
-    public void SortWeapons(Dropdown _test)
+    public void SortWeapons(Dropdown _dropDown)
     {
-        Managers.Game.Inventory.Sort((SortType)_test.value);
+        Managers.Game.Inventory.ChangeSortType((SortType)_dropDown.value);
     }
 
     public void HideLendedWeapon(bool _toggleValue)

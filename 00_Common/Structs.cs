@@ -164,11 +164,11 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 [Serializable]
 public struct UserData
 {
-    public static UserData colum;
+    public static UserData column;
     public int gold, diamond, weaponSoul, stone, attendance;
-    public int exp, level, favoriteWeaponId,goldPerMin, mineGameScore, combatScore;
+    public int exp, level, favoriteWeaponId, goldPerMin, mineGameScore, combatScore;
     public string inDate;
-    public DateTime owner_inDate,lastLogin;
+    public DateTime owner_inDate, lastLogin;
 }
 public struct PideaData//도감차트
 {

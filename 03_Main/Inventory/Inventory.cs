@@ -8,6 +8,7 @@ public class Inventory
 {
     List<Weapon> weapons = new();
     public List<Weapon> Weapons => weapons;
+    SortType currentSortType = SortType.기본;
 
     public Inventory()
     {
@@ -31,9 +32,40 @@ public class Inventory
         return true;
     }
 
-    public void Sort(SortType _sortType)
+    public void ChangeSortType(SortType _sortType)
     {
-        switch (_sortType)
+        currentSortType = _sortType;
+
+        SortWeapon();
+        // switch (_sortType)
+        // {
+        //     case SortType.기본:
+        //         break;
+        //     case SortType.등급순:
+        //         weapons = weapons.OrderByDescending((one) => one.data.rarity).ToList();
+        //         break;
+        //     case SortType.전투력순:
+        //         weapons = weapons.OrderByDescending((one) => one.power).ToList();
+        //         break;
+        //     case SortType.공격력순:
+        //         weapons = weapons.OrderByDescending((one) => one.data.atk).ToList();
+        //         break;
+        //     case SortType.공격속도순:
+        //         weapons = weapons.OrderByDescending((one) => one.data.atkSpeed).ToList();
+        //         break;
+        //     case SortType.공격범위순:
+        //         weapons = weapons.OrderByDescending((one) => one.data.atkRange).ToList();
+        //         break;
+        //     case SortType.정확도순:
+        //         weapons = weapons.OrderByDescending((one) => one.data.accuracy).ToList();
+        //         break;
+        // }
+        // Managers.Event.UIRefreshEvent?.Invoke();
+    }
+
+    public void SortWeapon()
+    {
+        switch (currentSortType)
         {
             case SortType.기본:
                 break;
@@ -93,6 +125,7 @@ public class Inventory
                     IsNew = true
                 };
                 weapons.Add(weapon);
+                // todo : 포문 다 돌고 난 후에 업데이트 되도록 수정 필요
                 Managers.Game.Player.SetCombatScore(weapon.power);
                 if (Managers.Event.PideaCheckEvent.Invoke(_baseWeaponData[i].index))
                 {

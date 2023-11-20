@@ -14,7 +14,7 @@ public class Store : MonoBehaviour
     [SerializeField] UnityEngine.UI.Button epicTenGacha;
     [SerializeField] GameObject cutSceneControl;
 
-    protected void Awake()
+    void Awake()
     {
         gacharsPercents = Managers.ServerData.GachaDatas;
         percents = new int[gacharsPercents.Length][];
@@ -43,39 +43,25 @@ public class Store : MonoBehaviour
             return;
         }
 
+        int costRatio = _count == TEN ? _count - 1 : _count;
+
         if (_type == 0)
         {
-            if(_count == TEN)
-            {
-                _count = _count - 1;
-            }
-            if (!Managers.Game.Player.AddGold(-COST_GOLD * _count))
+            if (!Managers.Game.Player.AddGold(-COST_GOLD * costRatio))
             {
                 Managers.Alarm.Warning("골드가 부족합니다.");
                 return;
             }
             Managers.Game.Player.TryProduceWeapon(_count);
-            if (_count > ONE)
-            {
-                _count = _count + 1;
-            }
         }
         else
         {
-            if(_count == TEN)
-            {
-                _count = _count - 1;
-            }
-            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * _count))
+            if (!Managers.Game.Player.AddDiamond(-COST_DIAMOND * costRatio))
             {
                 Managers.Alarm.Warning("다이아몬드가 부족합니다.");
                 return;
             }
             Managers.Game.Player.TryAdvanceProduceWeapon(_count);
-            if(_count > ONE)
-            {
-                _count = _count + 1;
-            }
         }
 
         cutSceneControl.SetActive(true);
@@ -89,21 +75,13 @@ public class Store : MonoBehaviour
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
         }
 
-
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
-        if(_count == ONE)
-        {
-            manufactureOneUI.SetInfo(_type, baseWeaponDatas);
-            Managers.UI.OpenPopup(manufactureOneUI.gameObject);
-            if (manufactureOneUI.gameObject.activeSelf == true)
-                manufactureOneUI.ManuFactureSpriteChange();
-        }
-        else
-        {
-            manufactureUI.SetInfo(_type, baseWeaponDatas);
-            Managers.UI.OpenPopup(manufactureUI.gameObject);
-            if (manufactureUI.gameObject.activeSelf == true)
-                manufactureUI.ManuFactureSpriteChange();
-        }
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
+
+        ManufactureResultUI targetManufactureResultUI = _count == ONE ? manufactureOneUI : manufactureUI;
+        targetManufactureResultUI.SetInfo(_type, baseWeaponDatas);
+        Managers.UI.OpenPopup(targetManufactureResultUI.gameObject);
+        if (targetManufactureResultUI.gameObject.activeSelf == true)
+            targetManufactureResultUI.ManuFactureSpriteChange();
     }
 }
