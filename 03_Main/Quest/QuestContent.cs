@@ -264,6 +264,14 @@ public class QuestContent : MonoBehaviour
             if (current != -1)
             {
                 processText.text = $"{current} / {targetData.requestCount}";
+                if(current > 1000)
+                {
+                    processText.text = $"{current / 1000}k / {targetData.requestCount}";
+                }
+                else if(current > 1000000)
+                {
+                    processText.text = $"{current / 1000000}m / {targetData.requestCount}";
+                }
                 processSlider.value = (float)current / targetData.requestCount;
             }
             else

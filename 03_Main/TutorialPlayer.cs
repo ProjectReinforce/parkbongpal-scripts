@@ -9,13 +9,15 @@ public class TutorialPlayer : MonoBehaviour
 {
     [SerializeField] GameObject tutorialPanel;
     [SerializeField] GameObject cheifControl;
+    [SerializeField] Sprite[] cheifSprite;
     [SerializeField] GameObject cheifTalkObject;
     [SerializeField] Button tutorialButton;
     [SerializeField] Button textNextButton;
     [SerializeField] Text cheifTalk;
     [SerializeField] Store storeUI;
-    [SerializeField] Sprite[] cheifSprite;
-    [SerializeField] Transform[] panelTrans;
+    [SerializeField] Mine mineUI;
+    [SerializeField] GameObject miniGameUI;
+    Transform[] panelTrans;
     string[] cheifLine;
     int index;
     int textIndex;
@@ -46,47 +48,69 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalk.text = cheifLine[0];
             panelTrans[0] = Utills.Bind<Transform>("Button_Manufacture_S");
             tutorialPanel.transform.position = panelTrans[index].position;
-            Debug.Log(panelTrans[0].position);
             textNextButton.gameObject.SetActive(true);
+            panelTrans[1] = Utills.Bind<Transform>("Gacha_Normal_One");
+            panelTrans[2] = Utills.Bind<Transform>("Button_Gacha_Ok_One");
+            panelTrans[3] = Utills.Bind<Transform>("CloseButton_Manufacture");
             panelTrans[4] = Utills.BindFromMine<Transform>("00_S");
-            panelTrans[5] = Utills.Bind<Transform>("MiniGame");
-            panelTrans[6] = Utills.Bind<Transform>("Reinforce_T");
-            panelTrans[7] = Utills.Bind<Transform>("Button_Inventory");
-            panelTrans[8] = Utills.Bind<Transform>("Button_Quest_S");
-            panelTrans[9] = Utills.Bind<Transform>("PackageButton");
-            panelTrans[10] = Utills.Bind<Transform>("Button_Check_S");
-            panelTrans[11] = Utills.Bind<Transform>("Button_Post_S");
-            panelTrans[12] = Utills.Bind<Transform>("Button_Setting");
+            panelTrans[5] = Utills.Bind<Transform>("Image_AddWeapon");
+            panelTrans[6] = Utills.Bind<Transform>("Button_Close");
+            panelTrans[7] = Utills.Bind<Transform>("MiniGame");
+            panelTrans[8] = Utills.Bind<Transform>("MineGame");
+            panelTrans[9] = Utills.Bind<Transform>("Reinforce_T");
+            panelTrans[10] = Utills.Bind<Transform>("Button_Inventory");
+            panelTrans[11] = Utills.Bind<Transform>("Button_Quest_S");
+            panelTrans[12] = Utills.Bind<Transform>("PackageButton");
+            panelTrans[13] = Utills.Bind<Transform>("Button_Check_S");
+            panelTrans[14] = Utills.Bind<Transform>("Button_Post_S");
+            panelTrans[15] = Utills.Bind<Transform>("Button_Setting");
         }
     }
 
     void ButtonIndexChange()
     {
         index++;
-        if(index == 1)
+        switch(index)
         {
-            ManufactureTutorial();
-        }
-        if(index == 2)
-        {
-            ManufactureTutorialTry();
-            StartCoroutine(StoreAfter());
-        }
-        if(index == 3)
-        {
-            ManufactureFinish();
-        }
-        if(index == 4)
-        {
-            NextScene();
+            case 1:
+                ManufactureTutorial();
+                break;
+            case 2:
+                ManufactureTutorialTry();
+                StartCoroutine(StoreAfter());
+                break;
+            case 3:
+                ManufactureFinish();
+                break;
+            case 4:
+                NextScene();
+                break;
+            case 5:
+                MineTutorial();
+                break;
+            case 6:
+                MineLendTutorial();
+                break;
+            case 7:
+                NextScene();
+                break;
+            case 8:
+                MiniGameTutorial();
+                break;
+            case 9:
+                MiniGameTry();
+                break;
         }
         if (index >= panelTrans.Length || panelTrans[index] == null)
         {
             index = 0;
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
+            cheifTalkObject.gameObject.SetActive(false);
         }
-        tutorialPanel.transform.position = panelTrans[index].transform.position;
+        tutorialPanel.transform.position = panelTrans[index].position;
+        if (index == 1 || index == 2 || index == 5)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
     }
 
     void ManufactureTutorial()
@@ -95,10 +119,6 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         cheifControl.TryGetComponent(out SpriteRenderer sprite);
         sprite.sprite = cheifSprite[2];
-        panelTrans[3] = Utills.Bind<Transform>("CloseButton_Manufacture");
-        Debug.Log(panelTrans[3].position);
-        panelTrans[1] = Utills.Bind<Transform>("Gacha_Normal_1");
-        Debug.Log(panelTrans[1].position);
         TextChanges();
         textNextButton.gameObject.SetActive(true);
     }
@@ -109,8 +129,6 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
         storeUI.TutorialManufacture();
-        panelTrans[2] = Utills.Bind<Transform>("Button_Gacha_Ok_1");
-        Debug.Log(panelTrans[2]);
     }
 
     void ManufactureFinish()
@@ -136,30 +154,72 @@ public class TutorialPlayer : MonoBehaviour
         {
             Managers.UI.ClosePopup();
         }
+        TextChanges();
         Managers.Game.Player.Record.TutorialRecordIndex();
         textNextButton.gameObject.SetActive(true);
+    }
+
+    void MineTutorial()
+    {
+        Managers.Event.MineClickEvent?.Invoke(mineUI);
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void MineLendTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void MiniGameTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        miniGameUI.gameObject.SetActive(true);
+    }
+
+    void MiniGameTry()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
     }
 
     void TextChanges()
     {
         textIndex++;
-        if(textIndex == 1)
+        switch(textIndex)
         {
-            textNextButton.gameObject.SetActive(false);
-        }
-        if(textIndex == 4)
-        {
-            textNextButton.gameObject.SetActive(false);
-            tutorialPanel.transform.parent.gameObject.SetActive(true);
-        }
-        if(textIndex == 6)
-        {
-            textNextButton.gameObject.SetActive(false);
-            tutorialPanel.transform.parent.gameObject.SetActive(true);
-        }
-        if(textIndex == 8)
-        {
-            textNextButton.gameObject.SetActive(false);
+            case 1:
+                textNextButton.gameObject.SetActive(false);
+                break;
+            case 4:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 6:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 8:
+                textNextButton.gameObject.SetActive(false);
+                break;
+            case 10:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 11:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 13:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 16:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
         }
         if (textIndex > cheifLine.Length || cheifLine[textIndex] == null)
         {
@@ -170,7 +230,6 @@ public class TutorialPlayer : MonoBehaviour
             textNextButton.gameObject.SetActive(false);
         }
         cheifTalk.text = cheifLine[textIndex];
-
     }
 
     void CheifLines()
@@ -184,8 +243,13 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[6] = "그럼 이제 좌측 상단의 X버튼을 눌러 팝업을 꺼주겠나?\n 광산화면을 보여주도록 하지";
         cheifLine[7] = "광산은 앞으로 자네를 위해 재화를 벌어줄걸세\n 그리고 광산이 열리면 NPC들이 채광을 시작할걸세";
         cheifLine[8] = "광산을 한 번 클릭해보게나\n 첫 광산은 조금만 기다리면 열리도록 고급인력을 투입하도록 하지";
-        cheifLine[9] = "이제 다시 광산을 클릭해보겠나?\n 광산에 무기를 대여할 수 있도록 내가 무기를 하나 주겠네";
+        cheifLine[9] = "광산이 열린거 같다네\n 광산을 다시 클릭해보겠나?\n 광산에 대한 설명을 추가로 해주겠네";
         cheifLine[10] = "해당 버튼을 클릭해서 무기를 대여해보게\n 무기를 대여한다면 골드를 획득할 수 있을테니 말이야";
         cheifLine[11] = "무기를 대여했으니 시간이 지나면 골드를 획득할 것일세\n 그럼 이제 X버튼을 눌러 팝업을 꺼주게";
+        cheifLine[12] = "이제 미니게임을 해볼 차례라네\n 미니게임은 주어진 시간동안 무기를 통해\n 얼마나 많은 데미지를 줬는지 측정하네";
+        cheifLine[13] = "하단의 미니게임 버튼을 눌러보게\n 백문이 불여일견 직접 해보는 것이 이해가 쉬울걸세";
+        cheifLine[14] = "참 자네는 방금 하나있는 무기를 대여해서\n 사용할 무기가 없을 것이라네\n 이번엔 내가 무기를 빌려주도록 하겠네\n 아주 좋은 무기로!";
+        cheifLine[15] = "내가 빌려주는만큼 이번 미니게임에서 얻는 보상은\n 내가 가져가겠네 자네라면 이보다 더 좋은 무기는\n 금방 얻을테니 말이야";
+        cheifLine[16] = "상단에 있는 버튼을 눌러 미니게임을 해보게\n 빨리 눌러 더 많은 석상을 부술수록\n 높은 점수를 획득할 것이라네!";
     }
 }
