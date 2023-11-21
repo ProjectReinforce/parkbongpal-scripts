@@ -72,14 +72,6 @@ public class MineBase : MonoBehaviour, Rental
         }
     }
 
-    // 초기화
-    // 업데이트 => 건설 시간 감소, 획득 재화 계산
-    // 앱포커스 => 건설 시간, 재화 재계산
-    // 광산에 서버 데이터 세팅 함수
-    // 광산 건설 시작
-    // 광산 건설 중, 건설 시간 계산
-    // 광산 건설 완료
-    // 획득 재화 계산
     protected void Awake()
     {
         // 광산 정보 초기화
@@ -197,17 +189,19 @@ public class MineBase : MonoBehaviour, Rental
         {
             case RewardType.Gold:
             Managers.Game.Player.AddGold(rewardAmount, false);
+            CurrentCurrency -= rewardAmount;
             break;
             case RewardType.Diamond:
             rewardAmount /= 100;
             Managers.Game.Player.AddDiamond(rewardAmount, false);
+            CurrentCurrency -= rewardAmount * 100;
             break;
             case RewardType.Ore:
-            rewardAmount /= 10;
+            rewardAmount /= 100;
             Managers.Game.Player.AddStone(rewardAmount, false);
+            CurrentCurrency -= rewardAmount * 100;
             break;
         }
-        CurrentCurrency -= rewardAmount;
         
         if (_directUpdate == true)
             lendedWeapon.Lend(mineIndex);
