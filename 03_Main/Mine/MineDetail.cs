@@ -53,10 +53,23 @@ public class MineDetail : MonoBehaviour, IGameInitializer
     {
         Managers.Event.ConfirmLendWeaponEvent = (weapon) => 
         {
-            _mine.Lend(weapon);
+            (RewardType rewardType, int amount) = _mine.Lend(weapon);
 
             UpdateUIRelatedLendedWeapon(_mine);
             Managers.Game.Mine.CalculateGoldPerMin();
+
+            if (amount > 0)
+            Managers.Game.Player.AddTransactionCurrency();
+
+            Transactions.SendCurrent(callback =>
+            {
+                if (!callback.IsSuccess())
+                {
+                    Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                    return;
+                }
+                Managers.Alarm.Warning($"이전 무기로 모아둔 {rewardType}: {amount:n0}를 수령했습니다.");
+            });
         };
 
         nameText.text = _mine.GetMineData().name;
@@ -166,6 +179,12 @@ public class MineDetail : MonoBehaviour, IGameInitializer
 
                 // 리팩 후 사용
                 (RewardType rewardType, int amount) = _mine.Receipt();
+                if (amount <= 0)
+                {
+                    Managers.Alarm.Warning("수령할 재화가 없습니다.");
+                    goldCollectButton.interactable = true;
+                    return;
+                }
                 Managers.Game.Player.AddTransactionCurrency();
 
                 Transactions.SendCurrent(callback =>

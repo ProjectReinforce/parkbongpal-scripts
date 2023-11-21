@@ -228,11 +228,14 @@ public class MineBase : MonoBehaviour, Rental
         restNPC.SetActive(true);
     }
 
-    public void Lend(Weapon _weapon)
+    public (RewardType rewardType, int amount) Lend(Weapon _weapon)
     {
+        RewardType rewardType = RewardType.Gold;
+        int amount = 0;
+
         if (lendedWeapon != null)
         {
-            Receipt(false);
+            (rewardType, amount) = Receipt(false);
             CollectWeapon();
         }
         lendedWeapon = _weapon;
@@ -249,6 +252,8 @@ public class MineBase : MonoBehaviour, Rental
         }
 
         SetInfo();
+
+        return (rewardType, amount);
     }
 
     /// <summary>
