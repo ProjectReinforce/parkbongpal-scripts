@@ -8,7 +8,7 @@ public class TimerControl : MonoBehaviour
     // 퍼즈
     [SerializeField] MineGame mineGame;
     [SerializeField] Slider timerBar;
-    const float MAX_TIME = 10f;
+    const float MAX_TIME = 60f;
     float currentTime = MAX_TIME;
     public float CurrentTime
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,27 +17,26 @@ public class Rock : MonoBehaviour
     {
         get { return score; }
     }
+    int dropSoulCount;
+    public int DropSoulCount
+    {
+        get { return dropSoulCount; }
+    }
+    int dropStoneCount;
+    public int DropStoneCount
+    {
+        get { return dropStoneCount; }
+    }
     float maxHp = 500f;
     float hp;
     int currentRockIndex = 0;
-    void Awake() 
+
+    void Awake()
     {
         TryGetComponent(out image);
         hp = maxHp;
         originalSizeDelta = image.rectTransform.sizeDelta;
         originalPosition = image.rectTransform.anchoredPosition3D;
-        Debug.Log(originalPosition);
-    }
-
-    void OnEnable() 
-    {
-        Managers.Event.ResetMiniGameScoreEvent -= ResetScore;
-        Managers.Event.ResetMiniGameScoreEvent += ResetScore;
-    }
-
-    void OnDisable() 
-    {
-        Managers.Event.ResetMiniGameScoreEvent -= ResetScore;
     }
 
     public void ResetRockInfo()
@@ -48,11 +48,9 @@ public class Rock : MonoBehaviour
         currentRockIndex = 0;
         image.rectTransform.sizeDelta = originalSizeDelta;
         image.rectTransform.anchoredPosition3D = originalPosition;
-        Debug.Log("이미지 로컬포지션" + image.rectTransform.anchoredPosition3D);
-        Debug.Log("오리지널 포지션" + originalPosition);
     }
 
-    public void GetDamage(int damage)
+    public void GetDamage(int damage, Action pbpChangeAction)
     {
         hp -= damage;
         score += damage;
@@ -62,11 +60,13 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
+            pbpChangeAction?.Invoke();
+            
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
 
-            image.sprite = sprites[currentRockIndex = ++currentRockIndex%sprites.Length];
+            image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
 
             Vector2 newSize = image.rectTransform.sizeDelta* 0.9f;
             image.rectTransform.sizeDelta = newSize;
@@ -76,11 +76,36 @@ public class Rock : MonoBehaviour
             image.rectTransform.anchoredPosition3D = newPosition;
 
             timerControl.CurrentTime += 20f;
+
+            MinigameRewardPercent minigameRewardPercent = Managers.ServerData.MiniGameRewardPercentDatas;
+            int[] minigameRewardPercents = { minigameRewardPercent.None, minigameRewardPercent.Soul, minigameRewardPercent.Ore};
+            string[] minigameRewardType = {"None", "Soul", "Ore"};
+            int numItems = Utills.random.Next(1, 11);
+            int resultIndex = Utills.GetResultFromWeightedRandom(minigameRewardPercents);
+            if(resultIndex != -1)
+            {
+                switch (minigameRewardType[resultIndex])
+                {
+                    case "None":
+                    Debug.Log(minigameRewardType[resultIndex] + "  꽝!");
+                    break;
+                    case "Soul": 
+                    Debug.Log(minigameRewardType[resultIndex] + "  " + numItems + $"  소울 {numItems}개 드랍!");
+                    dropStoneCount += numItems;
+                    break;
+                    case "Ore": 
+                    Debug.Log(minigameRewardType[resultIndex] + "  " + numItems + $"  원석 {numItems}개 드랍!");
+                    dropSoulCount += numItems;
+                    break;
+                }
+            }
         }
     }
 
-    void ResetScore()
+    public void ResetScore()
     {
         score = 0;
+        dropSoulCount = 0;
+        dropStoneCount = 0;
     }
 }

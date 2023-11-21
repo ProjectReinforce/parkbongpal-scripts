@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
@@ -12,10 +13,11 @@ public class MineGame : MonoBehaviour
     [SerializeField] Text text;     // 터치 스타트 텍스트
     [SerializeField] Button mainButton;
     [SerializeField] GameObject pausePanel;
-    [SerializeField] GameObject resultPanel;
+    [SerializeField] MineGameResultUI resultPanel;
+    [SerializeField] PBPManager pbpManager;
+    // [SerializeField] MiniGameDamageTextPooler pooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
-    bool isPauseOn = false;
 
     public void Resume()
     {
@@ -39,6 +41,7 @@ public class MineGame : MonoBehaviour
     public void SetMineGameWeapon(Weapon _weapon)
     {
         selectedWeapon = _weapon;
+        pbpManager.SetPBPWeaponSprites(selectedWeapon.Icon);
     }
     
     void OnEnable()
@@ -88,7 +91,12 @@ public class MineGame : MonoBehaviour
 
     void Attack() // 데미지 계산 할 함수
     {
-        rock.GetDamage(selectedWeapon.power);
+        int damage = Utills.random.Next(selectedWeapon.power - 3, selectedWeapon.power + 3);
+        rock.GetDamage(damage, pbpManager.PBPRandomOn);
+        Managers.Event.SetMiniGameDamageTextEvent?.Invoke(damage);
+        // Managers.Event.GetPoolEvent?.Invoke();
+        // pooler.GetPool();
+        // Invoke("releaseText", 0.5f);
     }
 
     void CompareScore(int _newScore)
@@ -100,14 +108,27 @@ public class MineGame : MonoBehaviour
     public void GameOver()
     {
         isAttackAble = false;
+
         Managers.Game.Player.AddGold(rock.Score);
-        // Debug.Log(rock.Score);
+        if(rock.DropSoulCount != 0)
+        {
+            Managers.Game.Player.AddSoul(rock.DropSoulCount);
+        }
+        if(rock.DropStoneCount != 0)
+        {
+            Managers.Game.Player.AddStone(rock.DropStoneCount);
+        }
+
         CompareScore(rock.Score);
-        // Debug.Log(Managers.Game.Player.Data.gold);
-        resultPanel.SetActive(true);
-        Managers.Event.ResultBestScoreMineGameEvent?.Invoke();
-        Managers.Event.ResultNewScoreMineGameEvent?.Invoke(rock.Score);
-        Managers.Event.ResetMiniGameScoreEvent?.Invoke();
+
+        resultPanel.gameObject.SetActive(true);
+        resultPanel.SetBestScore();
+        resultPanel.SetNowTurnScore(rock.Score);
+
+        resultPanel.ReceiveReward(rock.Score, rock.DropSoulCount, rock.DropStoneCount);
+        resultPanel.SetRewardSlot();
+
+        rock.ResetScore();
     }
 
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
@@ -118,12 +139,13 @@ public class MineGame : MonoBehaviour
 
     public void ResetGame()  // 초기화 함수
     {
+        rock.ResetScore();
         rock.ResetRockInfo();
         timerControl.ResetTimer();
         text.text = "Touch to Start!";
         mainButton.gameObject.SetActive(true);
         mainButton.interactable = true;
-        resultPanel.SetActive(false);
+        resultPanel.gameObject.SetActive(false);
         isAttackAble = false;
     }
 
