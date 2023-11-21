@@ -109,6 +109,12 @@ public class MineManager
         // };
         // Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
         // 리팩 후 사용
+        if (totalGold <= 0 && totalDiamond <= 0 && totalOre <= 0)
+        {
+            Managers.Alarm.Warning("수령할 재화가 없습니다.");
+            return;
+        }
+
         Managers.Game.Player.AddTransactionCurrency();
         
         Transactions.SendCurrent((callback) =>

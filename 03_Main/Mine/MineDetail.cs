@@ -153,7 +153,8 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                 _mine.CollectWeapon();
                 UpdateUIRelatedLendedWeapon(_mine);
                 Managers.Game.Mine.CalculateGoldPerMin();
-                Managers.Game.Player.AddTransactionCurrency();
+                if (amount > 0)
+                    Managers.Game.Player.AddTransactionCurrency();
                 
                 Transactions.SendCurrent(callback =>
                 {
@@ -162,7 +163,8 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                         Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
                         return;
                     }
-                    Managers.Alarm.Warning($"{rewardType}: {amount:n0}를 수령했습니다.");
+                    if (amount > 0)
+                        Managers.Alarm.Warning($"{rewardType}: {amount:n0}를 수령했습니다.");
                     weaponCollectButton.interactable = true;
                 });
             });

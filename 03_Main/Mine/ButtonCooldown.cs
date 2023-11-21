@@ -25,7 +25,7 @@ public class ButtonCooldown : MonoBehaviour
 
     IEnumerator Cooldown()
     {
-        yield return new WaitForSeconds(60f);
+        yield return new WaitForSeconds(30f);
 
         button.interactable = true;
     }

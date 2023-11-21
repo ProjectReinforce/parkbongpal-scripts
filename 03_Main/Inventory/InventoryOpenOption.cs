@@ -215,6 +215,8 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
 
     public InventoryOpenOptionReinforceMaterial(InventoryController _inventoryController) : base(_inventoryController)
     {
+        confirmMaterialsButton.onClick.RemoveAllListeners();
+        confirmMaterialsButton.onClick.AddListener(() => Managers.Event.ReinforceMaterialChangeEvent?.Invoke());
     }
 
     public void Set()

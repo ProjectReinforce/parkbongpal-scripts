@@ -37,30 +37,6 @@ public class Inventory
         currentSortType = _sortType;
 
         SortWeapon();
-        // switch (_sortType)
-        // {
-        //     case SortType.기본:
-        //         break;
-        //     case SortType.등급순:
-        //         weapons = weapons.OrderByDescending((one) => one.data.rarity).ToList();
-        //         break;
-        //     case SortType.전투력순:
-        //         weapons = weapons.OrderByDescending((one) => one.power).ToList();
-        //         break;
-        //     case SortType.공격력순:
-        //         weapons = weapons.OrderByDescending((one) => one.data.atk).ToList();
-        //         break;
-        //     case SortType.공격속도순:
-        //         weapons = weapons.OrderByDescending((one) => one.data.atkSpeed).ToList();
-        //         break;
-        //     case SortType.공격범위순:
-        //         weapons = weapons.OrderByDescending((one) => one.data.atkRange).ToList();
-        //         break;
-        //     case SortType.정확도순:
-        //         weapons = weapons.OrderByDescending((one) => one.data.accuracy).ToList();
-        //         break;
-        // }
-        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     public void SortWeapon()
@@ -88,7 +64,7 @@ public class Inventory
                 weapons = weapons.OrderByDescending((one) => one.data.accuracy).ToList();
                 break;
         }
-        Managers.Event.UIRefreshEvent?.Invoke();
+        Managers.Event.SlotRefreshEvent?.Invoke();
     }
 
     // todo : 개선 필요, 뒤끝 연동 부분 분리해야 하지 않을지

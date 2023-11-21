@@ -67,16 +67,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
     public void Set(InventoryType _inventoryType)
     {
-        // InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
-        // foreach (var item in slots)
-        //     item.ResetUI((int)CurrentInventoryType);
-
         CurrentInventoryType = _inventoryType;
-        // InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
-        // foreach (var item in slots)
-        //     item.SetUI((int)CurrentInventoryType);
-            
-        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     void OnEnable()
@@ -88,11 +79,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
-        {
             item.SetUI((int)CurrentInventoryType);
-            // if (item.gameObject.activeSelf == true) continue;
-            // item.gameObject.SetActive(true);
-        }
     }
 
     void OnDisable()

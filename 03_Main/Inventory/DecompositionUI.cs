@@ -119,7 +119,7 @@ public class DecompositionUI : MonoBehaviour
         Transactions.SendCurrent();
 
         selectedWeapons.Clear();
-        Managers.Event.UIRefreshEvent?.Invoke();
+        Managers.Event.SlotRefreshEvent?.Invoke();
        
         // HighPowerFinder.UpdateHighPowerWeaponData();
     }

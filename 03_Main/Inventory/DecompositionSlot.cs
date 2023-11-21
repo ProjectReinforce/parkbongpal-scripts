@@ -34,8 +34,8 @@ public class DecompositionSlot : MonoBehaviour
         });
         weaponIcon = Utills.Bind<Image>("Image_WeaponIcon", transform);
 
-        Managers.Event.UIRefreshEvent -= Refresh;
-        Managers.Event.UIRefreshEvent += Refresh;
+        Managers.Event.SlotRefreshEvent -= Refresh;
+        Managers.Event.SlotRefreshEvent += Refresh;
     }
 
     void Selected(Weapon _weapon)
