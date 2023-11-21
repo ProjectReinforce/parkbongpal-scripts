@@ -104,17 +104,18 @@ public class MineBase : MonoBehaviour, Rental
                     {
                         Managers.Alarm.Warning("건설을 시작합니다.");
                         StartBuild();
-                        Managers.Game.Player.AddGold(-(int)buildCost, false);
-                        Managers.Game.Player.AddTransactionCurrency();
+                        Managers.Game.Player.AddGold(-(int)buildCost);
+                        // Managers.Game.Player.AddGold(-(int)buildCost, false);
+                        // Managers.Game.Player.AddTransactionCurrency();
                             
-                        Transactions.SendCurrent(callback =>
-                        {
-                            if (!callback.IsSuccess())
-                            {
-                                Managers.Alarm.Danger($"통신 에러! : {callback}");
-                                return;
-                            }
-                        });
+                        // Transactions.SendCurrent(callback =>
+                        // {
+                        //     if (!callback.IsSuccess())
+                        //     {
+                        //         Managers.Alarm.Danger($"통신 에러! : {callback}");
+                        //         return;
+                        //     }
+                        // });
                     }
                 }
             });
@@ -326,17 +327,18 @@ public class MineBase : MonoBehaviour, Rental
             { nameof(MineBuildData.buildStartTime), startTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") },
             { nameof(MineBuildData.buildCompleted), false }
         };
-        Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
-        // SendQueue.Enqueue(Backend.GameData.Insert, nameof(MineBuildData), param, callback =>
-        // {
-        //     if (!callback.IsSuccess())
-        //     {
-        //         Managers.Alarm.Danger($"통신 에러! : {callback}");
-        //         return;
-        //     }
-        // });
-        // if (Managers.Etc.CallChecker != null)
-        //     Managers.Etc.CallChecker.CountCall();
+        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), param));
+        SendQueue.Enqueue(Backend.GameData.Insert, nameof(MineBuildData), param, callback =>
+        {
+            if (!callback.IsSuccess())
+            {
+                Managers.Alarm.Danger($"통신 에러! : {callback}");
+                return;
+            }
+            InDate = callback.GetInDate();
+        });
+        if (Managers.Etc.CallChecker != null)
+            Managers.Etc.CallChecker.CountCall();
     }
 
     /// <summary>
