@@ -28,6 +28,7 @@ public class TutorialPlayer : MonoBehaviour
     string[] cheifLine;
     int index;
     int textIndex;
+    bool mineOpenTutorialCheck;
 
     void Start()
     {
@@ -46,6 +47,7 @@ public class TutorialPlayer : MonoBehaviour
             index = 0;
             textIndex = 0;
             CheifLines();   // 추후 서버에 있는 대화집을 가져오게 바꿀 예정
+            mineOpenTutorialCheck = false;
             tutorialButton.onClick.AddListener(ButtonIndexChange);
             textNextButton.onClick.AddListener(TextChanges);
 
@@ -69,15 +71,17 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[12] = Utills.Bind<Transform>("Button_MiniGameStart");
             panelTrans[13] = Utills.Bind<Transform>("Reinforce_T");
             panelTrans[14] = Utills.Bind<Transform>("Weapon_S");
-            panelTrans[15] = Utills.Bind<Transform>("Normal_S");
-            panelTrans[16] = Utills.Bind<Transform>("Button_Reinforce_Normal");
-            panelTrans[17] = Utills.Bind<Transform>("Main_Mine_S");
-            panelTrans[18] = Utills.Bind<Transform>("Button_Inventory");
-            panelTrans[19] = Utills.Bind<Transform>("Button_Quest_S");
-            panelTrans[20] = Utills.Bind<Transform>("PackageButton");
-            panelTrans[21] = Utills.Bind<Transform>("Button_Check_S");
-            panelTrans[22] = Utills.Bind<Transform>("Button_Post_S");
-            panelTrans[23] = Utills.Bind<Transform>("Button_Setting");
+            panelTrans[15] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[16] = Utills.Bind<Transform>("Button_Select");
+            panelTrans[17] = Utills.Bind<Transform>("Normal_S");
+            panelTrans[18] = Utills.Bind<Transform>("Button_Reinforce_Normal");
+            panelTrans[19] = Utills.Bind<Transform>("Main_Mine_S");
+            panelTrans[20] = Utills.Bind<Transform>("Button_Inventory");
+            panelTrans[21] = Utills.Bind<Transform>("Button_Quest_S");
+            panelTrans[22] = Utills.Bind<Transform>("PackageButton");
+            panelTrans[23] = Utills.Bind<Transform>("Button_Check_S");
+            panelTrans[24] = Utills.Bind<Transform>("Button_Post_S");
+            panelTrans[25] = Utills.Bind<Transform>("Button_Setting");
         }
     }
 
@@ -100,51 +104,61 @@ public class TutorialPlayer : MonoBehaviour
                 NextScene();
                 break;
             case 5:
-                MineOpenTutorial();
+                if(!mineOpenTutorialCheck)
+                {
+                    MineTutorial();
+                }
+                else
+                {
+                    MineOpenTutorial();
+                }
                 break;
             case 6:
-                MineTutorial();
-                break;
-            case 7:
                 MineLendTutorial();
                 break;
-            case 8:
+            case 7:
                 MineLendTry();
                 break;
-            case 9:
+            case 8:
                 MineLendAfter();
                 break;
-            case 10:
+            case 9:
                 NextScene();
                 break;
-            case 11:
+            case 10:
                 MiniGameTutorial();
                 break;
-            case 12:
+            case 11:
                 MiniGameExplain();
                 break;
-            case 13:
+            case 12:
                 MiniGameTry();
                 break;
-            case 14:
+            case 13:
                 MiniGameStart();
                 break;
-            case 15:
+            case 14:
                 ReinforcTutorial();
                 break;
-            case 16:
+            case 15:
                 ReinforceLendWeapon();
                 break;
+            case 16:
+                ReinforceLendWeaponCheck();
+                break;
             case 17:
-                ReinforceTry();
+                ReinforecLendAfter();
                 break;
             case 18:
-                ReinforceNormal();
+                ReinforceTry();
                 break;
             case 19:
-                MineTapMove();
+                ReinforceNormal();
                 break;
             case 20:
+                MineTapMove();
+                break;
+            case 21:
                 InventoryExplain();
                 break;
         }
@@ -156,8 +170,10 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalkObject.gameObject.SetActive(false);
         }
         tutorialPanel.transform.position = panelTrans[index].position;
-        if (index == 1 || index == 2 || index == 6 || index == 7 || index == 11)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
+        if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
             tutorialPanel.transform.position = panelTrans[index].position * 10;
+        if (index == 15)
+            tutorialPanel.transform.position = panelTrans[index].position * 5;
     }
 
     void ManufactureTutorial()
@@ -208,24 +224,22 @@ public class TutorialPlayer : MonoBehaviour
 
     void MineTutorial()
     {
-        Managers.Event.MineClickEvent?.Invoke(mineUI);
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        // bool형 변수를 만들고 이 함수가 이미 돌았으면 bool형 값을 true로 해서 광산이 열리는 이벤트를 못하게
+        if (!mineOpenTutorialCheck)
+        {
+            index = 4;
+            tutorialPanel.transform.position = panelTrans[index].position;
+            mineOpenTutorialCheck = true;
+        }
+        // 광산 건설에 대한 작업
     }
 
     void MineOpenTutorial()
     {
-        bool fucntionCheck = false;
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        // 광산 건설에 대한 작업
-        if (!fucntionCheck)
-        {
-            index = 4;
-            tutorialPanel.transform.position = panelTrans[index].position;
-            fucntionCheck = true;
-        }
+        Managers.Event.MineClickEvent?.Invoke(mineUI);
     }
 
     void MineLendTutorial()
@@ -256,7 +270,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.UI.MoveTap((TapType)2);
+        Managers.UI.MoveTap(TapType.MiniGame);
     }
 
     void MiniGameExplain()
@@ -270,24 +284,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        inventoryUI.Set((InventoryType)4);
-        Managers.UI.OpenPopup(inventoryUI.gameObject);
-    }
-
-    void MiniGameSetWeapon()
-    {
-        detailInfoUI = inventoryUI.DetailInfo;
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        Managers.Event.SlotSelectEvent?.Invoke(weapon);
-    }
-
-    void MiniGameLendWeapon()
-    {
-        textNextButton.gameObject.SetActive(true);
-        tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        Managers.Event.SetMiniGameWeaponEvent?.Invoke(weapon);
-        Managers.UI.ClosePopup();
+        // 스프라이트 변경 이벤트
     }
 
     void MiniGameStart()
@@ -302,15 +299,32 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.UI.MoveTap((TapType)1);
+        Managers.UI.MoveTap(TapType.Reinforce);
     }
 
     void ReinforceLendWeapon()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        inventoryUI.Set((InventoryType)2);
+        inventoryUI.Set(InventoryType.Reinforce);
         Managers.UI.OpenPopup(inventoryUI.gameObject);
+    }
+
+    void ReinforceLendWeaponCheck()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        detailInfoUI = inventoryUI.DetailInfo;
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        Managers.Event.SlotSelectEvent?.Invoke(weapon);
+    }
+
+    void ReinforecLendAfter()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
+        Managers.UI.ClosePopup();
     }
 
     void ReinforceTry()
@@ -336,14 +350,14 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.UI.MoveTap((TapType)0);
+        Managers.UI.MoveTap(TapType.Main_Mine);
     }
 
     void InventoryExplain()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        inventoryUI.Set((InventoryType)0);
+        inventoryUI.Set(InventoryType.Default);
         Managers.UI.OpenPopup(inventoryUI.gameObject);
     }
 
@@ -408,6 +422,10 @@ public class TutorialPlayer : MonoBehaviour
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
             case 26:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 27:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
