@@ -49,7 +49,7 @@ public class RankSlot : MonoBehaviour
         }
         
         nickName.text = data.nickname;
-        score.text = data.score.ToString();
+        score.text = data.score.ToString("N0");
     }
     
 

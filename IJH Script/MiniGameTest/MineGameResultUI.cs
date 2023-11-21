@@ -19,12 +19,12 @@ public class MineGameResultUI : MonoBehaviour
 
     public void SetNowTurnScore(int _score)
     {
-        nowTurnScore.text = _score.ToString();
+        nowTurnScore.text = _score.ToString("N0");
     }
 
     public void SetBestScore()
     {
-        bestScore.text = $"최고점수  : {Managers.Game.Player.Data.mineGameScore,6}";
+        bestScore.text = $"최고점수  :  {Managers.Game.Player.Data.mineGameScore,6:N0}";
     }
 
     public void ReceiveReward(int _getGold, int _dropSoul, int _dropStone)

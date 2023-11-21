@@ -27,7 +27,7 @@ public class MiniGameSetWeaponUI : MonoBehaviour
         Managers.Event.SetMiniGameWeaponUIEvent -= SetWeaponUI;
         Managers.Event.SetMiniGameWeaponUIEvent += SetWeaponUI;
         
-        bestScoreText.text = $"최고점수  : {Managers.Game.Player.Data.mineGameScore,6}";
+        bestScoreText.text = $"최고점수  :  {Managers.Game.Player.Data.mineGameScore,6:N0}";
         gameStart.interactable = false;
         gameStartButtonImage.sprite = ButtonImages[1];
         selectWeaponImage.sprite = null;

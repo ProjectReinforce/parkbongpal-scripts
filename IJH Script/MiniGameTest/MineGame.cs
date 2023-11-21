@@ -14,6 +14,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] Button mainButton;
     [SerializeField] GameObject pausePanel;
     [SerializeField] MineGameResultUI resultPanel;
+    [SerializeField] PBPManager pbpManager;
     // [SerializeField] MiniGameDamageTextPooler pooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
@@ -40,6 +41,7 @@ public class MineGame : MonoBehaviour
     public void SetMineGameWeapon(Weapon _weapon)
     {
         selectedWeapon = _weapon;
+        pbpManager.SetPBPWeaponSprites(selectedWeapon.Icon);
     }
     
     void OnEnable()
@@ -90,7 +92,7 @@ public class MineGame : MonoBehaviour
     void Attack() // 데미지 계산 할 함수
     {
         int damage = Utills.random.Next(selectedWeapon.power - 3, selectedWeapon.power + 3);
-        rock.GetDamage(damage);
+        rock.GetDamage(damage, pbpManager.PBPRandomOn);
         Managers.Event.SetMiniGameDamageTextEvent?.Invoke(damage);
         // Managers.Event.GetPoolEvent?.Invoke();
         // pooler.GetPool();

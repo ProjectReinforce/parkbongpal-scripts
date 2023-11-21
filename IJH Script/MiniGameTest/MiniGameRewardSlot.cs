@@ -8,6 +8,6 @@ public class MiniGameRewardSlot : MonoBehaviour
 
     public void SetRewardText(int _dropItemCount)
     {
-        rewardCountText.text = _dropItemCount.ToString();
+        rewardCountText.text = _dropItemCount.ToString("N0");
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,7 +50,7 @@ public class Rock : MonoBehaviour
         image.rectTransform.anchoredPosition3D = originalPosition;
     }
 
-    public void GetDamage(int damage)
+    public void GetDamage(int damage, Action pbpChangeAction)
     {
         hp -= damage;
         score += damage;
@@ -59,6 +60,8 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
+            pbpChangeAction?.Invoke();
+            
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
