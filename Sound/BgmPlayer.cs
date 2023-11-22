@@ -20,11 +20,11 @@ public class BgmPlayer : MonoBehaviour
     {
         if(Managers.Sound.IsMuted == true)
         {
-            bgmPlayer.volume = 1;
+            bgmPlayer.volume = 1f;
         }
         else
         {
-            bgmPlayer.volume = 0;
+            bgmPlayer.volume = 0f;
         }
     }
 

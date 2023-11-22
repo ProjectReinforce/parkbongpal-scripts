@@ -90,8 +90,8 @@ public class Slot : MonoBehaviour
         Managers.Event.SlotSelectEvent += slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].RegisterCustomUIEvent();
 
-        Managers.Event.UIRefreshEvent += slotModeUIs[currentInventoryType].ResetUI;
-        Managers.Event.UIRefreshEvent += slotModeUIs[currentInventoryType].SetUI;
+        Managers.Event.SlotRefreshEvent += slotModeUIs[currentInventoryType].ResetUI;
+        Managers.Event.SlotRefreshEvent += slotModeUIs[currentInventoryType].SetUI;
     }
 
     public void DeregistUIEvent()
@@ -99,8 +99,8 @@ public class Slot : MonoBehaviour
         Managers.Event.SlotSelectEvent -= slotModeUIs[currentInventoryType].UIEvent;
         slotModeUIs[currentInventoryType].DeregisterCustomUIEvent();
         
-        Managers.Event.UIRefreshEvent -= slotModeUIs[currentInventoryType].ResetUI;
-        Managers.Event.UIRefreshEvent -= slotModeUIs[currentInventoryType].SetUI;
+        Managers.Event.SlotRefreshEvent -= slotModeUIs[currentInventoryType].ResetUI;
+        Managers.Event.SlotRefreshEvent -= slotModeUIs[currentInventoryType].SetUI;
     }
 
     // void Awake()

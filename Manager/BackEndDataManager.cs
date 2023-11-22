@@ -65,6 +65,7 @@ public class BackEndDataManager
     public RefinementData RefinementData;               // 재련 데이터
     public Decomposit[] DecompositDatas;                // 분해? 데이터
     public CollectionData[] CollectionDatas;            // 컬렉션 데이터
+    public MinigameRewardPercent MiniGameRewardPercentDatas;
 
     // 사용자 데이터를 검색하기 위한 검색 필터
     Where SearchFromMyIndate;
@@ -89,7 +90,7 @@ public class BackEndDataManager
     public void Initialize()
     {
         SearchFromMyIndate = new();
-        SearchFromMyIndate.Equal(nameof(UserData.colum.owner_inDate), Backend.UserInDate);  // 현재 사용자를 위한 검색 필터 설정
+        SearchFromMyIndate.Equal(nameof(UserData.column.owner_inDate), Backend.UserInDate);  // 현재 사용자를 위한 검색 필터 설정
         for (int i =0; i<baseWeaponDatasFromRarity.Length; i++)                             // 희귀도별 기본 무기 데이터를 저장할 리스트 배열 초기화
             baseWeaponDatasFromRarity[i]= new List<BaseWeaponData>();
             
@@ -108,7 +109,7 @@ public class BackEndDataManager
         // 테스트용
     }
 
-    const string VERSION_CHART_ID = "96606";
+    const string VERSION_CHART_ID = "98743";
     const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
     Dictionary<string, VersionInfo> localChartLists;
     Dictionary<string, VersionInfo> backEndChartLists;
@@ -341,6 +342,13 @@ public class BackEndDataManager
                     GetBackEndChartData<CollectionData>(chartId, CollectionDataProcess);
                 else
                     SetChartData<CollectionData>(chartId, CollectionDataProcess);
+                break;
+            case ChartName.minigameRewardPercent:
+                void MinigameRewardDataProcess(MinigameRewardPercent[] data) { MiniGameRewardPercentDatas = data[0]; }
+                if (_fromBackEnd)
+                    GetBackEndChartData<MinigameRewardPercent>(chartId, MinigameRewardDataProcess);
+                else
+                    SetChartData<MinigameRewardPercent>(chartId, MinigameRewardDataProcess);
                 break;
         }
     }

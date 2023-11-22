@@ -13,6 +13,8 @@ public class QuestContentsInitializer : MonoBehaviour
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
+    int oldExp, oldLevel, oldGold, oldDiamond;
+
     void Awake()
     {
         string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
@@ -41,9 +43,25 @@ public class QuestContentsInitializer : MonoBehaviour
         ClearCheck();
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
+        UserData userData = Managers.Game.Player.Data;
+        oldExp = userData.exp;
+        oldLevel = userData.level;
+        oldGold = userData.gold;
+        oldDiamond = userData.diamond;
+
         UpdateAllContent();
+    }
+
+    void OnDisable()
+    {
+        Player player = Managers.Game.Player;
+        if (oldExp != player.Data.exp || oldLevel != player.Data.level || oldGold != player.Data.gold || oldDiamond != player.Data.diamond)
+        {
+            player.AddTransactionQuestRewards();
+            Transactions.SendCurrent();
+        }
     }
 
     public void ClickTap(int _index)

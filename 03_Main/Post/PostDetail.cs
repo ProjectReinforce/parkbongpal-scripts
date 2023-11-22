@@ -31,7 +31,6 @@ public class PostDetail : MonoBehaviour
         {
             PostItemSlot itemSlot = postItemSlots[i];
             itemSlot.PostItemInitialized(currentSlot.postItemDatas[i]);
-            //Debug.Log("아이템 세팅하겠습니다." + currentSlot.postItemDatas[i].itemName);
             itemSlot.gameObject.SetActive(true);
         }
     }
@@ -48,7 +47,6 @@ public class PostDetail : MonoBehaviour
             {
                 case 1:
                     Managers.Game.Player.AddGold(currentSlot.postItemDatas[i].itemCount);
-                    Debug.Log($"골드 {currentSlot.postItemDatas[i].itemCount}만큼 올라감.");
                     break;
                 case 2:
                     Managers.Game.Player.AddDiamond(currentSlot.postItemDatas[i].itemCount);

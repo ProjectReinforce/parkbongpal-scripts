@@ -48,14 +48,28 @@ public class MineDetail : MonoBehaviour, IGameInitializer
         Managers.Event.MineClickEvent += ClickEvent;
     }
 
-    void ClickEvent(Mine _mine)
+    void ClickEvent(MineBase _mine)
+    // void ClickEvent(Mine _mine)
     {
         Managers.Event.ConfirmLendWeaponEvent = (weapon) => 
         {
-            _mine.Lend(weapon);
+            (RewardType rewardType, int amount) = _mine.Lend(weapon);
 
             UpdateUIRelatedLendedWeapon(_mine);
             Managers.Game.Mine.CalculateGoldPerMin();
+
+            if (amount > 0)
+            Managers.Game.Player.AddTransactionCurrency();
+
+            Transactions.SendCurrent(callback =>
+            {
+                if (!callback.IsSuccess())
+                {
+                    Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                    return;
+                }
+                Managers.Alarm.Warning($"이전 무기로 모아둔 {rewardType}: {amount:n0}를 수령했습니다.");
+            });
         };
 
         nameText.text = _mine.GetMineData().name;
@@ -75,7 +89,8 @@ public class MineDetail : MonoBehaviour, IGameInitializer
         Managers.UI.OpenPopup(gameObject);
     }
 
-    void UpdateUIRelatedLendedWeapon(Mine _mine)
+    void UpdateUIRelatedLendedWeapon(MineBase _mine)
+    // void UpdateUIRelatedLendedWeapon(Mine _mine)
     {
         Weapon lendedWeapon = _mine.GetWeapon();
         if (lendedWeapon is null)
@@ -95,9 +110,12 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponName.text = lendedWeapon.Name;
             weaponName.gameObject.SetActive(true);
             addIcon.gameObject.SetActive(false);
-            string hpPerDMG = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.hpPerDMG.ToString();
-            string rangePerSize = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.rangePerSize.ToString();
-            string goldPerMin = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.goldPerMin.ToString();
+            // string hpPerDMG = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.hpPerDMG.ToString();
+            // string rangePerSize = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.rangePerSize.ToString();
+            // string goldPerMin = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.goldPerMin.ToString();
+            string hpPerDMG = _mine.HpPerDMG <= 0 ? "채광 불가" : _mine.HpPerDMG.ToString();
+            string rangePerSize = _mine.RangePerSize <= 0 ? "채광 불가" : _mine.RangePerSize.ToString();
+            string goldPerMin = _mine.GoldPerMin <= 0 ? "채광 불가" : _mine.GoldPerMin.ToString();
             calculatedInfoText.text = $"{hpPerDMG}\n{rangePerSize}\n{goldPerMin}";
             skillDescription.text = "";
             for (int i = 0; i < lendedWeapon.data.magic.Length; i++)
@@ -111,23 +129,43 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
-                // todo: 해제 전 골드 수령 부분 추가해야 함.
-                _mine.Receipt(() => 
-                {
-                    _mine.SetWeapon(null);
-                    UpdateUIRelatedLendedWeapon(_mine);
+                // 리팩 전
+                // _mine.Receipt(() => 
+                // {
+                //     _mine.SetWeapon(null);
+                //     UpdateUIRelatedLendedWeapon(_mine);
 
-                    weaponCollectButton.interactable = false;
-                    Managers.Game.Mine.CalculateGoldPerMin();
+                //     weaponCollectButton.interactable = false;
+                //     Managers.Game.Mine.CalculateGoldPerMin();
                     
-                    Transactions.SendCurrent(callback =>
+                //     Transactions.SendCurrent(callback =>
+                //     {
+                //         if (!callback.IsSuccess())
+                //         {
+                //             Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                //             return;
+                //         }
+                //     });
+                // });
+                // 리팩 후 사용
+                weaponCollectButton.interactable = false;
+                (RewardType rewardType, int amount) = _mine.Receipt(false);
+                _mine.CollectWeapon();
+                UpdateUIRelatedLendedWeapon(_mine);
+                Managers.Game.Mine.CalculateGoldPerMin();
+                if (amount > 0)
+                    Managers.Game.Player.AddTransactionCurrency();
+                
+                Transactions.SendCurrent(callback =>
+                {
+                    if (!callback.IsSuccess())
                     {
-                        if (!callback.IsSuccess())
-                        {
-                            Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
-                            return;
-                        }
-                    });
+                        Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                        return;
+                    }
+                    if (amount > 0)
+                        Managers.Alarm.Warning($"{rewardType}: {amount:n0}를 수령했습니다.");
+                    weaponCollectButton.interactable = true;
                 });
             });
             weaponCollectButton.interactable = true;
@@ -135,10 +173,32 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             goldCollectButton.onClick.AddListener(() => 
             {
                 goldCollectButton.interactable = false;
-                _mine.Receipt(() =>
+                // 리팩 전
+                // _mine.Receipt(() =>
+                // {
+                //     goldCollectButton.interactable = true;
+                // }, true);
+
+                // 리팩 후 사용
+                (RewardType rewardType, int amount) = _mine.Receipt();
+                if (amount <= 0)
                 {
+                    Managers.Alarm.Warning("수령할 재화가 없습니다.");
                     goldCollectButton.interactable = true;
-                }, true);
+                    return;
+                }
+                Managers.Game.Player.AddTransactionCurrency();
+
+                Transactions.SendCurrent(callback =>
+                {
+                    if (!callback.IsSuccess())
+                    {
+                        Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
+                        return;
+                    }
+                    Managers.Alarm.Warning($"{rewardType}: {amount:n0}를 수령했습니다.");
+                    goldCollectButton.interactable = true;
+                });
             });
             goldCollectButton.interactable = true;
         }

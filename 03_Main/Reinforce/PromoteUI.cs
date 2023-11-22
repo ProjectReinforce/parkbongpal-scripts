@@ -47,8 +47,10 @@ public class PromoteUI : ReinforceUIBase
     {
         base.OnEnable();
 
-        Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
-        Managers.Event.ReinforceMaterialChangeEvent += UpdateMaterialsImage;
+        // Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
+        // Managers.Event.ReinforceMaterialChangeEvent += UpdateMaterialsImage;
+        Managers.Event.ReinforceMaterialChangeEvent -= CheckQualification;
+        Managers.Event.ReinforceMaterialChangeEvent += CheckQualification;
     }
 
     protected override void OnDisable()
@@ -59,7 +61,8 @@ public class PromoteUI : ReinforceUIBase
             item.sprite = basicSlot;
         
         Managers.Game.Reinforce.ResetMaterials();
-        Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
+        // Managers.Event.ReinforceMaterialChangeEvent -= UpdateMaterialsImage;
+        Managers.Event.ReinforceMaterialChangeEvent -= CheckQualification;
     }
 
     void UpdateWeaponImage()
@@ -80,25 +83,19 @@ public class PromoteUI : ReinforceUIBase
 
     void UpdateMaterialsImage()
     {
-        if (Managers.Game.Reinforce.SelectedMaterials.Count <= 0)
+        for (int i = 0; i < 2; i++)
         {
-            for (int i = 0; i < materialIcons.Length; i++)
+            if (i < reinforceManager.SelectedMaterials.Count)
+            {
+                materialIcons[i].sprite = reinforceManager.SelectedMaterials[i].Icon;
+                weaponSlots[i+2].sprite = slotSprites[reinforceManager.SelectedMaterials[0].data.rarity];
+            }
+            else
             {
                 materialIcons[i].sprite = basicSprite;
                 weaponSlots[i+2].sprite = basicSlot;
             }
-            return;
         }
-        for (int i = 0; i < Managers.Game.Reinforce.SelectedMaterials.Count; i++)
-        {
-            if (Managers.Game.Reinforce.SelectedMaterials[i] != null)
-            {
-                materialIcons[i].sprite = Managers.Game.Reinforce.SelectedMaterials[i].Icon;
-                weaponSlots[i+2].sprite = slotSprites[Managers.Game.Reinforce.SelectedMaterials[0].data.rarity];
-            }
-        }
-
-        CheckQualification();
     }
 
     protected override void UpdateCosts()
@@ -118,7 +115,6 @@ public class PromoteUI : ReinforceUIBase
     protected override void UpdateInformations()
     {
         UpdateWeaponImage();
-        reinforceManager.ResetMaterials();
         UpdateMaterialsImage();
 
         UserData userData = Managers.Game.Player.Data;
@@ -195,7 +191,6 @@ public class PromoteUI : ReinforceUIBase
 
     bool CheckMaterials()
     {
-        // Debug.Log($"재료 2개 선택? : {Managers.Game.Reinforce.SelectedMaterials.Count == 2}");
         if (Managers.Game.Reinforce.SelectedMaterials.Count == 2)
             return true;
         return false;

@@ -71,7 +71,8 @@ public enum ChartName
     quest,
     skillData,
     decomposit,
-    collection
+    collection,
+    minigameRewardPercent
 }
 
 public enum StatType

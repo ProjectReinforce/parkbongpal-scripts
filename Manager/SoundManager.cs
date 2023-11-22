@@ -6,7 +6,7 @@ public class SoundManager
 {
     public SfxPlayer sfxPlayer;
     public BgmPlayer bgmPlayer;
-    bool isMuted;
+    bool isMuted = true;
     public bool IsMuted
     {
         get
