@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class Player
 {
-    // TopUIDatatViewer topUIDatatViewer;
     [SerializeField] UserData userData;
     public UserData Data => userData;
     RecordData recordData;
     public RecordData Record => recordData;
+    QuestRecord questProgress;
+    public QuestRecord QuestProgress => questProgress;
 
     public Player()
     {
-        // topUIDatatViewer = Utills.Bind<TopUIDatatViewer>("Top_S");
-        // userData = Managers.ServerData.UserData;
         UpdateUserData();
 
         recordData = new RecordData();
+        questProgress = Managers.ServerData.questRecordDatas[0];
     }
     public void UpdateUserData()
     {
@@ -26,7 +26,6 @@ public class Player
     public void Initialize()
     {
         recordData.LoadOrInitRecord(userData.inDate);
-        // topUIDatatViewer.Initialize();
     }
 
     void UpdateBackEndData(string columnName, int _data)
@@ -74,7 +73,6 @@ public class Player
         recordData.ModifyGoldRecord(_gold);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.gold), userData.gold);
-        // topUIDatatViewer.UpdateGold();
         Managers.Event.GoldChangeEvent?.Invoke();
         return true;
     }
@@ -87,7 +85,6 @@ public class Player
         recordData.ModifyDiamondRecord(_diamond);
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.diamond), userData.diamond);
-        // topUIDatatViewer.UpdateDiamond();
         Managers.Event.DiamondChangeEvent?.Invoke();
         return true;
     }
@@ -99,7 +96,6 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.weaponSoul), userData.weaponSoul);
-        // inventoryUIViwer.SetSoul(userData.weaponSoul);
         return true;
     }
 
@@ -110,7 +106,6 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.stone), userData.stone);
-        // inventoryUIViwer.SetStone(userData.stone);
         return true;
     }
     
@@ -122,7 +117,6 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.exp), userData.exp);
-        // topUIDatatViewer.UpdateExp();
         Managers.Event.ExpChangeEvent?.Invoke();
     }
 
@@ -130,15 +124,15 @@ public class Player
     {
         userData.exp -= Managers.ServerData.ExpDatas[userData.level-1];
         userData.level ++;
+        // todo : LevelUpEvent 이랑 LevelChangeEvent을 따로 쓸 필요가 없음
         Managers.Event.LevelUpEvent?.Invoke();
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.level), userData.level);
-        // topUIDatatViewer.UpdateLevel();
         Managers.Event.LevelChangeEvent?.Invoke();
 
         if (userData.exp >= Managers.ServerData.ExpDatas[userData.level-1])
-            LevelUp();
+            LevelUp(_directUpdate);
     }
     
     public void SetFavoriteWeaponId(int _weaponId)
@@ -147,7 +141,6 @@ public class Player
         userData.favoriteWeaponId = _weaponId;
 
         UpdateBackEndData(nameof(UserData.column.favoriteWeaponId), userData.favoriteWeaponId);
-        // topUIDatatViewer.UpdateWeaponIcon();
         Managers.Event.FavoriteWeaponChangeEvent?.Invoke();
     }
 
@@ -159,7 +152,6 @@ public class Player
 
     public void SetMineGameScore(int score)
     {
-        // if (userData.mineGameScore <= score) return;
         userData.mineGameScore = score;
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.column.mineGameScore), userData.mineGameScore);
     }
@@ -177,8 +169,6 @@ public class Player
         userData.attendance = day;
         recordData.ModifyDayAttendanceRecord();
         recordData.ModifyWeekAttendanceRecord();
-
-        // UpdateBackEndData(nameof(UserData.colum.attendance), day);
     }
 
     public void UpdateInfoRelatedAttendanceToServer()
@@ -325,22 +315,32 @@ public class Player
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
     }
 
-    public void GetQuestRewards(int _exp, int _gold, int _diamond)
+    public void AddTransactionQuestRewards()
+    // public void GetQuestRewards(int _exp, int _gold, int _diamond)
     {
-        AddExp(_exp, false);
-        AddGold(_gold, false);
-        AddDiamond(_diamond, false);
+        // AddExp(_exp, false);
+        // AddGold(_gold, false);
+        // AddDiamond(_diamond, false);
 
         Param param = new()
         {
-            {nameof(UserData.column.exp), Data.exp + _exp},
+            // {nameof(UserData.column.exp), Data.exp + _exp},
+            // {nameof(UserData.column.level), Data.level},
+            // {nameof(UserData.column.gold), Data.gold + _gold},
+            // {nameof(UserData.column.diamond), Data.diamond + _diamond}
+            {nameof(UserData.column.exp), Data.exp},
             {nameof(UserData.column.level), Data.level},
-            {nameof(UserData.column.gold), Data.gold + _gold},
-            {nameof(UserData.column.diamond), Data.diamond + _diamond}
+            {nameof(UserData.column.gold), Data.gold},
+            {nameof(UserData.column.diamond), Data.diamond}
         };
-
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
-        Transactions.SendCurrent();
+        
+        param = new()
+        {
+            { nameof(QuestRecord.idList), questProgress.idList }
+        };
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), questProgress.inDate, Backend.UserInDate, param));
+        // Transactions.SendCurrent();
     }
 
     public void GetBonusCount(uint _totalGold)
@@ -364,5 +364,10 @@ public class Player
             { nameof(UserData.column.stone), Data.stone }
         };
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
+    }
+
+    public void ModifyQuestProgress(RecordType _recordType, int _questId)
+    {
+        questProgress.idList[(int)_recordType] = _questId + 1;
     }
 }
