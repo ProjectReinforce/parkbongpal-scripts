@@ -73,8 +73,8 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     void OnEnable()
     {
         scrollRect.normalizedPosition = Vector2.one;
-        soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
-        oreText.text = Managers.Game.Player.Data.stone.ToString();
+        soulText.text = $"{Managers.Game.Player.Data.weaponSoul:n0}";
+        oreText.text = $"{Managers.Game.Player.Data.stone:n0}";
 
         Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
