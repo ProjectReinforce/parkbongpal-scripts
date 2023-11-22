@@ -37,36 +37,42 @@ public class Weapon : IVisibleNew
         SetPower();
     }
 
-    public void SetBorrowedDate(DateTime time)
+    public void SetBorrowedDate(DateTime _time)
     {
-        _data.borrowedDate = time;
+        _data.borrowedDate = _time;
     }
-    public void SetBorrowedDate()
-    {
-        // _data.borrowedDate = DateTime.Parse(Backend.Utils.GetServerTime ().GetReturnValuetoJSON()["utcTime"].ToString());
-        _data.borrowedDate = Managers.Etc.GetServerTime();
-    }
+
+    // public void SetBorrowedDate()
+    // {
+    //     _data.borrowedDate = Managers.Etc.GetServerTime();
+    // }
 
     public void Lend(int mineId)
     {
         _data.mineId = mineId;
-        SetBorrowedDate();
-        Param param = new Param();
-        param.Add(nameof(WeaponData.colum.mineId),mineId);
-        param.Add(nameof(WeaponData.colum.borrowedDate),_data.borrowedDate);
-
-        SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
+        DateTime date = Managers.Etc.GetServerTime();
+        SetBorrowedDate(date);
+        Param param = new()
         {
-            if (!callback.IsSuccess())
-            {
-                Debug.Log(callback);
-                return;
-            }
-            Debug.Log("성공"+callback);
-        });
+            { nameof(WeaponData.colum.mineId), mineId },
+            // { nameof(WeaponData.colum.borrowedDate), date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
+            { nameof(WeaponData.colum.borrowedDate), date }
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(WeaponData), data.inDate, Backend.UserInDate, param));
+
+        // SendQueue.Enqueue(Backend.GameData.UpdateV2, nameof(WeaponData), data.inDate, Backend.UserInDate, param, ( callback ) => 
+        // {
+        //     if (!callback.IsSuccess())
+        //     {
+        //         Debug.Log(callback);
+        //         return;
+        //     }
+        //     Debug.Log("성공"+callback);
+        // });
         // myslot.UpdateLend();
-        if (Managers.Etc.CallChecker != null)
-            Managers.Etc.CallChecker.CountCall();
+        // if (Managers.Etc.CallChecker != null)
+        //     Managers.Etc.CallChecker.CountCall();
     }
 
     const float STAT_CORRECTION_FACTOR = 0.2f;

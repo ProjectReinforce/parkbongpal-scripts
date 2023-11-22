@@ -7,14 +7,15 @@ using UnityEngine.UI;
 public class EventManager
 {
     public Action<Weapon> SlotSelectEvent;          // 무기 선택 이벤트
-    public Action UIRefreshEvent;                   // UI 새로고침 이벤트
+    public Action SlotRefreshEvent;                   // UI 새로고침 이벤트
     public Action ReinforceWeaponChangeEvent;       // 강화 무기 변경 이벤트
     public Action ReinforceMaterialChangeEvent;     // 강화 재료 변경 이벤트
-    public Action ReinforceMaterialRegistEvent;     // 강화 재료 등록 이벤트
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
-    public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
+    public Action<MineBase> MineClickEvent;             // 광산 클릭 이벤트
+    // public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
     public Action<bool> RecieveAttendanceRewardEvent;
+    public Action<bool> InventoryNewAlarmEvent;
 
     #region TopUI
     public Action GoldChangeEvent;
@@ -41,12 +42,9 @@ public class EventManager
     #region MiniGame
     public Action<Weapon> SetMiniGameWeaponEvent;
     public Action<Sprite, string> SetMiniGameWeaponUIEvent;
-    public Action<int> ResultNewScoreMineGameEvent;
     // public Action SetMiniGameEvent;
-    public Action ResetMiniGameScoreEvent;
-    public Action ResultBestScoreMineGameEvent;
     public Action MiniGameEscEvent;
-    public Action MiniGameOverEvent;
+    public Action<int> SetMiniGameDamageTextEvent;
     #endregion
 
     #region Quest

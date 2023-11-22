@@ -67,31 +67,19 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
     public void Set(InventoryType _inventoryType)
     {
-        // InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
-        // foreach (var item in slots)
-        //     item.ResetUI((int)CurrentInventoryType);
-
         CurrentInventoryType = _inventoryType;
-        // InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
-        // foreach (var item in slots)
-        //     item.SetUI((int)CurrentInventoryType);
-            
-        // Managers.Event.UIRefreshEvent?.Invoke();
     }
 
     void OnEnable()
     {
         scrollRect.normalizedPosition = Vector2.one;
-        soulText.text = Managers.Game.Player.Data.weaponSoul.ToString();
-        oreText.text = Managers.Game.Player.Data.stone.ToString();
+        soulText.text = $"{Managers.Game.Player.Data.weaponSoul:n0}";
+        oreText.text = $"{Managers.Game.Player.Data.stone:n0}";
 
+        Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
         foreach (var item in slots)
-        {
             item.SetUI((int)CurrentInventoryType);
-            // if (item.gameObject.activeSelf == true) continue;
-            // item.gameObject.SetActive(true);
-        }
     }
 
     void OnDisable()
@@ -99,11 +87,12 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(false);
     }
 
-    public void SortWeapons(Dropdown _test)
+    public void SortWeapons(Dropdown _dropDown)
     {
-        Managers.Game.Inventory.Sort((SortType)_test.value);
+        Managers.Game.Inventory.ChangeSortType((SortType)_dropDown.value);
     }
 
     public void HideLendedWeapon(bool _toggleValue)

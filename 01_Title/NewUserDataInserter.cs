@@ -16,9 +16,9 @@ public class NewUserDataInserter
     {
         Transactions.Add(TransactionValue.SetInsert(nameof(UserData), new() { {nameof(UserData.lastLogin), DateTime.MinValue} }));//, {nameof(UserData.attendance), -1} } ));
 
-        Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 1}, {nameof(MineBuildData.buildCompleted), true} }));
-        Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 3}, {nameof(MineBuildData.buildCompleted), true} }));
-        Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 5}, {nameof(MineBuildData.buildCompleted), true} }));
+        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 1}, {nameof(MineBuildData.buildCompleted), true} }));
+        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 3}, {nameof(MineBuildData.buildCompleted), true} }));
+        // Transactions.Add(TransactionValue.SetInsert(nameof(MineBuildData), new() { {nameof(MineBuildData.mineIndex), 5}, {nameof(MineBuildData.buildCompleted), true} }));
         
         Param param = new()
         {

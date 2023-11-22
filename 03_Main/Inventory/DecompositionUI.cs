@@ -111,15 +111,15 @@ public class DecompositionUI : MonoBehaviour
         
         Param param = new()
         {
-            {nameof(UserData.colum.gold), Managers.Game.Player.Data.gold},
-            {nameof(UserData.colum.weaponSoul), Managers.Game.Player.Data.weaponSoul},
+            {nameof(UserData.column.gold), Managers.Game.Player.Data.gold},
+            {nameof(UserData.column.weaponSoul), Managers.Game.Player.Data.weaponSoul},
         };
 
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
         Transactions.SendCurrent();
 
         selectedWeapons.Clear();
-        Managers.Event.UIRefreshEvent?.Invoke();
+        Managers.Event.SlotRefreshEvent?.Invoke();
        
         // HighPowerFinder.UpdateHighPowerWeaponData();
     }

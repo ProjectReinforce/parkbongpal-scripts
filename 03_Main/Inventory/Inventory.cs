@@ -8,6 +8,7 @@ public class Inventory
 {
     List<Weapon> weapons = new();
     public List<Weapon> Weapons => weapons;
+    SortType currentSortType = SortType.기본;
 
     public Inventory()
     {
@@ -31,11 +32,19 @@ public class Inventory
         return true;
     }
 
-    public void Sort(SortType _sortType)
+    public void ChangeSortType(SortType _sortType)
     {
-        switch (_sortType)
+        currentSortType = _sortType;
+
+        SortWeapon();
+    }
+
+    public void SortWeapon()
+    {
+        switch (currentSortType)
         {
             case SortType.기본:
+                weapons = weapons.OrderByDescending((one) => one.data.inDate).ToList();
                 break;
             case SortType.등급순:
                 weapons = weapons.OrderByDescending((one) => one.data.rarity).ToList();
@@ -56,7 +65,7 @@ public class Inventory
                 weapons = weapons.OrderByDescending((one) => one.data.accuracy).ToList();
                 break;
         }
-        Managers.Event.UIRefreshEvent?.Invoke();
+        Managers.Event.SlotRefreshEvent?.Invoke();
     }
 
     // todo : 개선 필요, 뒤끝 연동 부분 분리해야 하지 않을지
@@ -85,6 +94,7 @@ public class Inventory
         {
             var bro = callback;
             LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
+            List<Weapon> newWeapons = new();
             for (int i = 0; i < json.Count; i++)
             {
                 WeaponData weaponData = new(json[i]["inDate"].ToString(), _baseWeaponData[i]);
@@ -92,7 +102,9 @@ public class Inventory
                 {
                     IsNew = true
                 };
-                weapons.Add(weapon);
+                // weapons.Add(weapon);
+                newWeapons.Add(weapon);
+                // todo : 포문 다 돌고 난 후에 업데이트 되도록 수정 필요
                 Managers.Game.Player.SetCombatScore(weapon.power);
                 if (Managers.Event.PideaCheckEvent.Invoke(_baseWeaponData[i].index))
                 {
@@ -103,6 +115,7 @@ public class Inventory
                     Managers.Event.PideaGetNewWeaponEvent?.Invoke(_baseWeaponData[i].index);
                 }
             }
+            weapons.InsertRange(0, newWeapons);
             Transactions.SendCurrent();
         });
     }
