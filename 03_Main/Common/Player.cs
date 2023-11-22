@@ -340,13 +340,7 @@ public class Player
 
     public void GetBonusCount(uint _totalGold)
     {
-        if(_totalGold >= 10000)
-        {
-            recordData.ModifyDayGetBonusRecord();
-        }
-        if(_totalGold >= 50000)
-        {
-            recordData.ModifyWeekGetBonusRecord();
-        }
+        recordData.ModifyDayGetBonusRecord(_totalGold);
+        recordData.ModifyWeekGetBonusRecord(_totalGold);
     }
 }

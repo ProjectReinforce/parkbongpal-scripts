@@ -21,6 +21,7 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] GameObject selectMiniGameUI;
     [SerializeField] NormalReinforceUI reinforceUI;
     [SerializeField] InventoryController inventoryUI;
+    [SerializeField] DecompositionUI decompositionUI;
     [SerializeField] QuestContentsInitializer questUI;
     [SerializeField] Beneficiary attendanceUI;
     [SerializeField] GameObject packgaeUI;
@@ -29,6 +30,7 @@ public class TutorialPlayer : MonoBehaviour
     int index;
     int textIndex;
     bool mineOpenTutorialCheck;
+    Vector3 vector;
 
     void Start()
     {
@@ -42,8 +44,8 @@ public class TutorialPlayer : MonoBehaviour
 
         if (clearedtutorial == false && Managers.Game.Player.Record.TutorialIndexCount > 0)
         {
-            panelTrans = new Transform[30];
-            cheifLine = new string[40];
+            panelTrans = new Transform[40];
+            cheifLine = new string[50];
             index = 0;
             textIndex = 0;
             CheifLines();   // 추후 서버에 있는 대화집을 가져오게 바꿀 예정
@@ -76,15 +78,24 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[17] = Utills.Bind<Transform>("Slot (1)");
             panelTrans[18] = Utills.Bind<Transform>("Button_Select");
             panelTrans[19] = Utills.Bind<Transform>("Normal_S");
-            panelTrans[20] = Utills.Bind<Transform>("Button_Reinforce_Normal");
+            panelTrans[20] = Utills.Bind<Transform>("Button_Reinforce");
             panelTrans[21] = Utills.Bind<Transform>("Count");
             panelTrans[22] = Utills.Bind<Transform>("Main_Mine_S");
             panelTrans[23] = Utills.Bind<Transform>("Button_Inventory");
-            panelTrans[24] = Utills.Bind<Transform>("Button_Quest_S");
-            panelTrans[25] = Utills.Bind<Transform>("PackageButton");
-            panelTrans[26] = Utills.Bind<Transform>("Button_Check_S");
-            panelTrans[27] = Utills.Bind<Transform>("Button_Post_S");
-            panelTrans[28] = Utills.Bind<Transform>("Button_Setting");
+            panelTrans[24] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[25] = Utills.Bind<Transform>("DetailInfo_S");
+            panelTrans[26] = Utills.Bind<Transform>("Dropdown_S");
+            panelTrans[27] = Utills.Bind<Transform>("Button_Decomposition");
+            panelTrans[28] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[29] = Utills.Bind<Transform>("Button_Decomposition", decompositionUI.transform);
+            panelTrans[30] = Utills.Bind<Transform>("Button_OK", decompositionUI.transform);
+            panelTrans[31] = Utills.Bind<Transform>("Button_Close", inventoryUI.transform);
+            panelTrans[32] = Utills.Bind<Transform>("Button_Quest_S");
+            panelTrans[33] = Utills.Bind<Transform>("CloseButton", questUI.transform);
+            panelTrans[34] = Utills.Bind<Transform>("PackageButton");
+            panelTrans[35] = Utills.Bind<Transform>("Button_Check_S");
+            panelTrans[36] = Utills.Bind<Transform>("Button_Post_S");
+            panelTrans[37] = Utills.Bind<Transform>("Button_Setting");
         }
     }
 
@@ -170,6 +181,36 @@ public class TutorialPlayer : MonoBehaviour
             case 24:
                 InventoryExplain();
                 break;
+            case 25:
+                InventoryDetailInfo();
+                break;
+            case 26:
+                InventorySortExplain();
+                break;
+            case 27:
+                InventoryDecompositionTutorial();
+                break;
+            case 28:
+                InventoryDecompositionOpenPopup();
+                break;
+            case 29:
+                InventoryDecompositionSetWeapon();
+                break;
+            case 30:
+                InventoryDecompositionTry();
+                break;
+            case 31:
+                InventoryOpenResultUI();
+                break;
+            case 32:
+                NextScene();
+                break;
+            case 33:
+                QuestExplain();
+                break;
+            case 34:
+                NextScene();
+                break;
         }
         if (index >= panelTrans.Length || panelTrans[index] == null)
         {
@@ -179,9 +220,9 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalkObject.gameObject.SetActive(false);
         }
         tutorialPanel.transform.position = panelTrans[index].position;
-        if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
+        if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11 || index == 33)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
             tutorialPanel.transform.position = panelTrans[index].position * 10;
-        if (index == 12 ||index == 17)
+        if (index == 12 || index == 17 || index == 24)
             tutorialPanel.transform.position = panelTrans[index].position * 5;
     }
 
@@ -361,7 +402,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
-        reinforceUI.gameObject.SetActive(true);
+        Managers.UI.OpenPopup(reinforceUI.gameObject);
     }
 
     void ReinforceNormal()
@@ -388,6 +429,69 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         inventoryUI.Set(InventoryType.Default);
         Managers.UI.OpenPopup(inventoryUI.gameObject);
+    }
+
+    void InventoryDetailInfo()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        detailInfoUI = inventoryUI.DetailInfo;
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        Managers.Event.SlotSelectEvent?.Invoke(weapon);
+    }
+
+    void InventorySortExplain()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        cheifControl.transform.localPosition = new Vector3(-180, -160, 0);
+        // 드랍다운 되기
+    }
+
+    void InventoryDecompositionTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        cheifTalkObject.transform.localPosition = new Vector3(0, -340, 0);
+    }
+
+    void InventoryDecompositionOpenPopup()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.OpenPopup(decompositionUI.gameObject);
+        cheifControl.transform.localPosition = new Vector3(180, -160, 0);
+        cheifTalkObject.transform.localPosition = new Vector3(0, -400, 0);
+        decompositionUI.GetSelectedWeapons();
+    }
+
+    void InventoryDecompositionSetWeapon()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        // 무기 적용 시키는 로직
+
+    }
+
+    void InventoryDecompositionTry()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        // 분해 시키는 로직
+        Managers.UI.ClosePopup();
+    }
+
+    void InventoryOpenResultUI()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void QuestExplain()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.OpenPopup(questUI.transform.parent.gameObject);
     }
 
     void TextChanges()
@@ -482,6 +586,42 @@ public class TutorialPlayer : MonoBehaviour
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
+            case 34:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 35:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 36:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 37:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 38:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 39:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 40:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 42:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 44:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
         }
         if (textIndex > cheifLine.Length || cheifLine[textIndex] == null)
         {
@@ -529,9 +669,18 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[30] = "이제 다른 것들을 배우러 가보겠나?\n 하단의 광산 버튼을 클릭해주게\n 내가 설명해줄테니 말이야?";
         cheifLine[31] = "이번에 설명할 것은 인벤토리라네\n 인벤토리에는 자네가 획득한 무기들이 들어있다네\n 무기들에 정보들 또한 여기서 볼 수 있네";
         cheifLine[32] = "상단의 인벤토리 버튼을 클릭해보겠나?\n 직접 보는 편이 더 이해를 도우니 말일세";
-        cheifLine[33] = "";
-        cheifLine[34] = "";
-        cheifLine[35] = "";
-        cheifLine[36] = "";
+        cheifLine[33] = "1";
+        cheifLine[34] = "2";
+        cheifLine[35] = "3";
+        cheifLine[36] = "4";
+        cheifLine[37] = "5";
+        cheifLine[38] = "6";
+        cheifLine[39] = "7";
+        cheifLine[40] = "8";
+        cheifLine[41] = "9";
+        cheifLine[42] = "10";
+        cheifLine[43] = "11";
+        cheifLine[44] = "12";
+        cheifLine[45] = "13";
     }
 }

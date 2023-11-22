@@ -353,9 +353,9 @@ public class RecordData
         PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
     }
 
-    public void ModifyDayGetBonusRecord()
+    public void ModifyDayGetBonusRecord(uint _totalGold)
     {
-        dayGetBonus++;
+        dayGetBonus += _totalGold;
         PlayerPrefs.SetString("DayGetBonus", dayGetBonus.ToString());
     }
 
@@ -403,9 +403,9 @@ public class RecordData
         PlayerPrefs.SetString("WeekAttendance", weekAttendance.ToString());
     }
 
-    public void ModifyWeekGetBonusRecord()
+    public void ModifyWeekGetBonusRecord(uint _totalGold)
     {
-        weekGetBonus++;
+        weekGetBonus += _totalGold;
         PlayerPrefs.SetString("WeekGetBonus", weekGetBonus.ToString());
     }
 
