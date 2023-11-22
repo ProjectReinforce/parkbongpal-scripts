@@ -18,7 +18,8 @@ public class MineGame : MonoBehaviour
     // [SerializeField] MiniGameDamageTextPooler pooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
-
+    bool isAnimPlaying = false;
+    
     public void Resume()
     {
         Managers.UI.ClosePopup();
@@ -37,6 +38,10 @@ public class MineGame : MonoBehaviour
         }
     }
     
+    void CheckAnimationPlaying(bool _AnimActiveSelf)
+    {
+        isAnimPlaying = _AnimActiveSelf;
+    }
 
     public void SetMineGameWeapon(Weapon _weapon)
     {
@@ -48,12 +53,19 @@ public class MineGame : MonoBehaviour
     {
         Managers.Event.MiniGameEscEvent -= MiniGameisOn;
         Managers.Event.MiniGameEscEvent += MiniGameisOn;
+        Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
+        Managers.Event.CheckAnimationPlayEvent += CheckAnimationPlaying;
+
+        pbpManager.gameObject.SetActive(true);
     }
 
     void OnDisable()// 게임을 다시 켰을때도 초기화
     {
         Managers.Event.MiniGameEscEvent -= MiniGameisOn;
+        Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
+
         ResetGame();
+        pbpManager.gameObject.SetActive(false);
     }
 
     public void MiniGameisOn()
@@ -92,7 +104,11 @@ public class MineGame : MonoBehaviour
     void Attack() // 데미지 계산 할 함수
     {
         int damage = Utills.random.Next(selectedWeapon.power - 3, selectedWeapon.power + 3);
-        rock.GetDamage(damage, pbpManager.PBPRandomOn);
+        if(!isAnimPlaying)
+        {
+            pbpManager.PBPRandomOn();
+        }
+        rock.GetDamage(damage);
         Managers.Event.SetMiniGameDamageTextEvent?.Invoke(damage);
         // Managers.Event.GetPoolEvent?.Invoke();
         // pooler.GetPool();

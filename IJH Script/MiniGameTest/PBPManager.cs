@@ -6,10 +6,10 @@ public class PBPManager : MonoBehaviour
 {
     [SerializeField] PBPController[] pbpControllers;
 
-    void OnEnable() 
-    {
-        PBPRandomOn();
-    }
+    // void OnEnable() 
+    // {
+    //     PBPRandomOn();
+    // }
 
     public void SetPBPWeaponSprites(Sprite _weaponSprite)
     {
@@ -21,11 +21,11 @@ public class PBPManager : MonoBehaviour
 
     public void PBPRandomOn()
     {
-        for(int i = 0; i < pbpControllers.Length; i++)
+        for(int i = 0; i < 3; i++)
         {
             pbpControllers[i].gameObject.SetActive(false);
         }
-        pbpControllers[Utills.random.Next(0 , pbpControllers.Length)].gameObject.SetActive(true);
+        pbpControllers[Utills.random.Next(0 , 3)].gameObject.SetActive(true);
     }
 
     // void OnDisable() 

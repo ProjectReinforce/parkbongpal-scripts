@@ -19,22 +19,22 @@ public class TopRankSlot : MonoBehaviour
         mainTitle.text = data.nickname;
         subTitle.text = $"{(RankingType)rankIndex}";
         myRankImage.sprite = rankSprites[myRank - 1];
-        score.text = data.score.ToString();
+        score.text = data.score.ToString("N0");
         switch (myRank)
         {
             case 1:
-            rewardGoldText.text = "1,000,000";
-            rewardDiamondText.text = "1,000";
+            rewardGoldText.text = $"{1000000:N0}";
+            rewardDiamondText.text = $"{5000:N0}";
             break;
 
             case 2:
-            rewardGoldText.text = "800,000";
-            rewardDiamondText.text = "800";
+            rewardGoldText.text = $"{800000:N0}";
+            rewardDiamondText.text = $"{3000:N0}";
             break;
 
             case 3:
-            rewardGoldText.text = "500,000";
-            rewardDiamondText.text = "500";
+            rewardGoldText.text = $"{500000:N0}";
+            rewardDiamondText.text = $"{1000:N0}";
             break;
         }
     }
