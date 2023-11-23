@@ -183,11 +183,11 @@ public class PromoteUI : ReinforceUIBase
         return userData.gold >= goldCost;
     }
 
-    bool CheckRarity()
-    {
-        WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-        return weaponData.rarity >= (int)Rarity.rare;
-    }
+    // bool CheckRarity()
+    // {
+    //     WeaponData weaponData = reinforceManager.SelectedWeapon.data;
+    //     return weaponData.rarity >= (int)Rarity.rare;
+    // }
 
     bool CheckMaterials()
     {
@@ -198,7 +198,7 @@ public class PromoteUI : ReinforceUIBase
 
     protected override bool Checks()
     {
-        if (CheckGold() && CheckRarity() && CheckMaterials()) return true;
+        if (CheckGold() && CheckMaterials()) return true;
         return false;
     }
 }
