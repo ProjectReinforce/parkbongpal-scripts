@@ -16,6 +16,7 @@ public class MineGame : MonoBehaviour
     [SerializeField] MineGameResultUI resultPanel;
     [SerializeField] PBPManager pbpManager;
     // [SerializeField] MiniGameDamageTextPooler pooler;
+    [SerializeField] MiniGameBrokenRockPooler brokenRockPooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
     bool isAnimPlaying = false;
@@ -110,6 +111,10 @@ public class MineGame : MonoBehaviour
         }
         rock.GetDamage(damage);
         Managers.Event.SetMiniGameDamageTextEvent?.Invoke(damage);
+        for (int i = 0; i < 3; i++)
+        {
+            brokenRockPooler.GetPool();
+        }
         // Managers.Event.GetPoolEvent?.Invoke();
         // pooler.GetPool();
         // Invoke("releaseText", 0.5f);

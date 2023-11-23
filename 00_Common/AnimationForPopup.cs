@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class AnimationForPopup : MonoBehaviour
 {
+    public static bool isAnimating = false;
+
     public void Initialize()
     {
         transform.localScale = Vector3.one * 0.1f;
@@ -12,18 +14,27 @@ public class AnimationForPopup : MonoBehaviour
 
     public void Show()
     {
-        gameObject.SetActive(true);
+        if(isAnimating) return;
 
+        isAnimating = true;
+        gameObject.SetActive(true);
+        
         var seq = DOTween.Sequence();
 
         seq.Append(transform.DOScale(1.05f, 0.2f));
         seq.Append(transform.DOScale(1f, 0.1f));
 
-        seq.Play();
+        seq.Play().OnComplete(() =>
+        {
+            isAnimating = false;
+        });
     }
 
     public void Hide()
     {
+        if(isAnimating) return;
+
+        isAnimating = true;
         var seq = DOTween.Sequence();
 
         seq.Append(transform.DOScale(1.05f, 0.1f));
@@ -32,6 +43,7 @@ public class AnimationForPopup : MonoBehaviour
         seq.Play().OnComplete(() =>
         {
             gameObject.SetActive(false);
+            isAnimating = false;
         });
     }
 }

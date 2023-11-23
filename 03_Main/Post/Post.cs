@@ -92,7 +92,6 @@ public class Post : MonoBehaviour, IGameInitializer
 
                     mail.Initialized(mailData, mailItemDatas);
 
-                    Debug.Log("메일 데이터 세팅 완료");
                     mail.gameObject.SetActive(true);
                     notifyer.GetNew(mail);
                     slots.Add(mail);

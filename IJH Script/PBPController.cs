@@ -16,16 +16,17 @@ public class PBPController : MonoBehaviour
         }
     }
 
+    public void WeaponSpriteChange(Sprite _weaponSprite)
+    {
+        weaponSpriteRenderer.sprite = _weaponSprite;
+    }
+    
     void OffIdleAnim()
     {
         idleAnim.gameObject.SetActive(false);
         Managers.Event.CheckAnimationPlayEvent?.Invoke(true);
     }
 
-    public void WeaponSpriteChange(Sprite _weaponSprite)
-    {
-        weaponSpriteRenderer.sprite = _weaponSprite;
-    }
 
     void OnAnimationEnd()
     {
