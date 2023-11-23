@@ -314,6 +314,8 @@ public class MineBase : MonoBehaviour, Rental
     {
         // 광산 상태 변경
         DateTime startTime = Managers.Etc.GetServerTime();
+        if (mineData.index == 0)
+            startTime.AddSeconds(-590);
         Building(startTime);
 
         // NPC 처리
@@ -349,7 +351,8 @@ public class MineBase : MonoBehaviour, Rental
     {
         // 남은 시간 계산
         TimeSpan timeSpan = Managers.Etc.GetServerTime() - _buildStartTime;
-        remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * 60 - (float)(timeSpan.TotalMilliseconds / 1000);
+        int toSeconds = mineData.index == 0 ? 10 : 60;
+        remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * toSeconds - (float)(timeSpan.TotalMilliseconds / 1000);
 
         // 광산 상태 변경
         mineStatus = MineStatus.Building;
