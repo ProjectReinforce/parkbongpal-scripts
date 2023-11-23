@@ -9,6 +9,7 @@ public class Rock : MonoBehaviour
     [SerializeField] TimerControl timerControl;
     [SerializeField] RockHpSlider rockHpSlider;
     [SerializeField] Sprite[] sprites;
+    [SerializeField] MiniGameDropItemPooler itemPooler;
     Vector3 originalPosition;
     Vector2 originalSizeDelta;
     Image image;
@@ -90,10 +91,18 @@ public class Rock : MonoBehaviour
                     case "Soul": 
                     Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 소울 {numItems}개 드랍!");
                     dropSoulCount += numItems;
+                    for(int i = 0; i < numItems; i++)
+                    {
+                        itemPooler.GetPool((int)DropItems.Soul);
+                    }
                     break;
                     case "Ore": 
                     Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 원석 {numItems}개 드랍!");
                     dropStoneCount += numItems;
+                    for(int i = 0; i < numItems; i++)
+                    {
+                        itemPooler.GetPool((int)DropItems.Ore);
+                    }
                     break;
                 }
             }

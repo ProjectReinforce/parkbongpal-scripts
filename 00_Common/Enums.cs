@@ -212,3 +212,9 @@ public enum QuestContents
     onceIngContents,
     onceClearContents
 }
+
+public enum DropItems
+{
+    Soul,
+    Ore
+}
