@@ -24,7 +24,6 @@ public class PostDetail : MonoBehaviour
         title.text = data.title;
         author.text = data.author;
         content.text = data.content;
-        //Debug.Log("sentDate : " + data.sentDate);
         date.text = data.sentDate.Substring(0, 10) + " / " + data.expirationDate[..10];
 
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)

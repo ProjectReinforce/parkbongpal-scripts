@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pidea : MonoBehaviour//Singleton<Pidea>
+public class Pidea : MonoBehaviour
 {
     [SerializeField] PideaSlot prefab;
     [SerializeField] List<PideaSlot> pideaSlots;
@@ -114,14 +114,4 @@ public class Pidea : MonoBehaviour//Singleton<Pidea>
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
         Managers.Event.PideaOpenSetting += OpenSetting;
     }
-    private void OnDisable()
-    {
-        Managers.Event.PideaSlotSelectEvent -= SetCurrentWeapon;
-        Managers.Event.PideaViwerOnDisableEvent -= NotifyClear;
-        Managers.Event.PideaCheckEvent -= CheckLockWeapon;
-        Managers.Event.PideaGetNewWeaponEvent -= GetNewWeapon;
-        Managers.Event.PideaSetWeaponCount -= PideaSetWeaponCount;
-        Managers.Event.PideaOpenSetting += OpenSetting;
-    }
-
 }
