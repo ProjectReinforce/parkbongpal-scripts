@@ -50,7 +50,7 @@ public class Rock : MonoBehaviour
         image.rectTransform.anchoredPosition3D = originalPosition;
     }
 
-    public void GetDamage(int damage, Action pbpChangeAction)
+    public void GetDamage(int damage)
     {
         hp -= damage;
         score += damage;
@@ -60,8 +60,6 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
-            pbpChangeAction?.Invoke();
-            
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
@@ -87,15 +85,15 @@ public class Rock : MonoBehaviour
                 switch (minigameRewardType[resultIndex])
                 {
                     case "None":
-                    Debug.Log(minigameRewardType[resultIndex] + "  꽝!");
+                    Debug.Log($"{minigameRewardType[resultIndex]}   꽝!");
                     break;
                     case "Soul": 
-                    Debug.Log(minigameRewardType[resultIndex] + "  " + numItems + $"  소울 {numItems}개 드랍!");
-                    dropStoneCount += numItems;
+                    Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 소울 {numItems}개 드랍!");
+                    dropSoulCount += numItems;
                     break;
                     case "Ore": 
-                    Debug.Log(minigameRewardType[resultIndex] + "  " + numItems + $"  원석 {numItems}개 드랍!");
-                    dropSoulCount += numItems;
+                    Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 원석 {numItems}개 드랍!");
+                    dropStoneCount += numItems;
                     break;
                 }
             }

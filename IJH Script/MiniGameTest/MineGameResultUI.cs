@@ -8,13 +8,16 @@ public class MineGameResultUI : MonoBehaviour
     [SerializeField] Text bestScore;
     [SerializeField] Text nowTurnScore;
     [SerializeField] MiniGameRewardSlot[] rewards;
+    [SerializeField] Text tipText;
     int getGold;
     int dropSoul;
     int dropStone;
+    string[] tipTexts = { "전투력이 높은 무기를 사용해보자", "리듬을 타며 누르면 더 잘 눌린다네요", "게임이 힘들면 강화하러 가보자!" };
 
     void OnEnable()
     {
         Managers.UI.InputLock = true;
+        SetTipText();
     }
 
     public void SetNowTurnScore(int _score)
@@ -51,6 +54,12 @@ public class MineGameResultUI : MonoBehaviour
             rewards[2].gameObject.SetActive(true);
         }
     }
+
+    void SetTipText()
+    {
+        tipText.text = $"Tip : {tipTexts[Utills.random.Next(0 , tipTexts.Length)]}";
+    }
+
     void OnDisable()
     {
         Managers.UI.InputLock = false;
