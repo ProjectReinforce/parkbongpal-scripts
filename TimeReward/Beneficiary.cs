@@ -56,6 +56,15 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         viwer.TodayCheck(days, rewardCheck);
     }
 
+    public void TutorialInit()
+    {
+        closeButton.gameObject.SetActive(false);
+        Managers.UI.OpenPopup(gameObject);
+
+        viwer.Initialize();
+        viwer.TodayCheck(days, rewardCheck);
+    }
+
     void OnEnable()
     {
         Managers.Event.RecieveAttendanceRewardEvent = Attend;

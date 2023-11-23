@@ -18,6 +18,7 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] MineBase mineUI;
     DetailInfoUI detailInfoUI;
     [SerializeField] GameObject selectMiniGameUI;
+    [SerializeField] MiniGameController mimiGameControl;
     [SerializeField] GameObject miniGameUI;
     [SerializeField] GameObject bottomTrans;
     [SerializeField] NormalReinforceUI reinforceUI;
@@ -418,10 +419,12 @@ public class TutorialPlayer : MonoBehaviour
 
     void MiniGameStart()
     {
-        textNextButton.gameObject.SetActive(true);
+        textNextButton.gameObject.SetActive(false);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.ClosePopup();
-        miniGameUI.gameObject.SetActive(true);
+        mimiGameControl.ClickStartButton();
+        cheifControl.gameObject.SetActive(false);
+        cheifTalkObject.gameObject.SetActive(false);
     }
 
     void ReinforceTutorial()
@@ -628,7 +631,13 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.MoveTap(TapType.Main_Mine);
-        // 출석부 처리
+    }
+
+    void TutorialEndAfter()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        attendanceUI.TutorialInit();
     }
 
     void TextChanges()
@@ -798,6 +807,7 @@ public class TutorialPlayer : MonoBehaviour
         }
         if (textIndex > cheifLine.Length || cheifLine[textIndex] == null)
         {
+            TutorialEndAfter();
             textIndex = 0;
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
