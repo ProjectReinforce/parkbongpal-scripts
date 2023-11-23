@@ -15,16 +15,20 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] Button textNextButton;
     [SerializeField] Text cheifTalk;
     [SerializeField] Store storeUI;
-    [SerializeField] Mine mineUI;
-    [SerializeField] Slot slotUI;
+    [SerializeField] MineBase mineUI;
     DetailInfoUI detailInfoUI;
     [SerializeField] GameObject selectMiniGameUI;
+    [SerializeField] GameObject miniGameUI;
+    [SerializeField] GameObject bottomTrans;
     [SerializeField] NormalReinforceUI reinforceUI;
     [SerializeField] InventoryController inventoryUI;
+    [SerializeField] Dropdown sortUI;
     [SerializeField] DecompositionUI decompositionUI;
+    [SerializeField] DecompositonResultUI decompositionResultUI;
     [SerializeField] QuestContentsInitializer questUI;
     [SerializeField] Beneficiary attendanceUI;
     [SerializeField] GameObject packgaeUI;
+    [SerializeField] Toggle collectionOn;
     [SerializeField] Transform[] panelTrans;
     string[] cheifLine;
     int index;
@@ -44,8 +48,8 @@ public class TutorialPlayer : MonoBehaviour
 
         if (clearedtutorial == false && Managers.Game.Player.Record.TutorialIndexCount > 0)
         {
-            panelTrans = new Transform[40];
-            cheifLine = new string[50];
+            panelTrans = new Transform[45];
+            cheifLine = new string[60];
             index = 0;
             textIndex = 0;
             CheifLines();   // 추후 서버에 있는 대화집을 가져오게 바꿀 예정
@@ -69,33 +73,37 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[8] = Utills.Bind<Transform>("Button_Close");
             panelTrans[9] = Utills.Bind<Transform>("MiniGame");
             panelTrans[10] = Utills.Bind<Transform>("MineGame");
-            panelTrans[11] = Utills.Bind<Transform>("Weapon_MiniGame");
-            panelTrans[12] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[11] = Utills.Bind<Transform>("Weapon", selectMiniGameUI.transform);
+            panelTrans[12] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[13] = Utills.Bind<Transform>("Button_Select");
-            panelTrans[14] = Utills.Bind<Transform>("Button_MiniGameStart");
-            panelTrans[15] = Utills.Bind<Transform>("Reinforce_T");
+            panelTrans[14] = Utills.Bind<Transform>("Button", selectMiniGameUI.transform);
+            panelTrans[15] = Utills.Bind<Transform>("Reinforce", bottomTrans.transform);
             panelTrans[16] = Utills.Bind<Transform>("Weapon_S");
-            panelTrans[17] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[17] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[18] = Utills.Bind<Transform>("Button_Select");
             panelTrans[19] = Utills.Bind<Transform>("Normal_S");
             panelTrans[20] = Utills.Bind<Transform>("Button_Reinforce");
             panelTrans[21] = Utills.Bind<Transform>("Count");
             panelTrans[22] = Utills.Bind<Transform>("Main_Mine_S");
             panelTrans[23] = Utills.Bind<Transform>("Button_Inventory");
-            panelTrans[24] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[24] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[25] = Utills.Bind<Transform>("DetailInfo_S");
             panelTrans[26] = Utills.Bind<Transform>("Dropdown_S");
             panelTrans[27] = Utills.Bind<Transform>("Button_Decomposition");
-            panelTrans[28] = Utills.Bind<Transform>("Slot (1)");
+            panelTrans[28] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[29] = Utills.Bind<Transform>("Button_Decomposition", decompositionUI.transform);
             panelTrans[30] = Utills.Bind<Transform>("Button_OK", decompositionUI.transform);
             panelTrans[31] = Utills.Bind<Transform>("Button_Close", inventoryUI.transform);
             panelTrans[32] = Utills.Bind<Transform>("Button_Quest_S");
             panelTrans[33] = Utills.Bind<Transform>("CloseButton", questUI.transform);
             panelTrans[34] = Utills.Bind<Transform>("PackageButton");
-            panelTrans[35] = Utills.Bind<Transform>("Button_Check_S");
-            panelTrans[36] = Utills.Bind<Transform>("Button_Post_S");
-            panelTrans[37] = Utills.Bind<Transform>("Button_Setting");
+            panelTrans[35] = Utills.Bind<Transform>("Button_Check_S", packgaeUI.transform);
+            panelTrans[36] = Utills.Bind<Transform>("Button_Post_S", packgaeUI.transform);
+            panelTrans[37] = Utills.Bind<Transform>("Button_Setting", packgaeUI.transform);
+            panelTrans[38] = Utills.Bind<Transform>("Pidea_S", bottomTrans.transform);
+            panelTrans[39] = Utills.Bind<Transform>("Book2_Toggle");
+            panelTrans[40] = Utills.Bind<Transform>("Main_Mine_S");
+            panelTrans[41] = Utills.BindFromMine<Transform>("00_S");
         }
     }
 
@@ -158,7 +166,7 @@ public class TutorialPlayer : MonoBehaviour
                 MiniGameStart();
                 break;
             case 16:
-                ReinforcTutorial();
+                ReinforceTutorial();
                 break;
             case 17:
                 ReinforceLendWeapon();
@@ -170,7 +178,10 @@ public class TutorialPlayer : MonoBehaviour
                 ReinforecLendAfter();
                 break;
             case 20:
-                ReinforceTry();
+                ReinforceOpenPopUp();
+                break;
+            case 21:
+                ReinforceNormalTry();
                 break;
             case 22:
                 ReinforceNormal();
@@ -211,6 +222,27 @@ public class TutorialPlayer : MonoBehaviour
             case 34:
                 NextScene();
                 break;
+            case 35:
+                PackageButtonOn();
+                break;
+            case 36:
+                AttendanceTutorial();
+                break;
+            case 37:
+                PostTutorial();
+                break;
+            case 38:
+                SettingTutorial();
+                break;
+            case 39:
+                PideaTutorial();
+                break;
+            case 40:
+                CollectionTutorial();
+                break;
+            case 41:
+                TutorialEnding();
+                break;
         }
         if (index >= panelTrans.Length || panelTrans[index] == null)
         {
@@ -224,6 +256,16 @@ public class TutorialPlayer : MonoBehaviour
             tutorialPanel.transform.position = panelTrans[index].position * 10;
         if (index == 12 || index == 17 || index == 24)
             tutorialPanel.transform.position = panelTrans[index].position * 5;
+        if(index == 30)
+        {
+            vector = new Vector3(panelTrans[index].position.x , panelTrans[index].position.y / 2);
+            tutorialPanel.transform.position = vector;
+        }
+        if (index == 35)
+        {
+            vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
+            tutorialPanel.transform.position = vector;
+        }
     }
 
     void ManufactureTutorial()
@@ -283,13 +325,28 @@ public class TutorialPlayer : MonoBehaviour
             mineOpenTutorialCheck = true;
         }
         // 광산 건설에 대한 작업
+        Managers.Alarm.Warning("건설을 시작합니다.");
+        mineUI.StartBuild();
     }
 
     void MineOpenTutorial()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.Event.MineClickEvent?.Invoke(mineUI);
+        float remainTime = mineUI.remainTime;
+        if (remainTime > 0)
+        {
+            index = 4;
+            tutorialPanel.transform.position = panelTrans[index].position;
+            textNextButton.gameObject.SetActive(false);
+            cheifTalk.text = "잠시만 기다려주겠나 아직 건설이 되지 않았다네";
+            tutorialPanel.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            mineUI.BuildComplete(true);
+            Managers.Event.MineClickEvent?.Invoke(mineUI);
+        }
     }
 
     void MineLendTutorial()
@@ -328,6 +385,9 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.OpenPopup(selectMiniGameUI);
+        BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
+        tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(1);
+        Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
     }
 
     void MiniGameTry()
@@ -342,8 +402,8 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        detailInfoUI = inventoryUI.DetailInfo;
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        detailInfoUI = inventoryUI.DetailInfo;;
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -351,7 +411,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SetMiniGameWeaponEvent?.Invoke(weapon);
         Managers.UI.ClosePopup();
     }
@@ -361,10 +421,10 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.ClosePopup();
-        // 튜토리얼용 미니게임 실행
+        miniGameUI.gameObject.SetActive(true);
     }
 
-    void ReinforcTutorial()
+    void ReinforceTutorial()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
@@ -384,7 +444,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -392,17 +452,33 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.TutorialReinforceWeaponChangeEvent?.Invoke(weapon);
         Managers.UI.ClosePopup();
         cheifControl.transform.localPosition = new Vector3(-180, -160, 0);
     }
 
-    void ReinforceTry()
+    void ReinforceOpenPopUp()
     {
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
         Managers.UI.OpenPopup(reinforceUI.gameObject);
+    }
+
+    void ReinforceNormalTry()
+    {
+        ReinforceInfos reinforceManager = Managers.Game.Reinforce;
+        BaseWeaponData tutorialBaseWeaponDatas = new BaseWeaponData();
+        tutorialBaseWeaponDatas = Managers.ServerData.GetBaseWeaponData(1);
+        int goldCost = Managers.ServerData.NormalReinforceData.GetGoldCost((Rarity)tutorialBaseWeaponDatas.rarity);
+        void callback(BackEnd.BackendReturnObject bro)
+        {
+            // todo : 연출 재생 후 결과 출력되도록
+            // reinforceButton.interactable = true;
+            reinforceUI.CheckQualification();
+        }
+        Managers.Game.Player.TryNormalReinforce(-goldCost);
+        reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce, callback);
     }
 
     void ReinforceNormal()
@@ -414,6 +490,18 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.transform.localPosition = new Vector3(180, -160, 0);
         cheifControl.gameObject.SetActive(true);
         cheifTalkObject.gameObject.SetActive(true);
+        ReinforceInfos reinforceManager = Managers.Game.Reinforce;
+        BaseWeaponData tutorialBaseWeaponDatas = new BaseWeaponData();
+        tutorialBaseWeaponDatas = Managers.ServerData.GetBaseWeaponData(1);
+        int goldCost = Managers.ServerData.NormalReinforceData.GetGoldCost((Rarity)tutorialBaseWeaponDatas.rarity);
+        void callback(BackEnd.BackendReturnObject bro)
+        {
+            // todo : 연출 재생 후 결과 출력되도록
+            // reinforceButton.interactable = true;
+            reinforceUI.CheckQualification();
+        }
+        Managers.Game.Player.TryNormalReinforce(-goldCost);
+        reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce, callback);
     }
 
     void MineTapMove()
@@ -436,7 +524,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;
-        Weapon weapon = Managers.Game.Inventory.GetWeapon(1);
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -445,7 +533,6 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         cheifControl.transform.localPosition = new Vector3(-180, -160, 0);
-        // 드랍다운 되기
     }
 
     void InventoryDecompositionTutorial()
@@ -453,38 +540,41 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         cheifTalkObject.transform.localPosition = new Vector3(0, -340, 0);
+        sortUI.Show();
     }
 
     void InventoryDecompositionOpenPopup()
     {
+        sortUI.Hide();
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.UI.OpenPopup(decompositionUI.gameObject);
         cheifControl.transform.localPosition = new Vector3(180, -160, 0);
         cheifTalkObject.transform.localPosition = new Vector3(0, -400, 0);
-        decompositionUI.GetSelectedWeapons();
+        inventoryUI.gameObject.SetActive(false);
+        inventoryUI.Set(InventoryType.Decomposition);
+        inventoryUI.gameObject.SetActive(true);
     }
 
     void InventoryDecompositionSetWeapon()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        // 무기 적용 시키는 로직
-
+        Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
     void InventoryDecompositionTry()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        // 분해 시키는 로직
-        Managers.UI.ClosePopup();
+        decompositionUI.ExcuteDecomposition();
     }
 
     void InventoryOpenResultUI()
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
     }
 
     void QuestExplain()
@@ -492,6 +582,53 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.OpenPopup(questUI.transform.parent.gameObject);
+    }
+
+    void PackageButtonOn()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.OpenPopup(packgaeUI.gameObject);
+    }
+
+    void AttendanceTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void PostTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void SettingTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+    }
+
+    void PideaTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.MoveTap(TapType.Pidea);
+    }
+
+    void CollectionTutorial()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        collectionOn.isOn = true;
+    }
+
+    void TutorialEnding()
+    {
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.MoveTap(TapType.Main_Mine);
+        // 출석부 처리
     }
 
     void TextChanges()
@@ -614,11 +751,47 @@ public class TutorialPlayer : MonoBehaviour
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
+            case 41:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
             case 42:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
-            case 44:
+            case 45:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 46:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 47:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 48:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 49:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 50:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 51:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 52:
+                textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                break;
+            case 53:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
@@ -656,7 +829,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[17] = "참 자네는 방금 하나있는 무기를 대여해서\n 사용할 무기가 없을 것이라네\n 이번엔 내가 무기를 빌려주도록 하겠네\n 아주 좋은 무기로!";
         cheifLine[18] = "내가 빌려주는만큼 이번 미니게임에서 얻는 보상은\n 내가 가져가겠네 자네라면 이보다 더 좋은 무기는\n 금방 얻을테니 말이야";
         cheifLine[19] = "버튼을 눌러 무기를 선택해주겠나\n 빌려준 무기가 마음에 들었으면 좋겠군\n 빌려준 무기는 미니게임이 끝나면 가져가겠넨";
-        cheifLine[20] = "자네는 금방 습득하는군\n 이제 무기를 선택하면 미니게임 시작에 한발짝 더 다가간걸세\n 버튼을 눌러보게나!";
+        cheifLine[20] = "자네는 금방 습득하는군\n 이제 무기를 선택하면 미니게임 시작에\n 한발짝 더 다가간걸세\n 버튼을 눌러보게나!";
         cheifLine[21] = "해당 버튼을 눌러서 미니게임을 시작해보게나\n 무운을 빈다네";
         cheifLine[22] = "미니게임은 재밌었나?\n 그럼 이제 무기 강화를 하러 가보는게 어떻겠나?\n 무기 강화에 대해 설명해주겠네";
         cheifLine[23] = "무기 강화는 여러가지가 있다네\n 강화를 통해서 여러 무기들을 극한으로 강화해보게나\n 자네의 무기가 얼마나 대단한지 세계가 기록할걸세";
@@ -682,5 +855,16 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[43] = "11";
         cheifLine[44] = "12";
         cheifLine[45] = "13";
+        cheifLine[46] = "14";
+        cheifLine[47] = "15";
+        cheifLine[48] = "16";
+        cheifLine[49] = "17";
+        cheifLine[50] = "18";
+        cheifLine[51] = "19";
+        cheifLine[52] = "20";
+        cheifLine[53] = "21";
+        cheifLine[54] = "22";
+        cheifLine[55] = "23";
+        cheifLine[56] = "24";
     }
 }

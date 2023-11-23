@@ -28,7 +28,7 @@ public class MineBase : MonoBehaviour, Rental
 
     protected MineStatus mineStatus = MineStatus.Locked;
     protected int mineIndex;
-    protected float remainTime;
+    public float remainTime;
     protected int currencyAmountLimit;
     protected int currentCurrency;
     protected int CurrentCurrency
@@ -310,7 +310,7 @@ public class MineBase : MonoBehaviour, Rental
     /// <summary>
     /// 광산 건설 시작 처리 함수. 건설 확인 UI에서 예를 선택시에만 호출됨.
     /// </summary>
-    protected void StartBuild()
+    public void StartBuild()
     {
         // 광산 상태 변경
         DateTime startTime = Managers.Etc.GetServerTime();

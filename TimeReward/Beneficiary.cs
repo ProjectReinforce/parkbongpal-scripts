@@ -37,7 +37,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         int month = dateTime.Month;
         periodText.text = $"{year}.{month}.{01:d2} ~ {year}.{month}.{DateTime.DaysInMonth(dateTime.Year, dateTime.Month)}";
 
-        if (rewardCheck = AttendanceCheck()) //갱신했으면
+        if (AttendanceCheck() && (Managers.Game.Player.Record.Tutorial == 1 || Managers.ServerData.questRecordDatas[0].idList[0] == 1)) //갱신했으면
         {
             closeButton.gameObject.SetActive(false);
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
