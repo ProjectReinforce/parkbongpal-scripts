@@ -60,9 +60,9 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
     {
         closeButton.gameObject.SetActive(false);
         Managers.UI.OpenPopup(gameObject);
-
-        viwer.Initialize();
-        viwer.TodayCheck(days, rewardCheck);
+        attendButton.interactable = true;
+        adButton.interactable = true;
+        buttonOff = false;
     }
 
     void OnEnable()

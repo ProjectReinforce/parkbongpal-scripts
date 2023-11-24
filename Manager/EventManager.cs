@@ -70,5 +70,6 @@ public class EventManager
 
     #region Tutorial
     public Action<Weapon> TutorialReinforceWeaponChangeEvent;
+    public Action OnCheifTalkObjectEvent;
     #endregion
 }

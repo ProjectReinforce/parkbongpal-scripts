@@ -36,6 +36,7 @@ public class TutorialPlayer : MonoBehaviour
     int textIndex;
     bool mineOpenTutorialCheck;
     Vector3 vector;
+    bool reconnectCheck;
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class TutorialPlayer : MonoBehaviour
             textIndex = 0;
             CheifLines();   // 추후 서버에 있는 대화집을 가져오게 바꿀 예정
             mineOpenTutorialCheck = false;
+            reconnectCheck = false;
             tutorialButton.onClick.AddListener(ButtonIndexChange);
             textNextButton.onClick.AddListener(TextChanges);
 
@@ -105,7 +107,51 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[39] = Utills.Bind<Transform>("Book2_Toggle");
             panelTrans[40] = Utills.Bind<Transform>("Main_Mine_S");
             panelTrans[41] = Utills.BindFromMine<Transform>("00_S");
+            Managers.Event.OnCheifTalkObjectEvent += OnCheifTalkObject;
+            // 튜토리얼 인덱스 값에 따라 인덱스와 텍스트 인덱스 값 변경
+            TutorialIndexChecking();
         }
+    }
+
+    void TutorialIndexChecking()
+    {
+        if (Managers.Game.Player.Record.TutorialIndexCount == 1)
+        {
+            index = 3;
+            textIndex = 4;
+            Managers.UI.OpenPopup(storeUI.transform.parent.gameObject);
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount >= 2)
+        {
+            index = 9;
+            textIndex = 13;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            reconnectCheck = true;
+        }
+        //if (Managers.Game.Player.Record.TutorialIndexCount >= 3)
+        //{
+        //    index = 15;
+        //    textIndex = 22;
+        //    textNextButton.gameObject.SetActive(true);
+        //    panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+        //    panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+        //    panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+        //    tutorialPanel.transform.position = panelTrans[index].position;
+        //    reconnectCheck = true;
+        //}
+        //if (Managers.Game.Player.Record.TutorialIndexCount >= 4)
+        //{
+        //    index = 23;
+        //    textIndex = 30;
+        //    textNextButton.gameObject.SetActive(true);
+        //    panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+        //    panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+        //    tutorialPanel.transform.position = panelTrans[index].position;
+        //    reconnectCheck = true;
+        //}
     }
 
     void ButtonIndexChange()
@@ -256,7 +302,21 @@ public class TutorialPlayer : MonoBehaviour
         if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11 || index == 33)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
             tutorialPanel.transform.position = panelTrans[index].position * 10;
         if (index == 12 || index == 17 || index == 24)
+        {
             tutorialPanel.transform.position = panelTrans[index].position * 5;
+            if(Managers.Game.Player.Record.TutorialIndexCount >= 2 && index == 12)
+            {
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+            }
+            if(Managers.Game.Player.Record.TutorialIndexCount == 3 && index == 17)
+            {
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+            }
+            if(Managers.Game.Player.Record.TutorialIndexCount == 4 && index == 24)
+            {
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+            }
+        }
         if(index == 30)
         {
             vector = new Vector3(panelTrans[index].position.x , panelTrans[index].position.y / 2);
@@ -267,6 +327,14 @@ public class TutorialPlayer : MonoBehaviour
             vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
             tutorialPanel.transform.position = vector;
         }
+    }
+
+    void OnCheifTalkObject()
+    {
+        cheifControl.gameObject.SetActive(true);
+        TextChanges();
+        cheifTalkObject.gameObject.SetActive(true);
+        textNextButton.gameObject.SetActive(true);
     }
 
     void ManufactureTutorial()
@@ -285,6 +353,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
         storeUI.TutorialManufacture();
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void ManufactureFinish()
@@ -311,7 +380,6 @@ public class TutorialPlayer : MonoBehaviour
             Managers.UI.ClosePopup();
         }
         TextChanges();
-        Managers.Game.Player.Record.TutorialRecordIndex();
         textNextButton.gameObject.SetActive(true);
     }
 
@@ -526,8 +594,13 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        tutorialPanel.transform.localScale = new Vector3(300, 250);
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        if(reconnectCheck)
+        {
+            weapon = Managers.Game.Inventory.GetWeapon(1);
+        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -535,6 +608,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        tutorialPanel.transform.localScale = new Vector3(68, 68);
         cheifControl.transform.localPosition = new Vector3(-180, -160, 0);
     }
 
@@ -563,6 +637,10 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        if (reconnectCheck)
+        {
+            weapon = Managers.Game.Inventory.GetWeapon(1);
+        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -659,6 +737,7 @@ public class TutorialPlayer : MonoBehaviour
                 break;
             case 8:
                 textNextButton.gameObject.SetActive(false);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
             case 9:
                 textNextButton.gameObject.SetActive(false);
