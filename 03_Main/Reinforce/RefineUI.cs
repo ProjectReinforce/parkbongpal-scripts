@@ -100,8 +100,8 @@ public class RefineUI : ReinforceUIBase
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
         goldCost = refinementData.baseGold + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.goldPerTry;
-        // oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
-        oreCost = 0;
+        oreCost = refinementData.baseOre + weaponData.RefineStat[(int)StatType.upgradeCount] * refinementData.orePerTry;
+        // oreCost = 0;
     }
 
     protected override void DeactiveElements()
