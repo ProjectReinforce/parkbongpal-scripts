@@ -37,6 +37,8 @@ public class TutorialPlayer : MonoBehaviour
     bool mineOpenTutorialCheck;
     Vector3 vector;
     bool reconnectCheck;
+    bool reconnectCheckTrans;
+    bool reconnectChecking;
 
     void Start()
     {
@@ -57,6 +59,8 @@ public class TutorialPlayer : MonoBehaviour
             CheifLines();   // 추후 서버에 있는 대화집을 가져오게 바꿀 예정
             mineOpenTutorialCheck = false;
             reconnectCheck = false;
+            reconnectCheckTrans = false;
+            reconnectChecking = false;
             tutorialButton.onClick.AddListener(ButtonIndexChange);
             textNextButton.onClick.AddListener(TextChanges);
 
@@ -124,11 +128,12 @@ public class TutorialPlayer : MonoBehaviour
         }
         if (Managers.Game.Player.Record.TutorialIndexCount == 3)
         {
-            index = 5;
-            textIndex = 10;
+            index = 4;
+            textIndex = 8;
+            tutorialPanel.transform.position = panelTrans[index].position;
             textNextButton.gameObject.SetActive(true);
-            Managers.Event.MineClickEvent?.Invoke(mineUI);
-            tutorialPanel.transform.position = panelTrans[index].position * 10;
+            tutorialPanel.transform.parent.gameObject.SetActive(true);
+            mineOpenTutorialCheck = true;
         }
         if (Managers.Game.Player.Record.TutorialIndexCount == 4)
         {
@@ -137,55 +142,49 @@ public class TutorialPlayer : MonoBehaviour
             textNextButton.gameObject.SetActive(true);
             Managers.Event.MineClickEvent?.Invoke(mineUI);
             tutorialPanel.transform.position = panelTrans[index].position * 10;
+            reconnectCheckTrans = true;
         }
         if (Managers.Game.Player.Record.TutorialIndexCount == 5)
-        {
-            index = 9;
-            textIndex = 13;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            reconnectCheck = true;
-        }
-        if(Managers.Game.Player.Record.TutorialIndexCount == 6)
         {
             index = 11;
             textIndex = 17;
             textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
             Managers.UI.MoveTap(TapType.MiniGame);
             Managers.UI.OpenPopup(selectMiniGameUI);
-            panelTrans[12] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
+            reconnectCheckTrans = true;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 6)
+        {
+            index = 15;
+            textIndex = 21;
+            Managers.UI.MoveTap(TapType.MiniGame);
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
             reconnectCheck = true;
         }
         if (Managers.Game.Player.Record.TutorialIndexCount == 7)
         {
-            index = 15;
-            textIndex = 22;
-            textNextButton.gameObject.SetActive(true);
-            panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            reconnectCheck = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 8)
-        {
             index = 23;
             textIndex = 30;
             textNextButton.gameObject.SetActive(true);
-            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
             tutorialPanel.transform.position = panelTrans[index].position;
-            reconnectCheck = true;
+            reconnectChecking = true;
         }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 9)
+        if (Managers.Game.Player.Record.TutorialIndexCount == 8)
         {
             index = 32;
             textIndex = 41;
             textNextButton.gameObject.SetActive(true);
+            cheifTalk.text = cheifLine[textIndex];
+            tutorialPanel.transform.position = panelTrans[index].position;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 9)
+        {
+            index = 34;
+            textIndex = 46;
+            textNextButton.gameObject.SetActive(true);
+            cheifTalk.text = cheifLine[textIndex];
             tutorialPanel.transform.position = panelTrans[index].position;
         }
         if (Managers.Game.Player.Record.TutorialIndexCount == 10)
@@ -199,7 +198,7 @@ public class TutorialPlayer : MonoBehaviour
         if (Managers.Game.Player.Record.TutorialIndexCount == 11)
         {
             index = 41;
-            textIndex = 52;
+            textIndex = 54;
             textNextButton.gameObject.SetActive(true);
             tutorialPanel.transform.position = panelTrans[index].position;
         }
@@ -359,15 +358,15 @@ public class TutorialPlayer : MonoBehaviour
         if (index == 12 || index == 17 || index == 24)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 5;
-            if(Managers.Game.Player.Record.TutorialIndexCount == 4 && index == 12)
+            if(Managers.Game.Player.Record.TutorialIndexCount == 5 && index == 12 && reconnectCheckTrans)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
-            if (Managers.Game.Player.Record.TutorialIndexCount >= 5 && index == 17)
+            if(Managers.Game.Player.Record.TutorialIndexCount == 6 && index == 17 && reconnectCheck)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
-            if (Managers.Game.Player.Record.TutorialIndexCount >= 5 && index == 24)
+            if(Managers.Game.Player.Record.TutorialIndexCount == 7 && index == 24 && reconnectChecking)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
@@ -488,7 +487,6 @@ public class TutorialPlayer : MonoBehaviour
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
-        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void MineLendAfter()
@@ -498,6 +496,7 @@ public class TutorialPlayer : MonoBehaviour
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.ConfirmLendWeaponEvent?.Invoke(weapon);
         Managers.UI.ClosePopup();
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void MiniGameTutorial()
@@ -532,10 +531,6 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        if (reconnectCheck)
-        {
-            weapon = Managers.Game.Inventory.GetWeapon(1);
-        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -579,10 +574,6 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        if (reconnectCheck)
-        {
-            weapon = Managers.Game.Inventory.GetWeapon(1);
-        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -653,10 +644,6 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.localScale = new Vector3(300, 250);
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        if(reconnectCheck)
-        {
-            weapon = Managers.Game.Inventory.GetWeapon(1);
-        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -693,10 +680,6 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
-        if (reconnectCheck)
-        {
-            weapon = Managers.Game.Inventory.GetWeapon(1);
-        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -1011,7 +994,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[49] = "이것은 우편이라네 세계가 자네를 위해\n 무언가를 줄 수도 있고 무언가 말할 수도 있을 것이니\n 나중에 확인해보게나";
         cheifLine[50] = "기초적인 것들이 담겨있는 설정 버튼이라네\n 자네의 이름을 다시 정할수도 있고\n 귓가에 울리는 노래소리도 제어할 수 있을걸세";
         cheifLine[51] = "이번에 볼 것은 도감이라네\n 어두운 것은 아직 만들어지지 않았으나\n 자네의 머리 속에 있는 무기의\n 예상도면만 그려져 있을 것이라네";
-        cheifLine[52] = "무기는 등급이 나뉘어져 있다네\n 총 6등급으로 \nTrash, Old, Normal, Rare, Unique, Legendary가 있지";
+        cheifLine[52] = "무기는 등급이 나뉘어져 있다네\n 총 6등급으로 \nTrash, Old, Normal,\n Rare, Unique, Legendary가 있지";
         cheifLine[53] = "이 버튼은 컬렉션이라네\n 어느 무기가 같은 결을 따르는지 알 수 있을 것이라네\n 이걸 수집하는 것도 재밌을 거라 생각하네";
         cheifLine[54] = "이제 마무리할 차례가 된 거 같다네\n 좌측 하단의 광산 버튼을 눌러주겠나?\n 자네에게 해주고 싶은 말이 있군";
         cheifLine[55] = "자네가 갑작스럽게 이 세계로 온 건\n 나의 부름일세...이 세계가 자네를 원하고 있으니\n 부디 노여워 말게";
