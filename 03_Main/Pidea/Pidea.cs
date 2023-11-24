@@ -57,13 +57,13 @@ public class Pidea : MonoBehaviour
     {
         return materials[index].color == Color.black;
     }
-    public void GetNewWeapon(int index)
+    public void GetNewWeapon(BaseWeaponData _weaponData)
     {
         //게임중에 추가되는 무기 넣어줘야한다. 최애무기 설정에서 사용예정.
         //pideaWeaponsrDatas.Add(materials)
-        pideaSlots[index].SetNew();
-        notifyer.GetNew(pideaSlots[index]);
-        materials[index].color = Color.white;
+        pideaSlots[_weaponData.index].SetNew();
+        notifyer.GetNew(pideaSlots[_weaponData.index]);
+        materials[_weaponData.index].color = Color.white;
     }
 
     void OpenSetting()

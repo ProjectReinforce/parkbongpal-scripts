@@ -112,7 +112,7 @@ public class Inventory
                         { nameof(PideaData.colum.ownedWeaponId), _baseWeaponData[i].index },
                         { nameof(PideaData.colum.rarity), _baseWeaponData[i].rarity }
                     }));
-                    Managers.Event.PideaGetNewWeaponEvent?.Invoke(_baseWeaponData[i].index);
+                    Managers.Event.PideaGetNewWeaponEvent?.Invoke(_baseWeaponData[i]);
                 }
             }
             weapons.InsertRange(0, newWeapons);
