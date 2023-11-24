@@ -9,8 +9,6 @@ public class PideaViwer : MonoBehaviour
     void OnEnable()
     {
         Managers.Event.PideaOpenSetting?.Invoke();
-        Managers.Event.PideaGetNewWeaponEvent -= GradeToggleNewControll;
-        Managers.Event.PideaGetNewWeaponEvent += GradeToggleNewControll;
         topToggleGruop.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
         gradeToggleGruop.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
     }
@@ -27,9 +25,8 @@ public class PideaViwer : MonoBehaviour
         {
             one.isOn = false;
         }
-        Managers.Event.PideaGetNewWeaponEvent -= GradeToggleNewControll;
     }
-    void GradeToggleNewControll(BaseWeaponData _weaponData)
+    public void GradeToggleNewControll(BaseWeaponData _weaponData)
     {
         if (!gradeToggleGruop.transform.GetChild(_weaponData.rarity).GetChild(2).gameObject.activeSelf)
             gradeToggleGruop.transform.GetChild(_weaponData.rarity).GetChild(2).gameObject.SetActive(true);

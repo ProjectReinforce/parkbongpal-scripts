@@ -11,6 +11,7 @@ public class Pidea : MonoBehaviour
     [SerializeField] RectTransform currentTap;
     [SerializeField] UnityEngine.UI.ScrollRect scrollView;
     [SerializeField] RectTransform[] rarityTables;
+    [SerializeField] PideaViwer pideaViwer;
     List<PideaData> pideaWeaponsrDatas;
 
     public void ClickTap(int index)
@@ -64,6 +65,7 @@ public class Pidea : MonoBehaviour
         pideaSlots[_weaponData.index].SetNew();
         notifyer.GetNew(pideaSlots[_weaponData.index]);
         materials[_weaponData.index].color = Color.white;
+        pideaViwer.GradeToggleNewControll(_weaponData);
     }
 
     void OpenSetting()
