@@ -92,7 +92,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                 { nameof(PideaData.colum.rarity), baseWeaponData.rarity }
             }));
 
-            Managers.Event.PideaGetNewWeaponEvent(baseWeaponData.index);
+            Managers.Event.PideaGetNewWeaponEvent(baseWeaponData);
         }
         Transactions.SendCurrent();
     }
@@ -140,7 +140,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
                     { nameof(PideaData.colum.ownedWeaponId), baseWeaponData[i].index },
                     { nameof(PideaData.colum.rarity), baseWeaponData[i].rarity }
                 }));
-                Managers.Event.PideaGetNewWeaponEvent(baseWeaponData[i].index);
+                Managers.Event.PideaGetNewWeaponEvent(baseWeaponData[i]);
             }
         }
         Transactions.SendCurrent();

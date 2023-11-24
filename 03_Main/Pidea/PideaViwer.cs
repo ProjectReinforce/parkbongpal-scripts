@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PideaViwer:MonoBehaviour
+public class PideaViwer : MonoBehaviour
 {
     [SerializeField] ToggleGroup topToggleGruop;
     [SerializeField] ToggleGroup gradeToggleGruop;
@@ -9,6 +9,8 @@ public class PideaViwer:MonoBehaviour
     void OnEnable()
     {
         Managers.Event.PideaOpenSetting?.Invoke();
+        Managers.Event.PideaGetNewWeaponEvent -= GradeToggleNewControll;
+        Managers.Event.PideaGetNewWeaponEvent += GradeToggleNewControll;
         topToggleGruop.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
         gradeToggleGruop.transform.GetChild(0).GetComponent<Toggle>().isOn = true;
     }
@@ -21,9 +23,15 @@ public class PideaViwer:MonoBehaviour
             toggle.isOn = false;
         }
 
-        foreach(Toggle one in gradeToggleGruop.GetComponentsInChildren<Toggle>())
+        foreach (Toggle one in gradeToggleGruop.GetComponentsInChildren<Toggle>())
         {
             one.isOn = false;
         }
+        Managers.Event.PideaGetNewWeaponEvent -= GradeToggleNewControll;
+    }
+    void GradeToggleNewControll(BaseWeaponData _weaponData)
+    {
+        if (!gradeToggleGruop.transform.GetChild(_weaponData.rarity).GetChild(2).gameObject.activeSelf)
+            gradeToggleGruop.transform.GetChild(_weaponData.rarity).GetChild(2).gameObject.SetActive(true);
     }
 }

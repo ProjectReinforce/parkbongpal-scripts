@@ -89,7 +89,7 @@ public class MineBase : MonoBehaviour, Rental
         mineButton.onClick.AddListener(() =>
         {
             ulong buildCost = Managers.ServerData.MineDatas[mineIndex].buildCost;
-            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다.", () => 
+            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다.", () =>
             {
                 Managers.UI.ClosePopup();
 
@@ -107,7 +107,7 @@ public class MineBase : MonoBehaviour, Rental
                         Managers.Game.Player.AddGold(-(int)buildCost);
                         // Managers.Game.Player.AddGold(-(int)buildCost, false);
                         // Managers.Game.Player.AddTransactionCurrency();
-                            
+
                         // Transactions.SendCurrent(callback =>
                         // {
                         //     if (!callback.IsSuccess())
@@ -124,8 +124,8 @@ public class MineBase : MonoBehaviour, Rental
         nameText = Utills.Bind<Text>("Text_Name", transform);
         nameText.text = mineData.name;
         infoText = Utills.Bind<Text>("Text_CurrentGold", transform);
-        restNPC = Utills.Bind<Transform>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Rest", transform).gameObject;
-        doNPC = Utills.Bind<NPCController>($"{transform.parent.name}_{transform.GetSiblingIndex()+1:d2}_Do", transform);
+        restNPC = Utills.Bind<Transform>($"{transform.parent.name}_{transform.GetSiblingIndex() + 1:d2}_Rest", transform).gameObject;
+        doNPC = Utills.Bind<NPCController>($"{transform.parent.name}_{transform.GetSiblingIndex() + 1:d2}_Do", transform);
 
         // 기타 변수 초기화
         rangePerSize = 0;
@@ -157,11 +157,18 @@ public class MineBase : MonoBehaviour, Rental
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
-                if (CurrentCurrency >= currencyAmountLimit) return;
+                if (CurrentCurrency >= currencyAmountLimit) 
+                { 
+                    doNPC.gameObject.SetActive(false);
+                    restNPC.gameObject.SetActive(true);
+                    return; 
+                }
                 elapse -= Time.fixedDeltaTime;
                 if (elapse > 0) return;
                 elapse += INTERVAL;
                 CurrentCurrency += (int)(goldPerMin * INTERVAL / 60);
+                restNPC.gameObject.SetActive(false);
+                doNPC.gameObject.SetActive(true);
                 break;
         }
     }
@@ -175,7 +182,7 @@ public class MineBase : MonoBehaviour, Rental
 
         ChangeNPCWeapon(lendedWeapon.Icon);
         restNPC.SetActive(false);
-        
+
         SetInfo();
         CalculateCurrency();
     }
@@ -184,26 +191,26 @@ public class MineBase : MonoBehaviour, Rental
     {
         bool condition = lendedWeapon != null && CurrentCurrency > 0;
         if (condition == false) return (mineData.rewardType, 0);
-        
+
         int rewardAmount = CurrentCurrency;
         switch (mineData.rewardType)
         {
             case RewardType.Gold:
-            Managers.Game.Player.AddGold(rewardAmount, false);
-            CurrentCurrency -= rewardAmount;
-            break;
+                Managers.Game.Player.AddGold(rewardAmount, false);
+                CurrentCurrency -= rewardAmount;
+                break;
             case RewardType.Diamond:
-            rewardAmount /= 100;
-            Managers.Game.Player.AddDiamond(rewardAmount, false);
-            CurrentCurrency -= rewardAmount * 100;
-            break;
+                rewardAmount /= 100;
+                Managers.Game.Player.AddDiamond(rewardAmount, false);
+                CurrentCurrency -= rewardAmount * 100;
+                break;
             case RewardType.Ore:
-            rewardAmount /= 100;
-            Managers.Game.Player.AddStone(rewardAmount, false);
-            CurrentCurrency -= rewardAmount * 100;
-            break;
+                rewardAmount /= 100;
+                Managers.Game.Player.AddStone(rewardAmount, false);
+                CurrentCurrency -= rewardAmount * 100;
+                break;
         }
-        
+
         if (_directUpdate == true)
             lendedWeapon.Lend(mineIndex);
 
@@ -305,7 +312,7 @@ public class MineBase : MonoBehaviour, Rental
 
         CurrentCurrency = (int)(timeInterval.TotalMilliseconds / 60000 * GoldPerMin);
     }
-    
+
     #region Build Function
     /// <summary>
     /// 광산 건설 시작 처리 함수. 건설 확인 UI에서 예를 선택시에만 호출됨.
@@ -356,7 +363,7 @@ public class MineBase : MonoBehaviour, Rental
 
         // 광산 상태 변경
         mineStatus = MineStatus.Building;
-        
+
         // NPC 처리
         ChangeNPCWeapon(Managers.Resource.sampleWeapon);
         doNPC.gameObject.SetActive(true);
@@ -379,7 +386,7 @@ public class MineBase : MonoBehaviour, Rental
     {
         // 광산 상태 변경
         mineStatus = MineStatus.Owned;
-        
+
         // UI 처리
         icon.color = Color.white;
         lockIcon.gameObject.SetActive(false);
@@ -390,7 +397,7 @@ public class MineBase : MonoBehaviour, Rental
         });
 
         // NPC 처리
-        if(lendedWeapon == null)
+        if (lendedWeapon == null)
         {
             doNPC.gameObject.SetActive(false);
             restNPC.gameObject.SetActive(true);
