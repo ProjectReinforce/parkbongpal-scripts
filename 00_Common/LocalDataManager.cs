@@ -225,6 +225,12 @@ public class RecordData
         PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
     }
 
+    public void TutorialReset()
+    {
+        tutorial = 0;
+        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
+    }
+
     public void TutorialRecordIndex()
     {
         tutorialIndexCount++;
@@ -234,7 +240,7 @@ public class RecordData
 
     public void TutorialClearRecord()
     {
-        if(tutorialIndexCount == 10)
+        if(tutorialIndexCount >= 10)
         {
             tutorial = 1;
             PlayerPrefs.SetString("Tutorial", tutorial.ToString());

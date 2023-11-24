@@ -108,14 +108,13 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[40] = Utills.Bind<Transform>("Main_Mine_S");
             panelTrans[41] = Utills.BindFromMine<Transform>("00_S");
             Managers.Event.OnCheifTalkObjectEvent += OnCheifTalkObject;
-            // 튜토리얼 인덱스 값에 따라 인덱스와 텍스트 인덱스 값 변경
             TutorialIndexChecking();
         }
     }
 
-    void TutorialIndexChecking()
+    void TutorialIndexChecking()    // case문으로 바꿀 예정
     {
-        if (Managers.Game.Player.Record.TutorialIndexCount == 1)
+        if (Managers.Game.Player.Record.TutorialIndexCount == 2)
         {
             index = 3;
             textIndex = 4;
@@ -123,7 +122,23 @@ public class TutorialPlayer : MonoBehaviour
             textNextButton.gameObject.SetActive(true);
             tutorialPanel.transform.position = panelTrans[index].position * 10;
         }
-        if (Managers.Game.Player.Record.TutorialIndexCount >= 2)
+        if (Managers.Game.Player.Record.TutorialIndexCount == 3)
+        {
+            index = 5;
+            textIndex = 10;
+            textNextButton.gameObject.SetActive(true);
+            Managers.Event.MineClickEvent?.Invoke(mineUI);
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 4)
+        {
+            index = 8;
+            textIndex = 12;
+            textNextButton.gameObject.SetActive(true);
+            Managers.Event.MineClickEvent?.Invoke(mineUI);
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 5)
         {
             index = 9;
             textIndex = 13;
@@ -131,27 +146,63 @@ public class TutorialPlayer : MonoBehaviour
             tutorialPanel.transform.position = panelTrans[index].position;
             reconnectCheck = true;
         }
-        //if (Managers.Game.Player.Record.TutorialIndexCount >= 3)
-        //{
-        //    index = 15;
-        //    textIndex = 22;
-        //    textNextButton.gameObject.SetActive(true);
-        //    panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-        //    panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-        //    panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-        //    tutorialPanel.transform.position = panelTrans[index].position;
-        //    reconnectCheck = true;
-        //}
-        //if (Managers.Game.Player.Record.TutorialIndexCount >= 4)
-        //{
-        //    index = 23;
-        //    textIndex = 30;
-        //    textNextButton.gameObject.SetActive(true);
-        //    panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-        //    panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
-        //    tutorialPanel.transform.position = panelTrans[index].position;
-        //    reconnectCheck = true;
-        //}
+        if(Managers.Game.Player.Record.TutorialIndexCount == 6)
+        {
+            index = 11;
+            textIndex = 17;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            Managers.UI.MoveTap(TapType.MiniGame);
+            Managers.UI.OpenPopup(selectMiniGameUI);
+            panelTrans[12] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            reconnectCheck = true;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 7)
+        {
+            index = 15;
+            textIndex = 22;
+            textNextButton.gameObject.SetActive(true);
+            panelTrans[17] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            reconnectCheck = true;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 8)
+        {
+            index = 23;
+            textIndex = 30;
+            textNextButton.gameObject.SetActive(true);
+            panelTrans[24] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            panelTrans[28] = Utills.Bind<Transform>("Slot (1)", inventoryUI.transform);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            reconnectCheck = true;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 9)
+        {
+            index = 32;
+            textIndex = 41;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 10)
+        {
+            index = 38;
+            textIndex = 50;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            Debug.Log(Managers.Game.Player.Record.TutorialIndexCount);
+        }
+        if (Managers.Game.Player.Record.TutorialIndexCount == 11)
+        {
+            index = 41;
+            textIndex = 52;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+        }
     }
 
     void ButtonIndexChange()
@@ -267,6 +318,7 @@ public class TutorialPlayer : MonoBehaviour
                 QuestExplain();
                 break;
             case 34:
+                Managers.Game.Player.Record.TutorialRecordIndex();
                 NextScene();
                 break;
             case 35:
@@ -300,19 +352,22 @@ public class TutorialPlayer : MonoBehaviour
         }
         tutorialPanel.transform.position = panelTrans[index].position;
         if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11 || index == 33)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
+        {
             tutorialPanel.transform.position = panelTrans[index].position * 10;
+        }            
+                
         if (index == 12 || index == 17 || index == 24)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 5;
-            if(Managers.Game.Player.Record.TutorialIndexCount >= 2 && index == 12)
+            if(Managers.Game.Player.Record.TutorialIndexCount == 4 && index == 12)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
-            if(Managers.Game.Player.Record.TutorialIndexCount == 3 && index == 17)
+            if (Managers.Game.Player.Record.TutorialIndexCount >= 5 && index == 17)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
-            if(Managers.Game.Player.Record.TutorialIndexCount == 4 && index == 24)
+            if (Managers.Game.Player.Record.TutorialIndexCount >= 5 && index == 24)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
             }
@@ -335,6 +390,7 @@ public class TutorialPlayer : MonoBehaviour
         TextChanges();
         cheifTalkObject.gameObject.SetActive(true);
         textNextButton.gameObject.SetActive(true);
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void ManufactureTutorial()
@@ -396,6 +452,7 @@ public class TutorialPlayer : MonoBehaviour
         // 광산 건설에 대한 작업
         Managers.Alarm.Warning("건설을 시작합니다.");
         mineUI.StartBuild();
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void MineOpenTutorial()
@@ -431,6 +488,7 @@ public class TutorialPlayer : MonoBehaviour
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void MineLendAfter()
@@ -457,6 +515,7 @@ public class TutorialPlayer : MonoBehaviour
         BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
         tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(1);
         Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void MiniGameTry()
@@ -473,6 +532,10 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        if (reconnectCheck)
+        {
+            weapon = Managers.Game.Inventory.GetWeapon(1);
+        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -516,6 +579,10 @@ public class TutorialPlayer : MonoBehaviour
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
+        if (reconnectCheck)
+        {
+            weapon = Managers.Game.Inventory.GetWeapon(1);
+        }
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
     }
 
@@ -550,6 +617,7 @@ public class TutorialPlayer : MonoBehaviour
         }
         Managers.Game.Player.TryNormalReinforce(-goldCost);
         reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce, callback);
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void ReinforceNormal()
@@ -561,18 +629,6 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.transform.localPosition = new Vector3(180, -160, 0);
         cheifControl.gameObject.SetActive(true);
         cheifTalkObject.gameObject.SetActive(true);
-        ReinforceInfos reinforceManager = Managers.Game.Reinforce;
-        BaseWeaponData tutorialBaseWeaponDatas = new BaseWeaponData();
-        tutorialBaseWeaponDatas = Managers.ServerData.GetBaseWeaponData(1);
-        int goldCost = Managers.ServerData.NormalReinforceData.GetGoldCost((Rarity)tutorialBaseWeaponDatas.rarity);
-        void callback(BackEnd.BackendReturnObject bro)
-        {
-            // todo : 연출 재생 후 결과 출력되도록
-            // reinforceButton.interactable = true;
-            reinforceUI.CheckQualification();
-        }
-        Managers.Game.Player.TryNormalReinforce(-goldCost);
-        reinforceManager.SelectedWeapon.ExecuteReinforce(ReinforceType.normalReinforce, callback);
     }
 
     void MineTapMove()
@@ -649,6 +705,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         decompositionUI.ExcuteDecomposition();
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void InventoryOpenResultUI()
@@ -688,6 +745,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void PideaTutorial()
@@ -702,6 +760,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         collectionOn.isOn = true;
+        Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
     void TutorialEnding()
@@ -715,6 +774,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.Game.Player.Record.TutorialRecordIndex();
         attendanceUI.TutorialInit();
     }
 
@@ -875,11 +935,11 @@ public class TutorialPlayer : MonoBehaviour
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
-            case 52:
+            case 53:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
-            case 53:
+            case 54:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
                 break;
@@ -892,6 +952,7 @@ public class TutorialPlayer : MonoBehaviour
             cheifControl.gameObject.SetActive(false);
             cheifTalk.transform.parent.gameObject.SetActive(false);
             textNextButton.gameObject.SetActive(false);
+            Managers.Game.Player.Record.TutorialClearRecord();
         }
         cheifTalk.text = cheifLine[textIndex];
     }
@@ -907,7 +968,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[6] = "그럼 이제 좌측 상단의 X버튼을 눌러 팝업을 꺼주겠나?\n 광산화면을 보여주도록 하지";
         cheifLine[7] = "광산은 앞으로 자네를 위해 재화를 벌어줄걸세\n 그리고 광산이 열리면 NPC들이 채광을 시작할걸세";
         cheifLine[8] = "광산을 한 번 클릭해보게나\n 첫 광산은 조금만 기다리면 열리도록 고급인력을 투입하도록 하지";
-        cheifLine[9] = "광산이 열린거 같다네\n 광산을 다시 클릭해보겠나?\n 광산에 대한 설명을 추가로 해주겠네";
+        cheifLine[9] = "광산을 열기 위해 시간이 필요하다네\n 대기 시간이 없어지면 광산을 다시 클릭해보겠나?\n 광산에 대한 설명을 추가로 해주겠네";
         cheifLine[10] = "광산은 어떤 무기를 넣느냐에 따라\n 획득할 수 있는 골드량도 달라진다네\n 좋은 무기를 넣으면 많은 재화를 얻을 수 있지";
         cheifLine[11] = "그럼 이제 광산에 무기를 대여해보도록 하겠나?\n 해당 버튼을 눌러 인벤토리를 활성화 해주게나";
         cheifLine[12] = "해당 버튼을 클릭해서 무기를 대여해보게\n 무기를 대여한다면 골드를 획득할 수 있을테니 말이야";
@@ -915,14 +976,14 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[14] = "이제 미니게임을 해볼 차례라네\n 미니게임은 주어진 시간동안 무기를 통해\n 얼마나 많은 데미지를 줬는지 측정하네";
         cheifLine[15] = "하단의 미니게임 버튼을 눌러보게\n 백문이불여일견 직접 해보는 것이 이해가 쉬울걸세";
         cheifLine[16] = "상단에 있는 버튼을 눌러 미니게임을 해보게\n 빨리 눌러 더 많은 석상을 부술수록\n 높은 점수를 획득할 것이라네!";
-        cheifLine[17] = "참 자네는 방금 하나있는 무기를 대여해서\n 사용할 무기가 없을 것이라네\n 이번엔 내가 무기를 빌려주도록 하겠네\n 아주 좋은 무기로!";
-        cheifLine[18] = "내가 빌려주는만큼 이번 미니게임에서 얻는 보상은\n 내가 가져가겠네 자네라면 이보다 더 좋은 무기는\n 금방 얻을테니 말이야";
-        cheifLine[19] = "버튼을 눌러 무기를 선택해주겠나\n 빌려준 무기가 마음에 들었으면 좋겠군\n 빌려준 무기는 미니게임이 끝나면 가져가겠넨";
+        cheifLine[17] = "참 자네는 방금 하나있는 무기를 대여해서\n 사용할 무기가 없을 것이라네\n 이번엔 내가 무기를 하나 주도록 하겠네\n 낡은 무기지만 말이야...";
+        cheifLine[18] = "미니게임을 통해 재화를 얻게 된다면\n 그 재화로 더 좋은 무기를 만들게나\n 이 무기는 늙은이가 주는 선물일세";
+        cheifLine[19] = "버튼을 눌러 무기를 선택해주겠나\n 준 무기가 마음에 들었으면 좋겠군";
         cheifLine[20] = "자네는 금방 습득하는군\n 이제 무기를 선택하면 미니게임 시작에\n 한발짝 더 다가간걸세\n 버튼을 눌러보게나!";
         cheifLine[21] = "해당 버튼을 눌러서 미니게임을 시작해보게나\n 무운을 빈다네";
         cheifLine[22] = "미니게임은 재밌었나?\n 그럼 이제 무기 강화를 하러 가보는게 어떻겠나?\n 무기 강화에 대해 설명해주겠네";
         cheifLine[23] = "무기 강화는 여러가지가 있다네\n 강화를 통해서 여러 무기들을 극한으로 강화해보게나\n 자네의 무기가 얼마나 대단한지 세계가 기록할걸세";
-        cheifLine[24] = "상단의 버튼을 클릭해서 무기를 대여해보게나\n 강화를 한번 해볼 수 있도록 도와주겠네\n 광산에 대여한 무기는 강화를 못하니\n 내 무기를 하나 주겠네";
+        cheifLine[24] = "상단의 버튼을 클릭해서 무기를 대여해보게나\n 강화를 한번 해볼 수 있도록 도와주겠네\n 아까 자네에게 준 무기를 사용하면 될 거 같네";
         cheifLine[25] = "무기를 선택해주겠나?";
         cheifLine[26] = "해당 버튼을 클릭해서 강화할 무기를 선택해주게나\n 그러면 강화할 무기가 정해지니 말이야";
         cheifLine[27] = "일반 강화를 한 번 해보겠나?\n 여러 가지의 강화 중 제일 기초적인 강화이면서\n 어쩌면 제일 중요한 강화이니까 말이야";
@@ -931,29 +992,30 @@ public class TutorialPlayer : MonoBehaviour
         cheifLine[30] = "이제 다른 것들을 배우러 가보겠나?\n 하단의 광산 버튼을 클릭해주게\n 내가 설명해줄테니 말이야?";
         cheifLine[31] = "이번에 설명할 것은 인벤토리라네\n 인벤토리에는 자네가 획득한 무기들이 들어있다네\n 무기들에 정보들 또한 여기서 볼 수 있네";
         cheifLine[32] = "상단의 인벤토리 버튼을 클릭해보겠나?\n 직접 보는 편이 더 이해를 도우니 말일세";
-        cheifLine[33] = "1";
-        cheifLine[34] = "2";
-        cheifLine[35] = "3";
-        cheifLine[36] = "4";
-        cheifLine[37] = "5";
-        cheifLine[38] = "6";
-        cheifLine[39] = "7";
-        cheifLine[40] = "8";
-        cheifLine[41] = "9";
-        cheifLine[42] = "10";
-        cheifLine[43] = "11";
-        cheifLine[44] = "12";
-        cheifLine[45] = "13";
-        cheifLine[46] = "14";
-        cheifLine[47] = "15";
-        cheifLine[48] = "16";
-        cheifLine[49] = "17";
-        cheifLine[50] = "18";
-        cheifLine[51] = "19";
-        cheifLine[52] = "20";
-        cheifLine[53] = "21";
-        cheifLine[54] = "22";
-        cheifLine[55] = "23";
-        cheifLine[56] = "24";
+        cheifLine[33] = "버튼을 클릭해주겠나?\n 그렇다면 자네에게 준 무기에 대한 정보를 알 수 있을 것이네\n 어떤 스탯을 가지고 있는 지 같이 보게나";
+        cheifLine[34] = "무기에 대한 정보를 이렇게 상세하게 나타난다네\n 광산에 무기를 대여하기 전 무기의 스탯이 어떤 지\n 여기서 확인할 수 있지";
+        cheifLine[35] = "이 버튼을 눌러보게나\n 무기들을 어떻게 정렬할 것인지 나올걸세\n 정리하기를 좋아하다면 이 버튼하나로 되니 유용할걸세";
+        cheifLine[36] = "분해하기 버튼을 눌러보게나\n 무기를 분해하면 다양한 재화가 나온다네\n 좋은 무기를 분해할 수록 나오는 재화가 다르다네";
+        cheifLine[37] = "아까 자네에게 줬던 무기를 같이 분해해보겠나?\n 아쉬워도 자네라면 이보다 가치있는 무기는\n 금방 얻을 걸세";
+        cheifLine[38] = "무기를 선택해주겠나?\n 어떤 재화가 나올지 궁금해지는군";
+        cheifLine[39] = "분해를 하니 이런 재화가 나왔네\n 기회가 된다면 나중에 얻는 무기도 분해해보게나\n 다른 곳에 쓰이는 재화가 나올걸세";
+        cheifLine[40] = "우측 상단의 X버튼을 눌러주겠나?\n 이제 다른 것을 배우러 가보게나";
+        cheifLine[41] = "이번에 설명할 것은 퀘스트라네\n 퀘스트는 매일, 매주마다 갱신되는 것과\n 지속적으로 기록되는 것이 있다네";
+        cheifLine[42] = "이렇게 말하는 것보다 직접 보는 편이 더 좋을 것 같군\n 퀘스트 버튼을 눌러주겠나?";
+        cheifLine[43] = "보는 것처럼 일간, 주간, 업적으로 분류가 된다네\n 퀘스트를 통해 얻는 보상은 상자 버튼을 누르면 볼 수 있을 걸세";
+        cheifLine[44] = "직접해보기엔 완료된 퀘스트가 아직 없으니\n 이 시간이 지나면 적혀있는 퀘스트를 완료하고\n 퀘스트 창을 열어보게나";
+        cheifLine[45] = "우측 상단의 X버튼을 눌러 퀘스트 창을 닫아주게\n 이제 설명할 것은 말로 설명할테니\n 빠르게 지나갈걸세";
+        cheifLine[46] = "이번에 배울 것은 제일 기본적이지만\n 제일 중요한 부분일 수도 있다네";
+        cheifLine[47] = "우측 상단의 버튼을 눌러주겠나?\n 무엇이 나올지 기대해보게";
+        cheifLine[48] = "이것은 출석부라네 세계가 자네의 성실함을 기록하지\n 자네가 성실하게 들어올수록\n  더 좋은 보상이 기다리고 있을 것이라네 ";
+        cheifLine[49] = "이것은 우편이라네 세계가 자네를 위해\n 무언가를 줄 수도 있고 무언가 말할 수도 있을 것이니\n 나중에 확인해보게나";
+        cheifLine[50] = "기초적인 것들이 담겨있는 설정 버튼이라네\n 자네의 이름을 다시 정할수도 있고\n 귓가에 울리는 노래소리도 제어할 수 있을걸세";
+        cheifLine[51] = "이번에 볼 것은 도감이라네\n 어두운 것은 아직 만들어지지 않았으나\n 자네의 머리 속에 있는 무기의\n 예상도면만 그려져 있을 것이라네";
+        cheifLine[52] = "무기는 등급이 나뉘어져 있다네\n 총 6등급으로 \nTrash, Old, Normal, Rare, Unique, Legendary가 있지";
+        cheifLine[53] = "이 버튼은 컬렉션이라네\n 어느 무기가 같은 결을 따르는지 알 수 있을 것이라네\n 이걸 수집하는 것도 재밌을 거라 생각하네";
+        cheifLine[54] = "이제 마무리할 차례가 된 거 같다네\n 좌측 하단의 광산 버튼을 눌러주겠나?\n 자네에게 해주고 싶은 말이 있군";
+        cheifLine[55] = "자네가 갑작스럽게 이 세계로 온 건\n 나의 부름일세...이 세계가 자네를 원하고 있으니\n 부디 노여워 말게";
+        cheifLine[56] = "지금까지 오느라 고생많았다네\n 자네가 얼마나 위대해질 지 기대가 되네\n 부디 세계를 위해 노력해주게";
+        cheifLine[57] = "고생했네\n 자네의 앞길을 내가 응원한다네";
     }
 }
