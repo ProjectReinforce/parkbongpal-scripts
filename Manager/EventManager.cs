@@ -12,6 +12,7 @@ public class EventManager
     public Action ReinforceMaterialChangeEvent;     // 강화 재료 변경 이벤트
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
     public Action<MineBase> MineClickEvent;             // 광산 클릭 이벤트
+    public Action<Weapon> WeaponCollectEvent;             // 광산 클릭 이벤트
     // public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
     public Action<bool> RecieveAttendanceRewardEvent;
@@ -66,5 +67,10 @@ public class EventManager
 
     #region NPC
     public Action ChangeWeaponNPC;      // 광산에서 무기상태가 변경됨으로써 NPC 상태변화를 위한 이벤트
+    #endregion
+
+    #region Tutorial
+    public Action<Weapon> TutorialReinforceWeaponChangeEvent;
+    public Action OnCheifTalkObjectEvent;
     #endregion
 }

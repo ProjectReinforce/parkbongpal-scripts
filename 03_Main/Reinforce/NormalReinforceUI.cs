@@ -46,6 +46,16 @@ public class NormalReinforceUI : ReinforceUIBase
         weaponNameText.text = weapon.Name;
     }
 
+    public void UpdateWeaponIconTutorial(Weapon _weapon)
+    {
+        Debug.Log(reinforceManager.SelectedWeapon);
+        reinforceManager.SelectedWeapon = _weapon;
+        _weapon = reinforceManager.SelectedWeapon;
+        weaponRarity.sprite = Managers.Resource.weaponRaritySlot[_weapon.data.rarity];
+        weaponIcon.sprite = _weapon.Icon;
+        weaponNameText.text = _weapon.Name;
+    }
+
     protected override void UpdateCosts()
     {
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;

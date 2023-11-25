@@ -28,7 +28,7 @@ public class MineBase : MonoBehaviour, Rental
 
     protected MineStatus mineStatus = MineStatus.Locked;
     protected int mineIndex;
-    protected float remainTime;
+    public float remainTime;
     protected int currencyAmountLimit;
     protected int currentCurrency;
     protected int CurrentCurrency
@@ -43,7 +43,8 @@ public class MineBase : MonoBehaviour, Rental
     }
 
     // UI 관련 변수
-    protected Image icon;
+    protected Image mineIcon;
+    protected Image currencyIcon;
     protected Button mineButton;
     protected Image lockIcon;
     protected Text nameText;
@@ -83,13 +84,14 @@ public class MineBase : MonoBehaviour, Rental
         mineData = Managers.ServerData.MineDatas[mineIndex];
 
         // UI 초기화
-        TryGetComponent(out icon);
+        TryGetComponent(out mineIcon);
         TryGetComponent(out mineButton);
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() =>
         {
             ulong buildCost = Managers.ServerData.MineDatas[mineIndex].buildCost;
-            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다.", () =>
+            int buildMin = Managers.ServerData.MineDatas[mineIndex].buildMin;
+            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다. 완공까지 {buildMin}분 소요", () =>
             {
                 Managers.UI.ClosePopup();
 
@@ -105,17 +107,6 @@ public class MineBase : MonoBehaviour, Rental
                         Managers.Alarm.Warning("건설을 시작합니다.");
                         StartBuild();
                         Managers.Game.Player.AddGold(-(int)buildCost);
-                        // Managers.Game.Player.AddGold(-(int)buildCost, false);
-                        // Managers.Game.Player.AddTransactionCurrency();
-
-                        // Transactions.SendCurrent(callback =>
-                        // {
-                        //     if (!callback.IsSuccess())
-                        //     {
-                        //         Managers.Alarm.Danger($"통신 에러! : {callback}");
-                        //         return;
-                        //     }
-                        // });
                     }
                 }
             });
@@ -320,12 +311,12 @@ public class MineBase : MonoBehaviour, Rental
     /// <summary>
     /// 광산 건설 시작 처리 함수. 건설 확인 UI에서 예를 선택시에만 호출됨.
     /// </summary>
-    protected void StartBuild()
+    public void StartBuild()
     {
         // 광산 상태 변경
         DateTime startTime = Managers.Etc.GetServerTime();
         if (mineData.index == 0)
-            startTime.AddSeconds(-590);
+            startTime.AddSeconds(-597);
         Building(startTime);
 
         // NPC 처리
@@ -361,7 +352,7 @@ public class MineBase : MonoBehaviour, Rental
     {
         // 남은 시간 계산
         TimeSpan timeSpan = Managers.Etc.GetServerTime() - _buildStartTime;
-        int toSeconds = mineData.index == 0 ? 10 : 60;
+        int toSeconds = mineData.index == 0 ? 3 : 60;
         remainTime = Managers.ServerData.MineDatas[mineIndex].buildMin * toSeconds - (float)(timeSpan.TotalMilliseconds / 1000);
 
         // 광산 상태 변경
@@ -391,7 +382,7 @@ public class MineBase : MonoBehaviour, Rental
         mineStatus = MineStatus.Owned;
 
         // UI 처리
-        icon.color = Color.white;
+        mineIcon.color = Color.white;
         lockIcon.gameObject.SetActive(false);
         mineButton.onClick.RemoveAllListeners();
         mineButton.onClick.AddListener(() =>

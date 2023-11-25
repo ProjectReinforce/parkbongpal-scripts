@@ -46,7 +46,7 @@ public class MiniGameDamageText : MonoBehaviour
         float randomY = Random.Range(-250f, 250f);
 
         transform.DOLocalJump(new Vector3(randomX,randomY, 0f), 15f, 2, 0.8f)
-        .Join(transform.DOScale(Vector3.zero, 0.8f))
+        .Join(transform.DOScale(Vector3.zero, Random.Range(0.3f, 0.8f)))
         .OnComplete(() => 
         {
             managedPool.Release(gameObject);

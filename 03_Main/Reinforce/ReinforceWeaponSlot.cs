@@ -19,11 +19,19 @@ public class ReinforceWeaponSlot : MonoBehaviour
     {
         Managers.Event.ReinforceWeaponChangeEvent -= UpdateWeaponIcon;
         Managers.Event.ReinforceWeaponChangeEvent += UpdateWeaponIcon;
+        Managers.Event.TutorialReinforceWeaponChangeEvent -= TutorialUpdateWeaponIcon;
+        Managers.Event.TutorialReinforceWeaponChangeEvent += TutorialUpdateWeaponIcon;
         weaponIcon.sprite = nullIcon;
     }
 
     void UpdateWeaponIcon()
     {
+        weaponIcon.sprite = reinforceManager.SelectedWeapon.Icon;
+    }
+
+    void TutorialUpdateWeaponIcon(Weapon _weapon)
+    {
+        reinforceManager.SelectedWeapon = _weapon;
         weaponIcon.sprite = reinforceManager.SelectedWeapon.Icon;
     }
 }

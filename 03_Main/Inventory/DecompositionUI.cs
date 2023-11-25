@@ -89,7 +89,7 @@ public class DecompositionUI : MonoBehaviour
         contentScrollbar.value = 0;
     }
 
-    void ExcuteDecomposition()
+    public void ExcuteDecomposition()
     {
         decompositionButton.interactable = false;
         int totalGold = 0, totalSoul = 0;

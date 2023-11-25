@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RewardUI : MonoBehaviour, IGameInitializer
+public class RewardUIBase : MonoBehaviour, IGameInitializer
 {
-    RewardSlot[] rewardSlots = new RewardSlot[3];
+    protected RewardSlot[] rewardSlots = new RewardSlot[3];
 
     public void GameInitialize()
     {
@@ -17,19 +17,14 @@ public class RewardUI : MonoBehaviour, IGameInitializer
         rewardSlots[2].Initialize();
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
         foreach (RewardSlot item in rewardSlots)
             item.gameObject.SetActive(false);
     }
 
-    public void Set(Dictionary<RewardType, int> _rewardTypeAmountPairs)
+    public virtual void Set(Dictionary<RewardType, int> _rewardTypeAmountPairs)
     {
-        // for(int i = 0; i < _rewardTypeAmountPairs.Count; i++)
-        // {
-        //     if(_rewardTypeAmountPairs.TryGetValue((RewardType)i, out int rewardAmount) == true)
-        //         rewardSlots[i].Set((RewardType)i, rewardAmount);
-        // }
         int i = 0;
         foreach (var item in _rewardTypeAmountPairs)
         {

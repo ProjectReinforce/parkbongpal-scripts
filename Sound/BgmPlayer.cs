@@ -42,6 +42,11 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
+    public void StopBgm()
+    {
+        bgmPlayer.Stop();
+    }
+    
     public void BgmSoundOn()
     {
         bgmPlayer.volume = 1;

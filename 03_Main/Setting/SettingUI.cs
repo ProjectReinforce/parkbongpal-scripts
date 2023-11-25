@@ -122,6 +122,7 @@ public class SettingUI : MonoBehaviour
         {        
             // 액세스 토큰 삭제, 즉 토큰 로그인 불가 (로그인이 먼저 되어야함)
             Backend.BMember.Logout();
+            Managers.UI.ClosePopup();
             Utills.LoadScene("R_Start");
         });
     }

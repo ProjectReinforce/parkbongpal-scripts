@@ -110,7 +110,8 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
                 return;
             }
             
-            upDownVisualer.SetCurrentWeapon(currentWeapon);
+            Managers.Event.WeaponCollectEvent?.Invoke(currentWeapon);
+            // upDownVisualer.SetCurrentWeapon(currentWeapon);
             Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
             Managers.UI.ClosePopup();
         });
