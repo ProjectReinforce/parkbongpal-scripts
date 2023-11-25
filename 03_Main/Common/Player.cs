@@ -60,11 +60,6 @@ public class Player
         });
     }
 
-    public void TutorialCleared(uint _clearCheck)
-    {
-        recordData.TutorialClearRecord(_clearCheck);
-    }
-
     public bool AddGold(int _gold, bool _directUpdate = true)
     {
         if (userData.gold + _gold < 0) return false;
@@ -345,14 +340,8 @@ public class Player
 
     public void GetBonusCount(uint _totalGold)
     {
-        if(_totalGold >= 10000)
-        {
-            recordData.ModifyDayGetBonusRecord();
-        }
-        if(_totalGold >= 50000)
-        {
-            recordData.ModifyWeekGetBonusRecord();
-        }
+        recordData.ModifyDayGetBonusRecord(_totalGold);
+        recordData.ModifyWeekGetBonusRecord(_totalGold);
     }
 
     public void AddTransactionCurrency()

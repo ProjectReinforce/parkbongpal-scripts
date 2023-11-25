@@ -170,6 +170,14 @@ public class MineGame : MonoBehaviour
         isAttackAble = false;
     }
 
+    public void OnlyTutorial()
+    {
+        if(Managers.Game.Player.Record.Tutorial != 1)
+        {
+            Managers.Event.OnCheifTalkObjectEvent?.Invoke();
+        }
+    }
+
     void Update() 
     {
         if(isAttackAble)

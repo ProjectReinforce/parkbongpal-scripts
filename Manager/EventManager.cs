@@ -68,4 +68,9 @@ public class EventManager
     #region NPC
     public Action ChangeWeaponNPC;      // 광산에서 무기상태가 변경됨으로써 NPC 상태변화를 위한 이벤트
     #endregion
+
+    #region Tutorial
+    public Action<Weapon> TutorialReinforceWeaponChangeEvent;
+    public Action OnCheifTalkObjectEvent;
+    #endregion
 }
