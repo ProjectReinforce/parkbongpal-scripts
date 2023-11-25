@@ -140,11 +140,11 @@ public class QuestContent : MonoBehaviour
             }
             if (daysCurrent != -1)
             {
-                processText.text = $"{daysCurrent} / {targetData.requestCount}";
+                processText.text = $"{daysCurrent:n0} / {targetData.requestCount:n0}";
                 processSlider.value = (float)daysCurrent / targetData.requestCount;
-                if(daysCurrent >= targetData.requestCount)
+                if (daysCurrent >= targetData.requestCount)
                 {
-                    processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+                    processText.text = $"{targetData.requestCount:n0} / {targetData.requestCount:n0}";
                 }
             }
             else
@@ -185,11 +185,11 @@ public class QuestContent : MonoBehaviour
             }
             if (weekCureent != -1)
             {
-                processText.text = $"{weekCureent} / {targetData.requestCount}";
+                processText.text = $"{weekCureent:n0} / {targetData.requestCount:n0}";
                 processSlider.value = (float)weekCureent / targetData.requestCount;
                 if (weekCureent >= targetData.requestCount)
                 {
-                    processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+                    processText.text = $"{targetData.requestCount:n0} / {targetData.requestCount:n0}";
                 }
             }
             else
@@ -272,14 +272,14 @@ public class QuestContent : MonoBehaviour
         {
             if (current != -1)
             {
-                processText.text = $"{current} / {targetData.requestCount}";
+                processText.text = $"{current:n0} / {targetData.requestCount:n0}";
                 processSlider.value = (float)current / targetData.requestCount;
                 if (current > 1000)
                 {
-                    processText.text = $"{current / 1000}k / {targetData.requestCount / 1000}k";
+                    processText.text = $"{current / 1000:n0}k / {targetData.requestCount / 1000:n0}k";
                     if (current > 1000000)
                     {
-                        processText.text = $"{current / 1000000}m / {targetData.requestCount / 1000000}m";
+                        processText.text = $"{current / 1000000:n0}m / {targetData.requestCount / 1000000:n0}m";
                     }
                 }
             }
@@ -291,7 +291,7 @@ public class QuestContent : MonoBehaviour
         }
         else
         {
-            processText.text = $"{targetData.requestCount} / {targetData.requestCount}";
+            processText.text = $"{targetData.requestCount:n0} / {targetData.requestCount:n0}";
             processSlider.value = (float)targetData.requestCount / targetData.requestCount;
         }
        

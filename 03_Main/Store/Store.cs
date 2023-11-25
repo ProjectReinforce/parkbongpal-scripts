@@ -70,7 +70,6 @@ public class Store : MonoBehaviour
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
             return;
         }
-
         int costRatio = _count == TEN ? _count - 1 : _count;
 
         if (_type == 0)
@@ -91,7 +90,6 @@ public class Store : MonoBehaviour
             }
             Managers.Game.Player.TryAdvanceProduceWeapon(_count);
         }
-
         cutSceneControl.SetActive(true);
 
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[_count];
@@ -104,7 +102,6 @@ public class Store : MonoBehaviour
             else if(rarity >= Rarity.unique)
                 Managers.Game.Player.Record.ModifyGetItemRecord();
         }
-
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
         Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
 

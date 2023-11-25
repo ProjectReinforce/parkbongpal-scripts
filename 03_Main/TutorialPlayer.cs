@@ -42,7 +42,6 @@ public class TutorialPlayer : MonoBehaviour
 
     void Start()
     {
-        Managers.Game.Player.Record.TutorialReset();
         uint tutorialCount = Managers.Game.Player.Record.TutorialIndexCount;
         bool clearedtutorial = false;
         if (Managers.Game.Player.Record.Tutorial != 0 || Managers.ServerData.questRecordDatas[0].idList[0] != 0)
@@ -203,14 +202,6 @@ public class TutorialPlayer : MonoBehaviour
                 tutorialPanel.transform.position = panelTrans[index].position;
                 cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
                 break;
-        }
-        if(indexCheck > 11)
-        {
-            index = 41;
-            textIndex = 54;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
         }
     }
 
@@ -771,7 +762,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
-        //attendanceUI.TutorialAttendance();
+        attendanceUI.TutorialAttendance();
     }
 
     void TextChanges()
