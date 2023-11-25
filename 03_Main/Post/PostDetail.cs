@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BackEnd;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PostDetail : MonoBehaviour
