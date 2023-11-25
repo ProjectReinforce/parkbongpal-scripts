@@ -37,20 +37,34 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         int month = dateTime.Month;
         periodText.text = $"{year}.{month}.{01:d2} ~ {year}.{month}.{DateTime.DaysInMonth(dateTime.Year, dateTime.Month)}";
 
-        if (rewardCheck = AttendanceCheck()) //갱신했으면
+        if (Managers.Game.Player.Record.Tutorial == 1 || Managers.ServerData.questRecordDatas[0].idList[0] == 1) //갱신했으면
+        {
+            if(rewardCheck = AttendanceCheck())
+            {
+                closeButton.gameObject.SetActive(false);
+                Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
+            }
+            else
+            {
+                closeButton.gameObject.SetActive(true);
+                // outsideObjectButton.enabled = false;
+                // insideObjectButton.gameObject.SetActive(false);
+                attendButton.interactable = false;
+                adButton.interactable = false;
+                buttonOff = true;
+                // adButton.interactable = false;
+            }
+            viwer.Initialize();
+            viwer.TodayCheck(days, rewardCheck);
+        }
+    }
+
+    public void TutorialAttendance()
+    {
+        if (rewardCheck = AttendanceCheck())
         {
             closeButton.gameObject.SetActive(false);
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
-        }
-        else
-        {
-            closeButton.gameObject.SetActive(true);
-            // outsideObjectButton.enabled = false;
-            // insideObjectButton.gameObject.SetActive(false);
-            attendButton.interactable = false;
-            adButton.interactable = false;
-            buttonOff = true;
-            // adButton.interactable = false;
         }
         viwer.Initialize();
         viwer.TodayCheck(days, rewardCheck);

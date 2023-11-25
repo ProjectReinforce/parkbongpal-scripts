@@ -24,6 +24,8 @@ public class RecordData
 {
     string userID;
     public string UserID => userID;
+    uint tutorialIndexCount;
+    public uint TutorialIndexCount => tutorialIndexCount;
     uint tutorial;
     public uint Tutorial => tutorial;
     ulong useGold;
@@ -102,10 +104,9 @@ public class RecordData
         if (_userInDate == userID)
         {
             uint.TryParse(PlayerPrefs.GetString("Tutorial"), out tutorial);
+            uint.TryParse(PlayerPrefs.GetString("TutorialIndexCount"), out tutorialIndexCount);
             ulong.TryParse(PlayerPrefs.GetString("UseGold"), out useGold);
-            // Debug.Log($"UsedGold : {useGold}");
             ulong.TryParse(PlayerPrefs.GetString("GetGold"), out getGold);
-            // Debug.Log($"GetedGold : {getGold}");
             ulong.TryParse(PlayerPrefs.GetString("UseDiamond"), out useDiamond);
             ulong.TryParse(PlayerPrefs.GetString("GetDiamond"), out getDiamond);
             uint.TryParse(PlayerPrefs.GetString("GetItem"), out getItem);
@@ -150,6 +151,7 @@ public class RecordData
         }
         PlayerPrefs.SetString("UserID", _userInDate);
         PlayerPrefs.DeleteKey("Tutorial");
+        PlayerPrefs.DeleteKey("TutorialIndexCount");
         PlayerPrefs.DeleteKey("UseGold");
         PlayerPrefs.DeleteKey("GetGold");
         PlayerPrefs.DeleteKey("UseDiamond");
@@ -183,6 +185,7 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
         tutorial = 0;
+        tutorialIndexCount = 0;
         useGold = 0;
         getGold = 0;
         useDiamond = 0;
@@ -216,9 +219,28 @@ public class RecordData
         weekSeeAds = 0;
     }
 
-    public void TutorialClearRecord(uint _clearCheck)
+    public void TutorialIndexReset()
     {
-        if(_clearCheck == 10)
+        tutorialIndexCount = 0;
+        PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
+    }
+
+    public void TutorialReset()
+    {
+        tutorial = 0;
+        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
+    }
+
+    public void TutorialRecordIndex()
+    {
+        tutorialIndexCount++;
+        Debug.Log(tutorialIndexCount);
+        PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
+    }
+
+    public void TutorialClearRecord()
+    {
+        if(tutorialIndexCount >= 10)
         {
             tutorial = 1;
             PlayerPrefs.SetString("Tutorial", tutorial.ToString());
@@ -337,9 +359,9 @@ public class RecordData
         PlayerPrefs.SetString("DayAttendance", dayAttendance.ToString());
     }
 
-    public void ModifyDayGetBonusRecord()
+    public void ModifyDayGetBonusRecord(uint _totalGold)
     {
-        dayGetBonus++;
+        dayGetBonus += _totalGold;
         PlayerPrefs.SetString("DayGetBonus", dayGetBonus.ToString());
     }
 
@@ -387,9 +409,9 @@ public class RecordData
         PlayerPrefs.SetString("WeekAttendance", weekAttendance.ToString());
     }
 
-    public void ModifyWeekGetBonusRecord()
+    public void ModifyWeekGetBonusRecord(uint _totalGold)
     {
-        weekGetBonus++;
+        weekGetBonus += _totalGold;
         PlayerPrefs.SetString("WeekGetBonus", weekGetBonus.ToString());
     }
 
