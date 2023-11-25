@@ -155,8 +155,7 @@ public class ShowAdButton : MonoBehaviour
         // Raised when the ad failed to open full screen content.
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            Debug.LogError("Rewarded interstitial ad failed to open full screen content " +
-                        "with error : " + error);
+            Managers.Alarm.Warning($"광고 초기화에 실패했습니다. {error}");
 
             // Reload the ad so that we can show another as soon as possible.
             LoadRewardedInterstitialAd();

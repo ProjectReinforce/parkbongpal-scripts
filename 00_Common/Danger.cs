@@ -21,7 +21,7 @@ public class Danger : MonoBehaviour, ISetMessage
     {
         title.text = _title;
         message.text = _message;
-        Managers.UI.OpenPopup(gameObject);
+        Managers.UI.OpenPopup(gameObject, true);
         Managers.UI.InputLock = true;
     }
 }

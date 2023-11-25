@@ -23,6 +23,6 @@ public class CustomWarning : Warning
         {
             _buttonEvent?.Invoke();
         });
-        Managers.UI.OpenPopup(gameObject);
+        Managers.UI.OpenPopup(gameObject, true);
     }
 }
