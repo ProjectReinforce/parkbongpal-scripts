@@ -118,89 +118,90 @@ public class TutorialPlayer : MonoBehaviour
 
     void TutorialIndexChecking()    // case문으로 바꿀 예정
     {
-        if (Managers.Game.Player.Record.TutorialIndexCount == 2)
+        uint indexCheck = Managers.Game.Player.Record.TutorialIndexCount;
+        switch(indexCheck)
         {
-            index = 3;
-            textIndex = 4;
-            Managers.UI.OpenPopup(storeUI.transform.parent.gameObject);
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position * 10;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 3)
-        {
-            index = 4;
-            textIndex = 8;
-            tutorialPanel.transform.position = panelTrans[index].position;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.parent.gameObject.SetActive(true);
-            mineOpenTutorialCheck = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 4)
-        {
-            index = 8;
-            textIndex = 12;
-            textNextButton.gameObject.SetActive(true);
-            Managers.Event.MineClickEvent?.Invoke(mineUI);
-            tutorialPanel.transform.position = panelTrans[index].position * 10;
-            reconnectCheckTrans = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 5)
-        {
-            index = 11;
-            textIndex = 17;
-            textNextButton.gameObject.SetActive(true);
-            Managers.UI.MoveTap(TapType.MiniGame);
-            Managers.UI.OpenPopup(selectMiniGameUI);
-            tutorialPanel.transform.position = panelTrans[index].position * 10;
-            reconnectCheckTrans = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 6)
-        {
-            index = 15;
-            textIndex = 21;
-            Managers.UI.MoveTap(TapType.MiniGame);
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            reconnectCheck = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 7)
-        {
-            index = 23;
-            textIndex = 30;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            reconnectChecking = true;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 8)
-        {
-            index = 32;
-            textIndex = 41;
-            textNextButton.gameObject.SetActive(true);
-            cheifTalk.text = cheifLine[textIndex];
-            tutorialPanel.transform.position = panelTrans[index].position;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 9)
-        {
-            index = 34;
-            textIndex = 46;
-            textNextButton.gameObject.SetActive(true);
-            cheifTalk.text = cheifLine[textIndex];
-            tutorialPanel.transform.position = panelTrans[index].position;
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 10)
-        {
-            index = 38;
-            textIndex = 50;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
-            Debug.Log(Managers.Game.Player.Record.TutorialIndexCount);
-        }
-        if (Managers.Game.Player.Record.TutorialIndexCount == 11)
-        {
-            index = 41;
-            textIndex = 54;
-            textNextButton.gameObject.SetActive(true);
-            tutorialPanel.transform.position = panelTrans[index].position;
+            case 2:
+                index = 3;
+                textIndex = 4;
+                Managers.UI.OpenPopup(storeUI.transform.parent.gameObject);
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 3:
+                index = 4;
+                textIndex = 8;
+                tutorialPanel.transform.position = panelTrans[index].position;
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.parent.gameObject.SetActive(true);
+                mineOpenTutorialCheck = true;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 4:
+                index = 8;
+                textIndex = 12;
+                textNextButton.gameObject.SetActive(true);
+                Managers.Event.MineClickEvent?.Invoke(mineUI);
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+                reconnectCheckTrans = true;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 5:
+                index = 11;
+                textIndex = 17;
+                textNextButton.gameObject.SetActive(true);
+                Managers.UI.MoveTap(TapType.MiniGame);
+                Managers.UI.OpenPopup(selectMiniGameUI);
+                tutorialPanel.transform.position = panelTrans[index].position * 10;
+                reconnectCheckTrans = true;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 6:
+                index = 15;
+                textIndex = 21;
+                Managers.UI.MoveTap(TapType.MiniGame);
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.position = panelTrans[index].position;
+                reconnectCheck = true;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 7:
+                index = 23;
+                textIndex = 30;
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.position = panelTrans[index].position;
+                reconnectChecking = true;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 8:
+                index = 32;
+                textIndex = 41;
+                textNextButton.gameObject.SetActive(true);
+                cheifTalk.text = cheifLine[textIndex];
+                tutorialPanel.transform.position = panelTrans[index].position;
+                break;
+            case 9:
+                index = 34;
+                textIndex = 46;
+                textNextButton.gameObject.SetActive(true);
+                cheifTalk.text = cheifLine[textIndex];
+                tutorialPanel.transform.position = panelTrans[index].position;
+                break;
+            case 10:
+                index = 38;
+                textIndex = 50;
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.position = panelTrans[index].position;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
+            case 11:
+                index = 41;
+                textIndex = 54;
+                textNextButton.gameObject.SetActive(true);
+                tutorialPanel.transform.position = panelTrans[index].position;
+                cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
+                break;
         }
     }
 
@@ -758,7 +759,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
-        attendanceUI.TutorialInit();
+        attendanceUI.TutorialAttendance();
     }
 
     void TextChanges()

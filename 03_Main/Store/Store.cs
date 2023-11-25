@@ -116,6 +116,7 @@ public class Store : MonoBehaviour
         BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
         tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(0);
         Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
+        Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
         manufactureOneUI.SetInfo(0, tutorialBaseWeaponDatas);
         Managers.UI.OpenPopup(manufactureOneUI.gameObject);
         if (manufactureOneUI.gameObject.activeSelf == true)
