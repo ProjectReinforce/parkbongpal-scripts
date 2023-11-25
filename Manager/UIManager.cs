@@ -100,6 +100,7 @@ public class UIManager
     public void OpenPopup(GameObject _popup)
     {
         if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
+        if (AnimationForPopup.isAnimating) return;
         Managers.Sound.PlaySfx(SfxType.PopupOpen);
         uiStack.Push(_popup);
 
@@ -119,7 +120,8 @@ public class UIManager
     /// </summary>
     public void ClosePopup(bool soundPlay = true)
     {
-        if(soundPlay)
+        if (AnimationForPopup.isAnimating) return;
+        if (soundPlay)
         {
             Managers.Sound.PlaySfx(SfxType.PopupClose);
         }
