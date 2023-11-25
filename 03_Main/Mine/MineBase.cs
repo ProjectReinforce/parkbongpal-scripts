@@ -159,8 +159,11 @@ public class MineBase : MonoBehaviour, Rental
                 if (lendedWeapon is null) return;
                 if (CurrentCurrency >= currencyAmountLimit) 
                 { 
-                    doNPC.gameObject.SetActive(false);
-                    restNPC.gameObject.SetActive(true);
+                    if(lendedWeapon is null)
+                    {
+                        doNPC.gameObject.SetActive(false);
+                        restNPC.gameObject.SetActive(true);
+                    }
                     return; 
                 }
                 elapse -= Time.fixedDeltaTime;

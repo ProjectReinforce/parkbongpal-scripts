@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BackEnd;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PostSlot : NewThing
@@ -11,13 +12,15 @@ public class PostSlot : NewThing
     [SerializeField] private GameObject items;              // 아이템이 1개 이상일 경우 보여주기위해
 
     public List<PostItemData> postItemDatas;
+    public PostType postType;
 
-    public void Initialized(PostData data, List<PostItemData> itemData)
+    public void Initialized(PostData _data, List<PostItemData> _itemData, PostType _postType)
     {
-        postData = data;
-        title.text = data.title;
-        date.text = data.sentDate.Substring(0, 10) + " / " + data.expirationDate[..10];
-        postItemDatas = itemData;
+        postData = _data;
+        postType = _postType;
+        title.text = _data.title;
+        date.text = _data.expirationDate[..10] + " 남음";
+        postItemDatas = _itemData;
         if (postItemDatas.Count != 0)
         {
             item.sprite = Managers.Resource.GetPostItem(postItemDatas[0].itemId - 1);
