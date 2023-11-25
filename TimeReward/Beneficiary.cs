@@ -54,10 +54,9 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
                 buttonOff = true;
                 // adButton.interactable = false;
             }
+            viwer.Initialize();
+            viwer.TodayCheck(days, rewardCheck);
         }
-        
-        viwer.Initialize();
-        viwer.TodayCheck(days, rewardCheck);
     }
 
     public void TutorialAttendance()
@@ -67,13 +66,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             closeButton.gameObject.SetActive(false);
             Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
         }
-        else
-        {
-            closeButton.gameObject.SetActive(true);
-            attendButton.interactable = false;
-            adButton.interactable = false;
-            buttonOff = true;
-        }
+        viwer.Initialize();
         viwer.TodayCheck(days, rewardCheck);
     }
 
