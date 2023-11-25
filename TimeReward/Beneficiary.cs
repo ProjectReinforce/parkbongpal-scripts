@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiary> //수혜자 역할
 {
     AttendanceViwer viwer;
-    RewardUI rewardUI;
+    RewardUIBase rewardUI;
     // Button outsideObjectButton;
     // Button insideObjectButton;
     Button closeButton;
@@ -22,7 +22,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
     {
         // Managers.Event.RecieveAttendanceRewardEvent = Attend;
         viwer = Utills.Bind<AttendanceViwer>("DateGroup_S", transform);
-        rewardUI = Utills.Bind<RewardUI>("RewardScreen_S");
+        rewardUI = Utills.Bind<RewardUIBase>("RewardScreen_S");
         // outsideObjectButton = Utills.Bind<Button>("Check_S", transform);
         // outsideObjectButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
         // insideObjectButton = Utills.Bind<Button>("Button_AttendanceCheck", transform);

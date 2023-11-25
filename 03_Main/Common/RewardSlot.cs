@@ -17,6 +17,7 @@ public class RewardSlot : MonoBehaviour
     public void Set(RewardType _rewardType, int _rewardAmount)
     {
         // 리소스 매니저 - 커머스 최적화 필요
+        if (_rewardType <= RewardType.Exp) return;
         iconImage.sprite = Managers.Resource.GetPostItem((int)_rewardType - 1);
         amountText.text = $"{_rewardAmount:n0}";
         gameObject.SetActive(true);

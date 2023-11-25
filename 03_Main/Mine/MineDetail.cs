@@ -59,7 +59,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             Managers.Game.Mine.CalculateGoldPerMin();
 
             if (amount > 0)
-            Managers.Game.Player.AddTransactionCurrency();
+                Managers.Game.Player.AddTransactionCurrency();
 
             Transactions.SendCurrent(callback =>
             {
@@ -151,6 +151,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                 weaponCollectButton.interactable = false;
                 (RewardType rewardType, int amount) = _mine.Receipt(false);
                 _mine.CollectWeapon();
+                Managers.Event.WeaponCollectEvent?.Invoke(_mine.GetWeapon());
                 UpdateUIRelatedLendedWeapon(_mine);
                 Managers.Game.Mine.CalculateGoldPerMin();
                 if (amount > 0)

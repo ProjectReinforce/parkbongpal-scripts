@@ -104,6 +104,7 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
     public void GameInitialize()
     {
         Managers.Event.MineClickEvent += SetCurrentWeaponFromMine;
+        Managers.Event.WeaponCollectEvent += SetCurrentWeapon;
     }
 
     void SetCurrentWeaponFromMine(MineBase _mine)
@@ -112,7 +113,7 @@ public class UpDownVisualer : MonoBehaviour, IGameInitializer
         currentWeapon = _mine.GetWeapon();
     }
 
-    public void SetCurrentWeapon(Weapon _weapon)
+    void SetCurrentWeapon(Weapon _weapon)
     {
         currentWeapon = _weapon;
     }
