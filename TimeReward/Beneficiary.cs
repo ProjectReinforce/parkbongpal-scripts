@@ -8,8 +8,6 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
 {
     AttendanceViwer viwer;
     RewardUIBase rewardUI;
-    // Button outsideObjectButton;
-    // Button insideObjectButton;
     Button closeButton;
     Button attendButton;
     Button adButton;
@@ -23,10 +21,6 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         // Managers.Event.RecieveAttendanceRewardEvent = Attend;
         viwer = Utills.Bind<AttendanceViwer>("DateGroup_S", transform);
         rewardUI = Utills.Bind<RewardUIBase>("RewardScreen_S");
-        // outsideObjectButton = Utills.Bind<Button>("Check_S", transform);
-        // outsideObjectButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
-        // insideObjectButton = Utills.Bind<Button>("Button_AttendanceCheck", transform);
-        // insideObjectButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
         closeButton = Utills.Bind<Button>("Button_Close", transform);
         attendButton = Utills.Bind<Button>("Button_Check", transform);
         attendButton.onClick.AddListener(() => Managers.Event.RecieveAttendanceRewardEvent?.Invoke(false));
@@ -43,16 +37,14 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             {
                 closeButton.gameObject.SetActive(false);
                 Managers.UI.OpenPopup(viwer.transform.parent.parent.gameObject);
+                Managers.UI.InputLock = true;
             }
             else
             {
                 closeButton.gameObject.SetActive(true);
-                // outsideObjectButton.enabled = false;
-                // insideObjectButton.gameObject.SetActive(false);
                 attendButton.interactable = false;
                 adButton.interactable = false;
                 buttonOff = true;
-                // adButton.interactable = false;
             }
             viwer.Initialize();
             viwer.TodayCheck(days, rewardCheck);
@@ -85,13 +77,12 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         if(!buttonOff && rewardCheck)
         {
             viwer.ButtonOn(days);
-            // outsideObjectButton.enabled = false;
-            // insideObjectButton.gameObject.SetActive(false);
             closeButton.gameObject.SetActive(true);
             attendButton.interactable = false;
             adButton.interactable = false;
             buttonOff = true;
             Receive(_isAdsRewards);
+            Managers.UI.InputLock = false;
         }
     }
 

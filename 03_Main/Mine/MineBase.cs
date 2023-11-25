@@ -93,7 +93,7 @@ public class MineBase : MonoBehaviour, Rental
             int buildMin = Managers.ServerData.MineDatas[mineIndex].buildMin;
             Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다. 완공까지 {buildMin}분 소요", () =>
             {
-                Managers.UI.ClosePopup();
+                Managers.UI.ClosePopup(_ignorAnimation : true);
 
                 if ((ulong)Managers.Game.Player.Data.gold < buildCost)
                 {

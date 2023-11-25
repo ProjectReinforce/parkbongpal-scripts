@@ -49,7 +49,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer
     }
 
     void ClickEvent(MineBase _mine)
-    // void ClickEvent(Mine _mine)
     {
         Managers.Event.ConfirmLendWeaponEvent = (weapon) => 
         {

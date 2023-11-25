@@ -12,9 +12,9 @@ public class AnimationForPopup : MonoBehaviour
         transform.localScale = Vector3.one * 0.1f;
     }
 
-    public void Show()
+    public void Show(bool _ignorAnimation = false)
     {
-        if(isAnimating) return;
+        if(isAnimating == true && _ignorAnimation == false) return;
 
         isAnimating = true;
         gameObject.SetActive(true);
@@ -30,9 +30,9 @@ public class AnimationForPopup : MonoBehaviour
         });
     }
 
-    public void Hide()
+    public void Hide(bool _ignorAnimation = false)
     {
-        if(isAnimating) return;
+        if(isAnimating == true && _ignorAnimation == false) return;
 
         isAnimating = true;
         var seq = DOTween.Sequence();

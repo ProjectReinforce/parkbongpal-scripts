@@ -97,10 +97,10 @@ public class UIManager
     /// 그렇지 않으면 _popup을 UI스택에 추가하고 활성화해줌
     /// </summary>
     /// <param name="_popup"></param>
-    public void OpenPopup(GameObject _popup)
+    public void OpenPopup(GameObject _popup, bool _ignorAnimation = false)
     {
         if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
-        if (AnimationForPopup.isAnimating) return;
+        if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
         Managers.Sound.PlaySfx(SfxType.PopupOpen);
         uiStack.Push(_popup);
 
@@ -109,7 +109,7 @@ public class UIManager
            component = _popup.AddComponent<AnimationForPopup>();
            component.Initialize();
         }
-        component.Show();
+        component.Show(_ignorAnimation);
 
         // _popup.SetActive(true);
     }
@@ -118,9 +118,9 @@ public class UIManager
     /// 팝업을 닫고 UI 스택에서 팝업을 제거하는 역할
     /// UI스택에서 팝업을 꺼내고 해당 팝업을 비활성화해줌
     /// </summary>
-    public void ClosePopup(bool soundPlay = true)
+    public void ClosePopup(bool soundPlay = true, bool _ignorAnimation = false)
     {
-        if (AnimationForPopup.isAnimating) return;
+        if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
         if (soundPlay)
         {
             Managers.Sound.PlaySfx(SfxType.PopupClose);
@@ -132,7 +132,7 @@ public class UIManager
            component = popup.AddComponent<AnimationForPopup>();
            component.Initialize();
         }
-        component.Hide();
+        component.Hide(_ignorAnimation);
 
         // popup.SetActive(false);
     }
