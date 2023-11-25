@@ -111,7 +111,7 @@ public class Managers : MonoBehaviour
                 eventM ??= new();
                 ui = new();
                 sound ??= new(transform);
-                sound.PlayBgm(sound.IsMuted, BgmType.MainBgm);
+                sound.StopBgm();
                 etc ??= new();
                 break;
             case SceneName.R_LoadingScene:
@@ -125,6 +125,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6:
                 game.Set();
+                sound.PlayBgm(sound.IsMuted, BgmType.MainBgm);
                 break;
         }
     }

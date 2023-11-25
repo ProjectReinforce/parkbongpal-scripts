@@ -43,7 +43,7 @@ public class MiniGameDropItem : MonoBehaviour
         transform.DOLocalJump(new Vector3(randomX,randomY, 0f), 15f, 1, 0.8f)
         .OnComplete(() => 
         {
-            transform.DOLocalMove(new Vector3(-300f, 30f, 0f), 0.7f)
+            transform.DOLocalMove(new Vector3(-300f, 30f, 0f), Random.Range(0.3f, 1.5f))
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {

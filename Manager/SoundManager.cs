@@ -46,6 +46,11 @@ public class SoundManager
         nowTapBgmIndex = (int)_bgmName;
     }
 
+    public void StopBgm()
+    {
+        bgmPlayer.StopBgm();
+    }
+
     public void PlaySfx(SfxType _sfxType)
     {
         sfxPlayer.PlaySfx(_sfxType);

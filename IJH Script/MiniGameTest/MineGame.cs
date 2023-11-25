@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,8 +20,14 @@ public class MineGame : MonoBehaviour
     [SerializeField] MiniGameBrokenRockPooler brokenRockPooler;
     Coroutine startCountdown;
     bool isAttackAble = false;
+    bool isButtonPressed = false;
+    public bool IsButtonPressed
+    {
+        get { return isButtonPressed; }
+        set { isButtonPressed = value; }
+    }
     bool isAnimPlaying = false;
-    
+
     public void Resume()
     {
         Managers.UI.ClosePopup();
@@ -180,7 +187,7 @@ public class MineGame : MonoBehaviour
 
     void Update() 
     {
-        if(isAttackAble)
+        if(isAttackAble && !isButtonPressed)
         {
             if(Input.GetMouseButtonDown(0))
             {

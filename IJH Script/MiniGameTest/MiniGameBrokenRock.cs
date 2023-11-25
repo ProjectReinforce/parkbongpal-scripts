@@ -12,11 +12,12 @@ public class MiniGameBrokenRock : MonoBehaviour
     {
         float randomX = Random.Range(-140f, -30f);
         float randomY = Random.Range(-105f, 150f);
+        float randomTime = Random.Range(0.3f, 0.8f);
 
-        transform.DOLocalJump(new Vector3(randomX,randomY, 0f), 15f, 1, 0.7f)
+        transform.DOLocalJump(new Vector3(randomX,randomY, 0f), 15f, 1, randomTime)
         .OnStart(() => 
         {
-            transform.DOLocalRotate(new Vector3(0f, 0f, 360f), 0.7f, RotateMode.FastBeyond360)
+            transform.DOLocalRotate(new Vector3(0f, 0f, 360f), randomTime, RotateMode.FastBeyond360)
                     .SetEase(Ease.Linear)
                     .OnComplete(() =>
                     {
