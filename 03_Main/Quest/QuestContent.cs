@@ -7,6 +7,7 @@ using BackEnd;
 
 public class QuestContent : MonoBehaviour
 {
+    RewardUIBase rewardUIBase;
     [SerializeField] Text descriptionText;
     [SerializeField] Slider processSlider;
     [SerializeField] Text processText;
@@ -63,6 +64,8 @@ public class QuestContent : MonoBehaviour
         gameObject.SetActive(true);
 
         getRewardButton.onClick.AddListener(UpdateQuestRecord);
+
+        rewardUIBase = Utills.Bind<RewardUIBase>("RewardScreen_S");
     }
 
     public void Cleared()
@@ -101,6 +104,8 @@ public class QuestContent : MonoBehaviour
         getRewardButton.interactable = false;
         Cleared();
         Managers.Event.UpdateAllContentEvent?.Invoke();
+
+        rewardUIBase.Set(targetData.rewardItem);
     }
 
     public void DayWeekUpdateContents()

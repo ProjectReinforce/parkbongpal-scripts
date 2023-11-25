@@ -14,9 +14,11 @@ public class RewardUIQuestBox : RewardUIBase
             rewardSlots[i].Set(item.Key, item.Value);
             i++;
         }
-        Debug.Log($"{Camera.main.ScreenToViewportPoint(_questContent.transform.localPosition)} / {Camera.main.ScreenToViewportPoint(gameObject.transform.localPosition)}");
-        // Vector3 pos = _questContent.transform.;
-        // gameObject.transform.position = new Vector3(pos.x, pos.y + 86f, pos.z);
+        Vector3 objPos = _questContent.transform.position;
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(objPos);
+        Vector3 modiPos = new (160f, screenPos.y - (Screen.height / 2f) + 90f, 0);
+        Debug.Log($"{screenPos} ({Screen.width}, {Screen.height}) {modiPos}");
+        gameObject.transform.localPosition = modiPos;
         gameObject.SetActive(true);
     }
 }
