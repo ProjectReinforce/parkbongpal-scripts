@@ -46,6 +46,7 @@ public class TutorialPlayer : MonoBehaviour
         bool clearedtutorial = false;
         if (Managers.Game.Player.Record.Tutorial != 0)
         {
+            Managers.UI.InputLock = false;
             clearedtutorial = true;
             return;
         }
@@ -556,6 +557,7 @@ public class TutorialPlayer : MonoBehaviour
 
     void ReinforceTutorial()
     {
+        Managers.UI.InputLock = true;
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.MoveTap(TapType.Reinforce);
@@ -759,6 +761,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
+        Managers.UI.InputLock = false;
         attendanceUI.TutorialAttendance();
     }
 
