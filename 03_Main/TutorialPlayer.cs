@@ -42,17 +42,17 @@ public class TutorialPlayer : MonoBehaviour
 
     void Start()
     {
-        Managers.UI.InputLock = true;
+        Managers.Game.Player.Record.TutorialReset();
+        uint tutorialCount = Managers.Game.Player.Record.TutorialIndexCount;
         bool clearedtutorial = false;
-        if (Managers.Game.Player.Record.Tutorial != 0)
+        if (Managers.Game.Player.Record.Tutorial != 0 || Managers.ServerData.questRecordDatas[0].idList[0] != 0)
         {
-            Managers.UI.InputLock = false;
             clearedtutorial = true;
             return;
         }
-
-        if (clearedtutorial == false && Managers.Game.Player.Record.TutorialIndexCount > 0)
+        if (!clearedtutorial && tutorialCount > 0)
         {
+            Managers.UI.InputLock = true;
             panelTrans = new Transform[45];
             cheifLine = new string[60];
             index = 0;
@@ -117,7 +117,7 @@ public class TutorialPlayer : MonoBehaviour
         }
     }
 
-    void TutorialIndexChecking()    // case문으로 바꿀 예정
+    void TutorialIndexChecking()
     {
         uint indexCheck = Managers.Game.Player.Record.TutorialIndexCount;
         switch(indexCheck)
@@ -203,6 +203,14 @@ public class TutorialPlayer : MonoBehaviour
                 tutorialPanel.transform.position = panelTrans[index].position;
                 cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
                 break;
+        }
+        if(indexCheck > 11)
+        {
+            index = 41;
+            textIndex = 54;
+            textNextButton.gameObject.SetActive(true);
+            tutorialPanel.transform.position = panelTrans[index].position;
+            cheifTalk.text = "돌아왔는가?\n 기다리고 있었다네";
         }
     }
 
@@ -731,6 +739,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
         Managers.Game.Player.Record.TutorialRecordIndex();
         Managers.UI.ClosePopup();
     }
@@ -762,7 +771,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
-        attendanceUI.TutorialAttendance();
+        //attendanceUI.TutorialAttendance();
     }
 
     void TextChanges()
@@ -933,13 +942,14 @@ public class TutorialPlayer : MonoBehaviour
         }
         if (textIndex > cheifLine.Length || cheifLine[textIndex] == null)
         {
-            TutorialEndAfter();
             textIndex = 0;
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
+            TutorialEndAfter();
+            Managers.Alarm.Warning("튜토리얼을 <color=red>완료</color>하셨습니다.\n 퀘스트 창에서 <color=red>완료 보상</color>을 수령해주세요!!" ,"축하합니다!");
+            Managers.Game.Player.Record.TutorialClearRecord();
             cheifTalk.transform.parent.gameObject.SetActive(false);
             textNextButton.gameObject.SetActive(false);
-            Managers.Game.Player.Record.TutorialClearRecord();
         }
         cheifTalk.text = cheifLine[textIndex];
     }

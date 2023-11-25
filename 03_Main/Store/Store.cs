@@ -47,8 +47,19 @@ public class Store : MonoBehaviour
     public int[] ReturnTypeCount(int _type, int _count)
     {
         typeCount[0] = _type;
-        string typeCheck = _type == 0 ? manufactureText.text = "<color=red>일반</color> 무기 제작을 하시겠습니까?" : manufactureText.text = "<color=red>고급</color> 무기 제작을 하시겠습니까?";
         typeCount[1] = _count;
+        if(_type == 0)
+        {
+            manufactureText.text = "<color=red>일반</color> 무기 <color=red>1회</color> 제작을 하시겠습니까?";
+            if(_count == TEN)
+                manufactureText.text = "<color=red>일반</color> 무기  <color=red>10회</color> 제작을 하시겠습니까?";
+        }
+        else
+        {
+            manufactureText.text = "<color=red>고급</color> 무기 <color=red>1회</color> 제작을 하시겠습니까?";
+            if (_count == TEN)
+                manufactureText.text = "<color=red>고급</color> 무기  <color=red>10회</color> 제작을 하시겠습니까?";
+        } 
         return typeCount;
     }
 
