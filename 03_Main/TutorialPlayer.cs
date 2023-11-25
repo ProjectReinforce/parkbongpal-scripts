@@ -392,6 +392,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifTalkObject.gameObject.SetActive(true);
         textNextButton.gameObject.SetActive(true);
         Managers.Game.Player.Record.TutorialRecordIndex();
+        Managers.UI.InputLock = true;
     }
 
     void ManufactureTutorial()
@@ -557,7 +558,6 @@ public class TutorialPlayer : MonoBehaviour
 
     void ReinforceTutorial()
     {
-        Managers.UI.InputLock = true;
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.UI.MoveTap(TapType.Reinforce);
@@ -761,7 +761,6 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
-        Managers.UI.InputLock = false;
         attendanceUI.TutorialAttendance();
     }
 
