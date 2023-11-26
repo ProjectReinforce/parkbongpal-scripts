@@ -4,6 +4,7 @@ using LitJson;
 using Random = System.Random;
 using UnityEngine;
 using System;
+using Unity.Mathematics;
 
 public static class Utills
 {
@@ -137,5 +138,31 @@ public static class Utills
     {
         Transform root = GameObject.Find(_canvasName).transform;
         return root.GetComponentsInChildren<T>(true);
+    }
+
+    const int REF_NUM = 1000;
+    enum KMG
+    {
+        K = 1,
+        M = 2,
+        G = 3
+    }
+
+    public static string ConvertToKMG(ulong _targetNumber)
+    {
+        if (_targetNumber > int.MaxValue) return "err";
+
+        int newNumber = (int)_targetNumber;
+        int kmg = 0;
+
+        while (newNumber >= REF_NUM)
+        {
+            newNumber /= REF_NUM;
+            kmg++;
+        }
+
+        string result = $"{newNumber}{(KMG)kmg}";
+
+        return result;
     }
 }

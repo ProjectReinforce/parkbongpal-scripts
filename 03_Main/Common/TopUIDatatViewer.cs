@@ -54,12 +54,12 @@ public class TopUIDatatViewer : MonoBehaviour
 
     void UpdateGold()
     {
-        goldText.text = player.Data.gold.ToString("n0");           // 유저 보유 돈
+        goldText.text = $"{Utills.ConvertToKMG((ulong)player.Data.gold):n0}";           // 유저 보유 돈
     }
 
     void UpdateDiamond()
     {
-        diamondText.text = player.Data.diamond.ToString("n0");     // 유저 보유 다이아
+        diamondText.text = $"{Utills.ConvertToKMG((ulong)player.Data.diamond):n0}";           // 유저 보유 돈
     }
 
     void UpdateLevel()

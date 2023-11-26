@@ -91,7 +91,7 @@ public class MineBase : MonoBehaviour, Rental
         {
             ulong buildCost = Managers.ServerData.MineDatas[mineIndex].buildCost;
             int buildMin = Managers.ServerData.MineDatas[mineIndex].buildMin;
-            Managers.Alarm.WarningWithButton($"{buildCost:n0} 골드를 소모하여 광산을 건설합니다. 완공까지 {buildMin}분 소요", () =>
+            Managers.Alarm.WarningWithButton($"{Utills.ConvertToKMG(buildCost)} 골드를 소모하여 광산을 건설합니다. 완공까지 {buildMin}분 소요", () =>
             {
                 Managers.UI.ClosePopup(_ignorAnimation : true);
 
