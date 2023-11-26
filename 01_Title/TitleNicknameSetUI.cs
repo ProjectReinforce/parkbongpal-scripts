@@ -15,13 +15,13 @@ public class TitleNicknameSetUI : NicknameSetUIBase
     
     void InsertNewUserData(string _nickname)
     {
-        confirmButton.interactable = false;
+        // confirmButton.interactable = false;
         
         SendQueue.Enqueue(Backend.BMember.UpdateNickname, _nickname, callback =>
         {
             if (!callback.IsSuccess())
                 Managers.Alarm.Danger($"유저 닉네임 변경 실패 : {callback}");
-            confirmButton.interactable = true;
+            // confirmButton.interactable = true;
         });
         newUserDataInserter = new();
         newUserDataInserter.InsertNewUserData();
