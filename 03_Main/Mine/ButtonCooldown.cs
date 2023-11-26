@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ButtonCooldown : MonoBehaviour
 {
+    [SerializeField] float coolTime;
     Button button;
 
     void Awake()
@@ -12,7 +13,8 @@ public class ButtonCooldown : MonoBehaviour
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
         {
-            Managers.Game.Mine.ReceiptAllGolds();
+            Managers.Game.Mine.ReceiptAllCurrencies();
+            StartCooldown();
         });
     }
 
@@ -25,7 +27,7 @@ public class ButtonCooldown : MonoBehaviour
 
     IEnumerator Cooldown()
     {
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(coolTime);
 
         button.interactable = true;
     }

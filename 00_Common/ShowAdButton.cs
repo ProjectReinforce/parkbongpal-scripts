@@ -16,7 +16,7 @@ public class ShowAdButton : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             ShowRewardedInterstitialAd();
-            button.interactable = false;
+            // button.interactable = false;
         });
 
         LoadRewardedInterstitialAd();
@@ -98,6 +98,7 @@ public class ShowAdButton : MonoBehaviour
                     case AdType.FreeGold:
                     break;
                     case AdType.CollectBonus:
+                    Managers.Event.RecieveAllReceiptBonusEvent?.Invoke();
                     break;
                 }
             });
