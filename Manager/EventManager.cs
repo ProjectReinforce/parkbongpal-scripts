@@ -16,6 +16,7 @@ public class EventManager
     // public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
     public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
     public Action<bool> RecieveAttendanceRewardEvent;
+    public Action RecieveAllReceiptBonusEvent;
     public Action<bool> InventoryNewAlarmEvent;
 
     #region TopUI

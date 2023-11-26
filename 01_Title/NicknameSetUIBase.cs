@@ -20,7 +20,7 @@ public abstract class NicknameSetUIBase : MonoBehaviour
     }
 
     protected const int MINLENGTH = 2;
-    protected const int MAXLENGTH = 8;
+    protected const int MAXLENGTH = 6;
     protected Coroutine coroutine;
     public void CheckNickname()
     {

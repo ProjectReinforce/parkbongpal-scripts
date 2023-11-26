@@ -6,18 +6,19 @@ using UnityEngine;
 
 public class MineManager
 {
+    AllReciptUI allReciptUI;
     // 광산 관리용 리스트
     Dictionary<int, MineBase> mines = new();
-    // Dictionary<int, Mine> mines = new();
 
     /// <summary>
     /// 모든 광산 초기화
     /// </summary>
     public MineManager()
     {
+        allReciptUI = Utills.Bind<AllReciptUI>("Reward_All_S");
         // 광산 리스트 등록
         MineBase[] results = Utills.FindAllFromCanvas<MineBase>("Canvas_Mine");
-        // Mine[] results = Utills.FindAllFromCanvas<Mine>("Canvas_Mine");
+
         foreach (var item in results)
         {
             int.TryParse(item.gameObject.name[..2], out int mineIndex);
@@ -40,8 +41,6 @@ public class MineManager
         {
             if (item.data.mineId != -1)
             {
-                // DateTime currentTime = Managers.Etc.GetServerTime();
-                // mines[item.data.mineId].SetWeapon(item, currentTime);
                 mines[item.data.mineId].SetWeaponFromServerData(item);
             }
         }
@@ -55,7 +54,6 @@ public class MineManager
         DateTime currentTime = Managers.Etc.GetServerTime();
         // 재화 재계산
         foreach (var item in mines)
-            // item.Value.SetGold(currentTime);
             item.Value.CalculateCurrency();
 
         // 건설 여부 재확인
@@ -71,19 +69,13 @@ public class MineManager
     /// <summary>
     /// 일괄 수령 함수
     /// </summary>
-    public void ReceiptAllGolds()
+    public void ReceiptAllCurrencies()
     {
-        // 리팩 전
         int totalGold = 0;
-        
-        // 리팩 후 사용
         int totalDiamond = 0;
         int totalOre = 0;
 
         foreach (var item in mines)
-            // 리팩 전
-            // totalGold += item.Value.Receipt(_needAddTransactions: true);
-        // 리팩 후 사용
         {
             (RewardType rewardType, int amount) = item.Value.Receipt();
             switch (rewardType)
@@ -100,30 +92,21 @@ public class MineManager
             }
         }
 
-        // 리팩 전
-        // Param param = new()
-        // {
-        //     { nameof(UserData.column.gold), Managers.Game.Player.Data.gold },
-        //     { nameof(UserData.column.stone), Managers.Game.Player.Data.stone },
-        //     { nameof(UserData.column.diamond), Managers.Game.Player.Data.diamond },
-        // };
-        // Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Managers.Game.Player.Data.inDate, Backend.UserInDate, param));
-        // 리팩 후 사용
         if (totalGold <= 0 && totalDiamond <= 0 && totalOre <= 0)
         {
             Managers.Alarm.Warning("수령할 재화가 없습니다.");
             return;
         }
 
+        allReciptUI.Set(totalGold, totalDiamond, totalOre);
+
         Managers.Game.Player.AddTransactionCurrency();
         
-        Transactions.SendCurrent((callback) =>
-        {
-            // 리팩 전
-            // Managers.Alarm.Warning($"{totalGold:n0} Gold를 수령했습니다.");
-            // 리팩 후 사용
-            Managers.Alarm.Warning($"Gold: {totalGold:n0}, Diamond: {totalDiamond:n0}, Ore: {totalOre:n0}를 수령했습니다.");
-        });
+        Transactions.SendCurrent();
+        // Transactions.SendCurrent((callback) =>
+        // {
+        //     Managers.Alarm.Warning($"Gold: {totalGold:n0}, Diamond: {totalDiamond:n0}, Ore: {totalOre:n0}를 수령했습니다.");
+        // });
         Managers.Game.Player.GetBonusCount((uint)totalGold);
     }
 
@@ -134,7 +117,6 @@ public class MineManager
     {
         int sum = 0;
         foreach (var item in mines)
-            // sum += item.Value.goldPerMin;
             sum += item.Value.GoldPerMin;
         Managers.Game.Player.SetGoldPerMin(sum);
     }
