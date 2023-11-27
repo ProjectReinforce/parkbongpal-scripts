@@ -219,6 +219,14 @@ public class RecordData
         weekSeeAds = 0;
     }
 
+    public uint TutorialGetIndex(uint _getIndex)
+    {
+        uint.TryParse(PlayerPrefs.GetString("TutorialIndexCount"), out tutorialIndexCount);
+        _getIndex = tutorialIndexCount;
+        Debug.Log(_getIndex);
+        return _getIndex;
+    }
+
     public void TutorialIndexReset()
     {
         tutorialIndexCount = 0;
