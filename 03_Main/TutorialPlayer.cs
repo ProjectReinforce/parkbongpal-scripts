@@ -16,7 +16,6 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] Text cheifTalk;
     [SerializeField] Store storeUI;
     [SerializeField] MineBase mineUI;
-    DetailInfoUI detailInfoUI;
     [SerializeField] GameObject selectMiniGameUI;
     [SerializeField] MiniGameController mimiGameControl;
     [SerializeField] GameObject miniGameUI;
@@ -30,7 +29,8 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] Beneficiary attendanceUI;
     [SerializeField] GameObject packgaeUI;
     [SerializeField] Toggle collectionOn;
-    [SerializeField] Transform[] panelTrans;
+    DetailInfoUI detailInfoUI;
+    Transform[] panelTrans;
     string[] cheifLine;
     int index;
     int textIndex;

@@ -121,9 +121,10 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("TryRefine"), out tryRefine);
             // 일일 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
-            if(saveDay == DateTime.MinValue)
+            if(DateTime.Parse(_userInDate) == Managers.Etc.GetServerTime().Date)
             {
                 saveDay = Managers.Etc.GetServerTime().Date;
+                PlayerPrefs.SetString("SaveDay", saveDay.ToString());
             }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
@@ -135,9 +136,10 @@ public class RecordData
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
-            if (saveWeek == DateTime.MinValue)
+            if (DateTime.Parse(_userInDate) == Managers.Etc.GetServerTime().Date)
             {
                 saveWeek = Managers.Etc.GetServerTime().Date;
+                PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
             }
             ResetRecordWeekData(weekValGroups, weekValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("WeekAttendance"), out weekAttendance);
@@ -156,6 +158,7 @@ public class RecordData
         PlayerPrefs.DeleteKey("GetGold");
         PlayerPrefs.DeleteKey("UseDiamond");
         PlayerPrefs.DeleteKey("GetDiamond");
+        PlayerPrefs.DeleteKey("GetItem");
         PlayerPrefs.DeleteKey("RegisterItem");
         PlayerPrefs.DeleteKey("DisassembleItem");
         PlayerPrefs.DeleteKey("ProduceWeapon");
@@ -223,20 +226,7 @@ public class RecordData
     {
         uint.TryParse(PlayerPrefs.GetString("TutorialIndexCount"), out tutorialIndexCount);
         _getIndex = tutorialIndexCount;
-        Debug.Log(_getIndex);
         return _getIndex;
-    }
-
-    public void TutorialIndexReset()
-    {
-        tutorialIndexCount = 0;
-        PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
-    }
-
-    public void TutorialReset()
-    {
-        tutorial = 0;
-        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
     }
 
     public void TutorialRecordIndex()
@@ -247,7 +237,7 @@ public class RecordData
 
     public void TutorialClearRecord()
     {
-        if(tutorialIndexCount >= 10)
+        if(tutorialIndexCount >= 11)
         {
             tutorial = 1;
             PlayerPrefs.SetString("Tutorial", tutorial.ToString());
@@ -440,13 +430,13 @@ public class RecordData
         {
             if (saveWeeks != serverData) 
             {
-                if(Managers.Etc.GetServerTime().DayOfWeek >= DayOfWeek.Monday)
+                if (Managers.Etc.GetServerTime().DayOfWeek >= DayOfWeek.Monday)
                 {
                     for (int i = 0; i < _weekRecord.Length; i++)
                     {
                         _weekRecord[i] = 0;
                         PlayerPrefs.SetString(_weekType[i], _weekRecord[i].ToString());
-                    }
+                    };
                     saveWeek = Managers.Etc.GetServerTime().Date;
                     PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
                 }
