@@ -42,14 +42,13 @@ public class TutorialPlayer : MonoBehaviour
 
     void Start()
     {
-        uint tutorialCount = 0;
         bool clearedtutorial = false;
         if (Managers.Game.Player.Record.Tutorial != 0 || Managers.ServerData.questRecordDatas[0].idList[0] != 0)
         {
             clearedtutorial = true;
             return;
         }
-        if ((!clearedtutorial && Managers.Game.Player.Record.TutorialGetIndex(tutorialCount) > 0) || Managers.Game.Player.Record == null)
+        if (!clearedtutorial && (Managers.ServerData.questRecordDatas[0].idList[0] == 0 || Managers.Game.Player.Record.Tutorial == 0))
         {
             Managers.UI.InputLock = true;
             panelTrans = new Transform[45];

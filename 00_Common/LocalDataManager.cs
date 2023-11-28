@@ -123,9 +123,11 @@ public class RecordData
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
             if(DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
-                Debug.Log("이 구문은 실행이 되었습니다.");
-                saveDay = Managers.Etc.GetServerTime().Date;
-                PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+                if(saveDay.Date != Managers.Etc.GetServerTime().Date)
+                {
+                    saveDay = Managers.Etc.GetServerTime().Date;
+                    PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+                }
             }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
@@ -139,8 +141,11 @@ public class RecordData
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
             if (DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
-                saveWeek = Managers.Etc.GetServerTime().Date;
-                PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
+                if (saveWeek.Date != Managers.Etc.GetServerTime().Date)
+                {
+                    saveWeek = Managers.Etc.GetServerTime().Date;
+                    PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
+                }
             }
             ResetRecordWeekData(weekValGroups, weekValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("WeekAttendance"), out weekAttendance);
