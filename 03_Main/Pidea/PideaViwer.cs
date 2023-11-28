@@ -5,6 +5,7 @@ public class PideaViwer : MonoBehaviour
 {
     [SerializeField] ToggleGroup topToggleGruop;
     [SerializeField] ToggleGroup gradeToggleGruop;
+    int rarityMaxIndex = 6;
 
     void OnEnable()
     {
@@ -25,6 +26,9 @@ public class PideaViwer : MonoBehaviour
         {
             one.isOn = false;
         }
+
+        for (int rarityIndex = 0; rarityIndex < rarityMaxIndex; rarityIndex++)
+            gradeToggleGruop.transform.GetChild(rarityIndex).GetChild(2).gameObject.SetActive(false);
     }
     public void GradeToggleNewControll(BaseWeaponData _weaponData)
     {

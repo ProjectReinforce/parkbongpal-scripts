@@ -18,6 +18,7 @@ public class EventManager
     public Action<bool> RecieveAttendanceRewardEvent;
     public Action RecieveAllReceiptBonusEvent;
     public Action<bool> InventoryNewAlarmEvent;
+    public Action SoulChangeEvent;
 
     #region TopUI
     public Action GoldChangeEvent;

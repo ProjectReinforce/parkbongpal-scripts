@@ -75,7 +75,8 @@ public class Post : MonoBehaviour, IGameInitializer
                 List<PostItemData> mailItemDatas = new();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
-                    if (itemJson["chartName"].ToString() == "post")
+                        Debug.Log("아이템차트이름 : " + itemJson["chartName"].ToString());
+                    if (itemJson["chartName"].ToString() == "미니게임 TEst")
                     {
                         PostItemData mailItemData = new();
                         mailItemData.itemId = int.Parse(itemJson["item"]["itemId"].ToString());

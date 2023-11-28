@@ -72,9 +72,14 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
     void OnEnable()
     {
+        Managers.Event.SoulChangeEvent = () =>
+        {
+            soulText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
+        };
+
         scrollRect.normalizedPosition = Vector2.one;
-        soulText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.weaponSoul):n0}";           // 유저 보유 돈
-        oreText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.stone):n0}";           // 유저 보유 돈
+        soulText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
+        oreText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.stone):n0}";
 
         Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();
@@ -84,6 +89,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
 
     void OnDisable()
     {
+        Managers.Event.SoulChangeEvent = null;
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();

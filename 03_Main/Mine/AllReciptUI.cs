@@ -26,6 +26,8 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
 
         Managers.Event.RecieveAllReceiptBonusEvent = () =>
         {
+            Managers.UI.ClosePopup();
+
             float bonus = 0.1f;
             int bonusGold = (int)(_totalGold * bonus);
             int bonusDiamond = (int)(_totalDiamond * bonus);

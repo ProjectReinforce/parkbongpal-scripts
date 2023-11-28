@@ -152,7 +152,7 @@ public static class Utills
     {
         if (_targetNumber > int.MaxValue) return "err";
 
-        int newNumber = (int)_targetNumber;
+        float newNumber = _targetNumber;
         int kmg = 0;
 
         while (newNumber >= REF_NUM)
@@ -161,7 +161,7 @@ public static class Utills
             kmg++;
         }
 
-        string result = $"{newNumber}{(KMG)kmg}";
+        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:f2}{(KMG)kmg}";
 
         return result;
     }

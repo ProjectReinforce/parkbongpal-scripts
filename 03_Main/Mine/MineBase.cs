@@ -93,7 +93,7 @@ public class MineBase : MonoBehaviour, Rental
             int buildMin = Managers.ServerData.MineDatas[mineIndex].buildMin;
             Managers.Alarm.WarningWithButton($"{Utills.ConvertToKMG(buildCost)} 골드를 소모하여 광산을 건설합니다. 완공까지 {buildMin}분 소요", () =>
             {
-                Managers.UI.ClosePopup(_ignorAnimation : true);
+                Managers.UI.ClosePopup(_ignorAnimation: true);
 
                 if ((ulong)Managers.Game.Player.Data.gold < buildCost)
                 {
@@ -148,14 +148,11 @@ public class MineBase : MonoBehaviour, Rental
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
-                if (CurrentCurrency >= currencyAmountLimit) 
-                { 
-                    if(lendedWeapon is null)
-                    {
-                        doNPC.gameObject.SetActive(false);
-                        restNPC.gameObject.SetActive(true);
-                    }
-                    return; 
+                if (CurrentCurrency >= currencyAmountLimit)
+                {
+                    doNPC.gameObject.SetActive(false);
+                    restNPC.gameObject.SetActive(true);
+                    return;
                 }
                 elapse -= Time.fixedDeltaTime;
                 if (elapse > 0) return;

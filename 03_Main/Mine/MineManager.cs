@@ -51,7 +51,6 @@ public class MineManager
     /// </summary>
     public void CalculateCurrencyAndBuildTimeAllMines()
     {
-        DateTime currentTime = Managers.Etc.GetServerTime();
         // 재화 재계산
         foreach (var item in mines)
             item.Value.CalculateCurrency();
