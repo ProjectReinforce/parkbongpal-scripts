@@ -49,7 +49,7 @@ public class TutorialPlayer : MonoBehaviour
             clearedtutorial = true;
             return;
         }
-        if (!clearedtutorial && Managers.Game.Player.Record.TutorialGetIndex(tutorialCount) > 0)
+        if ((!clearedtutorial && Managers.Game.Player.Record.TutorialGetIndex(tutorialCount) > 0) || Managers.Game.Player.Record == null)
         {
             Managers.UI.InputLock = true;
             panelTrans = new Transform[45];
