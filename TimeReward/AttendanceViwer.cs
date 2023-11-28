@@ -18,7 +18,7 @@ public class AttendanceViwer : MonoBehaviour
         {
             AttenanceSlot currentSlot = Instantiate(slot, transform);
             AttendanceData data = Managers.ServerData.AttendanceDatas[i];
-            currentSlot.Initialize(icons[data.type], $"x {data.value}",
+            currentSlot.Initialize(icons[data.type], $"x {data.value:n0}",
                 (i + 1) % 5 == 0 ? days[1] : days[0], $"{i + 1}일차");
             currentSlot.gameObject.SetActive(true);
             slots[i] = currentSlot;
