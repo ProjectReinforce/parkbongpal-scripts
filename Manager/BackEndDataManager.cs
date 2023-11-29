@@ -597,7 +597,7 @@ public class BackEndDataManager
             {
                 if(!isFirstCall)
                 {
-                    Managers.Event.GetRankDoneEvent?.Invoke();
+                    Managers.Event.RankRefreshEvent?.Invoke();
                 }
                 else
                 {

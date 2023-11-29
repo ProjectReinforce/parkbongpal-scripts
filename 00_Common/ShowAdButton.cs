@@ -92,6 +92,7 @@ public class ShowAdButton : MonoBehaviour
                     Managers.Event.RecieveAttendanceRewardEvent?.Invoke(true);
                     break;
                     case AdType.RefreshRank:
+                    Managers.Event.RankResetButtonEvent?.Invoke();
                     break;
                     case AdType.FreeDiamond:
                     break;

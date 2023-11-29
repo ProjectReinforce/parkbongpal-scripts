@@ -38,8 +38,7 @@ public class EventManager
     public Action<int> GetRankAfterTheFirstTimeEvent;
     public Action<int, int> SettingRankingPageEvent;
     public Action RankRefreshEvent;
-    public Action GetRankDoneEvent;
-
+    public Action RankResetButtonEvent;
     #endregion
 
     #region MiniGame
