@@ -103,6 +103,10 @@ public class ShowAdButton : MonoBehaviour
                 }
             });
         }
+        else
+        {
+            Managers.Alarm.Warning("아직 광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.");
+        }
     }
 
     private void RegisterEventHandlers(RewardedAd ad)
@@ -135,12 +139,12 @@ public class ShowAdButton : MonoBehaviour
         //     Debug.Log("Rewarded interstitial ad full screen content closed.");
         // };
         // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Managers.Alarm.Warning($"광고 초기화에 실패했습니다. {error}");
-            // Debug.LogError("Rewarded interstitial ad failed to open full screen content " +
-            //             "with error : " + error);
-        };
+        // ad.OnAdFullScreenContentFailed += (AdError error) =>
+        // {
+        //     Managers.Alarm.Warning($"광고 초기화에 실패했습니다. {error}");
+        //     // Debug.LogError("Rewarded interstitial ad failed to open full screen content " +
+        //     //             "with error : " + error);
+        // };
     }
 
     private void RegisterReloadHandler(RewardedAd ad)
