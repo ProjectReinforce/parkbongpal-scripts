@@ -121,8 +121,9 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("TryRefine"), out tryRefine);
             // 일일 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
-            if(DateTime.Parse(_userInDate) == Managers.Etc.GetServerTime().Date)
+            if(DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
+                Debug.Log("이 구문은 실행이 되었습니다.");
                 saveDay = Managers.Etc.GetServerTime().Date;
                 PlayerPrefs.SetString("SaveDay", saveDay.ToString());
             }
@@ -136,7 +137,7 @@ public class RecordData
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
-            if (DateTime.Parse(_userInDate) == Managers.Etc.GetServerTime().Date)
+            if (DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
                 saveWeek = Managers.Etc.GetServerTime().Date;
                 PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
