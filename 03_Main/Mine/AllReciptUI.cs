@@ -5,19 +5,22 @@ using UnityEngine.UI;
 
 public class AllReciptUI : MonoBehaviour, IGameInitializer
 {
+    Text titleText;
     Text goldText;
     Text diamondText;
     Text oreText;
 
     public void GameInitialize()
     {
+        titleText = Utills.Bind<Text>("TitleText", transform);
         Utills.Bind<Transform>("Reword_1", transform).transform.GetChild(0).TryGetComponent(out goldText);
         Utills.Bind<Transform>("Reword_2", transform).transform.GetChild(0).TryGetComponent(out diamondText);
         Utills.Bind<Transform>("Reword_3", transform).transform.GetChild(0).TryGetComponent(out oreText);
     }
 
-    public void Set(int _totalGold, int _totalDiamond, int _totalOre)
+    public void Set(int _totalGold, int _totalDiamond, int _totalOre, string _title = "")
     {
+        titleText.text = string.IsNullOrEmpty(_title) ? "수령 완료" : _title;
         goldText.text = $"{_totalGold:n0}";
         diamondText.text = $"{_totalDiamond:n0}";
         oreText.text = $"{_totalOre:n0}";
@@ -26,7 +29,7 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
 
         Managers.Event.RecieveAllReceiptBonusEvent = () =>
         {
-            Managers.UI.ClosePopup();
+            // Managers.UI.ClosePopup();
 
             float bonus = 0.1f;
             int bonusGold = (int)(_totalGold * bonus);
@@ -40,7 +43,8 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
             
             Transactions.SendCurrent((callback) =>
             {
-                Managers.Alarm.Warning($"Gold: {bonusGold:n0}, Diamond: {bonusDiamond:n0}, Ore: {bonusOre:n0}의 추가 보상을 수령했습니다.");
+                // Managers.Alarm.Warning($"Gold: {bonusGold:n0}, Diamond: {bonusDiamond:n0}, Ore: {bonusOre:n0}의 추가 보상을 수령했습니다.");
+                Set(bonusGold, bonusDiamond, bonusOre, "추가 보상");
             });
         };
     }

@@ -16,7 +16,6 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] Text cheifTalk;
     [SerializeField] Store storeUI;
     [SerializeField] MineBase mineUI;
-    DetailInfoUI detailInfoUI;
     [SerializeField] GameObject selectMiniGameUI;
     [SerializeField] MiniGameController mimiGameControl;
     [SerializeField] GameObject miniGameUI;
@@ -30,7 +29,8 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] Beneficiary attendanceUI;
     [SerializeField] GameObject packgaeUI;
     [SerializeField] Toggle collectionOn;
-    [SerializeField] Transform[] panelTrans;
+    DetailInfoUI detailInfoUI;
+    Transform[] panelTrans;
     string[] cheifLine;
     int index;
     int textIndex;
@@ -49,7 +49,7 @@ public class TutorialPlayer : MonoBehaviour
             clearedtutorial = true;
             return;
         }
-        if (!clearedtutorial && Managers.Game.Player.Record.TutorialGetIndex(tutorialCount) > 0)
+        if ((!clearedtutorial && Managers.Game.Player.Record.TutorialGetIndex(tutorialCount) > 0) || Managers.Game.Player.Record == null)
         {
             Managers.UI.InputLock = true;
             panelTrans = new Transform[45];

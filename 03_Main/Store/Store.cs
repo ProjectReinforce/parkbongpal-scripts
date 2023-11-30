@@ -65,6 +65,11 @@ public class Store : MonoBehaviour
 
     public void ExecuteManaufactureUI(int _type, int _count)
     {
+        if(manufactureStartButton.transform.parent.parent.gameObject.activeSelf)
+        {
+            Managers.UI.ClosePopup(false, true);
+        }
+  
         if (Managers.Game.Inventory.CheckRemainSlots(_count))
         {
             Managers.Alarm.Warning("인벤토리 공간이 부족합니다.");
@@ -107,7 +112,7 @@ public class Store : MonoBehaviour
 
         ManufactureResultUI targetManufactureResultUI = _count == ONE ? manufactureOneUI : manufactureUI;
         targetManufactureResultUI.SetInfo(_type, baseWeaponDatas);
-        Managers.UI.OpenPopup(targetManufactureResultUI.gameObject);
+        Managers.UI.OpenPopup(targetManufactureResultUI.gameObject, true);
         if (targetManufactureResultUI.gameObject.activeSelf == true)
             targetManufactureResultUI.ManuFactureSpriteChange();
     }
