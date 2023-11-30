@@ -29,7 +29,7 @@ public class PostSlot : NewThing
         }
         else
         {
-            item.sprite = Managers.Resource.GetPostItem(6);
+            item.sprite = Managers.Resource.GetPostItem(5);
             itemAmount.enabled = false;
         }
         if (postItemDatas.Count > 1)
