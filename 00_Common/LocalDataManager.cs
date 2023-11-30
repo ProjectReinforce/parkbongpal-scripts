@@ -92,6 +92,9 @@ public class RecordData
     DateTime saveWeek;
     public DateTime SaveWeek => saveWeek;
 
+    bool manufactureSkip;
+    public bool ManufactureSkip => manufactureSkip;
+
     public void LoadOrInitRecord(string _userInDate)
     {
         userID = PlayerPrefs.GetString("UserID");
@@ -155,6 +158,7 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("WeekGetBonus"), out weekGetBonus);
             uint.TryParse(PlayerPrefs.GetString("WeekSeeAds"), out weekSeeAds);
 
+            bool.TryParse(PlayerPrefs.GetString("ManufactureSkip"), out manufactureSkip);
             return;
         }
         PlayerPrefs.SetString("UserID", _userInDate);
@@ -193,6 +197,8 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekGetBonus");
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
+        PlayerPrefs.DeleteKey("ManufactureSkip");
+
         tutorial = 0;
         tutorialIndexCount = 0;
         useGold = 0;
@@ -226,6 +232,14 @@ public class RecordData
         weekTryReinforce = 0;
         weekGetBonus = 0;
         weekSeeAds = 0;
+
+        manufactureSkip = false;
+    }
+
+    public void TutorialIndexReset()
+    {
+        tutorialIndexCount = 0;
+        PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
     }
 
     public void TutorialRecordIndex()
@@ -441,6 +455,12 @@ public class RecordData
                 }
             }
         }
+    }
+
+    public void ManufactureIsOnCheck(bool _isOn)
+    {
+        manufactureSkip = _isOn;
+        PlayerPrefs.SetString("ManufactureSkip", manufactureSkip.ToString());
     }
 }
 

@@ -16,6 +16,7 @@ public class Store : MonoBehaviour
     [SerializeField] Button manufactureStartButton;
     [SerializeField] Text manufactureText;
     [SerializeField] GameObject cutSceneControl;
+    [SerializeField] Toggle isOnCheck;
     int[] typeCount;
 
     void Awake()
@@ -37,6 +38,7 @@ public class Store : MonoBehaviour
         {
             manufactureStartButton.onClick.AddListener(() => ExecuteManaufactureUI(typeCount[0], typeCount[1]));
         }
+        isOnCheck.isOn = Managers.Game.Player.Record.ManufactureSkip;
     }
 
     const int COST_GOLD = 10000;
@@ -115,6 +117,11 @@ public class Store : MonoBehaviour
         Managers.UI.OpenPopup(targetManufactureResultUI.gameObject, true);
         if (targetManufactureResultUI.gameObject.activeSelf == true)
             targetManufactureResultUI.ManuFactureSpriteChange();
+    }
+
+    public void IsOnChecker()
+    {
+        Managers.Game.Player.Record.ManufactureIsOnCheck(isOnCheck.isOn);
     }
 
     public void TutorialManufacture()
