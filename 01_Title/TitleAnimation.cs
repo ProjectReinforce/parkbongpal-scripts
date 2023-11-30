@@ -82,15 +82,6 @@ public class TitleAnimation : MonoBehaviour
             .OnStart(() => AnimateWeaponRecursively(startIndex + 1, delay, _isAnimSkip));
     }
 
-    public void DestroyDOTween()
-    {
-        DOTween.Kill("WeaponTween_0");
-        DOTween.Kill("WeaponTween_1");
-        DOTween.Kill("WeaponTween_2");
-        DOTween.Kill("WeaponTween_3");
-        DOTween.Kill("StartTouchText");
-    }
-
     public void SkipAnimation()
     {
         KillAllAnimation();
@@ -126,6 +117,14 @@ public class TitleAnimation : MonoBehaviour
             DOTween.Kill($"WeaponTween_{i}");
         }
         DOTween.Kill("StartTouchText");
+    }
 
+    void OnDisable() 
+    {
+        DOTween.Kill("WeaponTween_0");
+        DOTween.Kill("WeaponTween_1");
+        DOTween.Kill("WeaponTween_2");
+        DOTween.Kill("WeaponTween_3");
+        DOTween.Kill("StartTouchText");
     }
 }

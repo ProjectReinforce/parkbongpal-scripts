@@ -9,8 +9,7 @@ public class RankingUpdate : MonoBehaviour
     [SerializeField] GameObject rankResetAlarm;
     [SerializeField] Text timeText;
     [SerializeField] Button resetButton;
-    //[SerializeField] float countdownDuration = 10; // 30 minutes in seconds
-    float countdownDuration = 30;
+    float countdownDuration = 1800;
     float currentTime;
     bool isTimerEnd = false;
 
