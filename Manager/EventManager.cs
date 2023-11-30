@@ -74,4 +74,9 @@ public class EventManager
     public Action<Weapon> TutorialReinforceWeaponChangeEvent;
     public Action OnCheifTalkObjectEvent;
     #endregion
+
+    #region InternetAndVersion
+    public Action VersionCheckEvent;
+    public Action InternetCheckEvent;
+    #endregion
 }

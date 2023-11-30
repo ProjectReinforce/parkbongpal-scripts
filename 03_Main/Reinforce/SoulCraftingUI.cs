@@ -91,6 +91,8 @@ public class SoulCraftingUI : ReinforceUIBase
                 void callback(BackEnd.BackendReturnObject bro)
                 {
                     // todo : 연출 재생 후 결과 출력되도록
+                    //StartCoroutine("ReinforcePBP");
+                    //Debug.Log("SoulCrafting 봉팔");
                     // reinforceButton.interactable = true;
                     CheckQualification();
                 }

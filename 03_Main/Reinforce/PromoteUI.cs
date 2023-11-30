@@ -165,6 +165,7 @@ public class PromoteUI : ReinforceUIBase
     {
         reinforceButton.onClick.AddListener(() =>
         {
+            //StartCoroutine("ReinforcePBP");
             Managers.Game.Inventory.RemoveWeapons(reinforceManager.SelectedMaterials);
             reinforceManager.ResetMaterials();
             UpdateWeaponImage();

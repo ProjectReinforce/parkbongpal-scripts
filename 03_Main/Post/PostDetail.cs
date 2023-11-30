@@ -1,4 +1,4 @@
-﻿using BackEnd;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +10,18 @@ public class PostDetail : MonoBehaviour
 
     PostSlot currentSlot;
 
+    RewardUIBase rewardUI;
+
     private void OnDisable()
     {
         for (int i = 0; i < postItemSlots.Length; i++)
         {
             postItemSlots[i].gameObject.SetActive(false);
         }
+    }
+    private void Start()
+    {
+        rewardUI = Utills.Bind<RewardUIBase>("RewardScreen_S");
     }
 
     public void SetDetail(PostSlot slot)
@@ -25,7 +31,7 @@ public class PostDetail : MonoBehaviour
         title.text = data.title;
         author.text = data.author;
         content.text = data.content;
-        date.text = data.sentDate.Substring(0, 10) + " / " + data.expirationDate[..10];
+        date.text = data.expirationDate[..10] + " 남음";
 
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)
         {
@@ -36,25 +42,26 @@ public class PostDetail : MonoBehaviour
     }
     public void ReceiptButton()
     {
-        Managers.Event.PostReceiptButtonSelectEvent.Invoke(currentSlot);
+        Managers.Event.PostReceiptButtonSelectEvent?.Invoke(currentSlot);
 
         if (currentSlot.postItemDatas.Count == 0)
             return;
-
+        Dictionary<RewardType, int> rewards = new();
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)
         {
+            rewards.Add((RewardType)currentSlot.postItemDatas[i].itemId, currentSlot.postItemDatas[i].itemCount);
             switch (currentSlot.postItemDatas[i].itemId)
             {
-                case 1:
+                case (int)RewardType.Gold:
                     Managers.Game.Player.AddGold(currentSlot.postItemDatas[i].itemCount);
                     break;
-                case 2:
+                case (int)RewardType.Diamond:
                     Managers.Game.Player.AddDiamond(currentSlot.postItemDatas[i].itemCount);
                     break;
-                case 3:
+                case (int)RewardType.Soul:
                     Managers.Game.Player.AddSoul(currentSlot.postItemDatas[i].itemCount);
                     break;
-                case 4:
+                case (int)RewardType.Ore:
                     Managers.Game.Player.AddStone(currentSlot.postItemDatas[i].itemCount);
                     break;
                 default:
@@ -62,6 +69,6 @@ public class PostDetail : MonoBehaviour
                     break;
             }
         }
-
+        rewardUI.Set(rewards);
     }
 }

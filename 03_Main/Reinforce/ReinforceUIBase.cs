@@ -8,10 +8,13 @@ using UnityEngine.UI;
 public abstract class ReinforceUIBase : MonoBehaviour
 {
     [SerializeField] protected ReinforceType reinforceType;
+    [SerializeField] Transform aniBongpal;
     protected Text goldCostText;
-    protected Button reinforceButton;
+    [SerializeField] protected Button reinforceButton;
+    protected Button closeButton;
     protected ReinforceInfos reinforceManager;
     protected int goldCost;
+    protected Coroutine aniBongpalPlay;
 
     protected virtual void Awake()
     {
@@ -19,6 +22,9 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
         goldCostText = Utills.Bind<Text>("Coin_T", transform);
         reinforceButton = Utills.Bind<Button>("Button_Reinforce", transform);
+        closeButton  = Utills.Bind<Button>("Button_Close", transform);
+
+        aniBongpal = Utills.Bind<Transform>("Bongpal_Base", transform.parent);
     }
 
     protected virtual void OnEnable()
@@ -72,14 +78,38 @@ public abstract class ReinforceUIBase : MonoBehaviour
         reinforceButton.onClick.AddListener(() =>
         {
             reinforceButton.interactable = false;
+
             void callback(BackendReturnObject bro)
             {
                 // todo : 연출 재생 후 결과 출력되도록
+                //StartCoroutine("ReinforcePBP");
+                //Debug.Log("ReinforceUIBase 봉팔출동");
                 // reinforceButton.interactable = true;
                 CheckQualification();
             }
             reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);
         });
+    }
+
+    IEnumerator ReinforcePBP()
+    {
+        //reinforceButton.interactable = false;
+        closeButton.interactable = false;
+        aniBongpal.gameObject.SetActive(true);
+        if (aniBongpal != null)
+        {
+            float timeCheck = 0;
+            while (timeCheck < 1.4f)
+            {
+                timeCheck += Time.deltaTime;
+                yield return null;
+            }
+        }
+        Debug.Log("봉팔 작동 끝남.");
+        //CheckQualification();
+        aniBongpal.gameObject.SetActive(false);
+        reinforceButton.interactable = true;
+        closeButton.interactable = true;
     }
 
     public void CheckQualification()

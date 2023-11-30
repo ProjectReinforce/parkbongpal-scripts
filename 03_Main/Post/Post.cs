@@ -75,7 +75,6 @@ public class Post : MonoBehaviour, IGameInitializer
                 List<PostItemData> mailItemDatas = new();
                 foreach (JsonData itemJson in json[i]["items"])
                 {
-                        Debug.Log("아이템차트이름 : " + itemJson["chartName"].ToString());
                     if (itemJson["chartName"].ToString() == "미니게임 TEst")
                     {
                         PostItemData mailItemData = new();
@@ -93,7 +92,6 @@ public class Post : MonoBehaviour, IGameInitializer
                     PostSlot mail = Instantiate(slotRank, mailBox);
 
                     mail.Initialized(mailData, mailItemDatas, PostType.Rank);
-                    Debug.Log($"우편날짜 : {mail.postData.expirationDate}");
                     mail.gameObject.SetActive(true);
                     notifyer.GetNew(mail);
                     slots.Add(mail);
@@ -151,7 +149,6 @@ public class Post : MonoBehaviour, IGameInitializer
                     PostSlot mail = Instantiate(slotAdmin, mailBox);
 
                     mail.Initialized(mailData, mailItemDatas, PostType.Admin);
-                    Debug.Log($"우편날짜 : {mail.postData.expirationDate}");
                     mail.gameObject.SetActive(true);
                     notifyer.GetNew(mail);
                     slots.Add(mail);

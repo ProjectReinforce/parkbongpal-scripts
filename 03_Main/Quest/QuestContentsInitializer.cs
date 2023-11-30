@@ -5,7 +5,7 @@ using UnityEngine;
 using BackEnd;
 using UnityEngine.UI;
 
-public class QuestContentsInitializer : MonoBehaviour
+public class QuestContentsInitializer : MonoBehaviour, IGameInitializer
 {
     [SerializeField] QuestContentsPool pool;
     [SerializeField] RectTransform[] contents;
@@ -15,7 +15,7 @@ public class QuestContentsInitializer : MonoBehaviour
 
     int oldExp, oldLevel, oldGold, oldDiamond;
 
-    void Awake()
+    public void GameInitialize()
     {
         string[] recordTypeNames = System.Enum.GetNames(typeof(RecordType));
         foreach (var item in recordTypeNames)
@@ -27,11 +27,11 @@ public class QuestContentsInitializer : MonoBehaviour
 
         foreach (var item in Managers.ServerData.QuestDatas)
         {
-            QuestContent questContent = pool.GetOne(); 
-            questContent.Initialize(item, 
-                                    contents[(int)QuestContents.dayContents], 
-                                    contents[(int)QuestContents.weekContents], 
-                                    contents[(int)QuestContents.onceIngContents], 
+            QuestContent questContent = pool.GetOne();
+            questContent.Initialize(item,
+                                    contents[(int)QuestContents.dayContents],
+                                    contents[(int)QuestContents.weekContents],
+                                    contents[(int)QuestContents.onceIngContents],
                                     contents[(int)QuestContents.onceClearContents]);
 
             questContents[item.recordType].Add(questContent);
