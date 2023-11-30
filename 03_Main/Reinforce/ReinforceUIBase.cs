@@ -56,8 +56,8 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
         // 버튼 클릭 이벤트 등록
         reinforceButton.onClick.RemoveAllListeners();
-        RegisterButtonClickEvent();
         RegisterPreviousButtonClickEvent();
+        RegisterButtonClickEvent();
         RegisterAdditionalButtonClickEvent();
     }
 
@@ -82,10 +82,10 @@ public abstract class ReinforceUIBase : MonoBehaviour
             void callback(BackendReturnObject bro)
             {
                 // todo : 연출 재생 후 결과 출력되도록
-                StartCoroutine("ReinforcePBP");
-                Debug.Log("ReinforceUIBase 봉팔출동");
+                //StartCoroutine("ReinforcePBP");
+                //Debug.Log("ReinforceUIBase 봉팔출동");
                 // reinforceButton.interactable = true;
-                //CheckQualification();
+                CheckQualification();
             }
             reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);
         });
@@ -93,7 +93,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
 
     IEnumerator ReinforcePBP()
     {
-        reinforceButton.interactable = false;
+        //reinforceButton.interactable = false;
         closeButton.interactable = false;
         aniBongpal.gameObject.SetActive(true);
         if (aniBongpal != null)
@@ -106,7 +106,7 @@ public abstract class ReinforceUIBase : MonoBehaviour
             }
         }
         Debug.Log("봉팔 작동 끝남.");
-        CheckQualification();
+        //CheckQualification();
         aniBongpal.gameObject.SetActive(false);
         reinforceButton.interactable = true;
         closeButton.interactable = true;
