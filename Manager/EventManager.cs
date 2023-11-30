@@ -79,5 +79,6 @@ public class EventManager
     #region InternetAndVersion
     public Action VersionCheckEvent;
     public Action InternetCheckEvent;
+    public Action StoreGoEvent;
     #endregion
 }

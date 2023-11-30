@@ -40,4 +40,24 @@ public class CustomWarning : Warning
         });
         Managers.UI.OpenPopup(gameObject, true);
     }
+
+    public void CustomSetTwo(string _title, string _message, string _text, Action _buttonOneEvent, Action _buttonTwoEvent)
+    {
+        title.text = _title;
+        message.text = _message;
+        Button closeButton = Utills.Bind<Button>("Button_No", transform);
+        Text closeButtonText = Utills.Bind<Text>("Text", closeButton.transform);
+        closeButtonText.text = _text;
+        confirmButton.onClick.RemoveAllListeners();
+        closeButton.onClick.RemoveAllListeners();
+        confirmButton.onClick.AddListener(() =>
+        {
+            _buttonOneEvent?.Invoke();
+        });
+        closeButton.onClick.AddListener(() =>
+        {
+            _buttonTwoEvent?.Invoke();
+        });
+        Managers.UI.OpenPopup(gameObject, true);
+    }    
 }
