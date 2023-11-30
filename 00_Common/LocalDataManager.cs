@@ -92,6 +92,9 @@ public class RecordData
     DateTime saveWeek;
     public DateTime SaveWeek => saveWeek;
 
+    bool manufactureSkip;
+    public bool ManufactureSkip => manufactureSkip;
+
     public void LoadOrInitRecord(string _userInDate)
     {
         userID = PlayerPrefs.GetString("UserID");
@@ -123,9 +126,11 @@ public class RecordData
             DateTime.TryParse(PlayerPrefs.GetString("SaveDay"),  out saveDay);
             if(DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
-                Debug.Log("이 구문은 실행이 되었습니다.");
-                saveDay = Managers.Etc.GetServerTime().Date;
-                PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+                if(saveDay.Date != Managers.Etc.GetServerTime().Date)
+                {
+                    saveDay = Managers.Etc.GetServerTime().Date;
+                    PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+                }
             }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
@@ -139,8 +144,11 @@ public class RecordData
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
             if (DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
             {
-                saveWeek = Managers.Etc.GetServerTime().Date;
-                PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
+                if (saveWeek.Date != Managers.Etc.GetServerTime().Date)
+                {
+                    saveWeek = Managers.Etc.GetServerTime().Date;
+                    PlayerPrefs.SetString("SaveWeek", saveWeek.ToString());
+                }
             }
             ResetRecordWeekData(weekValGroups, weekValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("WeekAttendance"), out weekAttendance);
@@ -150,6 +158,7 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("WeekGetBonus"), out weekGetBonus);
             uint.TryParse(PlayerPrefs.GetString("WeekSeeAds"), out weekSeeAds);
 
+            bool.TryParse(PlayerPrefs.GetString("ManufactureSkip"), out manufactureSkip);
             return;
         }
         PlayerPrefs.SetString("UserID", _userInDate);
@@ -188,6 +197,8 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekGetBonus");
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
+        PlayerPrefs.DeleteKey("ManufactureSkip");
+
         tutorial = 0;
         tutorialIndexCount = 0;
         useGold = 0;
@@ -221,13 +232,14 @@ public class RecordData
         weekTryReinforce = 0;
         weekGetBonus = 0;
         weekSeeAds = 0;
+
+        manufactureSkip = false;
     }
 
-    public uint TutorialGetIndex(uint _getIndex)
+    public void TutorialIndexReset()
     {
-        uint.TryParse(PlayerPrefs.GetString("TutorialIndexCount"), out tutorialIndexCount);
-        _getIndex = tutorialIndexCount;
-        return _getIndex;
+        tutorialIndexCount = 0;
+        PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
     }
 
     public void TutorialRecordIndex()
@@ -443,6 +455,12 @@ public class RecordData
                 }
             }
         }
+    }
+
+    public void ManufactureIsOnCheck(bool _isOn)
+    {
+        manufactureSkip = _isOn;
+        PlayerPrefs.SetString("ManufactureSkip", manufactureSkip.ToString());
     }
 }
 
