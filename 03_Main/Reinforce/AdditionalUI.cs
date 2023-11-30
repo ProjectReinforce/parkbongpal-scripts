@@ -48,7 +48,6 @@ public class AdditionalUI : ReinforceUIBase
     {
         reinforceButton.onClick.AddListener(() => Managers.Game.Player.TryAdditional(-goldCost));
     }
-
     protected override void RegisterAdditionalButtonClickEvent()
     {
         reinforceButton.onClick.AddListener(() => UpdateAtk());
