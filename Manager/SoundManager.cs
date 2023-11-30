@@ -6,21 +6,40 @@ public class SoundManager
 {
     public SfxPlayer sfxPlayer;
     public BgmPlayer bgmPlayer;
-    bool isMuted = true;
-    public bool IsMuted
+    bool isSFXMuted = true;
+    public bool IsSFXMuted
     {
         get
         {
-            int muted = PlayerPrefs.GetInt("SoundOption");  // PlayerPrefs에서 "SoundOption" 키를 사용하여 저장된 값을 불러옴
+            int muted = PlayerPrefs.GetInt("SFXOption");  // PlayerPrefs에서 "SFXOption" 키를 사용하여 저장된 값을 불러옴
             Debug.Log($"사운드 : {muted} 불러옴");
-            isMuted = muted != 0;                           // 불러온 값을 기반으로 isMuted 변수를 설정함
-            return isMuted;                                 // isMuted 값을 반환
+            isSFXMuted = muted != 0;                           // 불러온 값을 기반으로 isSFXMuted 변수를 설정함
+            return isSFXMuted;                                 // isSFXMuted 값을 반환
         }
         set
         {
-            isMuted = value;                                // isMuted 값을 설정
-            int muted = value == true ? 1 : 0;              // isMuted 값을 정수로 변환 // value가 true인 경우 1이, false인 경우 0이 muted변수에 할당되어짐
-            PlayerPrefs.SetInt("SoundOption", muted);       // PlayerPrefs에 "SoundOption" 키로 저장함
+            isSFXMuted = value;                                // isSFXMuted 값을 설정
+            int muted = value == true ? 1 : 0;              // isSFXMuted 값을 정수로 변환 // value가 true인 경우 1이, false인 경우 0이 muted변수에 할당되어짐
+            PlayerPrefs.SetInt("SFXOption", muted);       // PlayerPrefs에 "SFXOption" 키로 저장함
+            Debug.Log($"사운드 : {muted} 저장됨");
+        }
+    }
+
+    bool isBGMMuted = true;
+    public bool IsBGMMuted
+    {
+        get
+        {
+            float muted = PlayerPrefs.GetFloat("BGMOption");  // PlayerPrefs에서 "BGMOption" 키를 사용하여 저장된 값을 불러옴
+            Debug.Log($"사운드 : {muted} 불러옴");
+            isBGMMuted = muted != 0;                           // 불러온 값을 기반으로 isBGMMuted 변수를 설정함
+            return isBGMMuted;                                 // isBGMMuted 값을 반환
+        }
+        set
+        {
+            isBGMMuted = value;                                // isBGMMuted 값을 설정
+            float muted = value == true ? 0.5f : 0;              // isBGMMuted 값을 실수로 변환 // value가 true인 경우 1이, false인 경우 0이 muted변수에 할당되어짐
+            PlayerPrefs.SetFloat("BGMOption", muted);       // PlayerPrefs에 "BGMOption" 키로 저장함
             Debug.Log($"사운드 : {muted} 저장됨");
         }
     }

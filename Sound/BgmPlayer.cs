@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class BgmPlayer : MonoBehaviour
 {
@@ -18,9 +19,9 @@ public class BgmPlayer : MonoBehaviour
 
     void Start() 
     {
-        if(Managers.Sound.IsMuted == true)
+        if(Managers.Sound.IsBGMMuted == true)
         {
-            bgmPlayer.volume = 1f;
+            bgmPlayer.volume = 0.5f;
         }
         else
         {
@@ -49,7 +50,7 @@ public class BgmPlayer : MonoBehaviour
     
     public void BgmSoundOn()
     {
-        bgmPlayer.volume = 1;
+        bgmPlayer.volume = 0.5f;
     }
 
     public void BgmSoundOff()

@@ -123,9 +123,9 @@ public class Managers : MonoBehaviour
                 serverData = new();
                 serverData.Initialize();
                 break;
-            case SceneName.R_Main_V6:
+            case SceneName.R_Main_V6_JHH:
                 game.Set();
-                sound.PlayBgm(sound.IsMuted, BgmType.MainBgm);
+                sound.PlayBgm(sound.IsBGMMuted, BgmType.MainBgm);
                 break;
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SfxPlayer : MonoBehaviour
 {
@@ -14,19 +15,11 @@ public class SfxPlayer : MonoBehaviour
         sfxPlayer = gameObject.AddComponent<AudioSource>();
         sfxPlayer.playOnAwake = false;
         sfxPlayer.loop = false;
-        // if(Managers.Sound.IsMuted == true)
-        // {
-        //     sfxPlayer.volume = 1f;
-        // }
-        // else
-        // {
-        //     sfxPlayer.volume = 0f;
-        // }
     }
 
     void Start() 
     {
-        if(Managers.Sound.IsMuted == true)
+        if(Managers.Sound.IsSFXMuted == true)
         {
             sfxPlayer.volume = 1f;
         }

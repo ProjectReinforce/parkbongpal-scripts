@@ -6,11 +6,11 @@ public class MoveTapMinigame : MonoBehaviour
 {
     void OnEnable() 
     {
-        Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MiniGameBgm);
+        Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, BgmType.MiniGameBgm);
     }
 
     void OnDisable() 
     {
-        Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MainBgm);
+        Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, BgmType.MainBgm);
     }
 }
