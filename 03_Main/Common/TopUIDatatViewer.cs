@@ -26,10 +26,10 @@ public class TopUIDatatViewer : MonoBehaviour
         goldText = Utills.Bind<Text>("Text_Gold", transform);
         diamondText = Utills.Bind<Text>("Text_Diamond", transform);
 
-        Managers.Event.GoldChangeEvent -= UpdateGold;
-        Managers.Event.GoldChangeEvent += UpdateGold;
-        Managers.Event.DiamondChangeEvent -= UpdateDiamond;
-        Managers.Event.DiamondChangeEvent += UpdateDiamond;
+        // Managers.Event.GoldChangeEvent -= UpdateGold;
+        // Managers.Event.GoldChangeEvent += UpdateGold;
+        // Managers.Event.DiamondChangeEvent -= UpdateDiamond;
+        // Managers.Event.DiamondChangeEvent += UpdateDiamond;
         Managers.Event.LevelChangeEvent -= UpdateLevel;
         Managers.Event.LevelChangeEvent += UpdateLevel;
         Managers.Event.NicknameChangeEvent -= UpdateNickname;
@@ -54,12 +54,14 @@ public class TopUIDatatViewer : MonoBehaviour
 
     void UpdateGold()
     {
-        goldText.text = $"{Utills.ConvertToKMG((ulong)player.Data.gold):n0}";           // 유저 보유 돈
+        // goldText.text = $"{player.Data.gold:n0}";           // 유저 보유 돈
+        // goldText.text = $"{Utills.ConvertToKMG((ulong)player.Data.gold):n0}";           // 유저 보유 돈
     }
 
     void UpdateDiamond()
     {
-        diamondText.text = $"{Utills.ConvertToKMG((ulong)player.Data.diamond):n0}";           // 유저 보유 돈
+        // diamondText.text = $"{player.Data.diamond:n0}";           // 유저 보유 돈
+        // diamondText.text = $"{Utills.ConvertToKMG((ulong)player.Data.diamond):n0}";           // 유저 보유 돈
     }
 
     void UpdateLevel()

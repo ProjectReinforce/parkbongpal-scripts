@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -123,7 +120,9 @@ public class NormalReinforceUI : ReinforceUIBase
                 {
                     // todo : 연출 재생 후 결과 출력되도록
                     // reinforceButton.interactable = true;
-                    CheckQualification();
+                    StartCoroutine("ReinforcePBP");
+                    Debug.Log("NormalReinforceUI 봉팔");
+                    //CheckQualification();
                 }
                 Managers.Game.Player.TryNormalReinforce(-goldCost);
                 reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);

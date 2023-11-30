@@ -42,6 +42,8 @@ public abstract class ReinforceButtonUIBase : MonoBehaviour
         qualificationUI.SetActive(true);
     }
 
+
+
     protected abstract bool Checks();
     protected abstract void SetQualificationMessage();
 }
