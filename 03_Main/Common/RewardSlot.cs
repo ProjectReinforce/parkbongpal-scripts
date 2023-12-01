@@ -21,5 +21,17 @@ public class RewardSlot : MonoBehaviour
         iconImage.sprite = Managers.Resource.GetPostItem((int)_rewardType - 1);
         amountText.text = $"{Utills.UnitConverter((ulong)_rewardAmount):n0}";
         gameObject.SetActive(true);
+
+        switch (_rewardType)
+        {
+            case RewardType.Gold:
+            Managers.Event.GoldCollectEvent?.Invoke(transform);
+            break;
+            case RewardType.Diamond:
+            Managers.Event.DiamondCollectEvent?.Invoke(transform);
+            break;
+            default:
+            break;
+        }
     }
 }

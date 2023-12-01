@@ -29,8 +29,6 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
 
         Managers.Event.RecieveAllReceiptBonusEvent = () =>
         {
-            // Managers.UI.ClosePopup();
-
             float bonus = 0.1f;
             int bonusGold = (int)(_totalGold * bonus);
             int bonusDiamond = (int)(_totalDiamond * bonus);
@@ -43,7 +41,6 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
             
             Transactions.SendCurrent((callback) =>
             {
-                // Managers.Alarm.Warning($"Gold: {bonusGold:n0}, Diamond: {bonusDiamond:n0}, Ore: {bonusOre:n0}의 추가 보상을 수령했습니다.");
                 Set(bonusGold, bonusDiamond, bonusOre, "추가 보상");
             });
         };
