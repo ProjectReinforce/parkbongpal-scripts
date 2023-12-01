@@ -140,15 +140,8 @@ public static class Utills
         return root.GetComponentsInChildren<T>(true);
     }
 
-    const int REF_NUM = 1000;
-    enum KMG
-    {
-        K = 1,
-        M = 2,
-        G = 3
-    }
-
-    public static string ConvertToKMG(ulong _targetNumber)
+    const int REF_NUM = 10000;
+    public static string UnitConverter(ulong _targetNumber)
     {
         if (_targetNumber > int.MaxValue) return "err";
 
@@ -161,7 +154,7 @@ public static class Utills
             kmg++;
         }
 
-        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:f2}{(KMG)kmg}";
+        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:0.##}{(Unit)kmg}";
 
         return result;
     }

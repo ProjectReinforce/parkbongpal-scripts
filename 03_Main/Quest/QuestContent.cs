@@ -140,11 +140,11 @@ public class QuestContent : MonoBehaviour
             }
             if (daysCurrent != -1)
             {
-                processText.text = $"{Utills.ConvertToKMG((ulong)daysCurrent):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+                processText.text = $"{Utills.UnitConverter((ulong)daysCurrent):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
                 processSlider.value = (float)daysCurrent / targetData.requestCount;
                 if (daysCurrent >= targetData.requestCount)
                 {
-                    processText.text = $"{Utills.ConvertToKMG((ulong)targetData.requestCount):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+                    processText.text = $"{Utills.UnitConverter((ulong)targetData.requestCount):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
                 }
             }
             else
@@ -185,11 +185,11 @@ public class QuestContent : MonoBehaviour
             }
             if (weekCureent != -1)
             {
-                processText.text = $"{Utills.ConvertToKMG((ulong)weekCureent):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+                processText.text = $"{Utills.UnitConverter((ulong)weekCureent):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
                 processSlider.value = (float)weekCureent / targetData.requestCount;
                 if (weekCureent >= targetData.requestCount)
                 {
-                    processText.text = $"{Utills.ConvertToKMG((ulong)targetData.requestCount):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+                    processText.text = $"{Utills.UnitConverter((ulong)targetData.requestCount):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
                 }
             }
             else
@@ -272,7 +272,7 @@ public class QuestContent : MonoBehaviour
         {
             if (current != -1)
             {
-                processText.text = $"{Utills.ConvertToKMG((ulong)current):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+                processText.text = $"{Utills.UnitConverter((ulong)current):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
                 processSlider.value = (float)current / targetData.requestCount;
             }
             else
@@ -283,7 +283,7 @@ public class QuestContent : MonoBehaviour
         }
         else
         {
-            processText.text = $"{Utills.ConvertToKMG((ulong)targetData.requestCount):n0} / {Utills.ConvertToKMG((ulong)targetData.requestCount):n0}";
+            processText.text = $"{Utills.UnitConverter((ulong)targetData.requestCount):n0} / {Utills.UnitConverter((ulong)targetData.requestCount):n0}";
             processSlider.value = (float)targetData.requestCount / targetData.requestCount;
         }
        
