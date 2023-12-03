@@ -271,12 +271,26 @@ public class SlotModeUIReinforceMaterial : SlotModeUI
     public override void SetUI()
     {
         Weapon weapon = Managers.Game.Inventory.GetWeapon(targetIndex);
+        Weapon selectedWeapon = Managers.Game.Reinforce.SelectedWeapon;
 
-        if (weapon != null && (Managers.Game.Reinforce.SelectedWeapon.data.rarity != weapon.data.rarity || Managers.Game.Reinforce.SelectedWeapon == weapon ))
+        if (slot.gameObject.activeSelf == false)
+            slot.gameObject.SetActive(true);
+
+        if (slot.IsHideLendedWeapon == true)
+        {
+            if (weapon != null && weapon.data.mineId != -1)
+            {
+                slot.gameObject.SetActive(false);
+                return;
+            }
+        }
+        else if (weapon != null && selectedWeapon != null && (selectedWeapon.data.rarity != weapon.data.rarity || selectedWeapon == weapon ))
         {
             slot.gameObject.SetActive(false);
             return;
         }
+        else
+            slot.gameObject.SetActive(true);
 
         foreach (var item in defaultUIObjects)
         {

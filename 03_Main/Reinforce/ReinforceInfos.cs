@@ -26,7 +26,7 @@ public class ReinforceInfos
             if (value is null) return;
             selectedMaterials = value;
 
-            Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
+            // Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
         }
     } 
     RefineResult[] refineResults;

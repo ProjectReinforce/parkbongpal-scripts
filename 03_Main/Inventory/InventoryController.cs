@@ -63,6 +63,9 @@ public class InventoryController : MonoBehaviour, IGameInitializer
             }
             slots[i].Initialize();
         }
+
+        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void Set(InventoryType _inventoryType)
