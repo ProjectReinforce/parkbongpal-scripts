@@ -175,12 +175,18 @@ public class Login : MonoBehaviour
         {
             case 200:
                 if(Backend.UserNickName == "")
+                {
                     Managers.UI.OpenPopup(NicknamePopup);
+                    Managers.UI.InputLock = true;
+                }
                 else
                     Utills.LoadScene(SceneName.R_Main_V6.ToString());
                 break;
             case 201:
-                Managers.UI.OpenPopup(NicknamePopup);
+                {
+                    Managers.UI.OpenPopup(NicknamePopup);
+                    Managers.UI.InputLock = true;
+                }
                 break;
         }
     }
