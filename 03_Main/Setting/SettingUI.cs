@@ -17,6 +17,7 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Button userUuidCopyButton;
     [SerializeField] Button syncGoogleButton;
     [SerializeField] GameObject nicknameChange;
+    [SerializeField] GameObject questionBox;
     // [SerializeField] Image myFavoriteWeapon;
     
     void Start()
@@ -60,6 +61,8 @@ public class SettingUI : MonoBehaviour
                 return;
             }
             Managers.Alarm.Warning($"계정 연동에 성공했습니다.");
+            BackendReturnObject bro = BackEnd.Backend.BMember.GetUserInfo();
+            accountText.text = bro.GetReturnValuetoJSON()["row"]["federationId"].ToString();
         });
     }
 
@@ -74,14 +77,17 @@ public class SettingUI : MonoBehaviour
             Social.localUser.Authenticate((bool success) =>
             {
                 if (success)
+                {
                     // 로그인 성공 -> 뒤끝 서버에 획득한 구글 토큰으로 가입 요청
                     ChangeCustomToFederation();
+                    _googleLoginButton.interactable = false;
+                }
                 else
                 {
                     // Debug.LogError($"로그인 실패");
                     Managers.Alarm.Warning($"구글 로그인에 실패했습니다.");
+                    _googleLoginButton.interactable = true;
                 }
-                _googleLoginButton.interactable = true;
             });
         }
     }
@@ -156,6 +162,6 @@ public class SettingUI : MonoBehaviour
 
     public void OpenUserHelp()
     {
-        Debug.Log("유저가 헷갈릴만한 게임설명을 담은 UI가 열릴 예정");
+        Managers.UI.OpenPopup(questionBox);
     }
 }

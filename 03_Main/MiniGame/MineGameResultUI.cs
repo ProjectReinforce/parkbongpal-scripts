@@ -20,7 +20,7 @@ public class MineGameResultUI : MonoBehaviour
     {
         Managers.UI.InputLock = true;
         SetTipText();
-        Invoke("ButtonInteractableOn", 0.5f);
+        Invoke("ButtonInteractableOn", 1f);
     }
 
     void ButtonInteractableOn()

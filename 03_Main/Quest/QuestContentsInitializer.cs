@@ -67,6 +67,17 @@ public class QuestContentsInitializer : MonoBehaviour, IGameInitializer
     public void ClickTap(int _index)
     {
         currentTap.gameObject.SetActive(false);
+        if(_index >= 2)
+        {
+            if(contents[(int)QuestContents.onceIngContents].transform.parent.gameObject.activeSelf)
+            {
+                _index = 2;
+            }
+            else if(contents[(int)QuestContents.onceClearContents].transform.parent.gameObject.activeSelf)
+            {
+                _index = 3;
+            }
+        }
         currentTap = contents[_index];
         float posX = currentTap.anchoredPosition.x;
         currentTap.anchoredPosition = new Vector2(posX, 0);

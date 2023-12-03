@@ -13,7 +13,7 @@ public class ButtonCooldown : MonoBehaviour
         TryGetComponent(out button);
         button.onClick.AddListener(() =>
         {
-            Managers.Game.Mine.ReceiptAllCurrencies();
+            Managers.Game.Mine.ReceiptAllCurrencies(transform);
             StartCooldown();
         });
     }
