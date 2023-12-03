@@ -6,36 +6,58 @@ using UnityEngine.UI;
 
 public class SoundToggleUI : MonoBehaviour
 {
-    [SerializeField] Slider soundSlider;
-    [SerializeField] Button soundButton;
+    [SerializeField] Slider BGMSlider;
+    [SerializeField] Slider SFXSlider;
+    [SerializeField] Button BGMButton;
+    [SerializeField] Button SFXButton;
 
     void Awake()
     {
-        soundButton.onClick.AddListener(() => ToggleSound());
+        BGMButton.onClick.AddListener(() => ToggleBGMSound());
+        SFXButton.onClick.AddListener(() => ToggleSFXSound());
 
-        if (Managers.Sound.IsMuted == true)
-            soundSlider.value = 1;
+        if (Managers.Sound.IsBGMMuted == true)
+            BGMSlider.value = 1;
         else
-            soundSlider.value = 0;
+            BGMSlider.value = 0;
+
+        if (Managers.Sound.IsSFXMuted == true)
+            SFXSlider.value = 1;
+        else
+            SFXSlider.value = 0;
     }
 
-    public void ToggleSound()
+    public void ToggleBGMSound()
     {
-        if (Managers.Sound.IsMuted == true)
+        if (Managers.Sound.IsBGMMuted == true)
         {
-            soundSlider.value = 0;
+            BGMSlider.value = 0;
             Managers.Sound.bgmPlayer.BgmSoundOff();
-            Managers.Sound.sfxPlayer.SfxSoundOff();
-            Managers.Sound.IsMuted = false;
-            Managers.Sound.PlayBgm(Managers.Sound.IsMuted, (BgmType)Managers.Sound.NowTapBgmIndex); // 혹시 몰라서 false값이 될때 노래도 종료
+            Managers.Sound.IsBGMMuted = false;
+            Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, (BgmType)Managers.Sound.NowTapBgmIndex); // 혹시 몰라서 false값이 될때 노래도 종료
         }
         else
         {
-            soundSlider.value = 1;
+            BGMSlider.value = 1;
             Managers.Sound.bgmPlayer.BgmSoundOn();
+            Managers.Sound.IsBGMMuted = true;
+            Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, (BgmType)Managers.Sound.NowTapBgmIndex);
+        }
+    }
+
+    public void ToggleSFXSound()
+    {
+        if (Managers.Sound.IsSFXMuted == true)
+        {
+            SFXSlider.value = 0;
+            Managers.Sound.sfxPlayer.SfxSoundOff();
+            Managers.Sound.IsSFXMuted = false;
+        }
+        else
+        {
+            SFXSlider.value = 1;
             Managers.Sound.sfxPlayer.SfxSoundOn();
-            Managers.Sound.IsMuted = true;
-            Managers.Sound.PlayBgm(Managers.Sound.IsMuted, (BgmType)Managers.Sound.NowTapBgmIndex);
+            Managers.Sound.IsSFXMuted = true;
         }
     }
 }

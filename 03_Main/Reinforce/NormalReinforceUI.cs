@@ -120,9 +120,9 @@ public class NormalReinforceUI : ReinforceUIBase
                 {
                     // todo : 연출 재생 후 결과 출력되도록
                     // reinforceButton.interactable = true;
-                    StartCoroutine("ReinforcePBP");
-                    Debug.Log("NormalReinforceUI 봉팔");
-                    //CheckQualification();
+                    //StartCoroutine("ReinforcePBP");
+                    //Debug.Log("NormalReinforceUI 봉팔");
+                    CheckQualification();
                 }
                 Managers.Game.Player.TryNormalReinforce(-goldCost);
                 reinforceManager.SelectedWeapon.ExecuteReinforce(reinforceType, callback);

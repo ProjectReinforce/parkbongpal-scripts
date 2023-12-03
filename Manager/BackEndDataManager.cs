@@ -582,8 +582,16 @@ public class BackEndDataManager
             {
                 if (!callback.IsSuccess())
                 {
-                    Debug.LogError(callback);
-                    return;
+                    if(callback.GetStatusCode() == "428")
+                    {
+                        Managers.Alarm.Warning("랭킹 초기화 작업중입니다!");
+                        return;
+                    }
+                    else
+                    {
+                        Debug.LogError(callback);
+                        return;
+                    }
                 }
 
                 JsonData json = BackendReturnObject.Flatten(callback.Rows());
@@ -597,7 +605,7 @@ public class BackEndDataManager
             {
                 if(!isFirstCall)
                 {
-                    Managers.Event.GetRankDoneEvent?.Invoke();
+                    Managers.Event.RankRefreshEvent?.Invoke();
                 }
                 else
                 {

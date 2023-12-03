@@ -31,7 +31,7 @@ public class PostDetail : MonoBehaviour
         title.text = data.title;
         author.text = data.author;
         content.text = data.content;
-        date.text = data.sentDate.Substring(0, 10) + " / " + data.expirationDate[..10];
+        date.text = data.expirationDate[..10] + " 남음";
 
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)
         {
@@ -42,12 +42,14 @@ public class PostDetail : MonoBehaviour
     }
     public void ReceiptButton()
     {
-        Managers.Event.PostReceiptButtonSelectEvent.Invoke(currentSlot);
+        Managers.Event.PostReceiptButtonSelectEvent?.Invoke(currentSlot);
 
         if (currentSlot.postItemDatas.Count == 0)
             return;
+        Dictionary<RewardType, int> rewards = new();
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)
         {
+            rewards.Add((RewardType)currentSlot.postItemDatas[i].itemId, currentSlot.postItemDatas[i].itemCount);
             switch (currentSlot.postItemDatas[i].itemId)
             {
                 case (int)RewardType.Gold:
@@ -67,5 +69,6 @@ public class PostDetail : MonoBehaviour
                     break;
             }
         }
+        rewardUI.Set(rewards);
     }
 }

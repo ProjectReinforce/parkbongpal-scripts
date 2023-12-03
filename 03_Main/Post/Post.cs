@@ -92,7 +92,6 @@ public class Post : MonoBehaviour, IGameInitializer
                     PostSlot mail = Instantiate(slotRank, mailBox);
 
                     mail.Initialized(mailData, mailItemDatas, PostType.Rank);
-                    Debug.Log($"우편날짜 : {mail.postData.expirationDate}");
                     mail.gameObject.SetActive(true);
                     notifyer.GetNew(mail);
                     slots.Add(mail);
@@ -150,7 +149,6 @@ public class Post : MonoBehaviour, IGameInitializer
                     PostSlot mail = Instantiate(slotAdmin, mailBox);
 
                     mail.Initialized(mailData, mailItemDatas, PostType.Admin);
-                    Debug.Log($"우편날짜 : {mail.postData.expirationDate}");
                     mail.gameObject.SetActive(true);
                     notifyer.GetNew(mail);
                     slots.Add(mail);

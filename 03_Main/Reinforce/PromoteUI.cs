@@ -165,7 +165,7 @@ public class PromoteUI : ReinforceUIBase
     {
         reinforceButton.onClick.AddListener(() =>
         {
-            StartCoroutine("ReinforcePBP");
+            //StartCoroutine("ReinforcePBP");
             Managers.Game.Inventory.RemoveWeapons(reinforceManager.SelectedMaterials);
             reinforceManager.ResetMaterials();
             UpdateWeaponImage();
@@ -176,6 +176,10 @@ public class PromoteUI : ReinforceUIBase
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() =>
+        {
+            Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
+        });
     }
 
     bool CheckGold()

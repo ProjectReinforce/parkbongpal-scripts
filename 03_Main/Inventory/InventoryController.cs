@@ -74,12 +74,12 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     {
         Managers.Event.SoulChangeEvent = () =>
         {
-            soulText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
+            soulText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
         };
 
         scrollRect.normalizedPosition = Vector2.one;
-        soulText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
-        oreText.text = $"{Utills.ConvertToKMG((ulong)Managers.Game.Player.Data.stone):n0}";
+        soulText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
+        oreText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.stone):n0}";
 
         Managers.Game.Inventory.SortWeapon();
         InventoryOpenOptions[(int)CurrentInventoryType]?.Set();

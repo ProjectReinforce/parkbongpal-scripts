@@ -6,36 +6,43 @@ using UnityEngine.UI;
 
 public class RankingUpdate : MonoBehaviour
 {
+    [SerializeField] GameObject rankResetAlarm;
     [SerializeField] Text timeText;
     [SerializeField] Button resetButton;
-    //[SerializeField] float countdownDuration = 10; // 30 minutes in seconds
-    float countdownDuration = 10;
+    float countdownDuration = 1800;
     float currentTime;
     bool isTimerEnd = false;
 
-    void OnEnable()
+
+    void Awake() 
     {
-        Managers.Event.GetRankDoneEvent -= NewGetRankDone;
-        Managers.Event.GetRankDoneEvent += NewGetRankDone;
+        Managers.Event.RankResetButtonEvent -= NewGetRankDone;
+        Managers.Event.RankResetButtonEvent += NewGetRankDone;
     }
 
     void Start()
     {
         currentTime = countdownDuration;
-        resetButton.interactable = false;
     }
 
     public void RankResetButtonClick()
     {
-        currentTime = countdownDuration;
-        Managers.ServerData.GetRankList(false);
+        if(isTimerEnd == true)
+        {
+            currentTime = countdownDuration;
+            Managers.ServerData.GetRankList(false);
+            isTimerEnd = false;
+        }
+        else
+        {
+            Managers.UI.OpenPopup(rankResetAlarm, true);
+        }
     }
-
+    
     void NewGetRankDone()
     {
-        Managers.Event.RankRefreshEvent?.Invoke();
-        isTimerEnd = false;
-        resetButton.interactable = false;
+        Managers.UI.ClosePopup(false, true);
+        Managers.ServerData.GetRankList(false);
     }
 
     void Update()
@@ -47,7 +54,6 @@ public class RankingUpdate : MonoBehaviour
             if (currentTime <= 0)
             {
                 isTimerEnd = true;
-                resetButton.interactable = true;
             }
         }
 
@@ -58,10 +64,5 @@ public class RankingUpdate : MonoBehaviour
         int minutes = (int)(currentTime / 60);
         int seconds = (int)(currentTime % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-    }
-
-    void OnDisable()
-    {
-        Managers.Event.GetRankDoneEvent -= NewGetRankDone;
     }
 }

@@ -19,6 +19,8 @@ public class EventManager
     public Action RecieveAllReceiptBonusEvent;
     public Action<bool> InventoryNewAlarmEvent;
     public Action SoulChangeEvent;
+    public Action<Transform> GoldCollectEvent;
+    public Action<Transform> DiamondCollectEvent;
 
     #region TopUI
     public Action GoldChangeEvent;
@@ -38,8 +40,7 @@ public class EventManager
     public Action<int> GetRankAfterTheFirstTimeEvent;
     public Action<int, int> SettingRankingPageEvent;
     public Action RankRefreshEvent;
-    public Action GetRankDoneEvent;
-
+    public Action RankResetButtonEvent;
     #endregion
 
     #region MiniGame

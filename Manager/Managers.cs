@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Managers : MonoBehaviour
 {
@@ -125,7 +126,7 @@ public class Managers : MonoBehaviour
                 break;
             case SceneName.R_Main_V6:
                 game.Set();
-                sound.PlayBgm(sound.IsMuted, BgmType.MainBgm);
+                sound.PlayBgm(sound.IsBGMMuted, BgmType.MainBgm);
                 break;
         }
     }

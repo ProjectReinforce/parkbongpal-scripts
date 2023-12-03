@@ -68,7 +68,7 @@ public class MineManager
     /// <summary>
     /// 일괄 수령 함수
     /// </summary>
-    public void ReceiptAllCurrencies()
+    public void ReceiptAllCurrencies(Transform _transform)
     {
         int totalGold = 0;
         int totalDiamond = 0;
@@ -98,14 +98,13 @@ public class MineManager
         }
 
         allReciptUI.Set(totalGold, totalDiamond, totalOre);
+        Managers.Event.GoldCollectEvent?.Invoke(_transform);
+        if (totalDiamond > 0)
+            Managers.Event.DiamondCollectEvent?.Invoke(_transform);
 
         Managers.Game.Player.AddTransactionCurrency();
         
         Transactions.SendCurrent();
-        // Transactions.SendCurrent((callback) =>
-        // {
-        //     Managers.Alarm.Warning($"Gold: {totalGold:n0}, Diamond: {totalDiamond:n0}, Ore: {totalOre:n0}를 수령했습니다.");
-        // });
         Managers.Game.Player.GetBonusCount((uint)totalGold);
     }
 

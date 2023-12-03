@@ -162,7 +162,7 @@ public class MineGame : MonoBehaviour
     public void OnClickRestartButton() // 다시하기 버튼 눌렀을때 초기화
     {
         ResetGame();
-        Managers.Sound.PlayBgm(Managers.Sound.IsMuted, BgmType.MiniGameBgm);
+        Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, BgmType.MiniGameBgm);
     }
 
     public void ResetGame()  // 초기화 함수

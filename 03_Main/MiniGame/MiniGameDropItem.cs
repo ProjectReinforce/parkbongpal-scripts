@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.Pool;
 using DG.Tweening;
 using UnityEngine.UI;
-using System.Diagnostics.Tracing;
 
 public class MiniGameDropItem : MonoBehaviour
 {
-    [SerializeField] Sprite[] threeTypeSprites;
+    [SerializeField] Sprite[] twoTypeSprites;
     Image nowImage;
     public IObjectPool<GameObject> managedPool;
 
@@ -32,7 +31,7 @@ public class MiniGameDropItem : MonoBehaviour
 
     public void SetDropItemImage(int _index)
     {
-        nowImage.sprite = threeTypeSprites[_index];
+        nowImage.sprite = twoTypeSprites[_index];
     }
 
     public void DestroyItem()

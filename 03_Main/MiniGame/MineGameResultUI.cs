@@ -9,6 +9,8 @@ public class MineGameResultUI : MonoBehaviour
     [SerializeField] Text nowTurnScore;
     [SerializeField] MiniGameRewardSlot[] rewards;
     [SerializeField] Text tipText;
+    [SerializeField] Button reStartButton;
+    [SerializeField] Button goMainButton;
     int getGold;
     int dropSoul;
     int dropStone;
@@ -18,6 +20,13 @@ public class MineGameResultUI : MonoBehaviour
     {
         Managers.UI.InputLock = true;
         SetTipText();
+        Invoke("ButtonInteractableOn", 0.5f);
+    }
+
+    void ButtonInteractableOn()
+    {
+        reStartButton.interactable = true;
+        goMainButton.interactable = true;
     }
 
     public void SetNowTurnScore(int _score)
@@ -63,5 +72,7 @@ public class MineGameResultUI : MonoBehaviour
     void OnDisable()
     {
         Managers.UI.InputLock = false;
+        reStartButton.interactable = false;
+        goMainButton.interactable = false;
     }
 }
