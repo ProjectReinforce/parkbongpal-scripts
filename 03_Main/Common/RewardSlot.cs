@@ -18,7 +18,7 @@ public class RewardSlot : MonoBehaviour
     {
         // 리소스 매니저 - 커머스 최적화 필요
         if (_rewardType <= RewardType.Exp || _rewardAmount <= 0) return;
-        iconImage.sprite = Managers.Resource.GetPostItem((int)_rewardType - 1);
+        iconImage.sprite = Managers.Resource.GetPostItem((int)_rewardType);
         amountText.text = $"{Utills.ConvertToKMG((ulong)_rewardAmount):n0}";
         gameObject.SetActive(true);
     }

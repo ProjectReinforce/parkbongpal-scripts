@@ -187,7 +187,10 @@ public class Post : MonoBehaviour, IGameInitializer
             newcheckImage.gameObject.SetActive(false);
         }
         else
+        {
+            noPost.SetActive(false);
             newcheckImage.gameObject.SetActive(true);
+        }
         postCount.text = $"{slots.Count}";
     }
 

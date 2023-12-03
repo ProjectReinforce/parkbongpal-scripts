@@ -32,6 +32,6 @@ public class RewardUIBase : MonoBehaviour, IGameInitializer
             rewardSlots[i].Set(item.Key, item.Value);
             i++;
         }
-        Managers.UI.OpenPopup(gameObject);
+        Managers.UI.OpenPopup(gameObject, true);
     }
 }

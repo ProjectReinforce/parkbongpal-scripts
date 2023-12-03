@@ -10,7 +10,7 @@ public class PostItemSlot : MonoBehaviour
 
     public void PostItemInitialized(PostItemData itemData)
     {
-        itemImage.sprite = Managers.Resource.GetPostItem(itemData.itemId - 1);
+        itemImage.sprite = Managers.Resource.GetPostItem(itemData.itemId);
         itemCount.text = itemData.itemCount.ToString();
     }
 }

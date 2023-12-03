@@ -31,7 +31,7 @@ public class PostDetail : MonoBehaviour
         title.text = data.title;
         author.text = data.author;
         content.text = data.content;
-        date.text = data.expirationDate[..10] + " 남음";
+        date.text = slot.date.text;
 
         for (int i = 0; i < currentSlot.postItemDatas.Count; i++)
         {
@@ -69,6 +69,7 @@ public class PostDetail : MonoBehaviour
                     break;
             }
         }
+        Managers.UI.ClosePopup(false, true);
         rewardUI.Set(rewards);
     }
 }

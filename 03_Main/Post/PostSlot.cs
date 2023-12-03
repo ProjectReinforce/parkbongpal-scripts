@@ -7,7 +7,7 @@ public class PostSlot : NewThing
 {
     public PostData postData { get; set; }
     [SerializeField] private UnityEngine.UI.Text title;
-    [SerializeField] private UnityEngine.UI.Text date;
+    [SerializeField] public UnityEngine.UI.Text date;
     [SerializeField] private UnityEngine.UI.Image item;     // Post창에 보여지는 아이템 이미지
     [SerializeField] private UnityEngine.UI.Text itemAmount;
     [SerializeField] private GameObject items;              // 아이템이 1개 이상일 경우 보여주기위해
@@ -20,19 +20,12 @@ public class PostSlot : NewThing
         postData = _data;
         postType = _postType;
         title.text = _data.title;
-        //date.text = RemainTimeConverter(_data.expirationDate) + " 남음";
+        date.text = RemainTimeConverter(DateTime.Parse(_data.expirationDate));
         Debug.Log(_data.title+" / "+_data.expirationDate);
-        DateTime test = DateTime.Parse(_data.expirationDate);
-        DateTime curTime = Managers.Etc.GetServerTime();
-        TimeSpan diff = test - curTime;
-        
-        Debug.Log("test : " + test.ToString());
-        Debug.Log("diff : " + diff.ToString());
-        Debug.Log("diff.Days : " + diff.Days.ToString());
         postItemDatas = _itemData;
         if (postItemDatas.Count != 0)
         {
-            item.sprite = Managers.Resource.GetPostItem(postItemDatas[0].itemId - 1);
+            item.sprite = Managers.Resource.GetPostItem(postItemDatas[0].itemId);
             itemAmount.enabled = true;
             itemAmount.text = postItemDatas[0].itemCount.ToString();
         }
@@ -50,22 +43,16 @@ public class PostSlot : NewThing
         Managers.Event.PostSlotSelectEvent?.Invoke(this);
     }
 
-    void RemainTimeConverter(DateTime _data)
+    string RemainTimeConverter(DateTime _postTime)
     {
-
-        //int postMonth = 
-        //int postDay = int.Parse(_data.Substring(8, 2));
-        //int postHour = int.Parse(_data.Substring(11, 2));
-        //int postMinute = int.Parse(_data.Substring(14, 2));
-        //string setString = "";
-        //int month = curTime.Month;
-        //int day = curTime.Day;
-        //int hour = curTime.Hour;
-        //int minute = curTime.Minute;
-        //setString = postMonth == month ? (postDay - day).ToString()+"일" : (postDay - day + DateTime.DaysInMonth(curTime.Year, curTime.Month)).ToString()+"일";
-        //if (setString == "0일")
-        //    setString = "메롱";
-        //return setString;
+        DateTime curTime = Managers.Etc.GetServerTime();
+        TimeSpan TimeDifference = _postTime - curTime;
+        string setString = "";
+        setString = TimeDifference.Days > 0 ? 
+                    TimeDifference.Days.ToString() + "일 남음" : 
+                    TimeDifference.Hours > 0 ? $"{TimeDifference.Hours}시간 남음" :
+                    TimeDifference.Minutes > 0 ? $"{TimeDifference.Minutes}분 남음" : "1분 이내 사라짐.";
+        return setString;
     }
 
 }
