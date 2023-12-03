@@ -17,6 +17,6 @@ public class DecompositonResultUI : MonoBehaviour
     {
         goldText.text = _gold.ToString();
         soulText.text = _soul.ToString();
-        Managers.UI.OpenPopup(gameObject);
+        Managers.UI.OpenPopup(transform.parent.gameObject);
     }
 }
