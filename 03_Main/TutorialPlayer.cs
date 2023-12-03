@@ -118,6 +118,7 @@ public class TutorialPlayer : MonoBehaviour
     void TutorialIndexChecking()
     {
         uint indexCheck = Managers.Game.Player.Record.TutorialIndexCount;
+        tutorialButton.interactable = false;
         switch(indexCheck)
         {
             case 2:
@@ -350,31 +351,41 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalkObject.gameObject.SetActive(false);
         }
         tutorialPanel.transform.position = panelTrans[index].position;
-        if (index == 1 || index == 2 || index == 5 || index == 6 || index == 11 || index == 33)   // OpenPopupUI이 사용되는 경우 Transform값이 1/10이 되어 해당 문제를 일단 처리하기 위함
+        if (index == 1 || index == 2 || index == 5 || index == 11 || index == 33)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 10;
-        }            
+        }
+
+        if(index == 6)
+        {
+            tutorialPanel.transform.position = panelTrans[index].position * 10;
+            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+            tutorialPanel.transform.position = vector1;
+        }
                 
         if (index == 12 || index == 17 || index == 24)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 5;
-            if(Managers.Game.Player.Record.TutorialIndexCount == 5 && index == 12 && reconnectCheckTrans)
+            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * 4);
+            tutorialPanel.transform.position = vector1;
+            if (Managers.Game.Player.Record.TutorialIndexCount == 5 && index == 12 && reconnectCheckTrans)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                tutorialPanel.transform.position = vector2;
             }
             if(Managers.Game.Player.Record.TutorialIndexCount == 6 && index == 17 && reconnectCheck)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                tutorialPanel.transform.position = vector2;
             }
             if(Managers.Game.Player.Record.TutorialIndexCount == 7 && index == 24 && reconnectChecking)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                tutorialPanel.transform.position = vector2;
             }
-        }
-        if(index == 30)
-        {
-            vector = new Vector3(panelTrans[index].position.x , panelTrans[index].position.y / 2);
-            tutorialPanel.transform.position = vector;
         }
         if (index == 35)
         {
@@ -767,7 +778,8 @@ public class TutorialPlayer : MonoBehaviour
     void TextChanges()
     {
         textIndex++;
-        switch(textIndex)
+        tutorialButton.interactable = true;
+        switch (textIndex)
         {
             case 1:
                 textNextButton.gameObject.SetActive(false);
