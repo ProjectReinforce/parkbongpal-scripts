@@ -213,6 +213,7 @@ public enum QuestContents
     onceClearContents
 }
 
+// todo : rewardtype이랑 합쳐서 currencytype으로 통합
 public enum DropItems
 {
     Soul,
@@ -223,4 +224,7 @@ public enum Unit
 {
     만 = 1,
     억 = 2,
+    조 = 3,
+    경 = 4,
+    해 = 5
 }

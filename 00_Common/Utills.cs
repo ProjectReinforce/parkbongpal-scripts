@@ -143,7 +143,7 @@ public static class Utills
     const int REF_NUM = 10000;
     public static string UnitConverter(ulong _targetNumber)
     {
-        if (_targetNumber > int.MaxValue) return "err";
+        // if (_targetNumber > int.MaxValue) return "err";
 
         float newNumber = _targetNumber;
         int kmg = 0;
@@ -154,7 +154,7 @@ public static class Utills
             kmg++;
         }
 
-        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:0.##}{(Unit)kmg}";
+        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:#,##0.##}{(Unit)kmg}";
 
         return result;
     }
