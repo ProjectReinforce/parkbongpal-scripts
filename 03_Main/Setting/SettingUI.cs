@@ -61,7 +61,8 @@ public class SettingUI : MonoBehaviour
                 return;
             }
             Managers.Alarm.Warning($"계정 연동에 성공했습니다.");
-            // nicknameText.text = callback.;
+            BackendReturnObject bro = BackEnd.Backend.BMember.GetUserInfo();
+            accountText.text = bro.GetReturnValuetoJSON()["row"]["federationId"].ToString();
         });
     }
 
