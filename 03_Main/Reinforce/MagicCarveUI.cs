@@ -42,7 +42,7 @@ public class MagicCarveUI : ReinforceUIBase
                 SkillData skillData = Managers.ServerData.SkillDatas[weapon.data.magic[i]];
                 skillIcons[i].sprite = Managers.Resource.GetSkill(weapon.data.magic[i]);
                 skillNameTexts[i].text = $"{skillData.skillName}";
-                skillDescriptionTexts[i].text = $"{skillData.description}";
+                skillDescriptionTexts[i].text = $"{skillData.Effect}";
             }
             else
             {

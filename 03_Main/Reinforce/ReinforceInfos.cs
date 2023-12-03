@@ -13,6 +13,7 @@ public class ReinforceInfos
             if (value is null) return;
             selectedWeapon = value;
 
+            refineResults = null;
             Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
         }
     }

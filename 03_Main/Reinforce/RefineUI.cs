@@ -43,7 +43,7 @@ public class RefineUI : ReinforceUIBase
         int[] compareds = new int[Enum.GetNames(typeof(StatType)).Length];
 
         compareds[(int)StatType.upgradeCount] = 0;
-        compareds[(int)StatType.atk] = weaponData.atk > baseWeaponData.atk ? 1 : weaponData.atk == baseWeaponData.atk ? 0 : -1;
+        compareds[(int)StatType.atk] = weaponData.defaultStat[(int)StatType.atk] + weaponData.RefineStat[(int)StatType.atk] > baseWeaponData.atk ? 1 : weaponData.defaultStat[(int)StatType.atk] + weaponData.RefineStat[(int)StatType.atk] == baseWeaponData.atk ? 0 : -1;
         compareds[(int)StatType.atkSpeed] = weaponData.atkSpeed > baseWeaponData.atkSpeed ? 1 : weaponData.atkSpeed == baseWeaponData.atkSpeed ? 0 : -1;
         compareds[(int)StatType.atkRange] = weaponData.atkRange > baseWeaponData.atkRange ? 1 : weaponData.atkRange == baseWeaponData.atkRange ? 0 : -1;
         compareds[(int)StatType.accuracy] = weaponData.accuracy > baseWeaponData.accuracy ? 1 : weaponData.accuracy == baseWeaponData.accuracy ? 0 : -1;

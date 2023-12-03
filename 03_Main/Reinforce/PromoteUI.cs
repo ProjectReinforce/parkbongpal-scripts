@@ -122,11 +122,11 @@ public class PromoteUI : ReinforceUIBase
 
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
 
-        weaponSlots[0].sprite = slotSprites[weaponData.rarity];
-        if (weaponData.rarity != (int)Rarity.legendary)
-            weaponSlots[1].sprite = slotSprites[weaponData.rarity + 1];
-        else
-            weaponSlots[1].sprite = slotSprites[weaponData.rarity];
+        // weaponSlots[0].sprite = slotSprites[weaponData.rarity];
+        // if (weaponData.rarity != (int)Rarity.legendary)
+        //     weaponSlots[1].sprite = slotSprites[weaponData.rarity + 1];
+        // else
+        //     weaponSlots[1].sprite = slotSprites[weaponData.rarity];
 
         switch (weaponData.rarity)
         {
@@ -158,7 +158,8 @@ public class PromoteUI : ReinforceUIBase
         currentRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity).ToString());
         if (weaponData.rarity < (int)Rarity.legendary)
             nextRarityNameText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity + 1).ToString());
-        nextRarityNameText.text = currentRarityNameText.text;
+        else
+            nextRarityNameText.text = currentRarityNameText.text;
     }
 
     protected override void RegisterPreviousButtonClickEvent()
