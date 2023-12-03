@@ -5,6 +5,7 @@ using UnityEngine.Pool;
 
 public class CurrencyCollectPool : MonoBehaviour
 {
+    [SerializeField] RewardType currencyType;
     [SerializeField] Sprite currencySprite;
     [SerializeField] Transform targetTransform;
     int capacity = 10;
@@ -17,6 +18,20 @@ public class CurrencyCollectPool : MonoBehaviour
 
         for (int i = 0; i < capacity; i++)
             pool.Release(CreateObjectPool());
+            
+        switch (currencyType)
+        {
+            case RewardType.Gold:
+            Managers.Event.GoldCollectEvent -= GetOne;
+            Managers.Event.GoldCollectEvent += GetOne;
+            break;
+            case RewardType.Diamond:
+            Managers.Event.DiamondCollectEvent -= GetOne;
+            Managers.Event.DiamondCollectEvent += GetOne;
+            break;
+            default:
+            break;
+        }
     }
 
     CurrencyCollectEffectController CreateObjectPool()

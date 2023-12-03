@@ -218,3 +218,9 @@ public enum DropItems
     Soul,
     Ore
 }
+
+public enum Unit
+{
+    만 = 1,
+    억 = 2,
+}

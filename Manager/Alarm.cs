@@ -50,6 +50,11 @@ public class Alarm
         warningWithButton.CustomSet(_title, _messgae, _buttonClickEvent);
     }
 
+    public void WarningWithTwoButtonCustom(string _message, Action _buttonOneClickEvent, Action _buttonTwoClickEvent, string _extraText, string _tilte = "알림")
+    {
+        warningWithButton.CustomSetTwo(_tilte, _message, _extraText, _buttonOneClickEvent, _buttonTwoClickEvent);
+    }
+
     /// <summary>
     /// 경고 상황일 때 제목과 내용을 담은 UI로 세팅한 후 해당 오브젝트를 활성화한다.
     /// </summary>

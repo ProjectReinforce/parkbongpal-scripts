@@ -176,6 +176,10 @@ public class PromoteUI : ReinforceUIBase
 
     protected override void RegisterAdditionalButtonClickEvent()
     {
+        reinforceButton.onClick.AddListener(() =>
+        {
+            Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
+        });
     }
 
     bool CheckGold()
