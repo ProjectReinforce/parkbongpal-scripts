@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class RewardSlot : MonoBehaviour
 {
+    [SerializeField] bool useAnimation;
     Image iconImage;
     Text amountText;
 
@@ -21,6 +22,8 @@ public class RewardSlot : MonoBehaviour
         iconImage.sprite = Managers.Resource.GetPostItem((int)_rewardType - 1);
         amountText.text = $"{Utills.UnitConverter((ulong)_rewardAmount):n0}";
         gameObject.SetActive(true);
+
+        if (useAnimation == false) return;
 
         switch (_rewardType)
         {
