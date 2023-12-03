@@ -64,6 +64,8 @@ public class UIManager
         taps[(int)currentTapType].SetActive(true);          // taps배열에서 새로운 탭에 해당하는 GameObject를 찾아서 활성화
         foreach (var item in withTaps[(int)currentTapType]) // withTaps 배열에서 현재 열린 탭과 관련된 GameObject 목록을 순회하여
             item.SetActive(true);                           // 각각의 GameObject를 활성화함
+        
+        Managers.Event.TapChangeEvent?.Invoke(currentTapType);
     }
 
     /// <summary>

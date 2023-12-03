@@ -102,6 +102,7 @@ public class Player
 
         if (_directUpdate)
             UpdateBackEndData(nameof(UserData.column.stone), userData.stone);
+        Managers.Event.OreChangeEvent?.Invoke();
         return true;
     }
     

@@ -6,21 +6,31 @@ using UnityEngine.UI;
 
 public class EventManager
 {
-    public Action<Weapon> SlotSelectEvent;          // 무기 선택 이벤트
-    public Action SlotRefreshEvent;                   // UI 새로고침 이벤트
-    public Action ReinforceWeaponChangeEvent;       // 강화 무기 변경 이벤트
-    public Action ReinforceMaterialChangeEvent;     // 강화 재료 변경 이벤트
+    public Action<TapType> TapChangeEvent;
+
+    #region Inventory
+    public Action<Weapon> SlotSelectEvent;
+    public Action<Weapon> ConfirmLendWeaponEvent;
     public Action<Weapon[]> DecompositionWeaponChangeEvent;
-    public Action<MineBase> MineClickEvent;             // 광산 클릭 이벤트
-    public Action<Weapon> WeaponCollectEvent;             // 광산 클릭 이벤트
-    // public Action<Mine> MineClickEvent;             // 광산 클릭 이벤트
-    public Action<Weapon> ConfirmLendWeaponEvent;   // 대여 무기 확인 이벤트
+    public Action<bool> InventoryNewAlarmEvent;
+    public Action SlotRefreshEvent;
+    public Action SoulChangeEvent;
+    public Action OreChangeEvent;
+    #endregion
+
+    #region Reinforce
+    public Action ReinforceWeaponChangeEvent;
+    public Action ReinforceMaterialChangeEvent;
+    #endregion
+
+    #region Mine
+    public Action<MineBase> MineClickEvent;
+    public Action<Weapon> WeaponCollectEvent;
     public Action<bool> RecieveAttendanceRewardEvent;
     public Action RecieveAllReceiptBonusEvent;
-    public Action<bool> InventoryNewAlarmEvent;
-    public Action SoulChangeEvent;
     public Action<Transform> GoldCollectEvent;
     public Action<Transform> DiamondCollectEvent;
+    #endregion
 
     #region TopUI
     public Action GoldChangeEvent;

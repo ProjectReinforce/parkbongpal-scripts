@@ -79,6 +79,10 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         {
             soulText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
         };
+        Managers.Event.OreChangeEvent = () =>
+        {
+            oreText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.stone):n0}";
+        };
 
         scrollRect.normalizedPosition = Vector2.one;
         soulText.text = $"{Utills.UnitConverter((ulong)Managers.Game.Player.Data.weaponSoul):n0}";
@@ -93,6 +97,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     void OnDisable()
     {
         Managers.Event.SoulChangeEvent = null;
+        Managers.Event.OreChangeEvent = null;
         foreach (var item in slots)
             item.ResetUI((int)CurrentInventoryType);
         InventoryOpenOptions[(int)CurrentInventoryType]?.Reset();
