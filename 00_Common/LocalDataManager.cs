@@ -239,7 +239,9 @@ public class RecordData
     public void TutorialIndexReset()
     {
         tutorialIndexCount = 0;
+        tutorial = 0;
         PlayerPrefs.SetString("TutorialIndexCount", tutorialIndexCount.ToString());
+        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
     }
 
     public void TutorialRecordIndex()

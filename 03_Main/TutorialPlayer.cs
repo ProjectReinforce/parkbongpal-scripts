@@ -387,6 +387,10 @@ public class TutorialPlayer : MonoBehaviour
                 tutorialPanel.transform.position = vector2;
             }
         }
+        if(index == 30)
+        {
+            tutorialPanel.transform.position = panelTrans[index].position / 2;
+        }
         if (index == 35)
         {
             vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
@@ -603,7 +607,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
-        Managers.UI.OpenPopup(reinforceUI.gameObject);
+        Managers.UI.OpenPopup(reinforceUI.transform.parent.gameObject);
     }
 
     void ReinforceNormalTry()

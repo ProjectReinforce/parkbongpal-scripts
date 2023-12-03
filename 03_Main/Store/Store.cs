@@ -97,7 +97,7 @@ public class Store : MonoBehaviour
             }
             Managers.Game.Player.TryAdvanceProduceWeapon(_count);
         }
-        cutSceneControl.SetActive(true);
+        cutSceneControl.transform.parent.gameObject.SetActive(true);
 
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[_count];
         for (int i = 0; i < _count; i++)
@@ -127,7 +127,7 @@ public class Store : MonoBehaviour
     public void TutorialManufacture()
     {
         Managers.Game.Player.TryProduceWeapon(1);
-        cutSceneControl.SetActive(true);
+        cutSceneControl.transform.parent.gameObject.SetActive(true);
         BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
         tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(0);
         Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
