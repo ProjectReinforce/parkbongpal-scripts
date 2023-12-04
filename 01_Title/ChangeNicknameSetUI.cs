@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using BackEnd;
-using System.Text.RegularExpressions;
 
 public class ChangeNicknameSetUI : NicknameSetUIBase
 {
@@ -12,22 +11,28 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
     
     protected override void FunctionAfterCallback(string _nickname = null)
     {
-        InsertNewUserData(_nickname);
+        UpdateNickname(_nickname);
     }
 
-    void InsertNewUserData(string _nickname)
+    void UpdateNickname(string _nickname)
     {
-        Backend.BMember.UpdateNickname(_nickname);
-        nickName.text = _nickname;
-        inputField.text = "";
-        Managers.UI.ClosePopup();
-        Managers.Event.NicknameChangeEvent?.Invoke();
-        Managers.Alarm.Warning("닉네임이 변경되었습니다!");
+        confirmButton.interactable = false;
+        
+        SendQueue.Enqueue(Backend.BMember.UpdateNickname, _nickname, callback =>
+        {
+            if (!callback.IsSuccess())
+                Managers.Alarm.Danger($"유저 닉네임 변경 실패 : {callback}");
+            confirmButton.interactable = true;
+            nickName.text = _nickname;
+            inputField.text = "";
+            Managers.UI.ClosePopup();
+            Managers.Event.NicknameChangeEvent?.Invoke();
+            Managers.Alarm.Warning("닉네임이 변경되었습니다!");
+        });
     }
 
-    public void ClickNoButton()
+    void OnDisable()
     {
         inputField.text = "";
-        Managers.UI.ClosePopup();
     }
 }

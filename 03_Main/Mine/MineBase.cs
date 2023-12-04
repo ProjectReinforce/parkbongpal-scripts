@@ -180,10 +180,18 @@ public class MineBase : MonoBehaviour, Rental
 
     public (RewardType rewardType, int amount) Receipt(bool _directUpdate = true)
     {
-        bool condition = lendedWeapon != null && CurrentCurrency > 0;
+        int rewardAmount = CurrentCurrency;
+        switch (mineData.rewardType)
+        {
+            case RewardType.Diamond:
+            case RewardType.Ore:
+                rewardAmount /= 100;
+                break;
+        }
+        bool condition = lendedWeapon != null && rewardAmount > 0;
         if (condition == false) return (mineData.rewardType, 0);
 
-        int rewardAmount = CurrentCurrency;
+        // int rewardAmount = CurrentCurrency;
         switch (mineData.rewardType)
         {
             case RewardType.Gold:
@@ -191,12 +199,12 @@ public class MineBase : MonoBehaviour, Rental
                 CurrentCurrency -= rewardAmount;
                 break;
             case RewardType.Diamond:
-                rewardAmount /= 100;
+                // rewardAmount /= 100;
                 Managers.Game.Player.AddDiamond(rewardAmount, false);
                 CurrentCurrency -= rewardAmount * 100;
                 break;
             case RewardType.Ore:
-                rewardAmount /= 100;
+                // rewardAmount /= 100;
                 Managers.Game.Player.AddStone(rewardAmount, false);
                 CurrentCurrency -= rewardAmount * 100;
                 break;
@@ -216,6 +224,7 @@ public class MineBase : MonoBehaviour, Rental
         rangePerSize = 0;
         hpPerDMG = 0;
         GoldPerMin = 0;
+        CurrentCurrency = 0;
 
         doNPC.gameObject.SetActive(false);
         restNPC.SetActive(true);

@@ -22,24 +22,34 @@ public class SettingUI : MonoBehaviour
     
     void Start()
     {
-        nicknameText.text = BackEnd.Backend.UserNickName;
+        nicknameText.text = Backend.UserNickName;
         // string id = GooglePlayGames.PlayGamesPlatform.Instance.GetUserId();
         // if (id == "0") id = BackEnd.Backend.BMember.GetGuestID();
-        BackEnd.BackendReturnObject bro = BackEnd.Backend.BMember.GetUserInfo();
-        if (bro.IsSuccess())
+        // BackEnd.BackendReturnObject bro = BackEnd.Backend.BMember.GetUserInfo();
+        accountText.text = $"계정 : -";
+        uuidText.text = $"UUID : -";
+        syncGoogleButton.interactable = false;
+
+        Backend.BMember.GetUserInfo(bro =>
         {
-            string id = bro.GetReturnValuetoJSON()["row"]["federationId"] != null ? bro.GetReturnValuetoJSON()["row"]["federationId"].ToString() : "Guest";
-            accountText.text = $"계정 : {id}";
-            uuidText.text = $"UUID : {bro.GetReturnValuetoJSON()["row"]["gamerId"]}";
-        }
-        else
-        {
-            accountText.text = $"계정 : -";
-            uuidText.text = $"UUID : -";
-        }
-        syncGoogleButton.onClick.AddListener(() =>
-        {
-            Managers.Alarm.WarningWithButton($"구글플레이 아이디로 계정을 전환하시겠습니까?", () => OnClickLoginGoogle(syncGoogleButton));
+            if (bro.IsSuccess())
+            {
+                string id = bro.GetReturnValuetoJSON()["row"]["federationId"] != null ? bro.GetReturnValuetoJSON()["row"]["federationId"].ToString() : "Guest";
+                if (id == "Guest")
+                    Managers.Game.MainEnqueue(() => 
+                    {
+                        syncGoogleButton.onClick.AddListener(() =>
+                        {
+                            Managers.Alarm.WarningWithButton($"구글플레이 아이디로 계정을 전환하시겠습니까? 연동에는 시간이 조금 걸리니 별도의 메시지가 출력될 때까지 잠시만 기다려 주세요.", () => OnClickLoginGoogle(syncGoogleButton));
+                        });
+                        syncGoogleButton.interactable = true;
+                    });
+                Managers.Game.MainEnqueue(() => 
+                {
+                    accountText.text = $"계정 : {id}";
+                    uuidText.text = $"UUID : {bro.GetReturnValuetoJSON()["row"]["gamerId"]}";
+                });
+            }
         });
     }
 
@@ -55,14 +65,16 @@ public class SettingUI : MonoBehaviour
     {
         SendQueue.Enqueue(Backend.BMember.ChangeCustomToFederation, GetTokens(), FederationType.Google, callback =>
         {
+            Managers.UI.ClosePopup();
             if(!callback.IsSuccess())
             {
                 Managers.Alarm.Danger($"계정 연동에 실패했습니다. {callback}");
                 return;
             }
             Managers.Alarm.Warning($"계정 연동에 성공했습니다.");
-            BackendReturnObject bro = BackEnd.Backend.BMember.GetUserInfo();
-            accountText.text = bro.GetReturnValuetoJSON()["row"]["federationId"].ToString();
+            BackendReturnObject bro = Backend.BMember.GetUserInfo();
+            accountText.text = $"계정 : {bro.GetReturnValuetoJSON()["row"]["federationId"]}";
+            // string id = bro.GetReturnValuetoJSON()["row"]["federationId"] != null ? bro.GetReturnValuetoJSON()["row"]["federationId"].ToString() : "Guest";
         });
     }
 
@@ -80,11 +92,12 @@ public class SettingUI : MonoBehaviour
                 {
                     // 로그인 성공 -> 뒤끝 서버에 획득한 구글 토큰으로 가입 요청
                     ChangeCustomToFederation();
-                    _googleLoginButton.interactable = false;
+                    // _googleLoginButton.interactable = false;
                 }
                 else
                 {
                     // Debug.LogError($"로그인 실패");
+                    Managers.UI.ClosePopup();
                     Managers.Alarm.Warning($"구글 로그인에 실패했습니다.");
                     _googleLoginButton.interactable = true;
                 }
