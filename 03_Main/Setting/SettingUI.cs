@@ -177,4 +177,15 @@ public class SettingUI : MonoBehaviour
     {
         Managers.UI.OpenPopup(questionBox);
     }
+
+    public void OnClickDelete()
+    {
+        // todo: 회원 탈퇴 기능 추가
+        // 1. 탈퇴 처리
+        // 2. 로컬 데이터 삭제
+        // 3. 게임 종료
+        // Backend.BMember.WithdrawAccount(callback => 
+        // {
+        // });
+    }
 }

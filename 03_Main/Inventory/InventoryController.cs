@@ -16,6 +16,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
     public Button DecompositionButton { get; private set; }
     public Button ConfirmMaterialsButton { get; private set; }
     public Toggle hideLendedWeaponToggle { get; private set; }
+    public Dropdown sortDropdown { get; private set; }
 
     ScrollRect scrollRect;
     Text soulText;
@@ -35,6 +36,7 @@ public class InventoryController : MonoBehaviour, IGameInitializer
         hideLendedWeaponToggle = Utills.Bind<Toggle>("Toggle_HideLendedWeapon", transform);
         hideLendedWeaponToggle.onValueChanged.RemoveAllListeners();
         hideLendedWeaponToggle.onValueChanged.AddListener((value) => HideLendedWeapon(value));
+        sortDropdown = Utills.Bind<Dropdown>("Dropdown_S", transform);
         soulText = Utills.Bind<Text>("Text_Soul", transform);
         oreText = Utills.Bind<Text>("Text_Ore", transform);
         scrollRect = Utills.Bind<ScrollRect>("Scroll View_Slot", transform);

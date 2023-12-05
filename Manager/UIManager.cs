@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public class UIManager
 {
+    public bool IsAnimating { get; set; }
     public bool InputLock { get; set; }
     Stack<GameObject> uiStack = new();
     TapType currentTapType;
@@ -102,16 +103,22 @@ public class UIManager
     public void OpenPopup(GameObject _popup, bool _ignorAnimation = false)
     {
         if (uiStack.Count > 0 && uiStack.Peek() == _popup) return;
-        if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
+        if (IsAnimating && _ignorAnimation == false) return;
+        // if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
         Managers.Sound.PlaySfx(SfxType.PopupOpen);
         uiStack.Push(_popup);
 
-        if (!_popup.TryGetComponent(out AnimationForPopup component))
+        // if (!_popup.TryGetComponent(out DefaultPopupAnimation component))
+        if (!_popup.TryGetComponent(out IAnimation component))
         {
-           component = _popup.AddComponent<AnimationForPopup>();
-           component.Initialize();
+        //    component = _popup.AddComponent<DefaultPopupAnimation>();
+        //    component.Initialize();
+            DefaultPopupAnimation defaultPopupAnimation = _popup.AddComponent<DefaultPopupAnimation>();
+            defaultPopupAnimation.Initialize();
+            defaultPopupAnimation.Show(_ignorAnimation);
         }
-        component.Show(_ignorAnimation);
+        else
+            component.Show(_ignorAnimation);
 
         // _popup.SetActive(true);
     }
@@ -122,19 +129,25 @@ public class UIManager
     /// </summary>
     public void ClosePopup(bool soundPlay = true, bool _ignorAnimation = false)
     {
-        if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
+        if (IsAnimating && _ignorAnimation == false) return;
+        // if (AnimationForPopup.isAnimating && _ignorAnimation == false) return;
         if (soundPlay)
         {
             Managers.Sound.PlaySfx(SfxType.PopupClose);
         }
         GameObject popup = uiStack.Pop();
 
-        if (!popup.TryGetComponent(out AnimationForPopup component))
+        // if (!popup.TryGetComponent(out DefaultPopupAnimation component))
+        if (!popup.TryGetComponent(out IAnimation component))
         {
-           component = popup.AddComponent<AnimationForPopup>();
-           component.Initialize();
+        //    component = popup.AddComponent<DefaultPopupAnimation>();
+        //    component.Initialize();
+            DefaultPopupAnimation defaultPopupAnimation = popup.AddComponent<DefaultPopupAnimation>();
+            defaultPopupAnimation.Initialize();
+            defaultPopupAnimation.Hide(_ignorAnimation);
         }
-        component.Hide(_ignorAnimation);
+        else
+            component.Hide(_ignorAnimation);
 
         // popup.SetActive(false);
     }

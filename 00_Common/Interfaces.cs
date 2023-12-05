@@ -1,5 +1,3 @@
-using UnityEngine.UI;
-
 public interface IGameInitializer
 {
     public void GameInitialize();
@@ -14,4 +12,10 @@ public interface IInventoryOpenOption
 public interface IVisibleNew
 {
     public bool IsNew { get; set; }
+}
+
+public interface IAnimation
+{
+    public void Show(bool _ignorAnimation = false);
+    public void Hide(bool _ignorAnimation = false);
 }

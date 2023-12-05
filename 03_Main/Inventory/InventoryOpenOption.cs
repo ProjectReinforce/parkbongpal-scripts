@@ -16,6 +16,7 @@ public class InventoryOpenOptionBase
     protected Image decompositionButtonImage;
     protected Text decompositionText;
     protected Button confirmMaterialsButton;
+    protected Dropdown sortDropdown;
 
     protected Weapon currentWeapon;
 
@@ -32,6 +33,7 @@ public class InventoryOpenOptionBase
         decompositionButton.TryGetComponent(out decompositionButtonImage);
         decompositionText = decompositionButton.transform.GetComponentInChildren<Text>();
         confirmMaterialsButton = _inventoryController.ConfirmMaterialsButton;
+        sortDropdown = _inventoryController.sortDropdown;
     }
 
     protected virtual void SetCurrentWeapon(Weapon _weapon)
@@ -52,8 +54,6 @@ public class InventoryOpenOptionBase
 
 public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    // Weapon currentWeapon;
-
     public InventoryOpenOptionDefault(InventoryController _inventoryController) : base(_inventoryController)
     {
     }
@@ -91,8 +91,6 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
 
 public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    // Weapon currentWeapon;
-
     public InventoryOpenOptionMine(InventoryController _inventoryController) : base(_inventoryController)
     {
     }
@@ -111,7 +109,6 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
             }
             
             Managers.Event.WeaponCollectEvent?.Invoke(currentWeapon);
-            // upDownVisualer.SetCurrentWeapon(currentWeapon);
             Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
             Managers.UI.ClosePopup();
         });
@@ -140,8 +137,6 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
 
 public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    // Weapon currentWeapon;
-
     public InventoryOpenOptionReinforce(InventoryController _inventoryController) : base(_inventoryController)
     {
     }
@@ -150,8 +145,6 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
     {
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
         Managers.Event.SlotSelectEvent += SetDetailInfo;
-        // Managers.Event.SlotClickEvent += SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent += SetDetailInfo;
 
         selectButton.onClick.AddListener(() => 
         {
@@ -176,44 +169,14 @@ public class InventoryOpenOptionReinforce : InventoryOpenOptionBase, IInventoryO
     {
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
-        // Managers.Event.SlotClickEvent -= SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
         selectButton.onClick.RemoveAllListeners();
         defaultBackground.gameObject.SetActive(true);
     }
-
-    // void SetCurrentWeapon(Weapon[] _weapon)
-    // // void SetCurrentWeapon(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
-
-    //     currentWeapon = _weapon[0];
-    // }
-
-    // void SetDetailInfo(Weapon[] _weapon)
-    // // void SetDetailInfo(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
-
-    //     detailInfoUI.Refresh(_weapon[0]);
-    //     if (detailInfoUI.gameObject.activeSelf == false)
-    //         detailInfoUI.gameObject.SetActive(true);
-    // }
 }
 
 public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IInventoryOpenOption
 {
-    // Weapon currentWeapon;
-
     public InventoryOpenOptionReinforceMaterial(InventoryController _inventoryController) : base(_inventoryController)
     {
         confirmMaterialsButton.onClick.RemoveAllListeners();
@@ -224,8 +187,6 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
     {
         Managers.Event.SlotSelectEvent += SetDetailInfo;
         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent += SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent += SetDetailInfo;
 
         selectButton.onClick.AddListener(() => 
         {
@@ -246,46 +207,20 @@ public class InventoryOpenOptionReinforceMaterial : InventoryOpenOptionBase, IIn
 
         // todo: 임시 버튼이므로 추후 UI 교체 필요
         confirmMaterialsButton.gameObject.SetActive(true);
+        sortDropdown.gameObject.SetActive(false);
     }
 
     public void Reset()
     {
         Managers.Event.SlotSelectEvent -= SetDetailInfo;
         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent -= SetCurrentWeapon;
-        // Managers.Event.SlotClickEvent -= SetDetailInfo;
 
         selectButton.onClick.RemoveAllListeners();
 
         confirmMaterialsButton.gameObject.SetActive(false);
         defaultBackground.gameObject.SetActive(true);
+        sortDropdown.gameObject.SetActive(true);
     }
-
-    // void SetCurrentWeapon(Weapon[] _weapon)
-    // // void SetCurrentWeapon(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
-
-    //     currentWeapon = _weapon[0];
-    // }
-
-    // void SetDetailInfo(Weapon[] _weapon)
-    // // void SetDetailInfo(Weapon _weapon)
-    // {
-    //     if (_weapon.Length != 1)
-    //     {
-    //         Debug.LogError("이상 동작 감지. 여러개의 웨폰이 동시 선택될 수 없음.");
-    //         return;
-    //     }
-
-    //     detailInfoUI.Refresh(_weapon[0]);
-    //     if (detailInfoUI.gameObject.activeSelf == false)
-    //         detailInfoUI.gameObject.SetActive(true);
-    // }
 }
 
 public class InventoryOpenOptionMiniGame : InventoryOpenOptionBase, IInventoryOpenOption
@@ -344,6 +279,7 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
         decompositionButton.enabled = false;
         originButtonColor = decompositionButtonImage.color;
         decompositionButtonImage.color = Color.red;
+        sortDropdown.gameObject.SetActive(false);
     
         // breakUI.SetActive(isDecompositing);
     }
@@ -354,36 +290,6 @@ public class InventoryOpenOptionDecomposition : InventoryOpenOptionBase, IInvent
         decompositionText.text = originButtonText;
         decompositionButton.enabled = true;
         decompositionButtonImage.color = originButtonColor;
+        sortDropdown.gameObject.SetActive(true);
     }
 }
-
-// public class InventoryOpenOptionSelectMyFavoriteWeapon : InventoryOpenOptionBase, IInventoryOpenOption
-// {
-//     public InventoryOpenOptionSelectMyFavoriteWeapon(InventoryController _inventoryController) : base(_inventoryController)
-//     {
-//     }
-
-//     public void Set()
-//     {
-//         Managers.Event.SlotSelectEvent += SetDetailInfo;
-//         Managers.Event.SlotSelectEvent += SetCurrentWeapon;
-
-//         selectButton.onClick.AddListener(() => 
-//         {
-//             Managers.UI.ClosePopup();
-//         });
-//         selectText.text = "선택하기";
-//         decompositionButton.gameObject.SetActive(false);
-//     }
-
-//     public void Reset()
-//     {
-//         Managers.Event.SlotSelectEvent -= SetDetailInfo;
-//         Managers.Event.SlotSelectEvent -= SetCurrentWeapon;
-
-//         selectButton.onClick.RemoveAllListeners();
-
-//         defaultBackground.gameObject.SetActive(true);
-//         decompositionButton.gameObject.SetActive(true);
-//     }
-// }

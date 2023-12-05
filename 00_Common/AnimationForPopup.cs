@@ -4,9 +4,9 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AnimationForPopup : MonoBehaviour
+public class DefaultPopupAnimation : MonoBehaviour, IAnimation
 {
-    public static bool isAnimating = false;
+    // public static bool isAnimating = false;
     Image panel;
     Transform target;
     readonly Color[] colors = { new(0f, 0f, 0f, 0f), new(0f, 0f, 0f, 100/255f) };
@@ -23,9 +23,12 @@ public class AnimationForPopup : MonoBehaviour
 
     public void Show(bool _ignorAnimation = false)
     {
-        if(isAnimating == true && _ignorAnimation == false) return;
+        // if(isAnimating == true && _ignorAnimation == false) return;
 
-        isAnimating = true;
+        // isAnimating = true;
+        if(Managers.UI.IsAnimating == true && _ignorAnimation == false) return;
+
+        Managers.UI.IsAnimating = true;
         gameObject.SetActive(true);
         
         var seq = DOTween.Sequence();
@@ -42,15 +45,19 @@ public class AnimationForPopup : MonoBehaviour
 
         seq.Play().OnComplete(() =>
         {
-            isAnimating = false;
+            // isAnimating = false;
+            Managers.UI.IsAnimating = false;
         });
     }
 
     public void Hide(bool _ignorAnimation = false)
     {
-        if(isAnimating == true && _ignorAnimation == false) return;
+        // if(isAnimating == true && _ignorAnimation == false) return;
 
-        isAnimating = true;
+        // isAnimating = true;
+        if(Managers.UI.IsAnimating == true && _ignorAnimation == false) return;
+
+        Managers.UI.IsAnimating = true;
         var seq = DOTween.Sequence();
 
         seq.Append(target.DOScale(1.05f, 0.1f));
@@ -63,7 +70,7 @@ public class AnimationForPopup : MonoBehaviour
         seq.Play().OnComplete(() =>
         {
             gameObject.SetActive(false);
-            isAnimating = false;
+            Managers.UI.IsAnimating = false;
         });
     }
 }
