@@ -77,13 +77,13 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[6] = Utills.Bind<Transform>("Images");
             panelTrans[7] = Utills.Bind<Transform>("Button_Select");
             panelTrans[8] = Utills.Bind<Transform>("Button_Close");
-            panelTrans[9] = Utills.Bind<Transform>("MiniGame");
+            panelTrans[9] = Utills.Bind<Transform>("MiniGame_S");
             panelTrans[10] = Utills.Bind<Transform>("MineGame");
             panelTrans[11] = Utills.Bind<Transform>("Weapon", selectMiniGameUI.transform);
             panelTrans[12] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[13] = Utills.Bind<Transform>("Button_Select");
             panelTrans[14] = Utills.Bind<Transform>("Button", selectMiniGameUI.transform);
-            panelTrans[15] = Utills.Bind<Transform>("Reinforce", bottomTrans.transform);
+            panelTrans[15] = Utills.Bind<Transform>("Reinforce_S", bottomTrans.transform);
             panelTrans[16] = Utills.Bind<Transform>("Weapon_S");
             panelTrans[17] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[18] = Utills.Bind<Transform>("Button_Select");
@@ -91,7 +91,7 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[20] = Utills.Bind<Transform>("Button_Reinforce");
             panelTrans[21] = Utills.Bind<Transform>("Count");
             panelTrans[22] = Utills.Bind<Transform>("Main_Mine_S");
-            panelTrans[23] = Utills.Bind<Transform>("Button_Inventory");
+            panelTrans[23] = Utills.Bind<Transform>("Button_Inventory_S");
             panelTrans[24] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[25] = Utills.Bind<Transform>("DetailInfo_S");
             panelTrans[26] = Utills.Bind<Transform>("Dropdown_S");
