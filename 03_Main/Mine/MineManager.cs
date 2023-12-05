@@ -115,7 +115,7 @@ public class MineManager
     {
         int sum = 0;
         foreach (var item in mines)
-            sum += item.Value.GoldPerMin;
+            sum += item.Value.CurrencyPerMin;
         Managers.Game.Player.SetGoldPerMin(sum);
     }
 }
