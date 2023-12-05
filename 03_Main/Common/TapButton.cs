@@ -13,8 +13,10 @@ public class TapButton : MonoBehaviour
 
     void Awake()
     {
-        backUI = transform.Find("Back").gameObject;
-        transform.Find("Button_S").TryGetComponent(out tapButton);
+        // backUI = transform.Find("Back").gameObject;
+        // transform.Find("Button_S").TryGetComponent(out tapButton);
+        backUI = transform.GetChild(0).gameObject;
+        transform.GetChild(1).TryGetComponent(out tapButton);
 
         string[] tapTypeNames = Enum.GetNames(typeof(TapType));
 
@@ -27,7 +29,7 @@ public class TapButton : MonoBehaviour
             }
         }
 
-        Managers.UI.RegisterWithTaps(tapType, backUI);
+        // Managers.UI.RegisterWithTaps(tapType, backUI);
 
         tapButton.onClick.AddListener(() => Managers.UI.MoveTap(tapType));
     }

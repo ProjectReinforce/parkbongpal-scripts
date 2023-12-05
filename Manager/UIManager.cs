@@ -12,7 +12,7 @@ public class UIManager
     Stack<GameObject> uiStack = new();
     TapType currentTapType;
     GameObject[] taps = new GameObject[Enum.GetNames(typeof(TapType)).Length];
-    List<GameObject>[] withTaps = new List<GameObject>[Enum.GetNames(typeof(TapType)).Length];
+    // List<GameObject>[] withTaps = new List<GameObject>[Enum.GetNames(typeof(TapType)).Length];
 
     /// <summary>
     /// 입력을 확인하고 처리하는 역할
@@ -59,12 +59,12 @@ public class UIManager
         // 탭 이동 처리
         if (currentTapType != TapType.Main_Mine)            // 만약 현재 열린탭이 Main_Mine이 아닌경우 ( 맞으면 건너뜀 ) // 다른 탭으로 이동할 때만 작동
             taps[(int)currentTapType].SetActive(false);     // taps 배열에서 현재 탭에 해당하는 GameObject를 찾아서 비활성화함
-        foreach (var item in withTaps[(int)currentTapType]) // withTaps 배열에서 현재 열린 탭과 관련된 GameObject 목록을 순회하여
-            item.SetActive(false);                          // 각각의 GameObject를 비활성화함
+        // foreach (var item in withTaps[(int)currentTapType]) // withTaps 배열에서 현재 열린 탭과 관련된 GameObject 목록을 순회하여
+        //     item.SetActive(false);                          // 각각의 GameObject를 비활성화함
         currentTapType = _tapType;                          // currentTapType 변수를 이동할 탭으로 업데이트람
         taps[(int)currentTapType].SetActive(true);          // taps배열에서 새로운 탭에 해당하는 GameObject를 찾아서 활성화
-        foreach (var item in withTaps[(int)currentTapType]) // withTaps 배열에서 현재 열린 탭과 관련된 GameObject 목록을 순회하여
-            item.SetActive(true);                           // 각각의 GameObject를 활성화함
+        // foreach (var item in withTaps[(int)currentTapType]) // withTaps 배열에서 현재 열린 탭과 관련된 GameObject 목록을 순회하여
+        //     item.SetActive(true);                           // 각각의 GameObject를 활성화함
         
         Managers.Event.TapChangeEvent?.Invoke(currentTapType);
     }
@@ -90,8 +90,8 @@ public class UIManager
     /// <param name="_withTap">해당 탭과 관련된 GameObject 목록</param>
     public void RegisterWithTaps(TapType _tapType, GameObject _withTap)
     {
-        if (withTaps[(int)_tapType] == null) withTaps[(int)_tapType] = new();
-        withTaps[(int)_tapType].Add(_withTap);
+        // if (withTaps[(int)_tapType] == null) withTaps[(int)_tapType] = new();
+        // withTaps[(int)_tapType].Add(_withTap);
     }
 
     /// <summary>
