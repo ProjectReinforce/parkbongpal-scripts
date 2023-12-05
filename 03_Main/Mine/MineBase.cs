@@ -38,7 +38,18 @@ public class MineBase : MonoBehaviour, Rental
         {
             currentCurrency = value;
             if (currentCurrency > currencyAmountLimit) currentCurrency = currencyAmountLimit;
-            infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency:n0}";
+            switch (mineData.rewardType)
+            {
+                case RewardType.Diamond:
+                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency/100:n0}";
+                break;
+                case RewardType.Ore:
+                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency/100:n0}";
+                break;
+                default:
+                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency:n0}";
+                break;
+            }
         }
     }
 
@@ -61,15 +72,15 @@ public class MineBase : MonoBehaviour, Rental
     public float HpPerDMG => hpPerDMG;
     protected int rangePerSize;
     public int RangePerSize => rangePerSize;
-    protected int goldPerMin;
-    public int GoldPerMin
+    protected int currencyPerMin;
+    public int CurrencyPerMin
     {
-        get => goldPerMin;
+        get => currencyPerMin;
 
         set
         {
             currencyAmountLimit = value * LIMIT_HOUR * 60;
-            goldPerMin = value;
+            currencyPerMin = value;
         }
     }
 
@@ -121,7 +132,7 @@ public class MineBase : MonoBehaviour, Rental
         // 기타 변수 초기화
         rangePerSize = 0;
         hpPerDMG = 0;
-        GoldPerMin = 0;
+        CurrencyPerMin = 0;
         rentalFactory = new RentalFactory();
         rental = this;
     }
@@ -157,7 +168,7 @@ public class MineBase : MonoBehaviour, Rental
                 elapse -= Time.fixedDeltaTime;
                 if (elapse > 0) return;
                 elapse += INTERVAL;
-                CurrentCurrency += (int)(goldPerMin * INTERVAL / 60);
+                CurrentCurrency += (int)(currencyPerMin * INTERVAL / 60);
                 restNPC.gameObject.SetActive(false);
                 doNPC.gameObject.SetActive(true);
                 break;
@@ -223,7 +234,7 @@ public class MineBase : MonoBehaviour, Rental
 
         rangePerSize = 0;
         hpPerDMG = 0;
-        GoldPerMin = 0;
+        CurrencyPerMin = 0;
         CurrentCurrency = 0;
 
         doNPC.gameObject.SetActive(false);
@@ -264,11 +275,11 @@ public class MineBase : MonoBehaviour, Rental
     protected void SetInfo()
     {
         float miss = rental.GetMiss(); //정확도-매끄러움
-        if (miss >= 100)
-        {
-            Managers.Alarm.Warning($"정확도가 {miss - 99} 부족합니다");
-            return;
-        }
+        // if (miss >= 100)
+        // {
+        //     Managers.Alarm.Warning($"정확도가 {miss - 99} 부족합니다");
+        //     return;
+        // }
 
         float oneHitDMG = rental.GetOneHitDMG();// 함수가있으면 ??
         // if (oneHitDMG <= 0)
@@ -284,9 +295,9 @@ public class MineBase : MonoBehaviour, Rental
 
         if (miss > 0)
             time *= 100 / (100 - miss);
-        GoldPerMin = (int)(oneOreGold * (60 / time));
-        if (GoldPerMin < 0)
-            GoldPerMin = 0;
+        CurrencyPerMin = (int)(oneOreGold * (60 / time));
+        if (CurrencyPerMin < 0)
+            CurrencyPerMin = 0;
     }
 
     /// <summary>
@@ -310,7 +321,7 @@ public class MineBase : MonoBehaviour, Rental
         // if (timeInterval.TotalHours >= LIMIT_HOUR)
         //     timeInterval = TimeSpan.FromHours(LIMIT_HOUR);
 
-        CurrentCurrency = (int)(timeInterval.TotalMilliseconds / 60000 * GoldPerMin);
+        CurrentCurrency = (int)(timeInterval.TotalMilliseconds / 60000 * CurrencyPerMin);
     }
 
     #region Build Function

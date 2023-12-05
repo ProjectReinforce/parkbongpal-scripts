@@ -180,12 +180,22 @@ public class SettingUI : MonoBehaviour
 
     public void OnClickDelete()
     {
+        Managers.Alarm.WarningWithButton("탈퇴하고 모든 데이터를 삭제합니다.\n<color=red>삭제 후에는 복구가 불가능</color>합니다.", () => 
+        {
+            Backend.BMember.WithdrawAccount(callback => 
+            {
+                if (!callback.IsSuccess())
+                {
+                    Managers.Game.MainEnqueue(() => Managers.Alarm.Danger($"탈퇴에 실패했습니다. {callback}"));
+                    return;
+                }
+                Backend.BMember.DeleteGuestInfo();
+                Managers.Game.MainEnqueue(() => Managers.Alarm.Danger("탈퇴 처리가 완료되었습니다.\n게임을 종료합니다."));
+            });
+        });
         // todo: 회원 탈퇴 기능 추가
         // 1. 탈퇴 처리
         // 2. 로컬 데이터 삭제
         // 3. 게임 종료
-        // Backend.BMember.WithdrawAccount(callback => 
-        // {
-        // });
     }
 }

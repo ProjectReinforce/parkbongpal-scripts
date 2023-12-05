@@ -114,7 +114,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             // string goldPerMin = _mine.hpPerDMG <= 0 ? "채광 불가" : _mine.goldPerMin.ToString();
             string hpPerDMG = _mine.HpPerDMG <= 0 ? "채광 불가" : _mine.HpPerDMG.ToString();
             string rangePerSize = _mine.RangePerSize <= 0 ? "채광 불가" : _mine.RangePerSize.ToString();
-            string goldPerMin = _mine.GoldPerMin <= 0 ? "채광 불가" : _mine.GoldPerMin.ToString();
+            string goldPerMin = _mine.CurrencyPerMin <= 0 ? "채광 불가" : _mine.CurrencyPerMin.ToString();
             calculatedInfoText.text = $"{hpPerDMG}\n{rangePerSize}\n{goldPerMin}";
             skillDescription.text = "";
             for (int i = 0; i < lendedWeapon.data.magic.Length; i++)
