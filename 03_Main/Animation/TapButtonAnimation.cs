@@ -2,48 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TapButtonAnimation : MonoBehaviour
 {
     [SerializeField] TapType tapType;
     [SerializeField] Vector3 startPosition;
-    [SerializeField] Vector3 endPosition;
     [SerializeField] float startDelay;
-    [SerializeField] float jumpDelay;
-    RectTransform rectTransform;
+    Image backUIImage;
+    RectTransform backUIRect;
     RectTransform imageRect;
+    Text text;
 
     void Start()
     {
-        TryGetComponent(out rectTransform);
+        Managers.Event.TapChangeEvent -= OnClick;
+        Managers.Event.TapChangeEvent += OnClick;
+
+        transform.GetChild(0).TryGetComponent(out backUIImage);
+        backUIImage.TryGetComponent(out backUIRect);
         transform.GetChild(2).TryGetComponent(out imageRect);
-        endPosition = imageRect.anchoredPosition;
         imageRect.anchoredPosition = startPosition;
+        transform.GetChild(3).TryGetComponent(out text);
+        Color color = text.color;
+        color.a = 0;
+        text.color = color;
 
         Once();
     }
 
     void Once()
     {
+        text.DOFade(1f, startDelay + 0.5f);
+
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(startDelay);
-        seq.Append(imageRect.DOAnchorPos3D(endPosition, 0.5f));
-        // seq.OnComplete(() => Loop());
+        seq.Append(imageRect.DOAnchorPosY(0f, 0.5f));
     }
 
-    void Loop()
+    void OnClick(TapType _tapType)
     {
-        Vector3 endPos = imageRect.anchoredPosition;
-        endPos.y += 10f;
+        if (tapType == _tapType)
+        {
+            Sequence seq1 = DOTween.Sequence();
+            seq1.Append(imageRect.DOAnchorPosY(30f, 0.3f));
+            seq1.Join(imageRect.DOScale(1.4f, 0.3f));
 
-        Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(jumpDelay / 2f);
-        seq.Append(imageRect.DOAnchorPos(endPos, 0.3f));
-        seq.SetLoops(-1, LoopType.Yoyo);
-    }
+            Sequence seq2 = DOTween.Sequence();
+            seq2.Append(backUIRect.DOAnchorPosY(0, 0.3f));
+            seq2.Join(backUIImage.DOFade(168/255f, 0.3f));
+        }
+        else
+        {
+            Sequence seq1 = DOTween.Sequence();
+            seq1.Append(imageRect.DOScale(1f, 0.3f));
+            seq1.Join(imageRect.DOAnchorPosY(0f, 0.3f));
 
-    public void Pop()
-    {
-        imageRect.DOPunchScale(Vector3.one * 1.05f, 0.3f, 5).SetLoops(1, LoopType.Yoyo);
+            Sequence seq2 = DOTween.Sequence();
+            seq2.Append(backUIRect.DOAnchorPosY(-55f, 0.3f));
+            seq2.Join(backUIImage.DOFade(0f, 0.3f));
+        }
     }
 }
