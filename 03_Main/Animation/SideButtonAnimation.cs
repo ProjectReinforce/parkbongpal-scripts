@@ -33,7 +33,7 @@ public class SideButtonAnimation : MonoBehaviour
     void Loop()
     {
         Vector3 endPos = imageRect.anchoredPosition;
-        endPos.y += 20f;
+        endPos.y += 10f;
 
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(jumpDelay / 2f);

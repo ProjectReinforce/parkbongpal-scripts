@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ServerTimeManager
 {
-    const float CHECK_SERVERTIME_FREQUENCY = 60f;
+    const float CHECK_SERVERTIME_FREQUENCY = 600f;
     float timerForCheck;
     DateTime dateTime;
     public DateTime ServerTime => dateTime;
