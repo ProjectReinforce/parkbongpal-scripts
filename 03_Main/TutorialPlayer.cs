@@ -631,7 +631,7 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        reinforceUI.gameObject.SetActive(false);
+        reinforceUI.transform.parent.gameObject.SetActive(false);
         TextChanges();
         cheifControl.transform.localPosition = new Vector3(180, -160, 0);
         cheifControl.gameObject.SetActive(true);
