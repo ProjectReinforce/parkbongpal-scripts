@@ -90,7 +90,7 @@ public class NewUserDataInserter
         if (userDataSuccess && goldPerMinSuccess && powerSuccess && miniGameSuccess)
         {
             Managers.UI.InputLock = false;
-            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6_SEH.ToString()));
+            Managers.Game.MainEnqueue(() => Utills.LoadScene(SceneName.R_Main_V6.ToString()));
         }
     }
 }
