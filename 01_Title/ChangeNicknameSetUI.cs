@@ -34,5 +34,6 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
     void OnDisable()
     {
         inputField.text = "";
+        messageText.text = "";
     }
 }
