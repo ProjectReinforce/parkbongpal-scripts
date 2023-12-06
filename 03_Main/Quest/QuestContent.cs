@@ -95,9 +95,16 @@ public class QuestContent : MonoBehaviour
         // Transactions.Add(TransactionValue.SetUpdateV2(nameof(QuestRecord), Managers.ServerData.questRecordDatas[0].inDate, Backend.UserInDate, param));
 
         Managers.Game.Player.ModifyQuestProgress(targetData.recordType, targetData.questId + 1);
-        Managers.Game.Player.AddExp(targetData.rewardItem[RewardType.Exp], false);
-        Managers.Game.Player.AddGold(targetData.rewardItem[RewardType.Gold], false);
-        Managers.Game.Player.AddDiamond(targetData.rewardItem[RewardType.Diamond], false);
+        if (targetData.rewardItem.TryGetValue(RewardType.Exp, out int exp))
+            Managers.Game.Player.AddExp(exp, false);
+        if (targetData.rewardItem.TryGetValue(RewardType.Gold, out int gold))
+            Managers.Game.Player.AddGold(gold, false);
+        if (targetData.rewardItem.TryGetValue(RewardType.Diamond, out int dia))
+            Managers.Game.Player.AddDiamond(dia, false);
+        if (targetData.rewardItem.TryGetValue(RewardType.Soul, out int soul))
+            Managers.Game.Player.AddSoul(soul, false);
+        if (targetData.rewardItem.TryGetValue(RewardType.Ore, out int ore))
+            Managers.Game.Player.AddStone(ore, false);
         // Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
 
         Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
