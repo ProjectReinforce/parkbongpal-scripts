@@ -5,19 +5,23 @@ using UnityEngine;
 
 public class SideButtonAnimation : MonoBehaviour
 {
-    [SerializeField] Vector3 startPosition;
-    [SerializeField] Vector3 endPosition;
+    [SerializeField] float moveDistance;
+    Vector3 endPosition;
     [SerializeField] float startDelay;
     [SerializeField] float jumpDelay;
     RectTransform rectTransform;
     RectTransform imageRect;
+    RectTransform buttonRect;
+    RectTransform textRect;
 
     void Start()
     {
-        TryGetComponent(out rectTransform);
-        transform.GetChild(0).TryGetComponent(out imageRect);
-        endPosition = rectTransform.anchoredPosition;
-        rectTransform.anchoredPosition = startPosition;
+        // TryGetComponent(out rectTransform);
+        transform.GetChild(0).TryGetComponent(out buttonRect);
+        transform.GetChild(1).TryGetComponent(out imageRect);
+        transform.GetChild(2).TryGetComponent(out textRect);
+        imageRect.DOAnchorPosX(moveDistance, 0f);
+        textRect.DOAnchorPosX(moveDistance, 0f);
 
         Once();
     }
@@ -26,18 +30,17 @@ public class SideButtonAnimation : MonoBehaviour
     {
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(startDelay);
-        seq.Append(rectTransform.DOAnchorPos3D(endPosition, 0.5f));
+        seq.Append(imageRect.DOAnchorPosX(0, 0.5f));
+        seq.Join(textRect.DOAnchorPosX(0, 0.5f));
         seq.OnComplete(() => Loop());
     }
 
     void Loop()
     {
-        Vector3 endPos = imageRect.anchoredPosition;
-        endPos.y += 10f;
-
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(jumpDelay / 2f);
-        seq.Append(imageRect.DOAnchorPos(endPos, 0.3f));
+        seq.Append(buttonRect.DOAnchorPos3DY(10f, 0.3f));
+        seq.Join(imageRect.DOAnchorPos3DY(10f, 0.3f));
         seq.SetLoops(-1, LoopType.Yoyo);
     }
 

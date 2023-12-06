@@ -47,9 +47,9 @@ public class CurrencyCollectEffectController : MonoBehaviour
             GameObject obj = childObjects[i];
             obj.SetActive(true);
             obj.transform.position = _fromPos;
-            obj.transform.DOMove((Vector2)obj.transform.position + spreadPos.normalized, 0.2f).OnComplete(() =>
+            obj.transform.DOMove((Vector2)obj.transform.position + spreadPos.normalized, 0.3f).OnComplete(() =>
             {
-                float duration = Random.Range(0.1f, 0.3f);
+                float duration = Random.Range(0.3f, 0.5f);
                 obj.transform.DOMove(targetTransform.position, duration).OnComplete(() => 
                 {
                     obj.SetActive(false);

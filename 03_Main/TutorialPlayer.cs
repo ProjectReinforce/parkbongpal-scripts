@@ -42,11 +42,6 @@ public class TutorialPlayer : MonoBehaviour
 
     void Start()
     {
-        Invoke("PlayTutorial", 0.5f);
-    }
-
-    void PlayTutorial()
-    {
         bool clearedtutorial = false;
         if (Managers.Game.Player.Record.Tutorial != 0 || Managers.ServerData.questRecordDatas[0].idList[0] != 0)
         {
