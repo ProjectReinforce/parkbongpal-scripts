@@ -5,10 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class ShowAdButton : MonoBehaviour
+[RequireComponent(typeof(HasIGameInitializer))]
+public class ShowAdButton : MonoBehaviour, IGameInitializer
 {
     [SerializeField] AdType adType;
     Button button;
+
+    public void GameInitialize()
+    {
+        LoadRewardedInterstitialAd();
+    }
 
     void Awake()
     {
@@ -18,8 +24,6 @@ public class ShowAdButton : MonoBehaviour
             ShowRewardedInterstitialAd();
             // button.interactable = false;
         });
-
-        LoadRewardedInterstitialAd();
     }
     
     // These ad units are configured to always serve test ads.

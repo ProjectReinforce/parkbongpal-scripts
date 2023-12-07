@@ -38,18 +38,12 @@ public class MineBase : MonoBehaviour, Rental
         {
             currentCurrency = value;
             if (currentCurrency > currencyAmountLimit) currentCurrency = currencyAmountLimit;
-            switch (mineData.rewardType)
+            infoText.text = mineData.rewardType switch
             {
-                case RewardType.Diamond:
-                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency/100:n0}";
-                break;
-                case RewardType.Ore:
-                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency/100:n0}";
-                break;
-                default:
-                infoText.text = currentCurrency <= 0 ? "-" : $"{currentCurrency:n0}";
-                break;
-            }
+                RewardType.Diamond => currentCurrency <= 0 ? "-" : $"{currentCurrency / 100:n0}",
+                RewardType.Ore => currentCurrency <= 0 ? "-" : $"{currentCurrency / 100:n0}",
+                _ => currentCurrency <= 0 ? "-" : $"{currentCurrency:n0}",
+            };
         }
     }
 
