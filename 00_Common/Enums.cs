@@ -183,10 +183,13 @@ public enum RankingType
 public enum SfxType
 {
     Click,
-    Button,
+    ButtonClick,
     Win,
     PopupOpen,
-    PopupClose
+    PopupClose,
+    Danger,
+    GetCoin,
+    CoinPop,
 }
 
 public enum BgmType
