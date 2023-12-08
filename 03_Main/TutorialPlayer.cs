@@ -30,7 +30,7 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] GameObject packgaeUI;
     [SerializeField] Toggle collectionOn;
     DetailInfoUI detailInfoUI;
-    Transform[] panelTrans;
+    [SerializeField]Transform[] panelTrans;
     string[] cheifLine;
     int index;
     int textIndex;
@@ -74,7 +74,7 @@ public class TutorialPlayer : MonoBehaviour
             panelTrans[3] = Utills.Bind<Transform>("CloseButton_Manufacture");
             panelTrans[4] = Utills.BindFromMine<Transform>("00_S");
             panelTrans[5] = Utills.Bind<Transform>("Image_AddWeapon");
-            panelTrans[6] = Utills.Bind<Transform>("Images");
+            panelTrans[6] = Utills.Bind<Transform>("Slot", inventoryUI.transform);
             panelTrans[7] = Utills.Bind<Transform>("Button_Select");
             panelTrans[8] = Utills.Bind<Transform>("Button_Close");
             panelTrans[9] = Utills.Bind<Transform>("MiniGame_S");
@@ -359,31 +359,31 @@ public class TutorialPlayer : MonoBehaviour
         if(index == 6)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 10;
-            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y / 2.5f);
             tutorialPanel.transform.position = vector1;
         }
-                
+
         if (index == 12 || index == 17 || index == 24)
         {
             tutorialPanel.transform.position = panelTrans[index].position * 5;
-            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * 4);
+            Vector2 vector1 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y / 1.65f);
             tutorialPanel.transform.position = vector1;
             if (Managers.Game.Player.Record.TutorialIndexCount == 5 && index == 12 && reconnectCheckTrans)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
-                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y / 2.5f);
                 tutorialPanel.transform.position = vector2;
             }
-            if(Managers.Game.Player.Record.TutorialIndexCount == 6 && index == 17 && reconnectCheck)
+            if (Managers.Game.Player.Record.TutorialIndexCount == 6 && index == 17 && reconnectCheck)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
-                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y / 2.5f);
                 tutorialPanel.transform.position = vector2;
             }
             if(Managers.Game.Player.Record.TutorialIndexCount == 7 && index == 24 && reconnectChecking)
             {
                 tutorialPanel.transform.position = panelTrans[index].position * 10;
-                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y * -1.4f);
+                Vector2 vector2 = new Vector2(tutorialPanel.transform.position.x, tutorialPanel.transform.position.y / 2.5f);
                 tutorialPanel.transform.position = vector2;
             }
         }
