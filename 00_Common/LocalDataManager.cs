@@ -392,6 +392,7 @@ public class RecordData
                 _dayRecord[i] = 0;
                 PlayerPrefs.SetString(_dayType[i], _dayRecord[i].ToString());
             }
+            saveDay = Managers.Etc.GetServerTime().Date;
             PlayerPrefs.SetString("SaveDay", saveDay.ToString());
         }
     }

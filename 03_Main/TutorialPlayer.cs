@@ -436,7 +436,7 @@ public class TutorialPlayer : MonoBehaviour
         textNextButton.gameObject.SetActive(true);
     }
 
-    readonly WaitForSeconds waitForDotDelay = new(2.2f);
+    readonly WaitForSeconds waitForDotDelay = new(3.3f);
     IEnumerator StoreAfter()
     {
         yield return waitForDotDelay;

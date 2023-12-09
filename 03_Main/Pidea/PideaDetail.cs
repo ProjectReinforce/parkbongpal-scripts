@@ -32,7 +32,7 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
         detail.SetActive(true);
         BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(index);
         weaponName.text = baseWeaponData.name;
-        rarity.text = ((Rarity)baseWeaponData.rarity).ToString();
+        rarity.text = Utills.CapitalizeFirstLetter(((Rarity)baseWeaponData.rarity).ToString());
         rarityColor.color = rarityColors[baseWeaponData.rarity];
         description.text = baseWeaponData.description;
         leftStats.text = $": {baseWeaponData.atk}\n: {baseWeaponData.atkSpeed}\n: {baseWeaponData.atkRange}\n: {baseWeaponData.accuracy}\n: {baseWeaponData.criticalRate}\n: {baseWeaponData.criticalDamage}";
