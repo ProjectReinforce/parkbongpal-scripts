@@ -73,6 +73,12 @@ public class SoundManager
         }
     }
 
+    public void ManufactureBgmControl(bool _isManufactureOn)
+    {
+        if(isBGMMuted) return;
+        bgmPlayer.ManufacturePlayBgm(_isManufactureOn);
+    }
+
     public void StopBgm()
     {
         bgmPlayer.StopBgm();

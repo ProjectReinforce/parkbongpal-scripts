@@ -41,6 +41,11 @@ public class Store : MonoBehaviour
         isOnCheck.isOn = Managers.Game.Player.Record.ManufactureSkip;
     }
 
+    void OnEnable() 
+    {
+        Managers.Sound.ManufactureBgmControl(true);
+    }
+
     const int COST_GOLD = 10000;
     const int COST_DIAMOND = 300;
     private const int ONE = 1;
@@ -156,5 +161,10 @@ public class Store : MonoBehaviour
         Managers.UI.OpenPopup(manufactureOneUI.gameObject);
         if (manufactureOneUI.gameObject.activeSelf == true)
             manufactureOneUI.ManuFactureSpriteChange();
+    }
+
+    void OnDisable() 
+    {
+        Managers.Sound.ManufactureBgmControl(false);
     }
 }

@@ -29,10 +29,16 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
-    public void ManufacturePlayBgm()
+    public void ManufacturePlayBgm(bool _isManufactureOn)
     {
-        bgmPlayer.volume = 0.2f;
-        // 서서히 감소하는 효과가 나타나야하는지?
+        if(_isManufactureOn == true)
+        {
+            bgmPlayer.volume = 0.1f;
+        }
+        else
+        {
+            bgmPlayer.volume = 0.5f;
+        }
     }
 
     public void PlayBgm(BgmType _bgmName)
