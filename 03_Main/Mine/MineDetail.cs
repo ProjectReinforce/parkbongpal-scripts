@@ -128,25 +128,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
-                // 리팩 전
-                // _mine.Receipt(() => 
-                // {
-                //     _mine.SetWeapon(null);
-                //     UpdateUIRelatedLendedWeapon(_mine);
-
-                //     weaponCollectButton.interactable = false;
-                //     Managers.Game.Mine.CalculateGoldPerMin();
-                    
-                //     Transactions.SendCurrent(callback =>
-                //     {
-                //         if (!callback.IsSuccess())
-                //         {
-                //             Managers.Alarm.Danger($"데이터 서버 저장 실패! {callback}");
-                //             return;
-                //         }
-                //     });
-                // });
-                // 리팩 후 사용
                 weaponCollectButton.interactable = false;
                 (RewardType rewardType, int amount) = _mine.Receipt(false);
                 _mine.CollectWeapon();
@@ -173,13 +154,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             goldCollectButton.onClick.AddListener(() => 
             {
                 goldCollectButton.interactable = false;
-                // 리팩 전
-                // _mine.Receipt(() =>
-                // {
-                //     goldCollectButton.interactable = true;
-                // }, true);
-
-                // 리팩 후 사용
                 (RewardType rewardType, int amount) = _mine.Receipt();
                 if (amount <= 0)
                 {

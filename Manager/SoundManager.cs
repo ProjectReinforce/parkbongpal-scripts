@@ -84,8 +84,8 @@ public class SoundManager
         bgmPlayer.StopBgm();
     }
 
-    public void PlaySfx(SfxType _sfxType)
+    public void PlaySfx(SfxType _sfxType, float _volume = 1f)
     {
-        sfxPlayer.PlaySfx(_sfxType);
+        sfxPlayer.PlaySfx(_sfxType, _volume);
     }
 }

@@ -9,7 +9,8 @@ public class DefaultPopupAnimation : MonoBehaviour, IAnimation
     // public static bool isAnimating = false;
     Image panel;
     Transform target;
-    readonly Color[] colors = { new(0f, 0f, 0f, 0f), new(0f, 0f, 0f, 100/255f) };
+    // readonly Color[] colors = { new(0f, 0f, 0f, 0f), new(0f, 0f, 0f, 100/255f) };
+    float originAlpha;
 
     public void Initialize()
     {
@@ -17,8 +18,12 @@ public class DefaultPopupAnimation : MonoBehaviour, IAnimation
         target = transform.GetChild(0);
         target.localScale = Vector3.one * 0.1f;
         if (TryGetComponent(out panel))
+        {
+            originAlpha = panel.color.a;
             // panel.color = new Color(panel.color.r, panel.color.g, panel.color.b, 0f);
-            panel.color = colors[0];
+            // panel.color = colors[0];
+            panel.DOFade(0f, 0f);
+        }
     }
 
     public void Show(bool _ignorAnimation = false)
@@ -34,7 +39,8 @@ public class DefaultPopupAnimation : MonoBehaviour, IAnimation
         var seq = DOTween.Sequence();
 
         if (panel != null)
-            panel.DOColor(colors[1], 0.1f);
+            // panel.DOColor(colors[1], 0.1f);
+            panel.DOFade(originAlpha, 0.1f);
         seq.Append(target.DOScale(1.05f, 0.2f));
         seq.Append(target.DOScale(1f, 0.1f));
 
@@ -62,7 +68,8 @@ public class DefaultPopupAnimation : MonoBehaviour, IAnimation
 
         seq.Append(target.DOScale(1.05f, 0.1f));
         if (panel != null)
-            seq.Join(panel.DOColor(colors[0], 0.1f));
+            // seq.Join(panel.DOColor(colors[0], 0.1f));
+            seq.Join(panel.DOFade(0f, 0.1f));
         seq.Append(target.DOScale(0.2f, 0.2f));
         // seq.Append(transform.DOScale(1.05f, 0.1f));
         // seq.Append(transform.DOScale(0.2f, 0.2f));

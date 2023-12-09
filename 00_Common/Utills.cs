@@ -154,7 +154,7 @@ public static class Utills
             kmg++;
         }
 
-        string result = kmg == 0 ? $"{newNumber:f0}" : $"{newNumber:#,##0.##}{(Unit)kmg}";
+        string result = kmg == 0 ? $"{newNumber:n0}" : $"{newNumber:#,##0.##}{(Unit)kmg}";
 
         return result;
     }
