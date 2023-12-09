@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RankFace : MonoBehaviour
 {
     [SerializeField] RectTransform rankContent; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     [SerializeField] RectTransform rankScrollView; // 랭킹탭을 변경시 목록을 상단으로 스크롤하기위함;
     int rankTabIndex = 0;
+    [SerializeField] Button rankRewardButton;
 
     void OnEnable() 
     {
@@ -28,6 +30,15 @@ public class RankFace : MonoBehaviour
         // Managers.Game.Player.SetGoldPerMin(150000);
         // Managers.Game.Player.SetCombatScore(550);
         rankTabIndex = _index;
+        if(rankTabIndex == 2)
+        {
+            rankRewardButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            rankRewardButton.gameObject.SetActive(false);
+        }
+
         for (int i = 0; i < Ranking.PORT_COUNT; i++)
         {
             Managers.Event.SettingRankingPageEvent?.Invoke(i, rankTabIndex);

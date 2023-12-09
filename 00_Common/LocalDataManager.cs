@@ -198,6 +198,10 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
         PlayerPrefs.DeleteKey("ManufactureSkip");
+        
+        // 사운드
+        PlayerPrefs.DeleteKey("SFXOption");
+        PlayerPrefs.DeleteKey("BGMOption");
 
         tutorial = 0;
         tutorialIndexCount = 0;

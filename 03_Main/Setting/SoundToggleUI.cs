@@ -34,14 +34,14 @@ public class SoundToggleUI : MonoBehaviour
             BGMSlider.value = 0;
             Managers.Sound.bgmPlayer.BgmSoundOff();
             Managers.Sound.IsBGMMuted = false;
-            Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, (BgmType)Managers.Sound.NowTapBgmIndex); // 혹시 몰라서 false값이 될때 노래도 종료
+            Managers.Sound.PlayBgm((BgmType)Managers.Sound.NowTapBgmIndex); // 혹시 몰라서 false값이 될때 노래도 종료
         }
         else
         {
             BGMSlider.value = 1;
             Managers.Sound.bgmPlayer.BgmSoundOn();
             Managers.Sound.IsBGMMuted = true;
-            Managers.Sound.PlayBgm(Managers.Sound.IsBGMMuted, (BgmType)Managers.Sound.NowTapBgmIndex);
+            Managers.Sound.PlayBgm((BgmType)Managers.Sound.NowTapBgmIndex);
         }
     }
 

@@ -29,18 +29,17 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
-    public void PlayBgm(bool _isPlay, BgmType _bgmName)
+    public void ManufacturePlayBgm()
     {
-        if(_isPlay)
-        {
-            bgmPlayer.Stop();
-            bgmPlayer.clip = bgmClips[(int)_bgmName];
-            bgmPlayer.Play();
-        }
-        else
-        {
-            bgmPlayer.Stop();
-        }
+        bgmPlayer.volume = 0.2f;
+        // 서서히 감소하는 효과가 나타나야하는지?
+    }
+
+    public void PlayBgm(BgmType _bgmName)
+    {
+        bgmPlayer.Stop();
+        bgmPlayer.clip = bgmClips[(int)_bgmName];
+        bgmPlayer.Play();
     }
 
     public void StopBgm()
