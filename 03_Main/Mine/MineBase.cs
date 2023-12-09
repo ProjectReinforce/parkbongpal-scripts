@@ -136,6 +136,7 @@ public class MineBase : MonoBehaviour, Rental
         switch (mineStatus)
         {
             case MineStatus.Locked:
+                infoText.text = Utills.UnitConverter(mineData.buildCost);
                 break;
             case MineStatus.Building:
                 if (remainTime <= 0)
