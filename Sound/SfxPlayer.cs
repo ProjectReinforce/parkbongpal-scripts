@@ -6,6 +6,8 @@ using UnityEngine.Audio;
 
 public class SfxPlayer : MonoBehaviour
 {
+    [Range(0f, 1f)]
+    [SerializeField] float maxVolume;
     [Header("SFX")]
     [SerializeField] AudioClip[] sfxClips;
     AudioSource sfxPlayer;
@@ -20,24 +22,20 @@ public class SfxPlayer : MonoBehaviour
     void Start() 
     {
         if(Managers.Sound.IsSFXMuted == true)
-        {
             sfxPlayer.volume = 0f;
-        }
         else
-        {
-            sfxPlayer.volume = 1f;
-        }
+            sfxPlayer.volume = maxVolume;
     }
 
 
-    public void PlaySfx(SfxType _sfxType)
+    public void PlaySfx(SfxType _sfxType, float _volume)
     {
-        sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType]);
+        sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType], Mathf.Min(maxVolume, _volume));
     }
 
     public void SfxSoundOn()
     {
-        sfxPlayer.volume = 1f;
+        sfxPlayer.volume = maxVolume;
     }
 
     public void SfxSoundOff()
