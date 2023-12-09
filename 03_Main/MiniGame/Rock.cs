@@ -13,6 +13,7 @@ public class Rock : MonoBehaviour
     Vector3 originalPosition;
     Vector2 originalSizeDelta;
     Image image;
+    int rockNum = 0;
     int score;
     public int Score
     {
@@ -66,13 +67,18 @@ public class Rock : MonoBehaviour
             rockHpSlider.SetHpValue(hp, maxHp);
 
             image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
+            rockNum++;
 
-            Vector2 newSize = image.rectTransform.sizeDelta* 0.9f;
-            image.rectTransform.sizeDelta = newSize;
+            if(rockNum == 5 || rockNum == 11)
+            {
+                Vector2 newSize = image.rectTransform.sizeDelta* 0.8f;
+                image.rectTransform.sizeDelta = newSize;
 
-            Vector3 newPosition = image.rectTransform.anchoredPosition3D;
-            newPosition.y -= ((newSize.y/0.9f) - newSize.y) / 2;
-            image.rectTransform.anchoredPosition3D = newPosition;
+                Vector3 newPosition = image.rectTransform.anchoredPosition3D;
+                newPosition.y -= ((newSize.y/0.8f) - newSize.y) / 2;
+                image.rectTransform.anchoredPosition3D = newPosition;
+            }
+
 
             timerControl.CurrentTime += 20f;
 
