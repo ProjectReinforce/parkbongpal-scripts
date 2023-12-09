@@ -30,7 +30,7 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] GameObject packgaeUI;
     [SerializeField] Toggle collectionOn;
     DetailInfoUI detailInfoUI;
-    [SerializeField]Transform[] panelTrans;
+    Transform[] panelTrans;
     string[] cheifLine;
     int index;
     int textIndex;
