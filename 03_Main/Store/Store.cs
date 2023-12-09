@@ -15,7 +15,7 @@ public class Store : MonoBehaviour
     [SerializeField] Button epicTenGacha;
     [SerializeField] Button manufactureStartButton;
     [SerializeField] Text manufactureText;
-    [SerializeField] GameObject cutSceneControl;
+    [SerializeField] GameObject[] cutSceneControl;
     [SerializeField] Toggle isOnCheck;
     int[] typeCount;
 
@@ -97,18 +97,37 @@ public class Store : MonoBehaviour
             }
             Managers.Game.Player.TryAdvanceProduceWeapon(_count);
         }
-        cutSceneControl.transform.parent.gameObject.SetActive(true);
 
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[_count];
+        bool legendaryCheck = false;
+
         for (int i = 0; i < _count; i++)
         {
             Rarity rarity = (Rarity)Utills.GetResultFromWeightedRandom(percents[_type]);
             baseWeaponDatas[i] = Managers.ServerData.GetBaseWeaponData(rarity);
             if (rarity >= Rarity.legendary)
+            {
                 SendChat.SendMessage($"레전드리 <color=red>{baseWeaponDatas[i].name}</color> 획득!");
+                legendaryCheck = true;
+            }
             else if(rarity >= Rarity.unique)
                 Managers.Game.Player.Record.ModifyGetItemRecord();
         }
+        
+        if(legendaryCheck)
+        {
+            cutSceneControl[0].gameObject.SetActive(false);
+            cutSceneControl[1].gameObject.SetActive(true);
+            cutSceneControl[1].transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            cutSceneControl[1].gameObject.SetActive(false);
+            cutSceneControl[0].gameObject.SetActive(true);
+            cutSceneControl[0].transform.parent.gameObject.SetActive(true);
+        }
+
+
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
         Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
 
@@ -127,7 +146,8 @@ public class Store : MonoBehaviour
     public void TutorialManufacture()
     {
         Managers.Game.Player.TryProduceWeapon(1);
-        cutSceneControl.transform.parent.gameObject.SetActive(true);
+        cutSceneControl[0].gameObject.SetActive(true);
+        cutSceneControl[0].transform.parent.gameObject.SetActive(true);
         BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
         tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(0);
         Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
