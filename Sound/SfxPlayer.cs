@@ -21,11 +21,11 @@ public class SfxPlayer : MonoBehaviour
     {
         if(Managers.Sound.IsSFXMuted == true)
         {
-            sfxPlayer.volume = 1f;
+            sfxPlayer.volume = 0f;
         }
         else
         {
-            sfxPlayer.volume = 0f;
+            sfxPlayer.volume = 1f;
         }
     }
 

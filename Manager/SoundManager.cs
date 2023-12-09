@@ -6,14 +6,14 @@ public class SoundManager
 {
     public SfxPlayer sfxPlayer;
     public BgmPlayer bgmPlayer;
-    bool isSFXMuted = true;
+    bool isSFXMuted;
     public bool IsSFXMuted
     {
         get
         {
             int muted = PlayerPrefs.GetInt("SFXOption");  // PlayerPrefs에서 "SFXOption" 키를 사용하여 저장된 값을 불러옴
             Debug.Log($"사운드 : {muted} 불러옴");
-            isSFXMuted = muted != 0;                           // 불러온 값을 기반으로 isSFXMuted 변수를 설정함
+            isSFXMuted = muted == 1;                           // 불러온 값을 기반으로 isSFXMuted 변수를 설정함
             return isSFXMuted;                                 // isSFXMuted 값을 반환
         }
         set
@@ -25,14 +25,14 @@ public class SoundManager
         }
     }
 
-    bool isBGMMuted = true;
+    bool isBGMMuted;
     public bool IsBGMMuted
     {
         get
         {
             float muted = PlayerPrefs.GetFloat("BGMOption");  // PlayerPrefs에서 "BGMOption" 키를 사용하여 저장된 값을 불러옴
             Debug.Log($"사운드 : {muted} 불러옴");
-            isBGMMuted = muted != 0;                           // 불러온 값을 기반으로 isBGMMuted 변수를 설정함
+            isBGMMuted = muted == 0.5f;                           // 불러온 값을 기반으로 isBGMMuted 변수를 설정함
             return isBGMMuted;                                 // isBGMMuted 값을 반환
         }
         set
@@ -63,12 +63,12 @@ public class SoundManager
     {
         if(isBGMMuted == true)
         {
-            bgmPlayer.PlayBgm(_bgmName);
+            bgmPlayer.StopBgm();
             nowTapBgmIndex = (int)_bgmName;
         }
         else
         {
-            bgmPlayer.StopBgm();
+            bgmPlayer.PlayBgm(_bgmName);
             nowTapBgmIndex = (int)_bgmName;
         }
     }

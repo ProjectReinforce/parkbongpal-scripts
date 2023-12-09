@@ -21,11 +21,11 @@ public class BgmPlayer : MonoBehaviour
     {
         if(Managers.Sound.IsBGMMuted == true)
         {
-            bgmPlayer.volume = 0.5f;
+            bgmPlayer.volume = 0f;
         }
         else
         {
-            bgmPlayer.volume = 0f;
+            bgmPlayer.volume = 0.5f;
         }
     }
 
