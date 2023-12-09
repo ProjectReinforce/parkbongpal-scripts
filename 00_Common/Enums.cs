@@ -190,6 +190,10 @@ public enum SfxType
     Danger,
     GetCoin,
     CoinPop,
+    Manufacture,
+    Quest,
+    Tutorial_Talk,
+    Tutorial_Button,
 }
 
 public enum BgmType

@@ -131,7 +131,7 @@ public class Store : MonoBehaviour
             cutSceneControl[0].gameObject.SetActive(true);
             cutSceneControl[0].transform.parent.gameObject.SetActive(true);
         }
-
+        Managers.Sound.PlaySfx(SfxType.Manufacture);
 
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
         Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
@@ -156,6 +156,7 @@ public class Store : MonoBehaviour
         BaseWeaponData[] tutorialBaseWeaponDatas = new BaseWeaponData[1];
         tutorialBaseWeaponDatas[0] = Managers.ServerData.GetBaseWeaponData(0);
         Managers.Game.Inventory.AddWeapons(tutorialBaseWeaponDatas);
+        Managers.Sound.PlaySfx(SfxType.Manufacture);
         Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
         manufactureOneUI.SetInfo(0, tutorialBaseWeaponDatas);
         Managers.UI.OpenPopup(manufactureOneUI.gameObject);

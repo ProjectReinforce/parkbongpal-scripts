@@ -396,6 +396,7 @@ public class TutorialPlayer : MonoBehaviour
             vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
             tutorialPanel.transform.position = vector;
         }
+        Managers.Sound.PlaySfx(SfxType.Tutorial_Button);
     }
 
     void OnCheifTalkObject()
@@ -958,6 +959,7 @@ public class TutorialPlayer : MonoBehaviour
             textNextButton.gameObject.SetActive(false);
         }
         cheifTalk.text = cheifLine[textIndex];
+        Managers.Sound.PlaySfx(SfxType.Tutorial_Talk);
     }
 
     void CheifLines()
