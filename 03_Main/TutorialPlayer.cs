@@ -745,7 +745,6 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        Managers.UI.ClosePopup();
         Managers.Game.Player.Record.TutorialRecordIndex();
         Managers.UI.ClosePopup();
     }
