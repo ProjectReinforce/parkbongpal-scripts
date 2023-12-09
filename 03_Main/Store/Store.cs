@@ -131,7 +131,11 @@ public class Store : MonoBehaviour
             cutSceneControl[0].gameObject.SetActive(true);
             cutSceneControl[0].transform.parent.gameObject.SetActive(true);
         }
-        Managers.Sound.PlaySfx(SfxType.Manufacture);
+
+        if(!isOnCheck.isOn)
+        {
+            Managers.Sound.PlaySfx(SfxType.Manufacture);
+        }
 
         Managers.Game.Inventory.AddWeapons(baseWeaponDatas);
         Managers.Event.InventoryNewAlarmEvent?.Invoke(true);
@@ -145,6 +149,7 @@ public class Store : MonoBehaviour
 
     public void IsOnChecker()
     {
+        Managers.Sound.PlaySfx(SfxType.Click);
         Managers.Game.Player.Record.ManufactureIsOnCheck(isOnCheck.isOn);
     }
 

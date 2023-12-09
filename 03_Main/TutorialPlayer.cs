@@ -208,14 +208,15 @@ public class TutorialPlayer : MonoBehaviour
     void ButtonIndexChange()
     {
         index++;
-        switch(index)
+        Managers.Sound.PlaySfx(SfxType.Tutorial_Button);
+        switch (index)
         {
             case 1:
                 ManufactureTutorial();
                 break;
             case 2:
                 ManufactureTutorialTry();
-                StartCoroutine(StoreAfter());   // 옵저퍼 패턴으로 바꿀 생각
+                StartCoroutine(StoreAfter());
                 break;
             case 3:
                 ManufactureFinish();
@@ -396,7 +397,6 @@ public class TutorialPlayer : MonoBehaviour
             vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
             tutorialPanel.transform.position = vector;
         }
-        Managers.Sound.PlaySfx(SfxType.Tutorial_Button);
     }
 
     void OnCheifTalkObject()
@@ -483,11 +483,13 @@ public class TutorialPlayer : MonoBehaviour
             textNextButton.gameObject.SetActive(false);
             cheifTalk.text = "잠시만 기다려주겠나 아직 건설이 되지 않았다네";
             tutorialPanel.transform.parent.gameObject.SetActive(true);
+            Managers.Sound.sfxPlayer.SfxSoundOff();
         }
         else
         {
             mineUI.BuildComplete(true);
             Managers.Event.MineClickEvent?.Invoke(mineUI);
+            Managers.Sound.sfxPlayer.SfxSoundOn();
         }
     }
 
