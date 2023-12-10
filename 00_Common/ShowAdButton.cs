@@ -106,6 +106,8 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
                     Managers.Event.RecieveAllReceiptBonusEvent?.Invoke();
                     break;
                 }
+                Managers.Game.Player.Record.ModifyDaySeeAdsRecord();
+                Managers.Game.Player.Record.ModifyWeekSeeAdsRecord();
             });
         }
         else
