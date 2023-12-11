@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DetailInfoUI : MonoBehaviour, IGameInitializer
 {
+    [SerializeField] ReinforceDetailUI reinforceDetailUI;
     static readonly Color[] rarityColors = 
     {
         Color.blue,
@@ -28,8 +29,6 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     Text techniqueText;
     Text charmText;
     Text constitutionText;
-
-
 
     Image[] lockImages = new Image[Consts.MAX_SKILL_COUNT];
     Image[] skillIcons = new Image[Consts.MAX_SKILL_COUNT];
@@ -115,5 +114,7 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
         rarityImage.color = rarityColors[weaponData.rarity];   
         rarityText.text = Utills.CapitalizeFirstLetter(((Rarity)weaponData.rarity).ToString());
         weaponName.text = weapon.Name;
+
+        reinforceDetailUI.Set(weapon);
     }
 }
