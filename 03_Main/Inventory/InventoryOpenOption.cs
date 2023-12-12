@@ -73,6 +73,7 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
             
             Managers.UI.MoveTap(TapType.Reinforce);
             Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
         });
         selectText.text = "강화하기";
         decompositionButton.gameObject.SetActive(true);

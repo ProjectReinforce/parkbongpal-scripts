@@ -14,6 +14,8 @@ public class Promote : Reinforce
     public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         _weapon.Promote();
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.rarity), _weapon.data.rarity);
         param.Add(nameof(WeaponData.colum.PromoteStat), _weapon.data.PromoteStat);
@@ -39,6 +41,8 @@ public class Additional : Reinforce
             Debug.Log($"result : {resultIndex} - {additionalDescription[resultIndex]} / {additionalPercent[resultIndex]}");
             _weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
             _weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
+
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
         }
 
         Param param = new Param();
@@ -77,10 +81,12 @@ public class NormalReinforce : Reinforce
             {
                 Debug.Log($"result : {randomValue} / 강화 성공!");
                 _weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
+                Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
             }
             else
             {
                 Debug.Log($"result : {randomValue} / 강화 실패!");
+                Managers.Sound.PlaySfx(SfxType.ReinforceFail, 0.5f);
             }
         }
 
@@ -117,6 +123,8 @@ public class MagicEngrave : Reinforce
             Debug.Log((MagicType)results[i]);
             _weapon.data.magic[i] = results[i];
         }
+
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.magic), _weapon.data.magic);
@@ -160,8 +168,10 @@ public class SoulCrafting : Reinforce
                 Debug.Log($"result : {resultIndex} - {soulDescription[resultIndex]} / {soulPercent[resultIndex]}");
                 _weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
             }
-        }
 
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+        }
+        
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.SoulStat), _weapon.data.SoulStat);
 
@@ -233,6 +243,8 @@ public class Refinement : Reinforce
         }
 
         Managers.Game.Reinforce.RefineResults = refineResults;
+        
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
 
         // foreach (var item in refineResults)
         // {

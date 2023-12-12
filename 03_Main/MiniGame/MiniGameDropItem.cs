@@ -9,6 +9,7 @@ public class MiniGameDropItem : MonoBehaviour
 {
     [SerializeField] Sprite[] twoTypeSprites;
     Image nowImage;
+    // Q : public이어야 할 이유, 그렇다면 변수명은 왜 소문자로 시작하는지
     public IObjectPool<GameObject> managedPool;
 
     void Awake() 
@@ -31,9 +32,11 @@ public class MiniGameDropItem : MonoBehaviour
 
     public void SetDropItemImage(int _index)
     {
+        Managers.Sound.PlaySfx(SfxType.CoinPop, 0.1f);
         nowImage.sprite = twoTypeSprites[_index];
     }
 
+    // Q : 아이템을 삭제하는 함수가 아니라 이동시키는 함수가 아닌지?
     public void DestroyItem()
     {
         float randomX = Random.Range(-200f, 210f);
@@ -48,6 +51,7 @@ public class MiniGameDropItem : MonoBehaviour
             {
                 managedPool.Release(gameObject);
                 gameObject.transform.position = gameObject.transform.parent.position;
+                Managers.Sound.PlaySfx(SfxType.GetCoin, 0.1f);
             });
         });
     }

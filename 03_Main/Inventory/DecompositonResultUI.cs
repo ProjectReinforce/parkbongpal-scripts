@@ -15,8 +15,10 @@ public class DecompositonResultUI : MonoBehaviour
 
     public void SetText(int _gold, int _soul)
     {
-        goldText.text = _gold.ToString();
-        soulText.text = _soul.ToString();
+        // goldText.text = _gold.ToString();
+        // soulText.text = _soul.ToString();
+        goldText.text = Utills.UnitConverter((ulong)_gold);
+        soulText.text = Utills.UnitConverter((ulong)_soul);
         Managers.UI.OpenPopup(transform.parent.gameObject);
     }
 }

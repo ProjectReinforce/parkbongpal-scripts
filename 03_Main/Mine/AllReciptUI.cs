@@ -34,8 +34,8 @@ public class AllReciptUI : MonoBehaviour, IGameInitializer
             int bonusDiamond = (int)(_totalDiamond * bonus);
             int bonusOre = (int)(_totalOre * bonus);
             Managers.Game.Player.AddGold(bonusGold, false);
-            Managers.Game.Player.AddDiamond(bonusGold, false);
-            Managers.Game.Player.AddStone(bonusGold, false);
+            Managers.Game.Player.AddDiamond(bonusDiamond, false);
+            Managers.Game.Player.AddStone(bonusOre, false);
 
             Managers.Game.Player.AddTransactionCurrency();
             

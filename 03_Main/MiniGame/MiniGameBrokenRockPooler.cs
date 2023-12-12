@@ -26,11 +26,13 @@ public class MiniGameBrokenRockPooler : MonoBehaviour
     GameObject CreatedBrokenRock()
     {
         int randomValue = Utills.random.Next(15, 26);
+        // Q : 굳이 프리팹으로 생성할 필요 없음. 컴포넌트 넣어도 생성 가능
         GameObject poolingRock = Instantiate(brokenRockPrefab, gameObject.transform);
         poolingRock.TryGetComponent(out RectTransform rect);
         rect.sizeDelta = new Vector2 (randomValue, randomValue);
         poolingRock.TryGetComponent(out MiniGameBrokenRock miniGameBrokenRock);
-        miniGameBrokenRock.managedPool = pool;
+        // miniGameBrokenRock.managedPool = pool;
+        miniGameBrokenRock.Initialize(pool);
         return poolingRock;
     }
 
