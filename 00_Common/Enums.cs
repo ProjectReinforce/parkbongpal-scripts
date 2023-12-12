@@ -194,6 +194,8 @@ public enum SfxType
     Quest,
     Tutorial_Talk,
     Tutorial_Button,
+    ReinforceFail,
+    ReinforceSuccess,
 }
 
 public enum BgmType

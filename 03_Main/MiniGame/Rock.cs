@@ -10,6 +10,10 @@ public class Rock : MonoBehaviour
     [SerializeField] RockHpSlider rockHpSlider;
     [SerializeField] Sprite[] sprites;
     [SerializeField] MiniGameDropItemPooler itemPooler;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] breakClips;
+    [Range(0, 1f)]
+    [SerializeField] float volume;
     Vector3 originalPosition;
     Vector2 originalSizeDelta;
     Image image;
@@ -62,6 +66,8 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
+            int randomInt = UnityEngine.Random.Range(0, 2);
+            audioSource.PlayOneShot(breakClips[randomInt], volume);
             maxHp *= 2f;
             hp = maxHp;
             rockHpSlider.SetHpValue(hp, maxHp);
