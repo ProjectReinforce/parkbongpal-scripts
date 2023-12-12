@@ -103,6 +103,7 @@ public class DecompositionUI : MonoBehaviour
             totalSoul += Managers.ServerData.DecompositDatas[item.data.NormalStat[(int)StatType.atk] / 5].normalReinforce[1];
 
             Managers.Game.Inventory.RemoveWeapons(item);
+            Managers.Game.Player.Record.ModifyDisassembleItemRecord();
         }
 
         Managers.Game.Player.AddGold(totalGold, false);

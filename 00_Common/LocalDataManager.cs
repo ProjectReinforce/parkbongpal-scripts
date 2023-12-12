@@ -299,6 +299,12 @@ public class RecordData
         PlayerPrefs.SetString("GetItem", getItem.ToString());
     }
 
+    public void ModifyDisassembleItemRecord()
+    {
+        disassembleItem++;
+        PlayerPrefs.SetString("DisassembleItem", disassembleItem.ToString());
+    }
+
     public void ModifyProduceRecord(int _count)
     {
         if (_count <= 0) return;
