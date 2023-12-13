@@ -359,6 +359,6 @@ public class Player
 
     public void ModifyQuestProgress(RecordType _recordType, int _questId)
     {
-        questProgress.idList[(int)_recordType] = _questId + 1;
+        questProgress.idList[(int)_recordType] = _questId;
     }
 }
