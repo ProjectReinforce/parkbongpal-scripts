@@ -128,6 +128,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
+                Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
                 weaponCollectButton.interactable = false;
                 (RewardType rewardType, int amount) = _mine.Receipt(false);
                 _mine.CollectWeapon();
@@ -160,6 +161,18 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                     Managers.Alarm.Warning("수령할 재화가 없습니다.");
                     goldCollectButton.interactable = true;
                     return;
+                }
+                // Managers.Sound.PlaySfx(SfxType.CoinPop, 0.5f);
+                switch (rewardType)
+                {
+                    case RewardType.Gold:
+                    Managers.Event.GoldCollectEvent?.Invoke(goldCollectButton.transform);
+                    break;
+                    case RewardType.Diamond:
+                    Managers.Event.DiamondCollectEvent?.Invoke(goldCollectButton.transform);
+                    break;
+                    default:
+                    break;
                 }
                 Managers.Game.Player.AddTransactionCurrency();
 

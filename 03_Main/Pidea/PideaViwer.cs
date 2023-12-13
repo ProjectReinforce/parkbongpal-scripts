@@ -5,6 +5,7 @@ public class PideaViwer : MonoBehaviour
 {
     [SerializeField] ToggleGroup topToggleGruop;
     [SerializeField] ToggleGroup gradeToggleGruop;
+    // Q : 상수로 쓸거라면 consts로 옮겨야 할 듯
     int rarityMaxIndex = 6;
 
     void OnEnable()

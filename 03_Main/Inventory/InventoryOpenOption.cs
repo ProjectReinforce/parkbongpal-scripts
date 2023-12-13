@@ -111,6 +111,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
             
             Managers.Event.WeaponCollectEvent?.Invoke(currentWeapon);
             Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
+            Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
             Managers.UI.ClosePopup();
         });
         selectText.text = "빌려주기";

@@ -17,5 +17,6 @@ public class PideaSlot : NewThing
         if (weaponImage.material.color == Color.black) return;
 
         Managers.Event.PideaSlotSelectEvent?.Invoke(this);
+        Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
     }
 }

@@ -196,6 +196,7 @@ public enum SfxType
     Tutorial_Button,
     ReinforceFail,
     ReinforceSuccess,
+    SlotClick,
 }
 
 public enum BgmType
