@@ -17,10 +17,12 @@ public class AdditionalUI : ReinforceUIBase
     void UpdateAtk()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
-        int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.AdditionalStat[(int)StatType.atk] / 100;
+        // int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
+        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk] + weaponData.NormalStat[(int)StatType.atk];
+        // int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.AdditionalStat[(int)StatType.atk] / 100;
 
-        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.AdditionalStat[(int)StatType.atk]}%</color>))";
+        // atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.AdditionalStat[(int)StatType.atk]}%</color>))";
+        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {weaponData.AtkFromAdditional}</color>(<color=green>+ {weaponData.AdditionalStat[(int)StatType.atk]}%</color>))";
     }
 
     protected override void UpdateCosts()

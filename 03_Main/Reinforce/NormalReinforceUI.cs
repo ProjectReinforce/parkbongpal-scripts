@@ -11,6 +11,8 @@ public class NormalReinforceUI : ReinforceUIBase
     Image arrowImage;
     Text nextSuccessCountText;
     Text upgradeCountText;
+    Text probabilityText;
+    Text atkUpText;
 
     protected override void Awake()
     {
@@ -32,6 +34,12 @@ public class NormalReinforceUI : ReinforceUIBase
         arrowImage = Utills.Bind<Image>("Image_Arrow", transform);
         nextSuccessCountText = Utills.Bind<Text>("Text_NextSuccessCount", transform);
         upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
+
+        NormalReinforceData data = Managers.ServerData.NormalReinforceData;
+        probabilityText = Utills.Bind<Text>("Probability", transform);
+        probabilityText.text = $"성공확률: {data.percent}%\n실패확률: {100 - data.percent}%";
+        atkUpText = Utills.Bind<Text>("AttackPower", transform);
+        atkUpText.text = $"공격력 : +{data.atkUp}";
     }
 
     public void UpdateWeaponIcon()
@@ -79,7 +87,7 @@ public class NormalReinforceUI : ReinforceUIBase
         goldCostText.text = userData.gold < goldCost ? $"<color=red>{goldCost}</color>" : $"<color=white>{goldCost}</color>";
 
         WeaponData selectedWeapon = reinforceManager.SelectedWeapon.data;
-        int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / 5;
+        int successCount = selectedWeapon.NormalStat[(int)StatType.atk] / Managers.ServerData.NormalReinforceData.atkUp;
 
         foreach (var item in currentSuccessCountText)
             item.text = $"+ {successCount}";

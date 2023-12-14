@@ -36,9 +36,10 @@ public class ReinforceDetailUI : MonoBehaviour
     {
         // todo : 리팩토링 고려
         WeaponData data = targetWeapon.data;
-        int additionalAtk = (data.defaultStat[(int)StatType.atk] + data.PromoteStat[(int)StatType.atk]) * data.AdditionalStat[(int)StatType.atk] / 100;
-        int soulAtk = (data.defaultStat[(int)StatType.atk] + data.PromoteStat[(int)StatType.atk]) * data.SoulStat[(int)StatType.atk] / 100;
-        texts[(int)StatType.atk-1].text = $": {data.atk}\n({data.defaultStat[(int)StatType.atk]} <color=red>+{data.PromoteStat[(int)StatType.atk]}</color> <color=green>+{additionalAtk}</color> <color=blue>+{data.NormalStat[(int)StatType.atk]}</color> <color=cyan>+{soulAtk}</color> <color=yellow>+{data.RefineStat[(int)StatType.atk]}</color>)";
+        // int additionalAtk = (data.defaultStat[(int)StatType.atk] + data.PromoteStat[(int)StatType.atk]) * data.AdditionalStat[(int)StatType.atk] / 100;
+        // int soulAtk = (data.defaultStat[(int)StatType.atk] + data.PromoteStat[(int)StatType.atk]) * data.SoulStat[(int)StatType.atk] / 100;
+        // texts[(int)StatType.atk-1].text = $": {data.atk}\n({data.defaultStat[(int)StatType.atk]} <color=red>+{data.PromoteStat[(int)StatType.atk]}</color> <color=green>+{additionalAtk}</color> <color=blue>+{data.NormalStat[(int)StatType.atk]}</color> <color=cyan>+{soulAtk}</color> <color=yellow>+{data.RefineStat[(int)StatType.atk]}</color>)";
+        texts[(int)StatType.atk-1].text = $": {data.atk}\n({data.defaultStat[(int)StatType.atk]} <color=red>+{data.PromoteStat[(int)StatType.atk]}</color> <color=green>+{data.AtkFromAdditional}</color> <color=blue>+{data.NormalStat[(int)StatType.atk]}</color> <color=cyan>+{data.AtkFromSoulCrafting}</color> <color=yellow>+{data.RefineStat[(int)StatType.atk]}</color>)";
         texts[(int)StatType.atkSpeed-1].text = $": {data.atkSpeed}({data.defaultStat[(int)StatType.atkSpeed]} <color=yellow>+{data.RefineStat[(int)StatType.atkSpeed]}</color>)";
         texts[(int)StatType.atkRange-1].text = $": {data.atkRange}({data.defaultStat[(int)StatType.atkRange]} <color=yellow>+{data.RefineStat[(int)StatType.atkRange]}</color>)";
         texts[(int)StatType.accuracy-1].text = $": {data.accuracy}({data.defaultStat[(int)StatType.accuracy]} <color=yellow>+{data.RefineStat[(int)StatType.accuracy]}</color>)";

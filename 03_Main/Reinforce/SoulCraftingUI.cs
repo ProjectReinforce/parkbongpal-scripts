@@ -30,10 +30,12 @@ public class SoulCraftingUI : ReinforceUIBase
     void UpdateAtk()
     {
         WeaponData weaponData = reinforceManager.SelectedWeapon.data;
-        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
-        int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.SoulStat[(int)StatType.atk] / 100;
+        // int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk];
+        int defaultAtk = weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk] + weaponData.NormalStat[(int)StatType.atk] + weaponData.AtkFromAdditional;
+        // int additionalAtk = (weaponData.defaultStat[(int)StatType.atk] + weaponData.PromoteStat[(int)StatType.atk]) * weaponData.SoulStat[(int)StatType.atk] / 100;
 
-        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.SoulStat[(int)StatType.atk]}%</color>))";
+        // atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {additionalAtk}</color>(<color=green>+ {weaponData.SoulStat[(int)StatType.atk]}%</color>))";
+        atkText.text = $"공격력 : {weaponData.atk} ({defaultAtk} <color=red>+ {weaponData.AtkFromSoulCrafting}</color>(<color=green>+ {weaponData.SoulStat[(int)StatType.atk]}%</color>))";
     }
 
     protected override void UpdateCosts()
