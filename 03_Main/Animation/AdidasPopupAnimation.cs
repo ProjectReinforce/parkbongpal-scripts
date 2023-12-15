@@ -7,6 +7,7 @@ public class AdidasPopupAnimation : MonoBehaviour, IAnimation
     [SerializeField] Image bGImage;
     [SerializeField] RectTransform[] buttonRects;
     [SerializeField] float delay;
+    Button outsideButton;
     bool isInitialized = false;
     float originAlpha;
 
@@ -14,6 +15,8 @@ public class AdidasPopupAnimation : MonoBehaviour, IAnimation
     {
         originAlpha = bGImage.color.a;
         bGImage.DOFade(0f, 0f);
+        TryGetComponent(out outsideButton);
+        outsideButton.interactable = false;
         
         isInitialized = true;
     }
@@ -22,6 +25,8 @@ public class AdidasPopupAnimation : MonoBehaviour, IAnimation
     {
         if (isInitialized == false) Initialize();
 
+        outsideButton.interactable = false;
+        
         var seq = DOTween.Sequence();
 
         seq.Append(bGImage.transform.DOScale(1.05f, 0.1f));
@@ -39,6 +44,7 @@ public class AdidasPopupAnimation : MonoBehaviour, IAnimation
         if (isInitialized == false) Initialize();
 
         gameObject.SetActive(true);
+        outsideButton.interactable = true;
 
         bGImage.DOFade(originAlpha, 0.5f);
 
