@@ -6,7 +6,7 @@ public class MagicCarveButtonUI : ReinforceButtonUIBase
 {
     protected override bool Checks()
     {
-        if (reinforceManager.SelectedWeapon.data.rarity < (int)Rarity.rare)
+        if (reinforceManager.SelectedWeapon.data.rarity < Managers.ServerData.MagicCarveData.firstRarityQuilfication)
             return false;
         return true;
     }

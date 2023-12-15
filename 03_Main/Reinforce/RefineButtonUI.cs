@@ -14,7 +14,7 @@ public class RefineButtonUI : ReinforceButtonUIBase
 
     protected override bool Checks()
     {
-        if (Managers.Game.Player.Data.level < 50)
+        if (Managers.Game.Player.Data.level < Managers.ServerData.RefinementData.levelQuilfication)
             return false;
         return true;
     }
