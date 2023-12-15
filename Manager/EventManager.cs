@@ -60,6 +60,7 @@ public class EventManager
     public Action MiniGameEscEvent;
     public Action<int> SetMiniGameDamageTextEvent;
     public Action<bool> CheckAnimationPlayEvent;
+    public Action MiniGameOverEvent;
     #endregion
 
     #region Quest

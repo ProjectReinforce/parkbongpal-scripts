@@ -33,7 +33,7 @@ public class Rock : MonoBehaviour
     {
         get { return dropStoneCount; }
     }
-    float maxHp = 500f;
+    float maxHp = 2f;
     float hp;
     int currentRockIndex = 0;
 
@@ -47,7 +47,7 @@ public class Rock : MonoBehaviour
 
     public void ResetRockInfo()
     {
-        maxHp = 500f;
+        maxHp = 2f;
         hp = maxHp;
         rockHpSlider.SetHpValue(hp, maxHp);
         image.sprite = sprites[0];
@@ -66,6 +66,12 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
+            ++rockNum;
+            if(rockNum == 11)
+            {
+                rockNum = 0;
+                Managers.Event.MiniGameOverEvent?.Invoke();
+            }
             int randomInt = UnityEngine.Random.Range(0, 2);
             audioSource.PlayOneShot(breakClips[randomInt], volume);
             maxHp *= 2f;
@@ -73,9 +79,8 @@ public class Rock : MonoBehaviour
             rockHpSlider.SetHpValue(hp, maxHp);
 
             image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
-            rockNum++;
 
-            if(rockNum == 5 || rockNum == 11)
+            if(rockNum == 5 || rockNum == 10)
             {
                 Vector2 newSize = image.rectTransform.sizeDelta* 0.8f;
                 image.rectTransform.sizeDelta = newSize;

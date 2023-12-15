@@ -63,6 +63,8 @@ public class MineGame : MonoBehaviour
         Managers.Event.MiniGameEscEvent += MiniGameisOn;
         Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
         Managers.Event.CheckAnimationPlayEvent += CheckAnimationPlaying;
+        Managers.Event.MiniGameOverEvent -= GameOver;
+        Managers.Event.MiniGameOverEvent += GameOver;
 
         pbpManager.gameObject.SetActive(true);
     }
@@ -71,6 +73,7 @@ public class MineGame : MonoBehaviour
     {
         Managers.Event.MiniGameEscEvent -= MiniGameisOn;
         Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
+        Managers.Event.MiniGameOverEvent -= GameOver;
 
         ResetGame();
         pbpManager.gameObject.SetActive(false);
