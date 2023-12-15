@@ -66,33 +66,6 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
-            ++rockNum;
-            if(rockNum == 11)
-            {
-                rockNum = 0;
-                Managers.Event.MiniGameOverEvent?.Invoke();
-            }
-            int randomInt = UnityEngine.Random.Range(0, 2);
-            audioSource.PlayOneShot(breakClips[randomInt], volume);
-            maxHp *= 2f;
-            hp = maxHp;
-            rockHpSlider.SetHpValue(hp, maxHp);
-
-            image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
-
-            if(rockNum == 5 || rockNum == 10)
-            {
-                Vector2 newSize = image.rectTransform.sizeDelta* 0.8f;
-                image.rectTransform.sizeDelta = newSize;
-
-                Vector3 newPosition = image.rectTransform.anchoredPosition3D;
-                newPosition.y -= ((newSize.y/0.8f) - newSize.y) / 2;
-                image.rectTransform.anchoredPosition3D = newPosition;
-            }
-
-
-            timerControl.CurrentTime += 20f;
-
             MinigameRewardPercent minigameRewardPercent = Managers.ServerData.MiniGameRewardPercentDatas;
             int[] minigameRewardPercents = { minigameRewardPercent.None, minigameRewardPercent.Soul, minigameRewardPercent.Ore};
             string[] minigameRewardType = {"None", "Soul", "Ore"};
@@ -122,6 +95,26 @@ public class Rock : MonoBehaviour
                     }
                     break;
                 }
+            }
+
+            rockNum++;
+
+            if(rockNum == 11)
+            {
+                Managers.Event.MiniGameOverEvent?.Invoke();
+                rockNum = 0;
+            }
+            else
+            {
+                int randomInt = UnityEngine.Random.Range(0, 2);
+                audioSource.PlayOneShot(breakClips[randomInt], volume);
+                maxHp *= 2f;
+                hp = maxHp;
+                rockHpSlider.SetHpValue(hp, maxHp);
+
+                image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
+
+                timerControl.CurrentTime += 20f;
             }
         }
     }

@@ -139,7 +139,8 @@ public class MineGame : MonoBehaviour
     public void GameOver()
     {
         isAttackAble = false;
-
+        timerControl.StopOperating();
+        
         Managers.Game.Player.AddGold(rock.Score);
         if(rock.DropSoulCount != 0)
         {

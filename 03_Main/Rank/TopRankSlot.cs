@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class TopRankSlot : MonoBehaviour
 {
     [SerializeField] Sprite[] rankSprites;
-    [SerializeField] Text rewardGoldText;
     [SerializeField] Text rewardDiamondText;
     [SerializeField] Image myRankImage;
     [SerializeField] Text score;
@@ -23,17 +22,14 @@ public class TopRankSlot : MonoBehaviour
         switch (myRank)
         {
             case 1:
-            rewardGoldText.text = $"{1000000:N0}";
             rewardDiamondText.text = $"{5000:N0}";
             break;
 
             case 2:
-            rewardGoldText.text = $"{800000:N0}";
             rewardDiamondText.text = $"{3000:N0}";
             break;
 
             case 3:
-            rewardGoldText.text = $"{500000:N0}";
             rewardDiamondText.text = $"{1000:N0}";
             break;
         }
