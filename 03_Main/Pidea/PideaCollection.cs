@@ -19,4 +19,8 @@ public class PideaCollection : MonoBehaviour
 
         Instantiate(slot, collectionLists[index].weapons).Initialized(slot.baseWeaponIndex);
     }
+    private void OnEnable()
+    {
+        collections.anchoredPosition = Vector2.zero;
+    }
 }

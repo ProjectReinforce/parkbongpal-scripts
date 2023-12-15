@@ -30,7 +30,6 @@ public class Notifyer : MonoBehaviour, IGameInitializer
     }
     public void PideaRemove(NewThing thing)
     {
-        Debug.Log("☆도감 삭제됩니다.");
         newThings.Remove(thing);
         thing.NewClear();
         TextUpdate();
