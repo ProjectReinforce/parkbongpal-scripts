@@ -15,6 +15,7 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
     
     [SerializeField] private GameObject start;
     [SerializeField] private GameObject detail;
+    [SerializeField] RectTransform detailContent;
 
     static readonly Color[] rarityColors =
     {
@@ -30,6 +31,7 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
     {
         start.SetActive(false);
         detail.SetActive(true);
+        detailContent.anchoredPosition = Vector2.zero;
         BaseWeaponData baseWeaponData = Managers.ServerData.GetBaseWeaponData(index);
         weaponName.text = baseWeaponData.name;
         rarity.text = Utills.CapitalizeFirstLetter(((Rarity)baseWeaponData.rarity).ToString());
