@@ -95,16 +95,24 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
         charmText.text = $"{weaponData.charm}";
         constitutionText.text = $"{weaponData.constitution}";
 
+        if (weapon.data.rarity >= (int)Rarity.rare)
+        {
+            lockImages[0].gameObject.SetActive(false);
+
+            if (weapon.data.rarity >= (int)Rarity.legendary)
+                lockImages[1].gameObject.SetActive(false);
+            else
+                lockImages[1].gameObject.SetActive(true);
+        }
+        else
+            lockImages[0].gameObject.SetActive(true);
+
         for (int i = 0; i < Consts.MAX_SKILL_COUNT; i++)
         {
             if (weapon.data.magic[i] < 0)
-            {
-                lockImages[i].gameObject.SetActive(true);
                 skillIcons[i].gameObject.SetActive(false);
-            }
             else
             {
-                lockImages[i].gameObject.SetActive(false);
                 skillIcons[i].sprite = Managers.Resource.GetSkill(weapon.data.magic[i]);
                 skillIcons[i].gameObject.SetActive(true);
             }
