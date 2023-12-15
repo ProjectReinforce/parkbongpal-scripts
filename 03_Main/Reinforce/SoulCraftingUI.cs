@@ -7,6 +7,7 @@ public class SoulCraftingUI : ReinforceUIBase
     Text upgradeCountText;
     Text atkText;
     Text soulCostText;
+    Text descriptionText;
     int soulCost;
 
     protected override void Awake()
@@ -25,6 +26,9 @@ public class SoulCraftingUI : ReinforceUIBase
         upgradeCountText = Utills.Bind<Text>("Text_UpgradeCount", transform);
         atkText = Utills.Bind<Text>("AttackPower", transform);
         soulCostText = Utills.Bind<Text>("Soul_T", transform);
+        SoulCraftingData data = Managers.ServerData.SoulCraftingData;
+        descriptionText = Utills.Bind<Text>("Probability", transform);
+        descriptionText.text = $"추가되는 공격력 : {data.option[0]} ~ {data.option[^1]}%";
     }
 
     void UpdateAtk()

@@ -6,12 +6,23 @@ using UnityEngine.UI;
 public class AdditionalUI : ReinforceUIBase
 {
     Text atkText;
+    Text descriptionText;
 
     protected override void Awake()
     {
         base.Awake();
 
         atkText = Utills.Bind<Text>("AttackPower", transform);
+        AdditionalData data = Managers.ServerData.AdditionalData;
+        descriptionText = Utills.Bind<Text>("Text_Description", transform);
+        string result = "추가되는 공격력\n";
+        for (int i = 0; i < data.option.Length; i++)
+        {
+            result += $"{data.option[i]}%";
+            if (i < data.option.Length - 1)
+                result += " / ";
+        }
+        descriptionText.text = result;
     }
 
     void UpdateAtk()
