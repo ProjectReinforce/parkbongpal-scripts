@@ -32,8 +32,10 @@ public class Additional : Reinforce
     public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         AdditionalData data = Managers.ServerData.AdditionalData;
-        int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
-        int[] additionalDescription = {2, 4, 6, 8, 10};
+        // int[] additionalPercent = {data.option2, data.option4, data.option6, data.option8, data.option10};
+        // int[] additionalDescription = {2, 4, 6, 8, 10};
+        int[] additionalPercent = data.percent;
+        int[] additionalDescription = data.option;
         
         int resultIndex = Utills.GetResultFromWeightedRandom(additionalPercent);
         if (resultIndex != -1)
@@ -159,8 +161,10 @@ public class SoulCrafting : Reinforce
         {
             _weapon.data.SoulStat[(int)StatType.upgradeCount]--;
 
-            int[] soulPercent = {data.option1, data.option2, data.option3, data.option4, data.option5};
-            int[] soulDescription = {1, 2, 3, 4, 5};
+            // int[] soulPercent = {data.option1, data.option2, data.option3, data.option4, data.option5};
+            // int[] soulDescription = {1, 2, 3, 4, 5};
+            int[] soulPercent = data.percent;
+            int[] soulDescription = data.option;
             
             int resultIndex = Utills.GetResultFromWeightedRandom(soulPercent);
             if (resultIndex != -1)

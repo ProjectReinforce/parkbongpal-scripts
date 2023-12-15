@@ -374,7 +374,9 @@ public struct AdditionalData
 {
     public int levelQuilfication;
     public int goldCost;
-    public int option2, option4, option6, option8, option10;
+    // public int option2, option4, option6, option8, option10;
+    public int[] option;
+    public int[] percent;
 }
 
 [Serializable]
@@ -403,7 +405,9 @@ public struct SoulCraftingData
 {
     public int levelQuilfication;
     public int goldCost, soulCost;
-    public int option1, option2, option3, option4, option5;
+    // public int option1, option2, option3, option4, option5;
+    public int[] option;
+    public int[] percent;
 }
 
 [Serializable]

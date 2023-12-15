@@ -58,7 +58,6 @@ public class MineBase : MonoBehaviour, Rental
     protected NPCController doNPC;
 
     protected const float INTERVAL = 1f;
-    protected const int LIMIT_HOUR = 2;
     protected float elapse = INTERVAL;
     protected const int BASE_GOLD = 1;
 
@@ -73,7 +72,7 @@ public class MineBase : MonoBehaviour, Rental
 
         set
         {
-            currencyAmountLimit = value * LIMIT_HOUR * 60;
+            currencyAmountLimit = value * Consts.MAX_COLLECT_HOUR * 60;
             currencyPerMin = value;
         }
     }
