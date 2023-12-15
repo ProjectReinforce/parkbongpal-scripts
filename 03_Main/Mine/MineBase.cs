@@ -153,13 +153,18 @@ public class MineBase : MonoBehaviour, Rental
                 break;
             case MineStatus.Owned:
                 if (lendedWeapon is null) return;
+
                 if (CurrentCurrency >= currencyAmountLimit)
                 {
-                    doNPC.gameObject.SetActive(false);
-                    restNPC.gameObject.SetActive(true);
+                    if (currencyAmountLimit > 0)
+                    {
+                        doNPC.gameObject.SetActive(false);
+                        restNPC.gameObject.SetActive(true);
+                    }
                     return;
                 }
                 elapse -= Time.fixedDeltaTime;
+
                 if (elapse > 0) return;
                 elapse += INTERVAL;
                 CurrentCurrency += (int)(currencyPerMin * INTERVAL / 60);
