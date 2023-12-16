@@ -208,6 +208,7 @@ public enum SfxType
     MinigameRockDamaged01,
     MinigameRockDamaged02,
     MinigameRockDamaged03,
+    TapMove,
 }
 
 public enum BgmType
