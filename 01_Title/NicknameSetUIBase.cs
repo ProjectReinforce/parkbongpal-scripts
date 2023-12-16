@@ -11,8 +11,11 @@ public abstract class NicknameSetUIBase : MonoBehaviour
     protected Image nicknameInputImage;
     protected Text messageText;
     protected Button confirmButton;
+    Color originColor;
     protected void Awake()
     {
+        originColor = nicknameInputImage.color;
+
         nicknameInput = Utills.Bind<InputField>("Nickname_InputField", transform);
         nicknameInputImage = Utills.Bind<Image>("Nickname_InputField", transform);
         messageText = Utills.Bind<Text>("Text_Message", transform);
@@ -74,7 +77,6 @@ public abstract class NicknameSetUIBase : MonoBehaviour
     {
         messageText.text = _message;
 
-        Color originColor = nicknameInputImage.color;
         for(int i = 0; i < Consts.BLINK_COUNT; i++)
         {
             nicknameInputImage.color = Color.red;
