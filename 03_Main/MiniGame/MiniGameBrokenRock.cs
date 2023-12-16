@@ -15,7 +15,7 @@ public class MiniGameBrokenRock : MonoBehaviour
     void OnEnable()
     {
         int randomInt = Random.Range(0, 3);
-        Managers.Sound.PlaySfx(SfxType.MinigameRockDamaged01 + randomInt, 0.5f);
+        Managers.Sound.PlaySfx(SfxType.MinigameRockDamaged01 + randomInt, 0.3f);
         // audioSource.clip = brockenSoundClips[randomInt];
         // audioSource.Play();
     }
