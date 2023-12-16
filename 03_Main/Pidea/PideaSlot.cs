@@ -4,13 +4,16 @@ using UnityEngine.UI;
 public class PideaSlot : NewThing
 {
     [SerializeField] Image weaponImage;
+    Button button;
     int _baseWeaponIndex;
     public int baseWeaponIndex => _baseWeaponIndex;
-    public void Initialized(int index)
+    public void Initialized(int index, bool isClickable = true)
     {
         weaponImage.sprite = Managers.Resource.GetBaseWeaponSprite(index);
         weaponImage.material = Managers.ServerData.ownedWeaponIds[index];
         _baseWeaponIndex = index;
+        TryGetComponent(out button);
+        button.interactable = isClickable;
     }
     public void SetCurrent()
     {

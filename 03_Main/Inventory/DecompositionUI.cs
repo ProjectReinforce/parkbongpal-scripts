@@ -37,7 +37,11 @@ public class DecompositionUI : MonoBehaviour
         contentTransform = Utills.Bind<Transform>("Content_Decomposition_Slot", transform);
         contentScrollbar = Utills.Bind<Scrollbar>("Scrollbar Vertical_Decomposition", transform);
         decompositionButton = Utills.Bind<Button>("Button_Decomposition", transform);
-        decompositionButton.onClick.AddListener(() => ExcuteDecomposition());
+        decompositionButton.onClick.AddListener(() =>
+        {
+            ExcuteDecomposition();
+            Managers.Sound.PlaySfx(SfxType.Decomposition);
+        });
     }
 
     void OnEnable()
@@ -45,6 +49,7 @@ public class DecompositionUI : MonoBehaviour
         decompositionButton.interactable = false;
 
         Managers.Event.SlotSelectEvent += Selected;
+        Managers.Sound.PlaySfx(SfxType.PopupOpen);
 
         selectedWeapons.Clear();
 
@@ -56,6 +61,7 @@ public class DecompositionUI : MonoBehaviour
     void OnDisable()
     {
         Managers.Event.SlotSelectEvent -= Selected;
+        Managers.Sound.PlaySfx(SfxType.PopupClose);
     }
 
     void Selected(Weapon _weapon)

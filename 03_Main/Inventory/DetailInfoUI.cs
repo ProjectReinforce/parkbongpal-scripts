@@ -38,6 +38,8 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
     Text rarityText;
     Text weaponName;
 
+    Button button;
+
     void OnDisable()
     {
         gameObject.SetActive(false);
@@ -71,6 +73,12 @@ public class DetailInfoUI : MonoBehaviour, IGameInitializer
         rarityImage = Utills.Bind<Image>("Image_Rarity", transform);
         rarityText = Utills.Bind<Text>("Text_Rarity", transform);
         weaponName = Utills.Bind<Text>("Text_WeaponName", transform);
+
+        button = Utills.Bind<Button>("Button_ReinforceInfo", transform);
+        button.onClick.AddListener(() =>
+        {
+            Managers.Sound.PlaySfx(SfxType.ReinforceDetail);
+        });
     }
 
     public void Refresh(Weapon weapon)
