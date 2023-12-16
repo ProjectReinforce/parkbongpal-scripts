@@ -79,7 +79,7 @@ public class Login : MonoBehaviour
                 Managers.Game.MainEnqueue(() =>
                 {
                     Managers.UI.OpenPopup(LoginPopup);
-                    Managers.Alarm.Warning($"자동 로그인 실패 : {message}");
+                    Managers.Alarm.Warning($"자동 로그인 실패 :\n{message}");
                     tokenLoginButton.interactable = true;
                     StopCoroutine(processCoroutine);
                     processText.text = "Touch to start.";

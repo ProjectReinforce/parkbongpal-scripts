@@ -17,12 +17,13 @@ public class Pidea : MonoBehaviour
     public void ClickTap(int index)
     {
         currentTap.gameObject.SetActive(false);
+        if (currentTap != rarityTables[index])
+            Managers.Sound.PlaySfx(SfxType.PideaChange);
         currentTap = rarityTables[index];
         scrollView.content = currentTap;
         float PosX = currentTap.anchoredPosition.x;
         currentTap.anchoredPosition = new Vector2(PosX, 0);
         currentTap.gameObject.SetActive(true);
-        Managers.Sound.PlaySfx(SfxType.PideaChange);
     }
     Material[] materials;//가진 웨폰아이디
 
