@@ -578,7 +578,7 @@ public class BackEndDataManager
         deligate[0] = (count) =>
         {
             if (count >= UUIDs.Length) return;
-            SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], callback =>
+            SendQueue.Enqueue(Backend.URank.User.GetRankList, UUIDs[count], 100, callback =>
             {
                 if (!callback.IsSuccess())
                 {

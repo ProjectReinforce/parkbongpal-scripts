@@ -41,16 +41,33 @@ public class Ranking : MonoBehaviour
         }
     }
 
-    
+    //현재 서버에 있는 모든 차트에 있는 내 랭킹정보 3가지
 
     void SetOnlyMyRank(int i)
     {
         onlyMyRank[i] = FindMyRankDataByNickname((RankingType)i);
     }
-    
+
     Rank FindMyRankDataByNickname(RankingType _rankingType)
     {
-        for(int i = 0; i < Managers.ServerData.myRanks[(int)_rankingType].Length; i++)
+        int k=0;
+        for (int i = 0; i < Managers.ServerData.topRanks[(int)_rankingType].Length; i++)
+        {
+            if (Managers.ServerData.topRanks[(int)_rankingType][i].nickname == Backend.UserNickName)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if(i+j<0 || i+j>Managers.ServerData.topRanks[(int)_rankingType].Length -1 ){
+                        continue;
+                    }
+                    ranks[1][(int)_rankingType][k] = Managers.ServerData.topRanks[(int)_rankingType][i + j];
+                    k++;
+                }
+                return Managers.ServerData.topRanks[(int)_rankingType][i];
+            }
+        }
+
+        for (int i = 0; i < Managers.ServerData.myRanks[(int)_rankingType].Length; i++)
         {
             if (Managers.ServerData.myRanks[(int)_rankingType][i].nickname == Backend.UserNickName)
             {
@@ -59,6 +76,7 @@ public class Ranking : MonoBehaviour
         }
         return new Rank();
     }
+
 
     void SetSlotTo(int idx, int _rankIndex)
     {
