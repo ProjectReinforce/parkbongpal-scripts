@@ -18,6 +18,7 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Button syncGoogleButton;
     [SerializeField] GameObject nicknameChange;
     [SerializeField] GameObject questionBox;
+    [SerializeField] GameObject blockPanel;
     // [SerializeField] Image myFavoriteWeapon;
     
     void Start()
@@ -40,7 +41,12 @@ public class SettingUI : MonoBehaviour
                     {
                         syncGoogleButton.onClick.AddListener(() =>
                         {
-                            Managers.Alarm.WarningWithButton($"구글플레이 아이디로 계정을 전환하시겠습니까? 연동에는 시간이 조금 걸리니 별도의 메시지가 출력될 때까지 잠시만 기다려 주세요.", () => OnClickLoginGoogle(syncGoogleButton));
+                            Managers.Alarm.WarningWithButton($"구글플레이 아이디로 계정을 전환하시겠습니까?", () =>
+                            {
+                                Managers.UI.ClosePopup();
+                                blockPanel.SetActive(true);
+                                OnClickLoginGoogle(syncGoogleButton);
+                            });
                         });
                         syncGoogleButton.interactable = true;
                     });
@@ -65,12 +71,19 @@ public class SettingUI : MonoBehaviour
     {
         SendQueue.Enqueue(Backend.BMember.ChangeCustomToFederation, GetTokens(), FederationType.Google, callback =>
         {
-            Managers.UI.ClosePopup();
             if(!callback.IsSuccess())
             {
-                Managers.Alarm.Danger($"계정 연동에 실패했습니다. {callback}");
-                return;
+                switch (int.Parse(callback.GetStatusCode()))
+                {
+                    default:
+                    Managers.Alarm.Danger($"계정 연동에 실패했습니다. {callback}");
+                    return;
+                    case 409:
+                    Managers.Alarm.Danger($"이미 연동되어 있는 구글 계정입니다.");
+                    return;
+                }
             }
+            blockPanel.SetActive(false);
             Managers.Alarm.Warning($"계정 연동에 성공했습니다.");
             BackendReturnObject bro = Backend.BMember.GetUserInfo();
             accountText.text = $"계정 : {bro.GetReturnValuetoJSON()["row"]["federationId"]}";

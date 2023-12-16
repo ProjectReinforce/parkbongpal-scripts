@@ -11,6 +11,7 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
     [SerializeField] AdType adType;
     Button button;
     int tryCount = 0;
+    bool isLoading;
 
     public void GameInitialize()
     {
@@ -50,6 +51,8 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
     /// </summary>
     public void LoadRewardedInterstitialAd()
     {
+        if (isLoading == true) return;
+        
         tryCount++;
         if (tryCount >= 3)
         {
@@ -74,12 +77,13 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
         RewardedAd.Load(_adUnitId[(int)adType], adRequest,
         (RewardedAd ad, LoadAdError error) =>
         {
+            isLoading = true;
             // if error is not null, the load request failed.
             if (error != null || ad == null)
             {
                 Debug.LogError("rewarded interstitial ad failed to load an ad " +
                                 "with error : " + error);
-                Managers.Alarm.Warning($"광고 로드에 실패했습니다. 재시도 횟수 : {tryCount}");
+                // Managers.Alarm.Warning($"광고 로드에 실패했습니다. 재시도 횟수 : {tryCount}");
                 LoadRewardedInterstitialAd();
 
                 return;

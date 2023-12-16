@@ -13,7 +13,7 @@ public class QuestContentsInitializer : MonoBehaviour, IGameInitializer
     Dictionary<RecordType, List<QuestContent>> questContents = new();
     Dictionary<int, QuestContent> quests = new();
 
-    int oldExp, oldLevel, oldGold, oldDiamond;
+    int oldExp, oldLevel, oldGold, oldDiamond, oldSoul;
 
     public void GameInitialize()
     {
@@ -50,6 +50,7 @@ public class QuestContentsInitializer : MonoBehaviour, IGameInitializer
         oldLevel = userData.level;
         oldGold = userData.gold;
         oldDiamond = userData.diamond;
+        oldSoul = userData.weaponSoul;
 
         UpdateAllContent();
     }
@@ -57,7 +58,7 @@ public class QuestContentsInitializer : MonoBehaviour, IGameInitializer
     void OnDisable()
     {
         Player player = Managers.Game.Player;
-        if (oldExp != player.Data.exp || oldLevel != player.Data.level || oldGold != player.Data.gold || oldDiamond != player.Data.diamond)
+        if (oldExp != player.Data.exp || oldLevel != player.Data.level || oldGold != player.Data.gold || oldDiamond != player.Data.diamond || oldSoul != player.Data.weaponSoul)
         {
             player.AddTransactionQuestRewards();
             Transactions.SendCurrent();
