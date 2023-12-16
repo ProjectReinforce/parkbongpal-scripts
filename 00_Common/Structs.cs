@@ -403,7 +403,7 @@ public struct MagicCarveData
 [Serializable]
 public struct SoulCraftingData
 {
-    public int levelQuilfication;
+    public int levelQualification;
     public int goldCost, soulCost;
     // public int option1, option2, option3, option4, option5;
     public int[] option;
@@ -413,7 +413,7 @@ public struct SoulCraftingData
 [Serializable]
 public struct RefinementData
 {
-    public int levelQuilfication;
+    public int levelQualification;
     public int baseGold, goldPerTry;
     public int baseOre, orePerTry;
     public int atk, critical, stat3, stat6;
