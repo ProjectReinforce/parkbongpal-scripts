@@ -61,7 +61,6 @@ public class Rock : MonoBehaviour
     {
         hp -= damage;
         score += damage;
-        Debug.Log(score);
         hp = Mathf.Clamp(hp, 0.0f, maxHp);
         rockHpSlider.SetHpValue(hp, maxHp);
 
@@ -77,10 +76,8 @@ public class Rock : MonoBehaviour
                 switch (minigameRewardType[resultIndex])
                 {
                     case "None":
-                    Debug.Log($"{minigameRewardType[resultIndex]}   꽝!");
                     break;
                     case "Soul": 
-                    Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 소울 {numItems}개 드랍!");
                     dropSoulCount += numItems;
                     for(int i = 0; i < numItems; i++)
                     {
@@ -88,7 +85,6 @@ public class Rock : MonoBehaviour
                     }
                     break;
                     case "Ore": 
-                    Debug.Log($"{minigameRewardType[resultIndex]} + {numItems} + 원석 {numItems}개 드랍!");
                     dropStoneCount += numItems;
                     for(int i = 0; i < numItems; i++)
                     {

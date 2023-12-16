@@ -172,20 +172,20 @@ public class SettingUI : MonoBehaviour
     //     }
     // }
 
-    public void OpenTitleWeaponInventory()
-    {
-        Debug.Log("최애무기를 고를수 있는 UI가 열릴 예정");
-    }
+    // public void OpenTitleWeaponInventory()
+    // {
+    //     Debug.Log("최애무기를 고를수 있는 UI가 열릴 예정");
+    // }
 
-    public void OpenChangeClothesInventory()
-    {
-        Debug.Log("봉팔이의 옷을 변경할 수 있는 UI가 열릴 예정");
-    }
+    // public void OpenChangeClothesInventory()
+    // {
+    //     Debug.Log("봉팔이의 옷을 변경할 수 있는 UI가 열릴 예정");
+    // }
 
-    public void OpenChangeHammerInventory()
-    {
-        Debug.Log("봉팔이의 망치를 변경할 수 있는 UI가 열릴 예정");
-    }
+    // public void OpenChangeHammerInventory()
+    // {
+    //     Debug.Log("봉팔이의 망치를 변경할 수 있는 UI가 열릴 예정");
+    // }
 
     public void OpenUserHelp()
     {
