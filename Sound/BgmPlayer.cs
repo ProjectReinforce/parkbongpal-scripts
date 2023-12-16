@@ -43,9 +43,10 @@ public class BgmPlayer : MonoBehaviour
         }
     }
 
-    public void PlayBgm(BgmType _bgmName)
+    public void PlayBgm(BgmType _bgmName, float _volume = 1f)
     {
         bgmPlayer.Stop();
+        bgmPlayer.volume = maxVolume * _volume;
         bgmPlayer.clip = bgmClips[(int)_bgmName];
         bgmPlayer.Play();
     }

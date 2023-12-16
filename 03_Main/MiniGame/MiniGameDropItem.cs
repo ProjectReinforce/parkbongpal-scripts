@@ -51,7 +51,7 @@ public class MiniGameDropItem : MonoBehaviour
             {
                 managedPool.Release(gameObject);
                 gameObject.transform.position = gameObject.transform.parent.position;
-                Managers.Sound.PlaySfx(SfxType.GetCoin, 0.1f);
+                Managers.Sound.PlaySfx(SfxType.GetCoin, 0.2f);
             });
         });
     }
