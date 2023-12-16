@@ -84,7 +84,6 @@ public class Managers : MonoBehaviour
     /// <param name="_hasFocus"></param>
     void OnApplicationFocus(bool _hasFocus)
     {
-        FixedScreenRatio.SetResolution();
         etc?.ReServeServerTime();
         
         bool isInMainScene = game != null && game.Mine != null && _hasFocus == true;

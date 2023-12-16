@@ -12,7 +12,7 @@ public class FixedScreenRatio : MonoBehaviour
         SetResolution();
     }
 
-    public static void SetResolution()
+    public void SetResolution()
     {
         int deviceWidth = Screen.width;
         int deviceHeight = Screen.height;

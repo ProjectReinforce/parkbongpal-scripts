@@ -54,17 +54,37 @@ public class Login : MonoBehaviour
             }
             else
             {
+                string message = "";
+                switch (int.Parse(callback.GetStatusCode()))
+                {
+                    default:
+                    message = callback.ToString();
+                    break;
+                    case 400:
+                    message = "기기에 로그인 정보가 없습니다. 로그인 방법을 선택해주세요.";
+                    break;
+                    case 401:
+                    if (callback.GetMessage().Contains("bad refreshToken, 잘못된 refreshToken 입니다"))
+                        message = "계정 정보가 없습니다.";
+                    else if (callback.GetMessage().Contains("프로젝트 상태가 '점검'일 경우"))
+                        message = "서버 점검 중입니다.";
+                    break;
+                    case 403:
+                    message = "차단된 계정입니다.";
+                    break;
+                    case 410:
+                    message = "로그인 정보가 만료되었습니다.";
+                    break;
+                }
                 Managers.Game.MainEnqueue(() =>
                 {
-                    // Debug.LogError($"자동 로그인 실패 : {callback}");
                     Managers.UI.OpenPopup(LoginPopup);
-                    Managers.Alarm.Warning($"자동 로그인 실패 : {callback}");
+                    Managers.Alarm.Warning($"자동 로그인 실패 : {message}");
                     tokenLoginButton.interactable = true;
                     StopCoroutine(processCoroutine);
                     processText.text = "Touch to start.";
                 });
             }
-            // Debug.Log("자동 로그인에 성공했습니다");
         });
     }
 
