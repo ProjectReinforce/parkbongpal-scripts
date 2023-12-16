@@ -17,7 +17,7 @@ public class PideaCollection : MonoBehaviour
     {
         if (index < 0) return;
 
-        Instantiate(slot, collectionLists[index].weapons).Initialized(slot.baseWeaponIndex);
+        Instantiate(slot, collectionLists[index].weapons).Initialized(slot.baseWeaponIndex, false);
     }
     private void OnEnable()
     {

@@ -73,7 +73,7 @@ public class InventoryOpenOptionDefault : InventoryOpenOptionBase, IInventoryOpe
             
             Managers.UI.MoveTap(TapType.Reinforce);
             Managers.Game.Reinforce.SelectedWeapon = currentWeapon;
-            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
         });
         selectText.text = "강화하기";
         decompositionButton.gameObject.SetActive(true);
@@ -111,7 +111,7 @@ public class InventoryOpenOptionMine : InventoryOpenOptionBase, IInventoryOpenOp
             
             Managers.Event.WeaponCollectEvent?.Invoke(currentWeapon);
             Managers.Event.ConfirmLendWeaponEvent?.Invoke(currentWeapon);
-            Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
+            Managers.Sound.PlaySfx(SfxType.SlotClick);
             Managers.UI.ClosePopup();
         });
         selectText.text = "빌려주기";

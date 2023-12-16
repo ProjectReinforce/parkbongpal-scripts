@@ -5,10 +5,10 @@ using UnityEngine;
 public class PBPManager : MonoBehaviour
 {
     [SerializeField] PBPController[] pbpControllers;
-    [SerializeField] AudioClip[] hitClips;
-    [SerializeField] AudioSource audioSource;
-    [Range(0, 1f)]
-    [SerializeField] float volume;
+    // [SerializeField] AudioClip[] hitClips;
+    // [SerializeField] AudioSource audioSource;
+    // [Range(0, 1f)]
+    // [SerializeField] float volume;
 
     // void OnEnable() 
     // {
@@ -31,7 +31,8 @@ public class PBPManager : MonoBehaviour
         }
         pbpControllers[Utills.random.Next(0 , 3)].gameObject.SetActive(true);
         int randomInt = Random.Range(0, 3);
-        audioSource.PlayOneShot(hitClips[randomInt], volume);
+        Managers.Sound.PlaySfx(SfxType.MinigameHit01 + randomInt);
+        // audioSource.PlayOneShot(hitClips[randomInt], volume);
     }
 
     // void OnDisable() 

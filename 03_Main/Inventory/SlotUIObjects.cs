@@ -64,7 +64,7 @@ public class WeaponIcon : UIObject
             Weapon weapon = Managers.Game.Inventory.GetWeapon(targetWeaponIndex);
             // Managers.Event.SlotClickEvent?.Invoke(new Weapon[] { weapon });
             Managers.Event.SlotSelectEvent?.Invoke(weapon);
-            Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
+            Managers.Sound.PlaySfx(SfxType.SlotClick);
         });
     }
 

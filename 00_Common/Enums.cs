@@ -197,6 +197,17 @@ public enum SfxType
     ReinforceFail,
     ReinforceSuccess,
     SlotClick,
+    ReinforceDetail,
+    PideaChange,
+    Decomposition,
+    MinigameHit01,
+    MinigameHit02,
+    MinigameHit03,
+    MinigameRockBreak01,
+    MinigameRockBreak02,
+    MinigameRockDamaged01,
+    MinigameRockDamaged02,
+    MinigameRockDamaged03,
 }
 
 public enum BgmType
