@@ -143,6 +143,7 @@ public class SettingUI : MonoBehaviour
             Backend.BMember.Logout();
             Managers.UI.ClosePopup();
             Utills.LoadScene("R_Start");
+            Application.Quit();
         });
     }
 
