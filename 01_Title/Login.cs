@@ -50,7 +50,7 @@ public class Login : MonoBehaviour
                 if(Backend.UserNickName == "")
                     Managers.UI.OpenPopup(NicknamePopup);
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6_JHH.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
             }
             else
             {
@@ -180,7 +180,7 @@ public class Login : MonoBehaviour
                     Managers.UI.InputLock = true;
                 }
                 else
-                    Utills.LoadScene(SceneName.R_Main_V6_JHH.ToString());
+                    Utills.LoadScene(SceneName.R_Main_V6.ToString());
                 break;
             case 201:
                 {
