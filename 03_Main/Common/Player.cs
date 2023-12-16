@@ -149,7 +149,7 @@ public class Player
 
     public void SetMineGameScore(int score)
     {
-        userData.mineGameScore = (int)MathF.Min(userData.mineGameScore + score, int.MaxValue);
+        userData.mineGameScore = (int)MathF.Min(score, int.MaxValue);
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.column.mineGameScore), userData.mineGameScore);
     }
 

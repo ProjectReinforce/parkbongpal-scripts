@@ -33,7 +33,7 @@ public class Rock : MonoBehaviour
     {
         get { return dropStoneCount; }
     }
-    float maxHp = 2f;
+    float maxHp = 500f;
     float hp;
     int currentRockIndex = 0;
 
@@ -47,13 +47,14 @@ public class Rock : MonoBehaviour
 
     public void ResetRockInfo()
     {
-        maxHp = 2f;
+        maxHp = 500f;
         hp = maxHp;
         rockHpSlider.SetHpValue(hp, maxHp);
         image.sprite = sprites[0];
         currentRockIndex = 0;
         image.rectTransform.sizeDelta = originalSizeDelta;
         image.rectTransform.anchoredPosition3D = originalPosition;
+        rockNum = 0;
     }
 
     public void GetDamage(int damage)
