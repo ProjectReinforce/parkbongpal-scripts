@@ -9,10 +9,12 @@ public class TutorialPlayer : MonoBehaviour
 {
     [SerializeField] GameObject tutorialPanel;
     [SerializeField] GameObject cheifControl;
+    [SerializeField] GameObject tutorialPanelInventory;
     [SerializeField] Sprite[] cheifSprite;
     [SerializeField] GameObject cheifTalkObject;
     [SerializeField] Button tutorialButton;
     [SerializeField] Button textNextButton;
+    [SerializeField] Button tutorialPanelButton;
     [SerializeField] Text cheifTalk;
     [SerializeField] Store storeUI;
     [SerializeField] MineBase mineUI;
@@ -62,6 +64,7 @@ public class TutorialPlayer : MonoBehaviour
             reconnectChecking = false;
             tutorialButton.onClick.AddListener(ButtonIndexChange);
             textNextButton.onClick.AddListener(TextChanges);
+            tutorialPanelButton.onClick.AddListener(ButtonIndexChange);
 
             cheifControl.gameObject.SetActive(true);
             cheifTalkObject.gameObject.SetActive(true);
@@ -655,7 +658,8 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        tutorialPanel.transform.localScale = new Vector3(300, 250);
+        tutorialPanel.gameObject.SetActive(false);
+        tutorialPanelInventory.gameObject.SetActive(true);
         detailInfoUI = inventoryUI.DetailInfo;
         Weapon weapon = Managers.Game.Inventory.GetWeapon(0);
         Managers.Event.SlotSelectEvent?.Invoke(weapon);
@@ -665,7 +669,6 @@ public class TutorialPlayer : MonoBehaviour
     {
         textNextButton.gameObject.SetActive(true);
         tutorialPanel.transform.parent.gameObject.SetActive(false);
-        tutorialPanel.transform.localScale = new Vector3(68, 68);
         cheifControl.transform.localPosition = new Vector3(-180, -160, 0);
     }
 
@@ -877,6 +880,8 @@ public class TutorialPlayer : MonoBehaviour
             case 35:
                 textNextButton.gameObject.SetActive(false);
                 tutorialPanel.transform.parent.gameObject.SetActive(true);
+                tutorialPanel.gameObject.SetActive(true);
+                tutorialPanelInventory.gameObject.SetActive(false);
                 break;
             case 36:
                 textNextButton.gameObject.SetActive(false);

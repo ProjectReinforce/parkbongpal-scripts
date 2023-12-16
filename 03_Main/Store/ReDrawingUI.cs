@@ -6,6 +6,7 @@ public class ReDrawingUI : MonoBehaviour
     int redrawingType;
     int redarwingCount;
     [SerializeField]Store store;
+    UnityEngine.UI.Button targetButton;
 
     private void OnEnable()
     {
@@ -28,9 +29,15 @@ public class ReDrawingUI : MonoBehaviour
         }
     }
 
-    public void SetInfo(int _type, int _Count)
+    private void OnDisable()
+    {
+        targetButton.interactable = true;
+    }
+
+    public void SetInfo(int _type, int _Count, UnityEngine.UI.Button _button)
     {
         redrawingType = _type;
         redarwingCount = _Count;
+        targetButton = _button;
     }
 }

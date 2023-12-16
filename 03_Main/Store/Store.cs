@@ -72,7 +72,7 @@ public class Store : MonoBehaviour
 
     public void ExecuteManaufactureUI(int _type, int _count)
     {
-        if(manufactureStartButton.transform.parent.parent.gameObject.activeSelf)
+        if (manufactureStartButton.transform.parent.parent.gameObject.activeSelf)
         {
             Managers.UI.ClosePopup(false, true);
         }
@@ -102,7 +102,6 @@ public class Store : MonoBehaviour
             }
             Managers.Game.Player.TryAdvanceProduceWeapon(_count);
         }
-
         BaseWeaponData[] baseWeaponDatas = new BaseWeaponData[_count];
         bool legendaryCheck = false;
 

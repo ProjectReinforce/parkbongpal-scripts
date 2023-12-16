@@ -36,8 +36,9 @@ public class ManufactureResultUI : MonoBehaviour
         resultWeapons = _resultWeapons;
         reDrawingButton.onClick.AddListener(() =>
         {
-            redrawingUI.SetInfo(_type, resultWeapons.Length);
+            redrawingUI.SetInfo(_type, resultWeapons.Length, reDrawingButton);
             Managers.UI.OpenPopup(redrawingUI.gameObject);
+            reDrawingButton.interactable = false;
         });
     }
 }
