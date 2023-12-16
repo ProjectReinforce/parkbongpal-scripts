@@ -128,7 +128,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
             weaponCollectButton.onClick.RemoveAllListeners();
             weaponCollectButton.onClick.AddListener(() => 
             {
-                Managers.Sound.PlaySfx(SfxType.SlotClick, 0.5f);
+                Managers.Sound.PlaySfx(SfxType.SlotClick);
                 weaponCollectButton.interactable = false;
                 (RewardType rewardType, int amount) = _mine.Receipt(false);
                 _mine.CollectWeapon();
@@ -147,7 +147,7 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                     }
                     if (amount > 0)
                         Managers.Alarm.Warning($"{rewardType}: {amount:n0}를 수령했습니다.");
-                    weaponCollectButton.interactable = true;
+                    // weaponCollectButton.interactable = true;
                 });
             });
             weaponCollectButton.interactable = true;
@@ -162,7 +162,6 @@ public class MineDetail : MonoBehaviour, IGameInitializer
                     goldCollectButton.interactable = true;
                     return;
                 }
-                // Managers.Sound.PlaySfx(SfxType.CoinPop, 0.5f);
                 switch (rewardType)
                 {
                     case RewardType.Gold:

@@ -30,7 +30,8 @@ public class SfxPlayer : MonoBehaviour
 
     public void PlaySfx(SfxType _sfxType, float _volume)
     {
-        sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType], Mathf.Min(maxVolume, _volume));
+        // sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType], Mathf.Min(maxVolume, _volume));
+        sfxPlayer.PlayOneShot(sfxClips[(int)_sfxType], maxVolume * _volume);
     }
 
     public void SfxSoundOn()

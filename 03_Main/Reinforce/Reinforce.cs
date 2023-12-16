@@ -14,7 +14,7 @@ public class Promote : Reinforce
     public void Execute(Weapon _weapon, Action<BackendReturnObject> _callback = null)
     {
         _weapon.Promote();
-        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.rarity), _weapon.data.rarity);
@@ -44,7 +44,7 @@ public class Additional : Reinforce
             _weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
             _weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
 
-            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
         }
 
         Param param = new Param();
@@ -83,12 +83,12 @@ public class NormalReinforce : Reinforce
             {
                 Debug.Log($"result : {randomValue} / 강화 성공!");
                 _weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
-                Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+                Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
             }
             else
             {
                 Debug.Log($"result : {randomValue} / 강화 실패!");
-                Managers.Sound.PlaySfx(SfxType.ReinforceFail, 0.5f);
+                Managers.Sound.PlaySfx(SfxType.ReinforceFail);
             }
         }
 
@@ -126,7 +126,7 @@ public class MagicEngrave : Reinforce
             _weapon.data.magic[i] = results[i];
         }
 
-        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
 
         Param param = new Param();
         param.Add(nameof(WeaponData.colum.magic), _weapon.data.magic);
@@ -173,7 +173,7 @@ public class SoulCrafting : Reinforce
                 _weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
             }
 
-            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+            Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
         }
         
         Param param = new Param();
@@ -248,7 +248,7 @@ public class Refinement : Reinforce
 
         Managers.Game.Reinforce.RefineResults = refineResults;
         
-        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess, 0.5f);
+        Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
 
         // foreach (var item in refineResults)
         // {

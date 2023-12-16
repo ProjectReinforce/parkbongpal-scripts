@@ -6,8 +6,8 @@ using DG.Tweening;
 
 public class MiniGameBrokenRock : MonoBehaviour
 {
-    [SerializeField] AudioClip[] brockenSoundClips;
-    AudioSource audioSource;
+    // [SerializeField] AudioClip[] brockenSoundClips;
+    // AudioSource audioSource;
     // Q : public이어야 할 이유, 그렇다면 변수명은 왜 소문자로 시작하는지
     // public IObjectPool<GameObject> managedPool;
     IObjectPool<GameObject> managedPool;
@@ -15,14 +15,15 @@ public class MiniGameBrokenRock : MonoBehaviour
     void OnEnable()
     {
         int randomInt = Random.Range(0, 3);
-        audioSource.clip = brockenSoundClips[randomInt];
-        audioSource.Play();
+        Managers.Sound.PlaySfx(SfxType.MinigameRockDamaged01 + randomInt);
+        // audioSource.clip = brockenSoundClips[randomInt];
+        // audioSource.Play();
     }
 
     public void Initialize(IObjectPool<GameObject> _objectPool)
     {
         managedPool = _objectPool;
-        TryGetComponent(out audioSource);
+        // TryGetComponent(out audioSource);
     }
 
     public void DestroyBrokenRock()
