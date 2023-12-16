@@ -14,12 +14,12 @@ public abstract class NicknameSetUIBase : MonoBehaviour
     Color originColor;
     protected void Awake()
     {
-        originColor = nicknameInputImage.color;
-
         nicknameInput = Utills.Bind<InputField>("Nickname_InputField", transform);
         nicknameInputImage = Utills.Bind<Image>("Nickname_InputField", transform);
         messageText = Utills.Bind<Text>("Text_Message", transform);
         confirmButton = Utills.Bind<Button>("Button_Confirm", transform);
+
+        originColor = nicknameInputImage.color;
     }
 
     protected const int MINLENGTH = 2;
