@@ -38,7 +38,7 @@ public class CurrencyCollectEffectController : MonoBehaviour
 
     public void Animate(Vector2 _fromPos)
     {
-        Managers.Sound.PlaySfx(SfxType.CoinPop, 0.5f);
+        Managers.Sound.PlaySfx(SfxType.CoinPop, 0.3f);
         int effectCount = Random.Range(3, 10);
         currentCount = 0;
 
@@ -53,7 +53,7 @@ public class CurrencyCollectEffectController : MonoBehaviour
                 float duration = Random.Range(0.3f, 0.5f);
                 obj.transform.DOMove(targetTransform.position, duration).OnComplete(() => 
                 {
-                    Managers.Sound.PlaySfx(SfxType.GetCoin, 0.5f);
+                    Managers.Sound.PlaySfx(SfxType.GetCoin, 0.3f);
                     obj.SetActive(false);
                     TryRelease(effectCount);
                 });

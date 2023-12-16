@@ -13,6 +13,7 @@ public class ReinforceInfos
             if (value is null) return;
             selectedWeapon = value;
 
+            ResetMaterials();
             refineResults = null;
             Managers.Event.ReinforceWeaponChangeEvent?.Invoke();
         }
@@ -39,6 +40,7 @@ public class ReinforceInfos
     public void ResetMaterials()
     {
         selectedMaterials.Clear();
+        Managers.Event.ReinforceMaterialChangeEvent?.Invoke();
     }
 
     public void Reset()
