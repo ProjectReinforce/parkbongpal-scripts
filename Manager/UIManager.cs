@@ -67,6 +67,7 @@ public class UIManager
         //     item.SetActive(true);                           // 각각의 GameObject를 활성화함
         
         Managers.Event.TapChangeEvent?.Invoke(currentTapType);
+        Managers.Sound.PlaySfx(SfxType.TapMove);
     }
 
     /// <summary>
