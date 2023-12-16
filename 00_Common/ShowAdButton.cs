@@ -71,6 +71,7 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
             {
                 Debug.LogError("rewarded interstitial ad failed to load an ad " +
                                 "with error : " + error);
+                Managers.Alarm.Warning("광고 로드에 실패했습니다.");
                 return;
             }
 
