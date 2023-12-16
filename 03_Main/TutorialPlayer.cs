@@ -392,11 +392,6 @@ public class TutorialPlayer : MonoBehaviour
         {
             tutorialPanel.transform.position = panelTrans[index].position / 2;
         }
-        if (index == 35)
-        {
-            vector = new Vector3(panelTrans[index].position.x / 10, panelTrans[index].position.y);
-            tutorialPanel.transform.position = vector;
-        }
     }
 
     void OnCheifTalkObject()
