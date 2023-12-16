@@ -105,8 +105,6 @@ public class MineGame : MonoBehaviour
             yield return waitForSeconds;
         }
 
-        Debug.Log("Game Start!");
-
         isAttackAble = true;
         timerControl.StartOperating();
         mainButton.gameObject.SetActive(false);
