@@ -54,6 +54,7 @@ public class Rock : MonoBehaviour
         currentRockIndex = 0;
         image.rectTransform.sizeDelta = originalSizeDelta;
         image.rectTransform.anchoredPosition3D = originalPosition;
+        rockNum = 0;
     }
 
     public void GetDamage(int damage)
@@ -66,29 +67,6 @@ public class Rock : MonoBehaviour
 
         if(hp <= 0)
         {
-            int randomInt = UnityEngine.Random.Range(0, 2);
-            Managers.Sound.PlaySfx(SfxType.MinigameRockBreak01 + randomInt);
-            // audioSource.PlayOneShot(breakClips[randomInt], volume);
-            maxHp *= 2f;
-            hp = maxHp;
-            rockHpSlider.SetHpValue(hp, maxHp);
-
-            image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
-            rockNum++;
-
-            if(rockNum == 5 || rockNum == 11)
-            {
-                Vector2 newSize = image.rectTransform.sizeDelta* 0.8f;
-                image.rectTransform.sizeDelta = newSize;
-
-                Vector3 newPosition = image.rectTransform.anchoredPosition3D;
-                newPosition.y -= ((newSize.y/0.8f) - newSize.y) / 2;
-                image.rectTransform.anchoredPosition3D = newPosition;
-            }
-
-
-            timerControl.CurrentTime += 20f;
-
             MinigameRewardPercent minigameRewardPercent = Managers.ServerData.MiniGameRewardPercentDatas;
             int[] minigameRewardPercents = { minigameRewardPercent.None, minigameRewardPercent.Soul, minigameRewardPercent.Ore};
             string[] minigameRewardType = {"None", "Soul", "Ore"};
@@ -118,6 +96,26 @@ public class Rock : MonoBehaviour
                     }
                     break;
                 }
+            }
+
+            rockNum++;
+
+            if(rockNum == 11)
+            {
+                Managers.Event.MiniGameOverEvent?.Invoke();
+                rockNum = 0;
+            }
+            else
+            {
+                int randomInt = UnityEngine.Random.Range(0, 2);
+                Managers.Sound.PlaySfx(SfxType.MinigameRockBreak01 + randomInt);
+                maxHp *= 2f;
+                hp = maxHp;
+                rockHpSlider.SetHpValue(hp, maxHp);
+
+                image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
+
+                timerControl.CurrentTime += 20f;
             }
         }
     }

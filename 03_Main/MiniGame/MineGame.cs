@@ -63,6 +63,8 @@ public class MineGame : MonoBehaviour
         Managers.Event.MiniGameEscEvent += MiniGameisOn;
         Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
         Managers.Event.CheckAnimationPlayEvent += CheckAnimationPlaying;
+        Managers.Event.MiniGameOverEvent -= GameOver;
+        Managers.Event.MiniGameOverEvent += GameOver;
 
         pbpManager.gameObject.SetActive(true);
     }
@@ -71,6 +73,7 @@ public class MineGame : MonoBehaviour
     {
         Managers.Event.MiniGameEscEvent -= MiniGameisOn;
         Managers.Event.CheckAnimationPlayEvent -= CheckAnimationPlaying;
+        Managers.Event.MiniGameOverEvent -= GameOver;
 
         ResetGame();
         pbpManager.gameObject.SetActive(false);
@@ -136,7 +139,8 @@ public class MineGame : MonoBehaviour
     public void GameOver()
     {
         isAttackAble = false;
-
+        timerControl.StopOperating();
+        
         Managers.Game.Player.AddGold(rock.Score);
         if(rock.DropSoulCount != 0)
         {

@@ -143,13 +143,13 @@ public class Player
 
     public void SetGoldPerMin(int _goldPerMin)
     {
-        userData.goldPerMin = (int)MathF.Min(userData.goldPerMin + _goldPerMin, int.MaxValue);
+        userData.goldPerMin = (int)MathF.Min(_goldPerMin, int.MaxValue);
         UpdateBackEndScore(BackEndDataManager.GOLD_UUID,nameof(UserData.column.goldPerMin), userData.goldPerMin);
     }
 
     public void SetMineGameScore(int score)
     {
-        userData.mineGameScore = (int)MathF.Min(userData.mineGameScore + score, int.MaxValue);
+        userData.mineGameScore = (int)MathF.Min(score, int.MaxValue);
         UpdateBackEndScore(BackEndDataManager.MINI_UUID,nameof(UserData.column.mineGameScore), userData.mineGameScore);
     }
 
@@ -157,7 +157,7 @@ public class Player
     public void SetCombatScore(int score)
     {
         if (userData.combatScore >= score) return;
-        userData.combatScore = (int)MathF.Min(userData.combatScore + score, int.MaxValue);
+        userData.combatScore = (int)MathF.Min(score, int.MaxValue);
         UpdateBackEndScore(BackEndDataManager.Power_UUID,nameof(UserData.column.combatScore), userData.combatScore);
     }
 
