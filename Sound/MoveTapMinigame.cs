@@ -6,7 +6,7 @@ public class MoveTapMinigame : MonoBehaviour
 {
     void OnEnable() 
     {
-        Managers.Sound.PlayBgm(BgmType.MiniGameBgm);
+        Managers.Sound.PlayBgm(BgmType.MiniGameBgm, 1.2f);
     }
 
     void OnDisable() 

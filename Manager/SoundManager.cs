@@ -59,7 +59,7 @@ public class SoundManager
         sfxPlayer.Initialize();
     }
 
-    public void PlayBgm(BgmType _bgmName)
+    public void PlayBgm(BgmType _bgmName, float _volume = 1f)
     {
         if(isBGMMuted == true)
         {
@@ -68,7 +68,7 @@ public class SoundManager
         }
         else
         {
-            bgmPlayer.PlayBgm(_bgmName);
+            bgmPlayer.PlayBgm(_bgmName, _volume);
             nowTapBgmIndex = (int)_bgmName;
         }
     }

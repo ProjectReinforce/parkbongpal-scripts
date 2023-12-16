@@ -110,7 +110,7 @@ public class QuestContent : MonoBehaviour
         Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
         getRewardButton.interactable = false;
         Cleared();
-        Managers.Sound.PlaySfx(SfxType.Quest);
+        Managers.Sound.PlaySfx(SfxType.Quest, 0.5f);
         Managers.Event.UpdateAllContentEvent?.Invoke();
 
         rewardUIBase.Set(targetData.rewardItem);

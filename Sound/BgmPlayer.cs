@@ -7,6 +7,8 @@ public class BgmPlayer : MonoBehaviour
 {
     [Header("BGM")]
     [SerializeField] AudioClip[] bgmClips;
+    [Range(0, 1f)]
+    [SerializeField] float maxVolume;
     AudioSource bgmPlayer;
 
     public void Initialize()
@@ -25,7 +27,7 @@ public class BgmPlayer : MonoBehaviour
         }
         else
         {
-            bgmPlayer.volume = 0.5f;
+            bgmPlayer.volume = maxVolume;
         }
     }
 
@@ -37,13 +39,14 @@ public class BgmPlayer : MonoBehaviour
         }
         else
         {
-            bgmPlayer.volume = 0.5f;
+            bgmPlayer.volume = maxVolume;
         }
     }
 
-    public void PlayBgm(BgmType _bgmName)
+    public void PlayBgm(BgmType _bgmName, float _volume = 1f)
     {
         bgmPlayer.Stop();
+        bgmPlayer.volume = maxVolume * _volume;
         bgmPlayer.clip = bgmClips[(int)_bgmName];
         bgmPlayer.Play();
     }
