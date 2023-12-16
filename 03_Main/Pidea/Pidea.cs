@@ -22,6 +22,7 @@ public class Pidea : MonoBehaviour
         float PosX = currentTap.anchoredPosition.x;
         currentTap.anchoredPosition = new Vector2(PosX, 0);
         currentTap.gameObject.SetActive(true);
+        Managers.Sound.PlaySfx(SfxType.PideaChange);
     }
     Material[] materials;//가진 웨폰아이디
 
