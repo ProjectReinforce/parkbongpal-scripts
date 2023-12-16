@@ -329,7 +329,7 @@ public class Player
             {nameof(UserData.column.level), Data.level},
             {nameof(UserData.column.gold), Data.gold},
             {nameof(UserData.column.diamond), Data.diamond},
-            {nameof(UserData.column.diamond), Data.weaponSoul}
+            {nameof(UserData.column.weaponSoul), Data.weaponSoul}
         };
         Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
         
