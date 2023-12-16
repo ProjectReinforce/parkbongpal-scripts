@@ -21,13 +21,12 @@ public class PostSlot : NewThing
         postType = _postType;
         title.text = _data.title;
         date.text = RemainTimeConverter(DateTime.Parse(_data.expirationDate));
-        Debug.Log(_data.title+" / "+_data.expirationDate);
         postItemDatas = _itemData;
         if (postItemDatas.Count != 0)
         {
             item.sprite = Managers.Resource.GetPostItem(postItemDatas[0].itemId);
             itemAmount.enabled = true;
-            itemAmount.text = postItemDatas[0].itemCount.ToString();
+            itemAmount.text = $"{postItemDatas[0].itemCount:n0}";
         }
         else
         {
