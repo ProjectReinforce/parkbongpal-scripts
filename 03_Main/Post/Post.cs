@@ -46,7 +46,7 @@ public class Post : MonoBehaviour, IGameInitializer
         {
             if (!callback.IsSuccess())
             {
-                Debug.LogError(callback);
+                Managers.Alarm.Danger("우편 정보를 불러오는 데 실패했습니다. : " + callback);
                 return;
             }
             Managers.Game.MainEnqueue(() => lastCallTime = Time.time);
@@ -83,8 +83,8 @@ public class Post : MonoBehaviour, IGameInitializer
                         mailItemData.itemCount = int.Parse(itemJson["itemCount"].ToString());
                         mailItemDatas.Add(mailItemData);
                     }
-                    else
-                        Debug.Log("존재하지않는 아이템차트 정보입니다.");
+                    // else
+                    //     Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
                 // 메일내용 세팅 및 슬롯(우편목록) 세팅
                 Managers.Game.MainEnqueue(() =>
@@ -103,7 +103,7 @@ public class Post : MonoBehaviour, IGameInitializer
         {
             if (!callback.IsSuccess())
             {
-                Debug.LogError(callback);
+                Managers.Alarm.Danger("우편 정보를 불러오는 데 실패했습니다. : " + callback);
                 return;
             }
             Managers.Game.MainEnqueue(() => lastCallTime = Time.time);
@@ -140,8 +140,8 @@ public class Post : MonoBehaviour, IGameInitializer
                         mailItemData.itemCount = int.Parse(itemJson["itemCount"].ToString());
                         mailItemDatas.Add(mailItemData);
                     }
-                    else
-                        Debug.Log("존재하지않는 아이템차트 정보입니다.");
+                    // else
+                    //     Debug.Log("존재하지않는 아이템차트 정보입니다.");
                 }
                 // 메일내용 세팅 및 슬롯(우편목록) 세팅
                 Managers.Game.MainEnqueue(() =>
@@ -164,9 +164,7 @@ public class Post : MonoBehaviour, IGameInitializer
         SendQueue.Enqueue(Backend.UPost.ReceivePostItem, _slot.postType, _slot.postData.inDate, bro =>
         {
             if (!bro.IsSuccess())
-            {
-                Debug.LogError("우편 수령에 실패했습니다.");
-            }
+                Managers.Alarm.Danger("우편 정보를 불러오는 데 실패했습니다. : " + bro);
             Destroy(_slot.gameObject);
         });
         notifyer.PostRemove(_slot);

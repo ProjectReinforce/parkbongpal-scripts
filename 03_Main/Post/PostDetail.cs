@@ -65,7 +65,7 @@ public class PostDetail : MonoBehaviour
                     Managers.Game.Player.AddStone(currentSlot.postItemDatas[i].itemCount);
                     break;
                 default:
-                    Debug.Log("수령 아이템 확인필요.");
+                    // Debug.Log("수령 아이템 확인필요.");
                     break;
             }
         }

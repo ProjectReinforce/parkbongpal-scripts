@@ -145,7 +145,7 @@ public class BackEndDataManager
             if (!bro.IsSuccess())
             {
                 // 요청 실패 처리
-                Debug.Log(bro);
+                Debug.LogError(bro);
                 return;
             }
 
@@ -384,7 +384,7 @@ public class BackEndDataManager
                 if (!bro.IsSuccess())
                 {
                     // 요청 실패 처리
-                    Debug.Log(bro);
+                    Debug.LogError(bro);
                     return;
                 }
 
@@ -431,7 +431,7 @@ public class BackEndDataManager
             if (!bro.IsSuccess())
             {
                 // 요청 실패 처리
-                Debug.Log(bro);
+                Debug.LogError(bro);
                 return;
             }
 

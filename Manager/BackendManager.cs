@@ -11,7 +11,8 @@ public class BackendManager : MonoBehaviour
             Debug.Log($"초기화 성공 : {bro}");
         else
         {
-            Debug.LogError($"초기화 실패 : {bro}");
+            // Debug.LogError($"초기화 실패 : {bro}");
+            Managers.Alarm.Danger($"초기화 실패 : {bro}");
             // todo : 아예 게임 꺼지도록
             return;
         }

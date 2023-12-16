@@ -53,7 +53,6 @@ public class NormalReinforceUI : ReinforceUIBase
 
     public void UpdateWeaponIconTutorial(Weapon _weapon)
     {
-        Debug.Log(reinforceManager.SelectedWeapon);
         reinforceManager.SelectedWeapon = _weapon;
         _weapon = reinforceManager.SelectedWeapon;
         weaponRarity.sprite = Managers.Resource.weaponRaritySlot[_weapon.data.rarity];

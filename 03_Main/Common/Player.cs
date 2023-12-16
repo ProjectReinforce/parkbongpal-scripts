@@ -36,10 +36,11 @@ public class Player
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                // Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                Managers.Alarm.Danger($"서버 통신에 문제가 발생해 게임을 종료합니다.\n{callback.GetMessage()}");
                 return;
             }
-            Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
+            // Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
         });
         if (Managers.Etc.CallChecker != null)
             Managers.Etc.CallChecker.CountCall();
@@ -53,10 +54,11 @@ public class Player
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                // Debug.Log($"Player : {columnName} 데이터 저장 실패 {callback.GetMessage()}");
+                Managers.Alarm.Danger($"서버 통신에 문제가 발생해 게임을 종료합니다.\n{callback.GetMessage()}");
                 return;
             }
-            Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
+            // Debug.Log($"Player : {columnName} 데이터 저장 성공 {callback}");
         });
     }
 
@@ -187,10 +189,11 @@ public class Player
         {
             if (!callback.IsSuccess())
             {
-                Debug.Log($"Player : 데이터 저장 실패 {callback.GetMessage()}");
+                // Debug.Log($"Player : 데이터 저장 실패 {callback.GetMessage()}");
+                Managers.Alarm.Danger($"서버 통신에 문제가 발생해 게임을 종료합니다.\n{callback.GetMessage()}");
                 return;
             }
-            Debug.Log($"Player : 데이터 저장 성공 {callback}");
+            // Debug.Log($"Player : 데이터 저장 성공 {callback}");
         });
         if (Managers.Etc.CallChecker != null)
             Managers.Etc.CallChecker.CountCall();

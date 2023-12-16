@@ -53,17 +53,17 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
         {
             if(!_args.Session.IsRemote)
             {
-                Debug.Log("채팅 채널 접속 성공");
+                // Debug.Log("채팅 채널 접속 성공");
                 ChatConnected = true;
                 
                 Managers.Game.MainEnqueue(() => SetChatObject(TITLE_GUIDE, JOIN_MESSAGE, MessageType.Guide));
             }
-            else
-                Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
+            // else
+            //     Debug.Log($"{_args.Session.NickName}님이 접속했습니다.");
         }
         else
         {
-            Debug.LogError($"채널 접속 실패 : {errorInfo}");
+            // Debug.LogError($"채널 접속 실패 : {errorInfo}");
             ChatConnected = false;
 
             Managers.Game.MainEnqueue(() => SetChatObject(TITLE_GUIDE, JOIN_FAIL_MESSAGE, MessageType.Guide));
@@ -76,15 +76,15 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
 
         if(errorInfo == ErrorInfo.Success)
         {
-            if(!_args.From.IsRemote)
-                Debug.Log($"나 : {_args.Message}");
-            else
-                Debug.Log($"{_args.From.NickName}님 : {_args.Message}");
+            // if(!_args.From.IsRemote)
+            //     Debug.Log($"나 : {_args.Message}");
+            // else
+            //     Debug.Log($"{_args.From.NickName}님 : {_args.Message}");
             
             Managers.Game.MainEnqueue(() => SetChatObject(_args.From.NickName, _args.Message));
         }
-        else
-            Debug.LogError($"메시지 송신 실패 : {errorInfo}");
+        // else
+        //     Debug.LogError($"메시지 송신 실패 : {errorInfo}");
     }
 
     [SerializeField] GameObject messageSlot;
@@ -110,33 +110,33 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
     {
         ErrorInfo errorInfo = _args.ErrInfo;
 
-        if(errorInfo == ErrorInfo.Success)
-            if(!_args.Session.IsRemote)
-                Debug.Log("채널에서 퇴장");
-                // CheckChatStatus();
-        else
-            Debug.LogError($"퇴장 실패 : {errorInfo}");
+        // if(errorInfo == ErrorInfo.Success)
+        //     if(!_args.Session.IsRemote)
+        //         Debug.Log("채널에서 퇴장");
+        //         // CheckChatStatus();
+        // else
+        //     Debug.LogError($"퇴장 실패 : {errorInfo}");
     }
 
     const string TITLE_NOTICE = "공지";
     void RecieveGlobalChat(GlobalChatEventArgs _args)
     {
         ErrorInfo errorInfo = _args.ErrInfo;
-        Debug.Log(errorInfo);
+        // Debug.Log(errorInfo);
 
         if(errorInfo == ErrorInfo.Success)
         {
-            Debug.Log($"[공지] {_args.From} : {_args.Message}");
+            // Debug.Log($"[공지] {_args.From} : {_args.Message}");
 
             Managers.Game.MainEnqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
         }
-        else
-            Debug.LogError($"공지 수신 실패 : {errorInfo}");
+        // else
+        //     Debug.LogError($"공지 수신 실패 : {errorInfo}");
     }
 
     void RecieveNotice(NotificationEventArgs _args)
     {
-        Debug.Log($"[공지] {_args.Subject} : {_args.Message}");
+        // Debug.Log($"[공지] {_args.Subject} : {_args.Message}");
         
         Managers.Game.MainEnqueue(() => SetChatObject(TITLE_NOTICE, _args.Message, MessageType.Notice));
     }
@@ -164,11 +164,11 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
 
             if(result != "y")
             {
-                Debug.LogError("뒤끝챗 활성화 상태가 아닙니다.");
+                // Debug.LogError("뒤끝챗 활성화 상태가 아닙니다.");
                 return;
             }
 
-            Debug.Log("뒤끝챗 활성화 확인됨");
+            // Debug.Log("뒤끝챗 활성화 확인됨");
             SearchGroup();
         });
     }
@@ -207,14 +207,14 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
                 string inDate = resultJson[0]["inDate"].ToString();
                 // Debug.Log($"{groupName} / {serverAddress} / {serverPort} / {inDate}");
                 // 성공
-                Debug.Log($"채널 그룹 검색 성공 : {resultJson.ToString()}");
+                // Debug.Log($"채널 그룹 검색 성공 : {resultJson.ToString()}");
 
                 ErrorInfo errorInfo;
                 Backend.Chat.JoinChannel(ChannelType.Public, serverAddress, serverPort, groupName, inDate, out errorInfo);
                 // Debug.Log(errorInfo);
             }
-            else
-                Debug.LogError($"채널 그룹 검색 실패 : {callback}");
+            // else
+                // Debug.LogError($"채널 그룹 검색 실패 : {callback}");
         });
     }
 }

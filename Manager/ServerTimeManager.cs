@@ -26,7 +26,7 @@ public class ServerTimeManager
         DateTime old = dateTime;
         dateTime = DateTime.Parse(BackEnd.Backend.Utils.GetServerTime().GetReturnValuetoJSON()["utcTime"].ToString());
         timerForCheck = CHECK_SERVERTIME_FREQUENCY;
-        Debug.Log($"서버 시간 받아옴 : {dateTime} / Old : {old}");
+        // Debug.Log($"서버 시간 받아옴 : {dateTime} / Old : {old}");
         return dateTime;
     }
 }

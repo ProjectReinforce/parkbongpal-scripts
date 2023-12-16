@@ -40,7 +40,7 @@ public class Additional : Reinforce
         int resultIndex = Utills.GetResultFromWeightedRandom(additionalPercent);
         if (resultIndex != -1)
         {
-            Debug.Log($"result : {resultIndex} - {additionalDescription[resultIndex]} / {additionalPercent[resultIndex]}");
+            // Debug.Log($"result : {resultIndex} - {additionalDescription[resultIndex]} / {additionalPercent[resultIndex]}");
             _weapon.data.AdditionalStat[(int)StatType.atk] = additionalDescription[resultIndex];
             _weapon.data.AdditionalStat[(int)StatType.upgradeCount] ++;
 
@@ -72,7 +72,7 @@ public class NormalReinforce : Reinforce
 
             _weapon.data.NormalStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].NormalStat[(int)StatType.upgradeCount];
             _weapon.data.NormalStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].NormalStat[(int)StatType.atk];
-            Debug.Log($"일반 강화 초기화 실행 : {_weapon.data.NormalStat[(int)StatType.upgradeCount]}, {_weapon.data.NormalStat[(int)StatType.atk]}");
+            // Debug.Log($"일반 강화 초기화 실행 : {_weapon.data.NormalStat[(int)StatType.upgradeCount]}, {_weapon.data.NormalStat[(int)StatType.atk]}");
         }
         else
         {
@@ -81,13 +81,13 @@ public class NormalReinforce : Reinforce
             int randomValue = Utills.random.Next(0, 101);
             if (randomValue < data.percent)
             {
-                Debug.Log($"result : {randomValue} / 강화 성공!");
+                // Debug.Log($"result : {randomValue} / 강화 성공!");
                 _weapon.data.NormalStat[(int)StatType.atk] += data.atkUp;
                 Managers.Sound.PlaySfx(SfxType.ReinforceSuccess);
             }
             else
             {
-                Debug.Log($"result : {randomValue} / 강화 실패!");
+                // Debug.Log($"result : {randomValue} / 강화 실패!");
                 Managers.Sound.PlaySfx(SfxType.ReinforceFail);
             }
         }
@@ -114,7 +114,7 @@ public class MagicEngrave : Reinforce
             drawCount = 1;
         else
         {
-            Debug.Log("등급 부족!");
+            Managers.Alarm.Warning("무기의 등급을 확인해주세요.");
             return;
         }
 
@@ -122,7 +122,6 @@ public class MagicEngrave : Reinforce
         
         for (int i = 0; i < results.Length; i++)
         {
-            Debug.Log((MagicType)results[i]);
             _weapon.data.magic[i] = results[i];
         }
 
@@ -155,7 +154,7 @@ public class SoulCrafting : Reinforce
 
             _weapon.data.SoulStat[(int)StatType.upgradeCount] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].SoulStat[(int)StatType.upgradeCount];
             _weapon.data.SoulStat[(int)StatType.atk] = resourceManager.BaseWeaponDatas[_weapon.data.baseWeaponIndex].SoulStat[(int)StatType.atk];
-            Debug.Log($"영혼 세공 초기화 실행 : {_weapon.data.SoulStat[(int)StatType.upgradeCount]}, {_weapon.data.SoulStat[(int)StatType.atk]}");
+            // Debug.Log($"영혼 세공 초기화 실행 : {_weapon.data.SoulStat[(int)StatType.upgradeCount]}, {_weapon.data.SoulStat[(int)StatType.atk]}");
         }
         else
         {
@@ -169,7 +168,7 @@ public class SoulCrafting : Reinforce
             int resultIndex = Utills.GetResultFromWeightedRandom(soulPercent);
             if (resultIndex != -1)
             {
-                Debug.Log($"result : {resultIndex} - {soulDescription[resultIndex]} / {soulPercent[resultIndex]}");
+                // Debug.Log($"result : {resultIndex} - {soulDescription[resultIndex]} / {soulPercent[resultIndex]}");
                 _weapon.data.SoulStat[(int)StatType.atk] += soulDescription[resultIndex];
             }
 

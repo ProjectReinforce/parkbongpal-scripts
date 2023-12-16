@@ -77,7 +77,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         var bro = Backend.GameData.Insert(nameof(WeaponData), param);
         if (!bro.IsSuccess())
         {
-            Debug.LogError("게임 정보 삽입 실패 : " + bro);
+            Managers.Alarm.Danger("게임 정보 삽입 실패 : " + bro);
             return;
         }
         
@@ -86,7 +86,6 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         
         if (Managers.Event.PideaCheckEvent(baseWeaponData.index))
         {
-            Debug.Log("PideaCheckEvent");
             Transactions.Add(TransactionValue.SetInsert( nameof(PideaData),new Param {
                 { nameof(PideaData.colum.ownedWeaponId), baseWeaponData.index },
                 { nameof(PideaData.colum.rarity), baseWeaponData.rarity }
@@ -127,7 +126,7 @@ public class InventoryPresentor : DontDestroy<InventoryPresentor>,IInventoryOpti
         var bro =  Backend.GameData.TransactionWriteV2 ( transactionList ); 
         if (!bro.IsSuccess())
         {
-            Debug.LogError("게임 정보 삽입 실패 : " + bro);
+            Managers.Alarm.Danger("게임 정보 삽입 실패 : " + bro);
             return;
         }
         LitJson.JsonData json = bro.GetReturnValuetoJSON()["putItem"];
