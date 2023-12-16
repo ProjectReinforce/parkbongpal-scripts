@@ -32,7 +32,7 @@ public class MiniGameDropItem : MonoBehaviour
 
     public void SetDropItemImage(int _index)
     {
-        Managers.Sound.PlaySfx(SfxType.CoinPop);
+        Managers.Sound.PlaySfx(SfxType.CoinPop, 0.2f);
         nowImage.sprite = twoTypeSprites[_index];
     }
 
@@ -51,7 +51,7 @@ public class MiniGameDropItem : MonoBehaviour
             {
                 managedPool.Release(gameObject);
                 gameObject.transform.position = gameObject.transform.parent.position;
-                Managers.Sound.PlaySfx(SfxType.GetCoin);
+                Managers.Sound.PlaySfx(SfxType.GetCoin, 0.2f);
             });
         });
     }

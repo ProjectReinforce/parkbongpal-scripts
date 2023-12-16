@@ -108,7 +108,7 @@ public class Rock : MonoBehaviour
             else
             {
                 int randomInt = UnityEngine.Random.Range(0, 2);
-                Managers.Sound.PlaySfx(SfxType.MinigameRockBreak01 + randomInt);
+                Managers.Sound.PlaySfx(SfxType.MinigameRockBreak01 + randomInt, 0.5f);
                 maxHp *= 2f;
                 hp = maxHp;
                 rockHpSlider.SetHpValue(hp, maxHp);
