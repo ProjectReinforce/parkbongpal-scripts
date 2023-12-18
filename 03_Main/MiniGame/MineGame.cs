@@ -21,6 +21,8 @@ public class MineGame : MonoBehaviour
     Coroutine startCountdown;
     bool isAttackAble = false;
     bool isButtonPressed = false;
+    byte tap;
+   
     public bool IsButtonPressed
     {
         get { return isButtonPressed; }
@@ -51,10 +53,14 @@ public class MineGame : MonoBehaviour
         isAnimPlaying = _AnimActiveSelf;
     }
 
+    private static float coolTime;
+    private float cool;
     public void SetMineGameWeapon(Weapon _weapon)
     {
         selectedWeapon = _weapon;
         pbpManager.SetPBPWeaponSprites(selectedWeapon.Icon);
+        cool = coolTime = 1.0f / (_weapon.data.atkSpeed-80)*2;
+        
     }
     
     void OnEnable()
@@ -113,6 +119,7 @@ public class MineGame : MonoBehaviour
     void Attack() // 데미지 계산 할 함수
     {
         int damage = Utills.random.Next(selectedWeapon.power - 3, selectedWeapon.power + 3);
+        cool -= coolTime;
         if(!isAnimPlaying)
         {
             pbpManager.PBPRandomOn();
@@ -187,14 +194,23 @@ public class MineGame : MonoBehaviour
         }
     }
 
-    void Update() 
+    void Update()
     {
-        if(isAttackAble && !isButtonPressed)
+      
+        
+        if (!isAttackAble || isButtonPressed) return;
+        if (coolTime>cool)
         {
-            if(Input.GetMouseButtonDown(0))
-            {
-                Attack();
-            }
+            cool += Time.deltaTime;    
+        }
+        if (Input.GetMouseButtonDown(0)&&tap < 2)
+        {
+            tap++;
+        }
+        if(cool>=coolTime&&tap>0)
+        {
+            Attack();
+            tap--;
         }
     }
 }
