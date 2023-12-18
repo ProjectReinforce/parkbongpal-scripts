@@ -13,6 +13,12 @@ public struct WeaponData// 유저마다 바뀔수 있는 데이터
 
     public string inDate;
     public DateTime borrowedDate;
+
+    public WeaponData(WeaponData _weaponData)
+    {
+        this = _weaponData.Clone();
+    }
+    
     public WeaponData(string _inDate, BaseWeaponData _weaponData)
     {
         inDate = _inDate;

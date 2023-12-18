@@ -142,7 +142,7 @@ public class Sinyum:Magic//신념
   
     public override WeaponData GetWeaponData()
     {
-        WeaponData weaponData = base.GetWeaponData();
+        WeaponData weaponData = new WeaponData(base.GetWeaponData());
         float miss = GetMiss();
         if (miss < 0)
         {
@@ -158,7 +158,7 @@ public class Inmyul : Magic //유일
    /* 4	인멸	80	무기가 지난 길이 자취도 없이 모두 없어짐.	공격속도가 80으로 고정되고 공격력이 150%가됩니다.*/
    public override WeaponData GetWeaponData()
    {
-       WeaponData weaponData = base.GetWeaponData();
+       WeaponData weaponData = new WeaponData(base.GetWeaponData());
        weaponData.defaultStat[(int)StatType.atkSpeed] = coefficient;
        weaponData.defaultStat[(int)StatType.atk] = (int)(1.5f*weaponData.atk- weaponData.defaultStat[(int)StatType.atk]);
        return weaponData;
@@ -173,7 +173,7 @@ public class Haebang : Magic //유일
   /*  5	해방	100	무기가 가진 힘을 해방시킴	주요 스탯을 제외한 6스탯 합을 공격력에 더합니다.*/
   public override WeaponData GetWeaponData()
   {
-      WeaponData weaponData = base.GetWeaponData();
+      WeaponData weaponData = new WeaponData(base.GetWeaponData());
       
       weaponData.defaultStat[(int)StatType.atk] += 
           weaponData.strength+weaponData.intelligence+weaponData.wisdom+
@@ -188,7 +188,7 @@ public class Ohpock : Magic //유일
    /* 6	오폭	50	화약성을 띈 날붙이가 폭발을 일으킴	공격력의 절반만큼 공격 범위가 증가합니다.*/
    public override WeaponData GetWeaponData()
    {
-       WeaponData weaponData = base.GetWeaponData();
+       WeaponData weaponData = new WeaponData(base.GetWeaponData());
 
        weaponData.defaultStat[(int)StatType.atkRange] += (int)(weaponData.atk * coefficient * (1f / 100));  
            
@@ -214,7 +214,7 @@ public class Jinsum : Magic //유일
    /* 8	진섬	20	침착한 공격으로 보다 넓은 범위를 공격	공격력과 공격속도수치가 20% 감소하지만 공격범위가 500으로 고정됩니다.*/
    public override WeaponData GetWeaponData()
    {
-       WeaponData weaponData = base.GetWeaponData();
+       WeaponData weaponData = new WeaponData(base.GetWeaponData());
        weaponData.defaultStat[(int)StatType.atk] -= (int)(weaponData.defaultStat[(int)StatType.atk] * coefficient * (1f / 100));
        weaponData.defaultStat[(int)StatType.atkSpeed] -= (int)(weaponData.defaultStat[(int)StatType.atkSpeed] * coefficient * (1f / 100));  
        weaponData.defaultStat[(int)StatType.atkRange] = 500;  
@@ -227,7 +227,7 @@ public class Choockbock : Magic //유일
     public Choockbock(Rental mine,int _coefficient) : base(mine,_coefficient) {}
     public override WeaponData GetWeaponData()
     {
-        WeaponData weaponData = base.GetWeaponData();
+        WeaponData weaponData = new WeaponData(base.GetWeaponData());
         int successCount = (int)(weaponData.NormalStat[(int)StatType.atk]/5f);
         for (int i = 0; i < Enum.GetValues(typeof(StatType)).Length; i++)
         {
@@ -271,7 +271,7 @@ public class Sachul : Magic //유일
     public Sachul(Rental mine,int _coefficient) : base(mine,_coefficient) {}
     public override WeaponData GetWeaponData()
     {
-        WeaponData weaponData = base.GetWeaponData();
+        WeaponData weaponData = new WeaponData(base.GetWeaponData());
         int betterStat = weaponData.defaultStat[(int)StatType.atkSpeed] > weaponData.defaultStat[(int)StatType.atkRange]
             ? weaponData.defaultStat[(int)StatType.atkSpeed]
             : weaponData.defaultStat[(int)StatType.atkRange];
