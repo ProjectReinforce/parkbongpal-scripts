@@ -109,7 +109,7 @@ public class BackEndDataManager
         // 테스트용
     }
 
-    const string VERSION_CHART_ID = "98743";
+    const string VERSION_CHART_ID = "101815";
     const string DEFAULT_UPDATE_DATE = "2000-01-01 09:00";
     Dictionary<string, VersionInfo> localChartLists;
     Dictionary<string, VersionInfo> backEndChartLists;
