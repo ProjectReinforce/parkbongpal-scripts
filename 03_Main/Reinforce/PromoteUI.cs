@@ -12,7 +12,7 @@ public class PromoteUI : ReinforceUIBase
     Text currentRarityNameText;
     Image[] weaponIcons = new Image[2];
     Image[] materialIcons = new Image[2];
-    Image[] weaponSlots = new Image[4];
+    Image[] weaponSlots = new Image[3];
 
     // todo: 리소스매니저에서 받아오도록 수정
     Sprite[] slotSprites;
@@ -34,10 +34,10 @@ public class PromoteUI : ReinforceUIBase
         weaponIcons[1] = Utills.Bind<Image>("Image_WeaponIcon2", transform);
         materialIcons[0] = Utills.Bind<Image>("Image_MaterialIcon1", transform);
         materialIcons[1] = Utills.Bind<Image>("Image_MaterialIcon2", transform);
-        weaponSlots[0] = Utills.Bind<Image>("Main", transform);
-        weaponSlots[1] = Utills.Bind<Image>("Box", transform);
-        weaponSlots[2] = Utills.Bind<Image>("Sub_1", transform);
-        weaponSlots[3] = Utills.Bind<Image>("Sub_2", transform);
+        //weaponSlots[0] = Utills.Bind<Image>("Main", transform);
+        weaponSlots[0] = Utills.Bind<Image>("Box", transform);
+        weaponSlots[1] = Utills.Bind<Image>("Sub_1", transform);
+        weaponSlots[2] = Utills.Bind<Image>("Sub_2", transform);
 
         basicSprite = weaponIcons[0].sprite;
         basicSlot = weaponSlots[0].sprite;
@@ -88,12 +88,12 @@ public class PromoteUI : ReinforceUIBase
             if (i < reinforceManager.SelectedMaterials.Count)
             {
                 materialIcons[i].sprite = reinforceManager.SelectedMaterials[i].Icon;
-                weaponSlots[i+2].sprite = slotSprites[reinforceManager.SelectedMaterials[0].data.rarity];
+                weaponSlots[i+1].sprite = slotSprites[reinforceManager.SelectedMaterials[0].data.rarity];
             }
             else
             {
                 materialIcons[i].sprite = basicSprite;
-                weaponSlots[i+2].sprite = basicSlot;
+                weaponSlots[i+1].sprite = basicSlot;
             }
         }
     }

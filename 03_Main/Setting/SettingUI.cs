@@ -17,7 +17,7 @@ public class SettingUI : MonoBehaviour
     [SerializeField] Button userUuidCopyButton;
     [SerializeField] Button syncGoogleButton;
     [SerializeField] GameObject nicknameChange;
-    [SerializeField] GameObject questionBox;
+    //[SerializeField] GameObject questionBox;
     [SerializeField] GameObject blockPanel;
     // [SerializeField] Image myFavoriteWeapon;
     
@@ -187,10 +187,10 @@ public class SettingUI : MonoBehaviour
     //     Debug.Log("봉팔이의 망치를 변경할 수 있는 UI가 열릴 예정");
     // }
 
-    public void OpenUserHelp()
-    {
-        Managers.UI.OpenPopup(questionBox);
-    }
+    //public void OpenUserHelp()
+    //{
+    //    Managers.UI.OpenPopup(questionBox);
+    //}
 
     public void OnClickDelete()
     {
