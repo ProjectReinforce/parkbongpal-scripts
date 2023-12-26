@@ -101,7 +101,7 @@ public class RecordData
         Debug.Log($"loaded userID : {userID} / indate : {_userInDate}");
         dayValGroups = new uint[6] { dayAttendance, dayTryPromote, dayTryMagic, dayTryReinforce, dayGetBonus, daySeeAds };
         dayValGroupsString = new string[6] { "DayAttendance", "DayTryPromote", "DayTryMagic", "DayTryReinforce", "DayGetBonus", "DaySeeAds" };
-        weekValGroups = new uint[6] { WeekAttendance, WeekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
+        weekValGroups = new uint[6] { weekAttendance, weekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
         weekValGroupsString = new string[6] { "WeekAttandance", "WeekTryPromote", "WeekTryMagic", "WeekTryReinforce", "WeekGetBonus", "WeekSeeAds" };
 
         if (_userInDate == userID)
