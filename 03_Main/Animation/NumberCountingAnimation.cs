@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,23 +14,33 @@ public class NumberCountingAnimation : MonoBehaviour
         TryGetComponent(out text);
     }
 
-    void Start()
+    void OnEnable()
     {
         int target = 0;
         switch (currencyType)
         {
             case RewardType.Gold:
-            target = Managers.Game.Player.Data.gold;
-            Managers.Event.GoldChangeEvent -= StartCounting;
-            Managers.Event.GoldChangeEvent += StartCounting;
-            break;
+                target = Managers.Game.Player.Data.gold;
+                Managers.Event.GoldChangeEvent -= StartCounting;
+                Managers.Event.GoldChangeEvent += StartCounting;
+                break;
             case RewardType.Diamond:
-            target = Managers.Game.Player.Data.diamond;
-            Managers.Event.DiamondChangeEvent -= StartCounting;
-            Managers.Event.DiamondChangeEvent += StartCounting;
-            break;
+                target = Managers.Game.Player.Data.diamond;
+                Managers.Event.DiamondChangeEvent -= StartCounting;
+                Managers.Event.DiamondChangeEvent += StartCounting;
+                break;
+            case RewardType.Soul:
+                target = Managers.Game.Player.Data.weaponSoul;
+                Managers.Event.SoulChangeEvent -= StartCounting;
+                Managers.Event.SoulChangeEvent += StartCounting;
+                break;
+            case RewardType.Ore:
+                target = Managers.Game.Player.Data.stone;
+                Managers.Event.OreChangeEvent -= StartCounting;
+                Managers.Event.OreChangeEvent += StartCounting;
+                break;
             default:
-            break;
+                break;
         }
         text.text = $"{target:n0}";
     }
@@ -57,7 +65,7 @@ public class NumberCountingAnimation : MonoBehaviour
             t += Time.deltaTime;
             float newValue = Mathf.Lerp(origin, GetTarget(), t / duration);
             text.text = $"{(int)newValue:n0}";
-            
+
             yield return null;
         }
     }
@@ -68,13 +76,19 @@ public class NumberCountingAnimation : MonoBehaviour
         switch (currencyType)
         {
             case RewardType.Gold:
-            target = Managers.Game.Player.Data.gold;
-            break;
+                target = Managers.Game.Player.Data.gold;
+                break;
             case RewardType.Diamond:
-            target = Managers.Game.Player.Data.diamond;
-            break;
+                target = Managers.Game.Player.Data.diamond;
+                break;
+            case RewardType.Soul:
+                target = Managers.Game.Player.Data.weaponSoul;
+                break;
+            case RewardType.Ore:
+                target = Managers.Game.Player.Data.stone;
+                break;
             default:
-            break;
+                break;
         }
         return target;
     }
