@@ -223,13 +223,21 @@ public class TutorialPlayer : MonoBehaviour
 
     void SkipTutorial()
     {
-        skipUI.gameObject.SetActive(true);
+        Managers.UI.OpenPopup(skipUI);
     }
 
     void SkipTutorialExit()
     {
-        Debug.Log("튜토리얼 꺼짐 ㅋㅋ");
-        gameObject.transform.parent.gameObject.SetActive(false);
+        index = 42;
+        textIndex = 54;
+        textNextButton.gameObject.SetActive(true);
+        tutorialPanel.transform.parent.gameObject.SetActive(false);
+        skipUIOnButton.gameObject.SetActive(false);
+        Managers.UI.ClosePopup();
+        cheifTalk.text = "자네는 이 세계에 익숙한가 보군";
+        cheifLine[55] = "하지만 명심하게나\n 자네가 선택하였으니 내가 다시 알려주진 못할걸세";
+        cheifLine[56] = "무기 제작을 통해 더 좋은 무기를 얻으며\n 세계를 자유롭게 다녀보게나";
+        cheifLine[57] = "자네의 앞길을 내가 응원하겠네\n 건승하게나";
     }
 
     void SkipButtonOn()
@@ -487,6 +495,7 @@ public class TutorialPlayer : MonoBehaviour
         cheifControl.gameObject.SetActive(false);
         cheifTalkObject.gameObject.SetActive(false);
         storeUI.TutorialManufacture();
+        skipUIOnButton.gameObject.SetActive(false);
         Managers.Game.Player.Record.TutorialRecordIndex();
     }
 
@@ -515,6 +524,7 @@ public class TutorialPlayer : MonoBehaviour
         }
         TextChanges();
         textNextButton.gameObject.SetActive(true);
+        skipUIOnButton.gameObject.SetActive(true);
     }
 
     void MineTutorial()
