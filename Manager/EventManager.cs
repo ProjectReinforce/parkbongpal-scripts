@@ -30,6 +30,7 @@ public class EventManager
     public Action RecieveAllReceiptBonusEvent;
     public Action<Transform> GoldCollectEvent;
     public Action<Transform> DiamondCollectEvent;
+    public Action AdButtonInteractableEvent;
     #endregion
 
     #region TopUI
@@ -86,6 +87,6 @@ public class EventManager
     #region Tutorial
     public Action<Weapon> TutorialReinforceWeaponChangeEvent;
     public Action OnCheifTalkObjectEvent;
-    public Action OnSkipButton;
+    public Action OnSkipUIEvent;
     #endregion
 }
