@@ -70,13 +70,13 @@ public class PromoteUI : ReinforceUIBase
         Weapon weapon = reinforceManager.SelectedWeapon;
 
         weaponIcons[0].sprite = weapon.Icon;
-        weaponIcons[1].sprite = weapon.Icon;
+        //weaponIcons[1].sprite = weapon.Icon;
 
         weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
         if (weapon.data.rarity != (int)Rarity.legendary)
-            weaponSlots[1].sprite = slotSprites[weapon.data.rarity + 1];
+            weaponSlots[0].sprite = slotSprites[weapon.data.rarity + 1];
         else
-            weaponSlots[1].sprite = slotSprites[weapon.data.rarity];
+            weaponSlots[0].sprite = slotSprites[weapon.data.rarity];
 
         weaponNameText.text = weapon.Name;
     }
