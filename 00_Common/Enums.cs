@@ -22,6 +22,7 @@ public enum Rarity
 public enum ReinforceType
 {
     Default,
+    randomUpgrade,
     promote,
     additional,
     normalReinforce,

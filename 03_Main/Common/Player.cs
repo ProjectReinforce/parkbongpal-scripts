@@ -209,6 +209,23 @@ public class Player
         recordData.ModifyAdvanceProduceRecord(_count);
     }
 
+    public void TryRandomUpdate(int _goldCost)
+    {
+        AddGold(_goldCost, false);
+        recordData.ModifyTryPromoteRecord();
+        recordData.ModifyDayTryPromoteRecord();
+        recordData.ModifyWeekTryPromoteRecord();
+        AddExp(50, false);
+        
+        Param param = new()
+        {
+            {nameof(UserData.column.exp), Data.exp},
+            {nameof(UserData.column.level), Data.level},
+            {nameof(UserData.column.gold), Data.gold},
+        };
+
+        Transactions.Add(TransactionValue.SetUpdateV2(nameof(UserData), Data.inDate, Backend.UserInDate, param));
+    }
     public void TryPromote(int _goldCost)
     {
         AddGold(_goldCost, false);

@@ -442,7 +442,7 @@ public struct PostItemData
 [Serializable]
 public struct CollectionData
 {
-    public string title;
+    public string title, reward;
     public int index;
 }
 
