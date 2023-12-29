@@ -39,4 +39,8 @@ public class Notifyer : MonoBehaviour, IGameInitializer
         newThings.Remove(_newThing);
         TextUpdate();
     }
+    public void PostReset()
+    {
+        newThings.Clear();
+    }
 }

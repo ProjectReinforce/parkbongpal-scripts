@@ -13,6 +13,7 @@ public class Pidea : MonoBehaviour
     [SerializeField] RectTransform[] rarityTables;
     [SerializeField] PideaViwer pideaViwer;
     List<PideaData> pideaWeaponsrDatas;
+    bool isSelect = false;
 
     public void ClickTap(int index)
     {
@@ -50,6 +51,7 @@ public class Pidea : MonoBehaviour
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
         if (notifyer.gameObject.activeSelf)
             notifyer.PideaRemove(slot);
+        slot.selectImage.gameObject.SetActive(true);
     }
 
     public void NotifyClear()

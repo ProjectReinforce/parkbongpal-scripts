@@ -14,7 +14,8 @@ public class NewThing:MonoBehaviour
 
     public void NewClear()
     {
-        newObject.gameObject.SetActive(false);
+        if (newObject.gameObject != null)
+            newObject.gameObject.SetActive(false);
     }
 }
 
