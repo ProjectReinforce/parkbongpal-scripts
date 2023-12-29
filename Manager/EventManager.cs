@@ -87,4 +87,8 @@ public class EventManager
     public Action<Weapon> TutorialReinforceWeaponChangeEvent;
     public Action OnCheifTalkObjectEvent;
     #endregion
+
+    #region Setting
+    public Action ChangeNickNameButtonEvent;
+    #endregion
 }

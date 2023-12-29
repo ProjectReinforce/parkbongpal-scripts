@@ -10,6 +10,9 @@ public class Rock : MonoBehaviour
     [SerializeField] RockHpSlider rockHpSlider;
     [SerializeField] Sprite[] sprites;
     [SerializeField] MiniGameDropItemPooler itemPooler;
+    [SerializeField] Text scoreText;
+    [SerializeField] Text soulText;
+    [SerializeField] Text oreText;
     // [SerializeField] AudioSource audioSource;
     // [SerializeField] AudioClip[] breakClips;
     // [Range(0, 1f)]
@@ -61,6 +64,7 @@ public class Rock : MonoBehaviour
     {
         hp -= damage;
         score += damage;
+        scoreText.text = score.ToString();
         hp = Mathf.Clamp(hp, 0.0f, maxHp);
         rockHpSlider.SetHpValue(hp, maxHp);
 
@@ -94,6 +98,9 @@ public class Rock : MonoBehaviour
                 }
             }
 
+            soulText.text = dropSoulCount.ToString();
+            oreText.text = dropStoneCount.ToString();
+
             rockNum++;
 
             if(rockNum == 11)
@@ -121,5 +128,8 @@ public class Rock : MonoBehaviour
         score = 0;
         dropSoulCount = 0;
         dropStoneCount = 0;
+        scoreText.text = "0";
+        soulText.text = "0";
+        oreText.text = "0";
     }
 }

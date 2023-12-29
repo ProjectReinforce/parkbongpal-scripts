@@ -26,6 +26,7 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
             nickName.text = _nickname;
             inputField.text = "";
             Managers.UI.ClosePopup();
+            Managers.ServerData.GetRankList(false);
             Managers.Event.NicknameChangeEvent?.Invoke();
             Managers.Alarm.Warning("닉네임이 변경되었습니다!");
         });

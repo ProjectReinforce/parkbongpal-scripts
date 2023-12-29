@@ -225,7 +225,8 @@ public enum AdType
     RefreshRank,
     FreeDiamond,
     FreeGold,
-    CollectBonus
+    CollectBonus,
+    // ChangeNickName
 }
 
 public enum QuestContents
