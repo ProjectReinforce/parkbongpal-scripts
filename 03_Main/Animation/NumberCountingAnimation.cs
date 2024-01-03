@@ -14,7 +14,7 @@ public class NumberCountingAnimation : MonoBehaviour
         TryGetComponent(out text);
     }
 
-    void OnEnable()
+    void Start()
     {
         int target = 0;
         switch (currencyType)
@@ -29,6 +29,26 @@ public class NumberCountingAnimation : MonoBehaviour
                 Managers.Event.DiamondChangeEvent -= StartCounting;
                 Managers.Event.DiamondChangeEvent += StartCounting;
                 break;
+            case RewardType.Soul:
+                target = Managers.Game.Player.Data.weaponSoul;
+                Managers.Event.SoulChangeEvent -= StartCounting;
+                Managers.Event.SoulChangeEvent += StartCounting;
+                break;
+            case RewardType.Ore:
+                target = Managers.Game.Player.Data.stone;
+                Managers.Event.OreChangeEvent -= StartCounting;
+                Managers.Event.OreChangeEvent += StartCounting;
+                break;
+            default:
+                break;
+        }
+        text.text = $"{target:n0}";
+    }
+    void OnEnable()
+    {
+        int target = 0;
+        switch (currencyType)
+        {
             case RewardType.Soul:
                 target = Managers.Game.Player.Data.weaponSoul;
                 Managers.Event.SoulChangeEvent -= StartCounting;

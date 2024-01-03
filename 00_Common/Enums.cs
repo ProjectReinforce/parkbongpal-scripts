@@ -22,6 +22,7 @@ public enum Rarity
 public enum ReinforceType
 {
     Default,
+    randomUpgrade,
     promote,
     additional,
     normalReinforce,
@@ -224,7 +225,8 @@ public enum AdType
     RefreshRank,
     FreeDiamond,
     FreeGold,
-    CollectBonus
+    CollectBonus,
+    // ChangeNickName
 }
 
 public enum QuestContents

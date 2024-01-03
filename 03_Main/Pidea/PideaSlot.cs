@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class PideaSlot : NewThing
 {
     [SerializeField] Image weaponImage;
+    [SerializeField] Image selectImage;
     Button button;
     int _baseWeaponIndex;
     public int baseWeaponIndex => _baseWeaponIndex;

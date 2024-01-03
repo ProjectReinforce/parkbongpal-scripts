@@ -89,4 +89,8 @@ public class EventManager
     public Action OnCheifTalkObjectEvent;
     public Action OnSkipUIEvent;
     #endregion
+
+    #region Setting
+    public Action ChangeNickNameButtonEvent;
+    #endregion
 }

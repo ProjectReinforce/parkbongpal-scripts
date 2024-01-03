@@ -8,6 +8,7 @@ public class TimerControl : MonoBehaviour
     // 퍼즈
     [SerializeField] MineGame mineGame;
     [SerializeField] Slider timerBar;
+    [SerializeField] Image timeBarImage;
     const float MAX_TIME = 60f;
     float currentTime = MAX_TIME;
     public float CurrentTime
@@ -26,6 +27,7 @@ public class TimerControl : MonoBehaviour
     void Update()
     {
         UpdateTimer();
+        ChangeSliderColor();
     }
 
     public void StartOperating()
@@ -54,10 +56,27 @@ public class TimerControl : MonoBehaviour
         }
     }
 
+    public void ChangeSliderColor()
+    {
+        if(timerBar.value >= 0.7f && timerBar.value < 1f)
+        {
+            timeBarImage.color = new Color(104f/255f, 204f/255f, 255f/255f);
+        }
+        else if(timerBar.value >= 0.3f && timerBar.value < 0.7f)
+        {
+            timeBarImage.color = Color.yellow;
+        }
+        else if(timerBar.value < 0.3f)
+        {
+            timeBarImage.color = Color.red;
+        }
+    }
+
     public void ResetTimer()
     {
         isOperating = false;
         timerBar.value = 1.0f;
         currentTime = MAX_TIME;
+        timeBarImage.color = new Color(104f/255f, 204f/255f, 255f/255f);
     }
 }

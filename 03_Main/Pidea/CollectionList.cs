@@ -5,7 +5,8 @@ using UnityEngine;
 public class CollectionList : MonoBehaviour
 {
     [SerializeField] int index;
-    [SerializeField] public UnityEngine.UI.Text title;
+    [SerializeField] UnityEngine.UI.Text title;
+    [SerializeField] UnityEngine.UI.Text rewardText;
     [SerializeField] public RectTransform weapons;
     CollectionData CollectionData;
     public void Initialized(CollectionData _CollectionData)
