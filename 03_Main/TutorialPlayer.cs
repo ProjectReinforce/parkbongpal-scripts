@@ -34,6 +34,7 @@ public class TutorialPlayer : MonoBehaviour
     [SerializeField] GameObject packageUI;
     [SerializeField] Toggle collectionOn;
     [SerializeField] GameObject skipUI;
+    RewardUIBase rewardUI;
     Button skipButton;
     DetailInfoUI detailInfoUI;
     Transform[] panelTrans;
@@ -74,6 +75,7 @@ public class TutorialPlayer : MonoBehaviour
             cheifTalkObject.gameObject.SetActive(true);
             cheifTalk.text = cheifLine[0];
             skipButton = Utills.Bind<Button>("Button_Yes", skipUI.transform);
+            rewardUI = Utills.Bind<RewardUIBase>("RewardScreen_S");
             skipButton.onClick.AddListener(SkipTutorialExit);
             panelTrans[0] = Utills.Bind<Transform>("Button_Manufacture_S");
             tutorialPanel.transform.position = panelTrans[index].position;
@@ -1020,7 +1022,18 @@ public class TutorialPlayer : MonoBehaviour
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
             TutorialEndAfter();
-            Managers.Alarm.Warning("튜토리얼을 <color=red>완료</color>하셨습니다.\n 퀘스트 창에서 <color=red>완료 보상</color>을 수령해주세요!!" ,"축하합니다!");
+            if(Managers.Game.Player.Record.TutorialIndexCount >= 3)
+            {
+                Dictionary<RewardType, int> tutorialReward = new Dictionary<RewardType, int>();
+                tutorialReward.Add(RewardType.Gold, 10000);
+                tutorialReward.Add(RewardType.Diamond, 500);
+                rewardUI.Set(tutorialReward, "튜토리얼 클리어 보상");
+                Managers.Alarm.Warning("튜토리얼을 <color=red>완료</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!" ,"축하합니다!");
+            }
+            else
+            {
+                Managers.Alarm.Warning("튜토리얼을 <color=green>스킵</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!", "감사합니다");
+            }
             Managers.Game.Player.Record.TutorialClearRecord();
             cheifTalk.transform.parent.gameObject.SetActive(false);
             textNextButton.gameObject.SetActive(false);

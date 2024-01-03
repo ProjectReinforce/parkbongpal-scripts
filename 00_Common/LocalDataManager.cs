@@ -256,11 +256,8 @@ public class RecordData
 
     public void TutorialClearRecord()
     {
-        if(tutorialIndexCount >= 11)
-        {
-            tutorial = 1;
-            PlayerPrefs.SetString("Tutorial", tutorial.ToString());
-        }
+        tutorial = 1;
+        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
     }
 
     public void ModifyGoldRecord(int _gold)
