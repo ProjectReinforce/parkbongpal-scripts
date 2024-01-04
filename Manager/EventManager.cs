@@ -91,4 +91,13 @@ public class EventManager
     #region Setting
     public Action ChangeNickNameButtonEvent;
     #endregion
+
+    #region Shop
+    public Action RecieveFreeSoulEvent;
+    public Action RecieveFreeStoneEvent;
+    #endregion
+
+    #region Chat
+    public Action RefreshChatChanelEvent;
+    #endregion
 }

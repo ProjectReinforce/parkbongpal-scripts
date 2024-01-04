@@ -24,6 +24,8 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
         pool = new(origin, chatContent);
 
         CheckChatStatus();
+
+        Managers.Event.RefreshChatChanelEvent = RefreshChat;
     }
 
     void Start()
@@ -171,6 +173,12 @@ public class ChatManager : MonoBehaviour//Manager.Singleton<ChatManager>
             // Debug.Log("뒤끝챗 활성화 확인됨");
             SearchGroup();
         });
+    }
+
+    void RefreshChat()
+    {
+        Backend.Chat.LeaveChannel(ChannelType.Public);
+        SearchGroup();
     }
 
     const string CHANNELNAME = "일반채널";

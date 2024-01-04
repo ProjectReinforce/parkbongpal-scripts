@@ -29,6 +29,7 @@ public class ChangeNicknameSetUI : NicknameSetUIBase
             Managers.ServerData.GetRankList(false);
             Managers.Event.NicknameChangeEvent?.Invoke();
             Managers.Alarm.Warning("닉네임이 변경되었습니다!");
+            Managers.Event.RefreshChatChanelEvent?.Invoke();
         });
     }
 

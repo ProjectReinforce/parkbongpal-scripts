@@ -33,6 +33,10 @@ public class RewardSlot : MonoBehaviour
             case RewardType.Diamond:
             Managers.Event.DiamondCollectEvent?.Invoke(transform);
             break;
+            case RewardType.Soul:
+            break;
+            case RewardType.Ore:
+            break;
             default:
             break;
         }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Rock : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Rock : MonoBehaviour
     [SerializeField] Text scoreText;
     [SerializeField] Text soulText;
     [SerializeField] Text oreText;
+    [SerializeField] MiniGameDropTimer miniGameDropTimer;
     // [SerializeField] AudioSource audioSource;
     // [SerializeField] AudioClip[] breakClips;
     // [Range(0, 1f)]
@@ -112,6 +114,7 @@ public class Rock : MonoBehaviour
             {
                 int randomInt = UnityEngine.Random.Range(0, 2);
                 Managers.Sound.PlaySfx(SfxType.MinigameRockBreak01 + randomInt, 0.5f);
+                // BrokenRockAnimation();
                 maxHp *= 2f;
                 hp = maxHp;
                 rockHpSlider.SetHpValue(hp, maxHp);
@@ -119,9 +122,28 @@ public class Rock : MonoBehaviour
                 image.sprite = sprites[currentRockIndex = ++currentRockIndex % sprites.Length];
 
                 timerControl.CurrentTime += 20f;
+                miniGameDropTimer.DropTimer();
             }
         }
     }
+
+    // void BrokenRockAnimation()
+    // {
+    //     var seq = DOTween.Sequence();
+
+    //     float duration = 1.5f;  // 애니메이션 지속 시간
+    //     float shakeAmount = 50f;  // 흔들림의 크기
+
+    //     transform.DOLocalMoveX(shakeAmount, duration).SetEase(Ease.OutQuad).OnComplete(() =>
+    //     {
+    //         // 흔들림이 감소하면서 원래 위치로 복귀
+    //         transform.DOLocalMoveX(-215f, duration).SetEase(Ease.InQuad).OnComplete(() =>
+    //         {
+    //          // 애니메이션이 완료되면 다음 동작 수행
+    //             Debug.Log("Shake animation complete!");
+    //         });
+    //     });
+    // }
 
     public void ResetScore()
     {

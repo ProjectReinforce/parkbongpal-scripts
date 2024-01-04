@@ -27,7 +27,7 @@ public class SettingUI : MonoBehaviour
         Managers.Event.ChangeNickNameButtonEvent = () => 
         {
             Managers.UI.ClosePopup();
-            Managers.UI.OpenPopup(nicknameChange);
+            Managers.UI.OpenPopup(nicknameChange, true);
         };
     }
 
@@ -148,16 +148,15 @@ public class SettingUI : MonoBehaviour
         }
     }
 
-    public void OpenChangeNickname()
-    {
-        Managers.UI.OpenPopup(nicknameChange);
-    }
-
-    // 닉네임 변경 광고 들어오면 매소드 변경해야함
     // public void OpenChangeNickname()
     // {
-    //     Managers.UI.OpenPopup(nicknameChangeAdj);
+    //     Managers.UI.OpenPopup(nicknameChange);
     // }
+
+    public void OpenChangeNickname()
+    {
+        Managers.UI.OpenPopup(nicknameChangeAdj);
+    }
     
     public void UserUUIDCopy()
     {

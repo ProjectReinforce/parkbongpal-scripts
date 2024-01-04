@@ -226,7 +226,9 @@ public enum AdType
     FreeDiamond,
     FreeGold,
     CollectBonus,
-    // ChangeNickName
+    ChangeNickName,
+    FreeSoul,
+    FreeOre
 }
 
 public enum QuestContents

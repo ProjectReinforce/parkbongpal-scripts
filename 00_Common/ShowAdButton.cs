@@ -35,7 +35,10 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
         "ca-app-pub-3920142147368711/7765883379",
         "ca-app-pub-3920142147368711/4544823668",
         "ca-app-pub-3920142147368711/8099521950",
-        "ca-app-pub-3920142147368711/7468114870"
+        "ca-app-pub-3920142147368711/7468114870",
+        "ca-app-pub-3920142147368711/8443514499",
+        "ca-app-pub-3920142147368711/7878222491",
+        "ca-app-pub-3920142147368711/2859235071"
     };
     #elif UNITY_IPHONE
     static string _adUnitId = "ca-app-pub-3940256099942544/6978759866";
@@ -50,12 +53,12 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
     /// </summary>
     public void LoadRewardedInterstitialAd()
     {
-        tryCount++;
-        if (tryCount >= 3)
-        {
-            Managers.Alarm.Warning($"광고 로드에 실패했습니다. 게임을 재실행 해보시고, 같은 문제가 반복되면 관리자에게 문의해주세요.");
-            return;
-        }
+        // tryCount++;
+        // if (tryCount >= 3)
+        // {
+        //     Managers.Alarm.Warning($"광고 로드에 실패했습니다. 게임을 재실행 해보시고, 같은 문제가 반복되면 관리자에게 문의해주세요.");
+        //     return;
+        // }
 
         // Clean up the old ad before loading a new one.
         if (rewardedInterstitialAd != null)
@@ -71,27 +74,30 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
         adRequest.Keywords.Add("unity-admob-sample");
 
         // send the request to load the ad.
-        RewardedAd.Load(_adUnitId[(int)adType], adRequest,
-        (RewardedAd ad, LoadAdError error) =>
+        if(_adUnitId.Length > (int)adType)
         {
-            // if error is not null, the load request failed.
-            if (error != null || ad == null)
+            RewardedAd.Load(_adUnitId[(int)adType], adRequest,
+            (RewardedAd ad, LoadAdError error) =>
             {
-                Debug.LogError("rewarded interstitial ad failed to load an ad " +
-                                "with error : " + error);
-                // Managers.Alarm.Warning($"광고 로드에 실패했습니다. 재시도 횟수 : {tryCount}");
-                LoadRewardedInterstitialAd();
+                // if error is not null, the load request failed.
+                if (error != null || ad == null)
+                {
+                    Debug.LogError("rewarded interstitial ad failed to load an ad " +
+                                    "with error : " + error);
+                    // Managers.Alarm.Warning($"광고 로드에 실패했습니다. 재시도 횟수 : {tryCount}");
+                    LoadRewardedInterstitialAd();
 
-                return;
-            }
+                    return;
+                }
 
-            Debug.Log("Rewarded interstitial ad loaded with response : "
-                        + ad.GetResponseInfo());
+                Debug.Log("Rewarded interstitial ad loaded with response : "
+                            + ad.GetResponseInfo());
 
-            rewardedInterstitialAd = ad;
-            RegisterEventHandlers(rewardedInterstitialAd);
-            RegisterReloadHandler(rewardedInterstitialAd);
-        });
+                rewardedInterstitialAd = ad;
+                RegisterEventHandlers(rewardedInterstitialAd);
+                RegisterReloadHandler(rewardedInterstitialAd);
+            });
+        }
     }
 
     public void ShowRewardedInterstitialAd()
@@ -116,9 +122,15 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
                     case AdType.CollectBonus:
                     Managers.Event.RecieveAllReceiptBonusEvent?.Invoke();
                     break;
-                    // case AdType.ChangeNickName:
-                    // Managers.Event.ChangeNickNameButtonEvent?.Invoke();
-                    // break;
+                    case AdType.ChangeNickName:
+                    Managers.Event.ChangeNickNameButtonEvent?.Invoke();
+                    break;
+                    case AdType.FreeSoul:
+                    Managers.Event.RecieveFreeSoulEvent?.Invoke();
+                    break;
+                    case AdType.FreeOre:
+                    Managers.Event.RecieveFreeStoneEvent?.Invoke();
+                    break;
                 }
                 Managers.Game.Player.Record.ModifyDaySeeAdsRecord();
                 Managers.Game.Player.Record.ModifyWeekSeeAdsRecord();

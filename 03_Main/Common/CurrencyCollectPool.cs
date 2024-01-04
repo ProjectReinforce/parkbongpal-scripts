@@ -29,6 +29,10 @@ public class CurrencyCollectPool : MonoBehaviour
             Managers.Event.DiamondCollectEvent -= GetOne;
             Managers.Event.DiamondCollectEvent += GetOne;
             break;
+            case RewardType.Soul:
+            break;
+            case RewardType.Ore:
+            break;
             default:
             break;
         }
