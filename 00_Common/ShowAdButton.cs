@@ -116,6 +116,9 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
                     case AdType.CollectBonus:
                     Managers.Event.RecieveAllReceiptBonusEvent?.Invoke();
                     break;
+                    // case AdType.ChangeNickName:
+                    // Managers.Event.ChangeNickNameButtonEvent?.Invoke();
+                    // break;
                 }
                 Managers.Game.Player.Record.ModifyDaySeeAdsRecord();
                 Managers.Game.Player.Record.ModifyWeekSeeAdsRecord();

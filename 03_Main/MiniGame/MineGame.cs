@@ -196,8 +196,6 @@ public class MineGame : MonoBehaviour
 
     void Update()
     {
-      
-        
         if (!isAttackAble || isButtonPressed) return;
         if (coolTime>cool)
         {
