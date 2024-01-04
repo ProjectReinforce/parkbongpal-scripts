@@ -27,7 +27,7 @@ public class Post : MonoBehaviour, IGameInitializer
         Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
         Managers.Event.PostReceiptButtonSelectEvent += RemoveSlot;
 
-        if (Time.time - lastCallTime <= 5) return;// 30분 1800
+        if (Time.time - lastCallTime <= 1800) return;
         ReciveFromServer();
     }
     void OnDisable()

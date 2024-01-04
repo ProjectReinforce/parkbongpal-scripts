@@ -13,7 +13,7 @@ public class Pidea : MonoBehaviour
     [SerializeField] RectTransform[] rarityTables;
     [SerializeField] PideaViwer pideaViwer;
     List<PideaData> pideaWeaponsrDatas;
-    bool isSelect = false;
+    GameObject selectSlot;
 
     public void ClickTap(int index)
     {
@@ -51,6 +51,9 @@ public class Pidea : MonoBehaviour
         pideaDetail.ViewUpdate(slot.baseWeaponIndex);
         if (notifyer.gameObject.activeSelf)
             notifyer.PideaRemove(slot);
+        if (selectSlot != null)
+            selectSlot.SetActive(false);
+        selectSlot = slot.selectImage.gameObject;
         slot.selectImage.gameObject.SetActive(true);
     }
 
@@ -76,6 +79,8 @@ public class Pidea : MonoBehaviour
     {
         // Trash 등급창 세팅
         ClickTap(0);
+        if (selectSlot != null)
+            selectSlot.SetActive(false);
     }
 
     void Awake()
