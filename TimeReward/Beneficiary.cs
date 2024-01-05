@@ -43,7 +43,10 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             {
                 closeButton.gameObject.SetActive(true);
                 attendButton.interactable = false;
-                adButton.interactable = false;
+                if(Managers.Game.Player.Record.AdRewardCheck)
+                {
+                    adButton.interactable = false;
+                }
                 buttonOff = true;
             }
             viwer.Initialize();
@@ -74,14 +77,26 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
 
     public void Attend(bool _isAdsRewards)
     {
-        if(!buttonOff && rewardCheck)
+        Managers.Game.Player.Record.AdRewardChecking(_isAdsRewards);
+        if (!buttonOff && rewardCheck)
         {
             viwer.ButtonOn(days);
             closeButton.gameObject.SetActive(true);
             attendButton.interactable = false;
-            adButton.interactable = false;
+            if (_isAdsRewards)
+            {
+                adButton.interactable = false;
+            }
             buttonOff = true;
             Receive(_isAdsRewards);
+            Managers.UI.InputLock = false;
+            rewardCheck = false;
+        }
+
+        if(!rewardCheck && _isAdsRewards)
+        {
+            adButton.interactable = false;
+            Receive(_isAdsRewards, 2);
             Managers.UI.InputLock = false;
         }
     }
@@ -101,10 +116,14 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
         return true;
     }
 
-    void Receive(bool _isAdsRewards = false)
+    void Receive(bool _isAdsRewards = false, int _rewardHalf = 1)
     {
         AttendanceData todayReward = Managers.ServerData.AttendanceDatas[days];
         int rewardAmount = _isAdsRewards == true ? todayReward.value * 2 : todayReward.value;
+        if(_rewardHalf > 1)
+        {
+            rewardAmount /= _rewardHalf;
+        }
         switch (todayReward.type)
         {
             case (int)RewardType.Exp:

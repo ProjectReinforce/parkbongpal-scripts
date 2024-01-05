@@ -109,7 +109,8 @@ public class QuestContent : MonoBehaviour
         // Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
         Sequence seq = DOTween.Sequence();
         RectTransform rect = GetComponent<RectTransform>();
-        seq.Append(rect.DOShakePosition(1f, 100f, 150, 900));
+        Vector3 rectAdd = rect.position + new Vector3(250, 0);
+        seq.Append(rect.DOBlendableLocalMoveBy(rect.position + rectAdd, 0.3f));
         seq.OnComplete(()=> 
         {
             Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);

@@ -1022,24 +1022,31 @@ public class TutorialPlayer : MonoBehaviour
             tutorialPanel.transform.parent.gameObject.SetActive(false);
             cheifControl.gameObject.SetActive(false);
             TutorialEndAfter();
-            if(Managers.Game.Player.Record.TutorialIndexCount >= 3)
-            {
-                Dictionary<RewardType, int> tutorialReward = new Dictionary<RewardType, int>();
-                tutorialReward.Add(RewardType.Gold, 10000);
-                tutorialReward.Add(RewardType.Diamond, 500);
-                rewardUI.Set(tutorialReward, "튜토리얼 클리어 보상");
-                Managers.Alarm.Warning("튜토리얼을 <color=red>완료</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!" ,"축하합니다!");
-            }
-            else
-            {
-                Managers.Alarm.Warning("튜토리얼을 <color=green>스킵</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!", "감사합니다");
-            }
+            TutorialReward();
             Managers.Game.Player.Record.TutorialClearRecord();
             cheifTalk.transform.parent.gameObject.SetActive(false);
             textNextButton.gameObject.SetActive(false);
         }
         cheifTalk.text = cheifLine[textIndex];
         Managers.Sound.PlaySfx(SfxType.Tutorial_Talk);
+    }
+
+    void TutorialReward()
+    {
+        if(Managers.Game.Player.Record.TutorialIndexCount >= 3)
+        {
+            Dictionary<RewardType, int> tutorialReward = new Dictionary<RewardType, int>();
+            tutorialReward.Add(RewardType.Gold, 10000);
+            tutorialReward.Add(RewardType.Diamond, 500);
+            Managers.Game.Player.AddDiamond(500);
+            Managers.Game.Player.AddGold(10000);
+            rewardUI.Set(tutorialReward, "튜토리얼 클리어 보상");
+            Managers.Alarm.Warning("튜토리얼을 <color=red>완료</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!" ,"축하합니다!");
+        }
+        else
+        {
+            Managers.Alarm.Warning("튜토리얼을 <color=green>스킵</color>하셨습니다.\n 퀘스트 창에서 <color=red>웰컴 퀘스트 보상</color>을 수령해주세요!!", "감사합니다");
+        }
     }
 
     void CheifLines()
