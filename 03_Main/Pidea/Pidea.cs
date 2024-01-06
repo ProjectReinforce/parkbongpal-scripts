@@ -54,12 +54,15 @@ public class Pidea : MonoBehaviour
         if (selectSlot != null)
             selectSlot.SetActive(false);
         selectSlot = slot.selectImage.gameObject;
-        slot.selectImage.gameObject.SetActive(true);
+        selectSlot.SetActive(true);
+        //pideaDetail.SelectSlotOff(selectSlot);
     }
 
     public void NotifyClear()
     {
         notifyer.Clear();
+        if (selectSlot != null)
+            selectSlot.SetActive(false);
     }
     public bool CheckLockWeapon(int index)
     {
@@ -79,6 +82,13 @@ public class Pidea : MonoBehaviour
     {
         // Trash 등급창 세팅
         ClickTap(0);
+        if (selectSlot != null)
+            selectSlot.SetActive(false);
+    }
+
+    void ClosePidea()
+    {
+        Debug.Log("컬렉션 열림");
         if (selectSlot != null)
             selectSlot.SetActive(false);
     }
@@ -124,5 +134,6 @@ public class Pidea : MonoBehaviour
         Managers.Event.PideaGetNewWeaponEvent += GetNewWeapon;
         Managers.Event.PideaSetWeaponCount += PideaSetWeaponCount;
         Managers.Event.PideaOpenSetting += OpenSetting;
+        Managers.Event.CollectionOpen += ClosePidea;
     }
 }
