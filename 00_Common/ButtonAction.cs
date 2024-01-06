@@ -33,5 +33,6 @@ public class ButtonAction : MonoBehaviour
         {
             popTargetTransform.DOScale(1f, 0.1f);
         });
+        Managers.Event.AdButtonInteractableEvent.Invoke();
     }
 }

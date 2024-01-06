@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Manager;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using BackEnd;
@@ -106,13 +107,18 @@ public class QuestContent : MonoBehaviour
         if (targetData.rewardItem.TryGetValue(RewardType.Ore, out int ore))
             Managers.Game.Player.AddStone(ore, false);
         // Managers.Game.Player.GetQuestRewards(targetData.rewardItem[RewardType.Exp], targetData.rewardItem[RewardType.Gold], targetData.rewardItem[RewardType.Diamond]);
-
-        Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
-        getRewardButton.interactable = false;
-        Cleared();
-        Managers.Sound.PlaySfx(SfxType.Quest, 0.5f);
-        Managers.Event.UpdateAllContentEvent?.Invoke();
-
+        Sequence seq = DOTween.Sequence();
+        RectTransform rect = GetComponent<RectTransform>();
+        Vector3 rectAdd = rect.position + new Vector3(250, 0);
+        seq.Append(rect.DOShakePosition(1, 100, 30, 90));
+        seq.OnComplete(()=> 
+        {
+            Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
+            getRewardButton.interactable = false;
+            Cleared();
+            Managers.Sound.PlaySfx(SfxType.Quest, 0.5f);
+            Managers.Event.UpdateAllContentEvent?.Invoke();
+        });
         rewardUIBase.Set(targetData.rewardItem);
     }
 
