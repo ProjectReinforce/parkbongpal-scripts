@@ -32,7 +32,7 @@ public class ResourceManager
         notifyer = Resources.Load<Notifyer>("Notifyer");
         sampleWeapon = Resources.Load<Sprite>("SampleWeapon");
         postItems = Resources.LoadAll<Sprite>("Sprites/Commerce");
-        levelImages = Resources.LoadAll<Sprite>("Sprites/Commerce");
+        levelImages = Resources.LoadAll<Sprite>("Sprites/Lv");
     }
 
     /// <summary>
