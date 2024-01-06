@@ -27,7 +27,7 @@ public class Post : MonoBehaviour, IGameInitializer
         Managers.Event.PostReceiptButtonSelectEvent -= RemoveSlot;
         Managers.Event.PostReceiptButtonSelectEvent += RemoveSlot;
 
-        if (Time.time - lastCallTime <= 1800) return;// 30분
+        if (Time.time - lastCallTime <= 1800) return;
         ReciveFromServer();
     }
     void OnDisable()
@@ -42,6 +42,8 @@ public class Post : MonoBehaviour, IGameInitializer
 
     private void ReciveFromServer()
     {
+        ResetMailBox();
+
         Backend.UPost.GetPostList(PostType.Rank, MAX_COUNT, callback =>
         {
             if (!callback.IsSuccess())
@@ -49,7 +51,7 @@ public class Post : MonoBehaviour, IGameInitializer
                 Managers.Alarm.Danger("우편 정보를 불러오는 데 실패했습니다. : " + callback);
                 return;
             }
-            Managers.Game.MainEnqueue(() => lastCallTime = Time.time);
+            //Managers.Game.MainEnqueue(() => lastCallTime = Time.time);
             JsonData json = callback.GetReturnValuetoJSON()["postList"];
             if (json.Count <= 0)
             {
@@ -64,7 +66,6 @@ public class Post : MonoBehaviour, IGameInitializer
             {
                 noPost.SetActive(false);
             });
-            slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
             for (int i = 0; i < json.Count; i++)
             {
@@ -121,7 +122,6 @@ public class Post : MonoBehaviour, IGameInitializer
             {
                 noPost.SetActive(false);
             });
-            slots.Clear();      // 우편 리스트를 불러올 때 slots 초기화
 
             for (int i = 0; i < json.Count; i++)
             {
@@ -190,6 +190,17 @@ public class Post : MonoBehaviour, IGameInitializer
             newcheckImage.gameObject.SetActive(true);
         }
         postCount.text = $"{slots.Count}";
+    }
+
+    void ResetMailBox()
+    {
+        // 우편 리스트를 불러올 때 slots 초기화
+        slots.Clear();
+        notifyer.PostReset();
+        foreach (Transform slot in mailBox)
+        {
+            Destroy(slot.gameObject);
+        }
     }
 
     //public void BatchReceipt()//일괄 수령

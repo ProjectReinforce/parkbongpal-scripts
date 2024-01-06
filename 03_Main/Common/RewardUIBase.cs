@@ -6,9 +6,11 @@ using UnityEngine;
 public class RewardUIBase : MonoBehaviour, IGameInitializer
 {
     protected RewardSlot[] rewardSlots = new RewardSlot[3];
+    protected UnityEngine.UI.Text titleText;
 
     public void GameInitialize()
     {
+        titleText = Utills.Bind<UnityEngine.UI.Text>("TitleText ", transform);
         rewardSlots[0] = Utills.Bind<RewardSlot>("Reword_1_S", transform);
         rewardSlots[0].Initialize();
         rewardSlots[1] = Utills.Bind<RewardSlot>("Reword_2_S", transform);
@@ -23,9 +25,10 @@ public class RewardUIBase : MonoBehaviour, IGameInitializer
             item.gameObject.SetActive(false);
     }
 
-    public virtual void Set(Dictionary<RewardType, int> _rewardTypeAmountPairs)
+    public virtual void Set(Dictionary<RewardType, int> _rewardTypeAmountPairs, string titleName = "º¸»ó")
     {
         int i = 0;
+        titleText.text = titleName;
         foreach (var item in _rewardTypeAmountPairs)
         {
             if (i >= _rewardTypeAmountPairs.Count) break;

@@ -25,6 +25,7 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
             ShowRewardedInterstitialAd();
             // button.interactable = false;
         });
+        Managers.Event.AdButtonInteractableEvent += ButtonInteractableCheck;
     }
     
     // These ad units are configured to always serve test ads.
@@ -121,6 +122,7 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
                     break;
                     case AdType.CollectBonus:
                     Managers.Event.RecieveAllReceiptBonusEvent?.Invoke();
+                    button.interactable = false;
                     break;
                     case AdType.ChangeNickName:
                     Managers.Event.ChangeNickNameButtonEvent?.Invoke();
@@ -139,6 +141,14 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
         else
         {
             Managers.Alarm.Warning("아직 광고가 준비되지 않았습니다. 잠시 후 다시 시도해주세요.");
+        }
+    }
+
+    void ButtonInteractableCheck()
+    {
+        if(!button.interactable)
+        {
+            button.interactable = true;
         }
     }
 

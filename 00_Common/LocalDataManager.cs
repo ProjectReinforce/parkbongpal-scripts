@@ -94,6 +94,8 @@ public class RecordData
 
     bool manufactureSkip;
     public bool ManufactureSkip => manufactureSkip;
+    bool adRewardCheck;
+    public bool AdRewardCheck => adRewardCheck;
 
     public void LoadOrInitRecord(string _userInDate)
     {
@@ -101,7 +103,7 @@ public class RecordData
         Debug.Log($"loaded userID : {userID} / indate : {_userInDate}");
         dayValGroups = new uint[6] { dayAttendance, dayTryPromote, dayTryMagic, dayTryReinforce, dayGetBonus, daySeeAds };
         dayValGroupsString = new string[6] { "DayAttendance", "DayTryPromote", "DayTryMagic", "DayTryReinforce", "DayGetBonus", "DaySeeAds" };
-        weekValGroups = new uint[6] { WeekAttendance, WeekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
+        weekValGroups = new uint[6] { weekAttendance, weekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
         weekValGroupsString = new string[6] { "WeekAttandance", "WeekTryPromote", "WeekTryMagic", "WeekTryReinforce", "WeekGetBonus", "WeekSeeAds" };
 
         if (_userInDate == userID)
@@ -139,6 +141,8 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("DayTryReinforce"), out dayTryReinforce);
             uint.TryParse(PlayerPrefs.GetString("DayGetBonus"), out dayGetBonus);
             uint.TryParse(PlayerPrefs.GetString("DaySeeAds"), out daySeeAds);
+            // 광고 출석 일일 초기화
+            AdRewardReset();
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
@@ -159,6 +163,7 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("WeekSeeAds"), out weekSeeAds);
 
             bool.TryParse(PlayerPrefs.GetString("ManufactureSkip"), out manufactureSkip);
+            bool.TryParse(PlayerPrefs.GetString("AdRewardCheck"), out adRewardCheck);
             return;
         }
         PlayerPrefs.SetString("UserID", _userInDate);
@@ -198,7 +203,8 @@ public class RecordData
         PlayerPrefs.DeleteKey("WeekSeeAds");
 
         PlayerPrefs.DeleteKey("ManufactureSkip");
-        
+        PlayerPrefs.DeleteKey("AdRewardCheck");
+
         // 사운드
         PlayerPrefs.DeleteKey("SFXOption");
         PlayerPrefs.DeleteKey("BGMOption");
@@ -238,6 +244,7 @@ public class RecordData
         weekSeeAds = 0;
 
         manufactureSkip = false;
+        adRewardCheck = false;
     }
 
     public void TutorialIndexReset()
@@ -256,11 +263,8 @@ public class RecordData
 
     public void TutorialClearRecord()
     {
-        if(tutorialIndexCount >= 11)
-        {
-            tutorial = 1;
-            PlayerPrefs.SetString("Tutorial", tutorial.ToString());
-        }
+        tutorial = 1;
+        PlayerPrefs.SetString("Tutorial", tutorial.ToString());
     }
 
     public void ModifyGoldRecord(int _gold)
@@ -474,6 +478,23 @@ public class RecordData
     {
         manufactureSkip = _isOn;
         PlayerPrefs.SetString("ManufactureSkip", manufactureSkip.ToString());
+    }
+
+    public void AdRewardChecking(bool _rewardCheck)
+    {
+        adRewardCheck = _rewardCheck;
+        PlayerPrefs.SetString("AdRewardCheck", adRewardCheck.ToString());
+    }
+
+    public void AdRewardReset()
+    {
+        if(saveDay.Date != Managers.Etc.GetServerTime().Date)
+        {
+            adRewardCheck = false;
+            PlayerPrefs.SetString("AdRewardCheck", adRewardCheck.ToString());
+            saveDay = Managers.Etc.GetServerTime().Date;
+            PlayerPrefs.SetString("SaveDay", saveDay.ToString());
+        }
     }
 }
 

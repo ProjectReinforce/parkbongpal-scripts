@@ -6,7 +6,8 @@ public enum SceneName
     R_LoadingScene,
     R_Main_V6_JHH,
     R_Main_V6,
-    R_Main_V6_SEH
+    R_Main_V6_SEH,
+    R_Main_V6_SH
 }
 
 public enum Rarity
@@ -22,13 +23,13 @@ public enum Rarity
 public enum ReinforceType
 {
     Default,
-    randomUpgrade,
     promote,
     additional,
     normalReinforce,
     magicEngrave,
     soulCrafting,
-    refineMent
+    refineMent,
+    randomUpgrade
 }
 
 public enum SortType
@@ -210,6 +211,7 @@ public enum SfxType
     MinigameRockDamaged02,
     MinigameRockDamaged03,
     TapMove,
+    LevelUp
 }
 
 public enum BgmType
@@ -253,4 +255,10 @@ public enum Unit
     조 = 3,
     경 = 4,
     해 = 5
+}
+
+public enum ReinforceOpenLvCheck
+{
+    soulCraftingOpen = 25,
+    refineMentOpen = 50
 }

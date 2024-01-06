@@ -31,13 +31,9 @@ public class NumberCountingAnimation : MonoBehaviour
                 break;
             case RewardType.Soul:
                 target = Managers.Game.Player.Data.weaponSoul;
-                Managers.Event.SoulChangeEvent -= StartCounting;
-                Managers.Event.SoulChangeEvent += StartCounting;
                 break;
             case RewardType.Ore:
                 target = Managers.Game.Player.Data.stone;
-                Managers.Event.OreChangeEvent -= StartCounting;
-                Managers.Event.OreChangeEvent += StartCounting;
                 break;
             default:
                 break;
