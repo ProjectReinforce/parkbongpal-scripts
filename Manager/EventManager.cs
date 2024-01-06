@@ -78,6 +78,7 @@ public class EventManager
     public Action<BaseWeaponData> PideaGetNewWeaponEvent;   // 도감에 해당 무기를 추가하는 이벤트
     public Func<int> PideaSetWeaponCount;                   // 도감에 등록된 무기의 갯수 체크 이벤트
     public Action PideaOpenSetting;                         // 도감 처음화면 세팅 이벤트
+    public Action CollectionOpen;                           // 컬렉션 화면 열림 이벤트
     #endregion
 
     #region NPC

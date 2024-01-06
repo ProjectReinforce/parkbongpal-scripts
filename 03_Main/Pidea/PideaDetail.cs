@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class PideaDetail : MonoBehaviour,IDetailViewer<int>
+public class PideaDetail : MonoBehaviour, IDetailViewer<int>
 {
     // Start is called before the first frame update
     //이름, 스토리, 아이콘, 초기 스탯 정보
@@ -12,10 +12,11 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
     //[SerializeField] private UnityEngine.UI.Text collection;
     [SerializeField] private UnityEngine.UI.Text leftStats;
     [SerializeField] private UnityEngine.UI.Text rightStats;
-    
+
     [SerializeField] private GameObject start;
     [SerializeField] private GameObject detail;
     [SerializeField] RectTransform detailContent;
+    GameObject selectSlot;
 
     static readonly Color[] rarityColors =
     {
@@ -44,6 +45,6 @@ public class PideaDetail : MonoBehaviour,IDetailViewer<int>
     private void OnEnable()
     {
         start.SetActive(true);
-        detail.SetActive(false); 
+        detail.SetActive(false);
     }
 }

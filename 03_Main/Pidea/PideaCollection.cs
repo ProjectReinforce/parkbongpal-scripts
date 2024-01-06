@@ -22,5 +22,6 @@ public class PideaCollection : MonoBehaviour
     private void OnEnable()
     {
         collections.anchoredPosition = Vector2.zero;
+        Managers.Event.CollectionOpen?.Invoke();
     }
 }
