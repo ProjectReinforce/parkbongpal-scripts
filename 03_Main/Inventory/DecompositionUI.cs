@@ -103,10 +103,10 @@ public class DecompositionUI : MonoBehaviour
         foreach (var item in selectedWeapons)
         {
             totalGold += Managers.ServerData.DecompositDatas[item.data.rarity].rarity[0];
-            totalGold += Managers.ServerData.DecompositDatas[item.data.NormalStat[(int)StatType.atk] / 5].normalReinforce[0];
+            totalGold += Managers.ServerData.DecompositDatas[item.data.NormalStat[(int)StatType.atk] / 3].normalReinforce[0];
                 
             totalSoul += Managers.ServerData.DecompositDatas[item.data.rarity].rarity[1]; 
-            totalSoul += Managers.ServerData.DecompositDatas[item.data.NormalStat[(int)StatType.atk] / 5].normalReinforce[1];
+            totalSoul += Managers.ServerData.DecompositDatas[item.data.NormalStat[(int)StatType.atk] / 3].normalReinforce[1];
 
             Managers.Game.Inventory.RemoveWeapons(item);
             Managers.Game.Player.Record.ModifyDisassembleItemRecord();

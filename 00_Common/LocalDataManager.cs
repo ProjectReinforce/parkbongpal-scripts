@@ -74,6 +74,20 @@ public class RecordData
     string[] dayValGroupsString;
     DateTime saveDay;
     public DateTime SaveDay => saveDay;
+    // DateTime resetShopAdDate;
+    // public DateTime ResetShopAdDate => resetShopAdDate;
+    // int dayFreeSoulCount;
+    // public int DayFreeSoulCount
+    // {
+    //     get => dayFreeSoulCount;
+    //     set {  dayFreeSoulCount = value; }
+    // }
+    // int dayFreeStoneCount;
+    // public int DayFreeStoneCount
+    // {
+    //     get => dayFreeStoneCount;
+    //     set {  dayFreeStoneCount = value; }
+    // }
     // 주간
     uint weekAttendance;
     public uint WeekAttendance => weekAttendance;
@@ -105,6 +119,7 @@ public class RecordData
         dayValGroupsString = new string[6] { "DayAttendance", "DayTryPromote", "DayTryMagic", "DayTryReinforce", "DayGetBonus", "DaySeeAds" };
         weekValGroups = new uint[6] { weekAttendance, weekTryPromote, weekTryMagic, weekTryReinforce, weekGetBonus, weekSeeAds };
         weekValGroupsString = new string[6] { "WeekAttandance", "WeekTryPromote", "WeekTryMagic", "WeekTryReinforce", "WeekGetBonus", "WeekSeeAds" };
+        // int[] dayShopAdReset = new int[2] { dayFreeSoulCount, dayFreeStoneCount };
 
         if (_userInDate == userID)
         {
@@ -134,6 +149,15 @@ public class RecordData
                     PlayerPrefs.SetString("SaveDay", saveDay.ToString());
                 }
             }
+            // DateTime.TryParse(PlayerPrefs.GetString("ShopResetDay"),  out resetShopAdDate);
+            // if(DateTime.Parse(_userInDate).Date == Managers.Etc.GetServerTime().Date)
+            // {
+            //     if(resetShopAdDate.Date != Managers.Etc.GetServerTime().Date)
+            //     {
+            //         resetShopAdDate = Managers.Etc.GetServerTime().Date;
+            //         PlayerPrefs.SetString("ShopResetDay", resetShopAdDate.ToString());
+            //     }
+            // }
             ResetRecordDayData(dayValGroups, dayValGroupsString);
             uint.TryParse(PlayerPrefs.GetString("DayAttendance"), out dayAttendance);
             uint.TryParse(PlayerPrefs.GetString("DayTryPromote"), out dayTryPromote);
@@ -141,8 +165,11 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("DayTryReinforce"), out dayTryReinforce);
             uint.TryParse(PlayerPrefs.GetString("DayGetBonus"), out dayGetBonus);
             uint.TryParse(PlayerPrefs.GetString("DaySeeAds"), out daySeeAds);
+            // int.TryParse(PlayerPrefs.GetString("DayFreeSoulCount"), out dayFreeSoulCount);
+            // int.TryParse(PlayerPrefs.GetString("DayFreeStoneCount"), out dayFreeStoneCount);
             // 광고 출석 일일 초기화
-            AdRewardReset();
+            AdRewardsReset();
+            // ShopAdDataReset();
 
             // 주간 초기화
             DateTime.TryParse(PlayerPrefs.GetString("SaveWeek"), out saveWeek);
@@ -228,12 +255,15 @@ public class RecordData
 
         // 일일
         saveDay = DateTime.MinValue;
+        // resetShopAdDate = DateTime.MinValue;
         dayAttendance = 0;
         dayTryPromote = 0;
         dayTryMagic = 0;
         dayTryReinforce = 0;
         dayGetBonus = 0;
         daySeeAds = 0;
+        // dayFreeSoulCount = 0;
+        // dayFreeStoneCount = 0;
         // 주간
         saveWeek = DateTime.MinValue;
         weekAttendance = 0;
@@ -486,7 +516,7 @@ public class RecordData
         PlayerPrefs.SetString("AdRewardCheck", adRewardCheck.ToString());
     }
 
-    public void AdRewardReset()
+    public void AdRewardsReset()
     {
         if(saveDay.Date != Managers.Etc.GetServerTime().Date)
         {
@@ -496,6 +526,15 @@ public class RecordData
             PlayerPrefs.SetString("SaveDay", saveDay.ToString());
         }
     }
+
+    // void ShopAdDataReset()
+    // {
+    //     if(resetShopAdDate.Date != Managers.Etc.GetServerTime().Date)
+    //     {
+    //         resetShopAdDate = Managers.Etc.GetServerTime().Date;
+    //         PlayerPrefs.SetString("ShopResetDay", resetShopAdDate.ToString());
+    //     }
+    // }
 }
 
 

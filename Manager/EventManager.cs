@@ -98,6 +98,8 @@ public class EventManager
     #region Shop
     public Action RecieveFreeSoulEvent;
     public Action RecieveFreeStoneEvent;
+    public Action<Transform> SoulCollectEvent;
+    public Action<Transform> StoneCollectEvent;
     #endregion
 
     #region Chat

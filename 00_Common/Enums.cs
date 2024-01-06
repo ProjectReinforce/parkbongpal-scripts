@@ -218,7 +218,8 @@ public enum BgmType
 {
     MainBgm,
     ReinforceBgm,
-    MiniGameBgm
+    MiniGameBgm,
+    ShopBgm
 }
 
 public enum AdType
@@ -261,4 +262,12 @@ public enum ReinforceOpenLvCheck
 {
     soulCraftingOpen = 25,
     refineMentOpen = 50
+}
+
+public enum ShopRewardType
+{
+    넋100,
+    넋500,
+    원석100,
+    원석500
 }

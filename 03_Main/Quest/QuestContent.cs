@@ -110,13 +110,16 @@ public class QuestContent : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         RectTransform rect = GetComponent<RectTransform>();
         Vector3 rectAdd = rect.position + new Vector3(250, 0);
-        seq.Append(rect.DOShakePosition(1, 100, 30, 90));
+        seq.Append(rect.DOShakePosition(0.5f, 100, 30, 90));
+        seq.OnStart(() => 
+        {
+            Managers.Sound.PlaySfx(SfxType.Quest, 0.5f);
+            getRewardButton.interactable = false;
+        });
         seq.OnComplete(()=> 
         {
             Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
-            getRewardButton.interactable = false;
             Cleared();
-            Managers.Sound.PlaySfx(SfxType.Quest, 0.5f);
             Managers.Event.UpdateAllContentEvent?.Invoke();
         });
         rewardUIBase.Set(targetData.rewardItem);
