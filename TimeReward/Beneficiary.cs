@@ -93,7 +93,7 @@ public class Beneficiary : MonoBehaviour, IGameInitializer//Singleton<Beneficiar
             rewardCheck = false;
         }
 
-        if(!rewardCheck && _isAdsRewards)
+        if(!rewardCheck && _isAdsRewards && adButton.interactable)
         {
             adButton.interactable = false;
             Receive(_isAdsRewards, 2);
