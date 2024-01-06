@@ -10,7 +10,6 @@ public class ShowAdButton : MonoBehaviour, IGameInitializer
 {
     [SerializeField] AdType adType;
     Button button;
-    int tryCount = 0;
 
     public void GameInitialize()
     {

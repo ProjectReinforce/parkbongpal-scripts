@@ -9,8 +9,8 @@ public class ShopRewards : MonoBehaviour
     [SerializeField] int rewards;
     [SerializeField] int rewardsPrice;
 
-    // public void ClickButton()
-    // {
-    //     shop.ChangeRewards(shopRewardType, rewards, rewardsPrice);
-    // }
+    public void ClickButton()
+    {
+        shop.ChangeRewards(shopRewardType, rewards, rewardsPrice);
+    }
 }

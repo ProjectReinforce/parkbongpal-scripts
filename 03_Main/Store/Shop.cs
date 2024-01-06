@@ -26,7 +26,7 @@ public class Shop : MonoBehaviour, IGameInitializer
 
     void OnEnable()
     {
-        Managers.Sound.PlayBgm(BgmType.ShopBgm);
+        Managers.Sound.PlayBgm(BgmType.ShopBgm, 0.8f);
     }
 
     public void GameInitialize()
@@ -102,53 +102,23 @@ public class Shop : MonoBehaviour, IGameInitializer
     //     }
     // }
 
-    // public void ChangeRewards(ShopRewardType _shopRewardType, int _rewards, int _rewardsPrice)
-    // {
-    //     switch ((int)_shopRewardType)
-    //     {
-    //         Managers.UI.OpenPopup(shopResultUI);
-    //         case (int)ShopRewardType.넋100:
-    //         shopResultUI.BuyRewards(RewardType.Soul, _rewards, _rewardsPrice)
-    //         Managers.Game.Player.AddSoul(100);
-    //         break;
-    //         case (int)ShopRewardType.넋500:
-    //         if(Managers.Game.Player.Data.gold < 90000000)
-    //         {
-    //             Managers.Alarm.Warning("보유하신 골드가 충분하지 않습니다!");
-    //         }
-    //         else
-    //         {
-    //             rewards.Add(RewardType.Soul, 500);
-    //             Managers.Game.Player.AddSoul(500);
-    //         }
-    //         break;
-    //         case (int)ShopRewardType.원석100:
-    //         if(Managers.Game.Player.Data.gold < 20000000)
-    //         {
-    //             Managers.Alarm.Warning("보유하신 골드가 충분하지 않습니다!");
-    //         }
-    //         else
-    //         {
-    //             rewards.Add(RewardType.Ore, 100);
-    //             Managers.Game.Player.AddStone(100);
-    //         }
-    //         break;
-    //         case (int)ShopRewardType.원석500:
-    //         if(Managers.Game.Player.Data.gold < 90000000)
-    //         {
-    //             Managers.Alarm.Warning("보유하신 골드가 충분하지 않습니다!");
-    //         }
-    //         else
-    //         {
-    //             rewards.Add(RewardType.Ore, 500);
-    //             Managers.Game.Player.AddStone(500);
-    //         }
-    //         break;
-    //         default:
-    //         break;
-    //     }
-    //     rewardUI.Set(rewards);
-    // }
+    public void ChangeRewards(ShopRewardType _shopRewardType, int _rewards, int _rewardsPrice)
+    {
+        Managers.UI.OpenPopup(shopResultUI.gameObject);
+        switch ((int)_shopRewardType)
+        {
+            case (int)ShopRewardType.넋100:
+            case (int)ShopRewardType.넋500:
+            shopResultUI.BuyRewards(RewardType.Soul, _rewards, _rewardsPrice);
+            break;
+            case (int)ShopRewardType.원석100:
+            case (int)ShopRewardType.원석500:
+            shopResultUI.BuyRewards(RewardType.Ore, _rewards, _rewardsPrice);
+            break;
+            default:
+            break;
+        }
+    }
 
     void OnDisable()
     {
