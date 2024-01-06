@@ -110,7 +110,7 @@ public class QuestContent : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         RectTransform rect = GetComponent<RectTransform>();
         Vector3 rectAdd = rect.position + new Vector3(250, 0);
-        seq.Append(rect.DOBlendableLocalMoveBy(rect.position + rectAdd, 0.3f));
+        seq.Append(rect.DOShakePosition(1, 100, 30, 90));
         seq.OnComplete(()=> 
         {
             Managers.Event.OpenQuestIDEvent?.Invoke(targetData.precedeQuestId + 1, targetData.recordType);
