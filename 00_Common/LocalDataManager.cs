@@ -167,8 +167,6 @@ public class RecordData
             uint.TryParse(PlayerPrefs.GetString("DaySeeAds"), out daySeeAds);
             // int.TryParse(PlayerPrefs.GetString("DayFreeSoulCount"), out dayFreeSoulCount);
             // int.TryParse(PlayerPrefs.GetString("DayFreeStoneCount"), out dayFreeStoneCount);
-            // 광고 출석 일일 초기화
-            AdRewardsReset();
             // ShopAdDataReset();
 
             // 주간 초기화
@@ -514,17 +512,6 @@ public class RecordData
     {
         adRewardCheck = _rewardCheck;
         PlayerPrefs.SetString("AdRewardCheck", adRewardCheck.ToString());
-    }
-
-    public void AdRewardsReset()
-    {
-        if(saveDay.Date != Managers.Etc.GetServerTime().Date)
-        {
-            adRewardCheck = false;
-            PlayerPrefs.SetString("AdRewardCheck", adRewardCheck.ToString());
-            saveDay = Managers.Etc.GetServerTime().Date;
-            PlayerPrefs.SetString("SaveDay", saveDay.ToString());
-        }
     }
 
     // void ShopAdDataReset()
